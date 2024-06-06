@@ -14,7 +14,7 @@
 }
 
 #' @importFrom igraph mean_distance decompose.graph
-.adjMeanShortestPath <- function(g, classAttr="class", directed=FALSE){
+.adjMeanShortestPath <- function(g, directed=FALSE){
   stopifnot(is(g,"igraph"))
   gc <- decompose.graph(g)
   msp <- sapply(gc, directed=directed, FUN=mean_distance)

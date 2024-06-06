@@ -55,9 +55,9 @@ setGeneric("getGraphClassMetrics", function(x, labels, metrics, k=NULL, ...){
            NCE=rowsum(.nlog2Enrichment(x, labels), labels)[,1]/length(labels),
            adhesion=.igraphFunPerClass(g, FUN=igraph::adhesion),
            cohesion=.igraphFunPerClass(g, FUN=igraph::cohesion),
-           AMSP=.adjMeanShortestPath(g),
+           AMSP=.igraphFunPerClass(g, FUN=.adjMeanShortestPath),
            PWC=rowsum(as.integer(.nPurity(x,labels)>0.5), labels)[,1]/length(labels),
-           stop("Unknown metric.")
+           stop("Unknown metric ", m)
            )
   }))
   row.names(res) <- levels(labels)
@@ -65,14 +65,15 @@ setGeneric("getGraphClassMetrics", function(x, labels, metrics, k=NULL, ...){
 }
 
 setMethod("getGraphClassMetrics", signature="list",
-          definition=function(x, labels, k=NULL, ...){
+          definition=function(x, labels, k=NULL,
+                              metrics=c("SI","NP","AMSP","PWC","NCE"), ...){
   .checkInputs(x,labels,checkNNcl=FALSE)
   if(!is.null(k)){
     if(k>ncol(knn$index))
       stop("The requested `k` is greater than the number of computed neighbors.")
     x <- lapply(x, FUN=function(x) x[,seq_len(k)])
   }
-  .getGraphClassMetricsFromKnn(x, labels=labels, ...)
+  .getGraphClassMetricsFromKnn(x, labels=labels, metrics=metrics, ...)
 })
 
 .getGraphClassMetricsFromEmbedding <- function(x, labels, k, emb2knnParams = list(), graphClassMetricsParams = list()){
