@@ -46,8 +46,8 @@
 }
 
 # proportion of weakly connected/PWC from igraph object
-#' @importFrom igraph V vertex_attr as_data_frame neighbors
-pwc <- function(g){
+#' @importFrom igraph V vertex_attr neighbors
+.pwc <- function(g){
   weaklyConnected <- c()
   for(v in V(g)){
     neighborClass <- sapply(neighbors(g,v), function(n) vertex_attr(g, index = n)$class)

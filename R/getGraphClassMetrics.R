@@ -107,7 +107,7 @@ setMethod("getGraphClassMetrics", signature="matrix",
            adhesion=.igraphFunPerClass(x, FUN=igraph::adhesion),
            cohesion=.igraphFunPerClass(x, FUN=igraph::cohesion),
            AMSP=.igraphFunPerClass(x, FUN=.adjMeanShortestPath),
-           PWC=pwc(x)$PWC,
+           PWC=.pwc(x)$PWC,
            stop("Unknown metric ", m)
     )
   }))
