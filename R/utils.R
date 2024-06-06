@@ -33,3 +33,22 @@
   }
   findKNN(x, k=k, BNPARAM=BNPARAM)
 }
+
+# computes shared nearest neighbors 
+#' @importFrom BiocNeighbors AnnoyParam ExhaustiveParam 
+#' @importFrom bluster makeSNNGraph
+#' @importFrom BiocParallel SerialParam
+.emb2snn <- function(x, k, type=c("rank", "number", "jaccard"), BNPARAM=NULL, 
+                     BPPARAM = BiocParallel::SerialParam()){
+  stopifnot(is.matrix(x) && is.numeric(x))
+  stopifnot(is.numeric(k) && length(k)==1 && k>0 && (k %/% 1)==k)
+  if(is.null(BNPARAM)){
+    if(nrow(x)>500){
+      BNPARAM <- BiocNeighbors::AnnoyParam()
+    }else{
+      BNPARAM <- BiocNeighbors::ExhaustiveParam()
+    }
+  }
+  bluster::makeSNNGraph(x, k, type = type, BNPARAM = BNPARAM,
+               BPPARAM = BPPARAM)
+}

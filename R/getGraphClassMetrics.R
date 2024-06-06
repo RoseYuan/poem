@@ -32,7 +32,7 @@ setOldClass("igraph")
 #' labels <- rep(LETTERS[1:3], each=10)
 #' # compute graph metrics:
 #' getGraphClassMetrics(dat, labels, k=4)
-setGeneric("getGraphClassMetrics", function(x, labels, metrics, k=NULL, ...){
+setGeneric("getGraphClassMetrics", function(x, labels, metrics, ...){
   standardGeneric("getGraphClassMetrics")
 })
 
@@ -58,7 +58,8 @@ setGeneric("getGraphClassMetrics", function(x, labels, metrics, k=NULL, ...){
            adhesion=.igraphFunPerClass(g, FUN=igraph::adhesion),
            cohesion=.igraphFunPerClass(g, FUN=igraph::cohesion),
            AMSP=.igraphFunPerClass(g, FUN=.adjMeanShortestPath),
-           PWC=as.numeric(rowsum(as.integer(.nPurity(x,labels)<=0.5), labels)[,1]/table(labels)),
+           PWC=as.numeric(rowsum(as.integer(.nPurity(x,labels)<=0.5), 
+                                 labels)[,1]/table(labels)),
            stop("Unknown metric ", m)
            )
   }))
@@ -78,15 +79,28 @@ setMethod("getGraphClassMetrics", signature="list",
   .getGraphClassMetricsFromKnn(x, labels=labels, metrics=metrics, ...)
 })
 
-.getGraphClassMetricsFromEmbedding <- function(x, labels, k, emb2knnParams = list(), graphClassMetricsParams = list()){
+.getGraphClassMetricsFromEmbedding <- function(x, labels, 
+                                               emb2graphFun = .emb2knn, 
+                                               emb2graphParams = list(k=10), 
+                                               graphClassMetricsParams = list()){
   stopifnot(is.character(labels) || is.factor(labels))
   stopifnot(length(labels)==nrow(x))
   if(is.data.frame(x)){
     stopifnot(all(!vapply(x, FUN.VALUE=logical(1), FUN=is.numeric)))
     x <- as.matrix(x)
   }
-  knnResult <- do.call(.emb2knn, c(list(x = x, k = k), emb2knnParams))
-  res <- do.call(.getGraphClassMetricsFromKnn, c(list(knnResult, labels = labels), graphClassMetricsParams))
+  graphResult <- do.call(emb2graphFun, c(list(x = x), emb2graphParams))
+  
+  if(identical(emb2graphFun, .emb2knn)){
+    res <- do.call(.getGraphClassMetricsFromKnn, c(list(graphResult, 
+                                                        labels = labels), 
+                                                   graphClassMetricsParams))
+  }else{
+    res <- do.call(.getGraphClassMetricsFromGraph, c(list(graphResult, 
+                                                          labels = labels), 
+                                                     graphClassMetricsParams))
+  }
+  
   row.names(res) <- row.names(x)
   res
 }
@@ -97,9 +111,11 @@ setMethod("getGraphClassMetrics", signature="matrix",
           definition=.getGraphClassMetricsFromEmbedding)
 
 
-
+#' @importFrom igraph gorder set_vertex_attr
 .getGraphClassMetricsFromGraph <- function(x, labels, 
                                            metrics=c("AMSP","PWC"), ...){
+  stopifnot(is.character(labels) || is.factor(labels))
+  stopifnot(length(labels)==gorder(x))
   labels <- as.factor(labels)
   x <- set_vertex_attr(x, "class", value=labels)
   res <- as.data.frame(lapply(setNames(metrics,metrics), FUN=function(m){
