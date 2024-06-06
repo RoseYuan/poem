@@ -94,3 +94,9 @@ setMethod("getGraphClassMetrics", signature="data.frame",
 setMethod("getGraphClassMetrics", signature="matrix",
           definition=.getGraphClassMetricsFromEmbedding)
 
+setMethod("getGraphClassMetrics", signature="igraph",
+          definition=.getGraphClassMetricsFromGraph)
+
+.getGraphClassMetricsFromGraph <- function(){
+  
+}
