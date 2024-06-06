@@ -24,10 +24,11 @@
 #' 
 #' @export
 #' @examples
-#' # generate random data:
+#' # generate random data and labels:
 #' dat <- matrix(rnorm(300), nrow=30)
 #' dat[1:10,1:3] <- dat[1:10,1:3]+2
 #' labels <- rep(LETTERS[1:3], each=10)
+#' # compute graph metrics:
 #' getGraphClassMetrics(dat, labels, k=4)
 setGeneric("getGraphClassMetrics", function(x, labels, metrics, k=NULL, ...){
   standardGeneric("getGraphClassMetrics")
