@@ -44,3 +44,19 @@
   log2((pseudoCount+rowSums(knn$nncl==labels))/
          (pseudoCount+expected[as.integer(labels)]))
 }
+
+# proportion of weakly connected/PWC from igraph object
+#' @importFrom igraph V vertex_attr as_data_frame neighbors
+pwc <- function(g){
+  weaklyConnected <- c()
+  for(v in V(g)){
+    neighborClass <- sapply(neighbors(g,v), function(n) vertex_attr(g, index = n)$class)
+    if (sum(neighborClass == vertex_attr(g, index = v)$class)/length(neighborClass) <= 0.5){
+      weaklyConnected <- c(weaklyConnected, v)
+    }
+  }
+  labels <- factor(vertex_attr(g)$class)
+  weaklyConnectedLabels <- labels[weaklyConnected]
+  res <- as.vector(table(weaklyConnectedLabels)/table(labels))
+  return(list(PWC=res, weaklyConnected=weaklyConnected))
+}

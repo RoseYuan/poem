@@ -1,3 +1,5 @@
+setOldClass("igraph")
+
 #' getGraphClassMetrics
 #' 
 #' Short description...
@@ -56,7 +58,7 @@ setGeneric("getGraphClassMetrics", function(x, labels, metrics, k=NULL, ...){
            adhesion=.igraphFunPerClass(g, FUN=igraph::adhesion),
            cohesion=.igraphFunPerClass(g, FUN=igraph::cohesion),
            AMSP=.igraphFunPerClass(g, FUN=.adjMeanShortestPath),
-           PWC=rowsum(as.integer(.nPurity(x,labels)>0.5), labels)[,1]/length(labels),
+           PWC=as.numeric(rowsum(as.integer(.nPurity(x,labels)<=0.5), labels)[,1]/table(labels)),
            stop("Unknown metric ", m)
            )
   }))
@@ -65,8 +67,8 @@ setGeneric("getGraphClassMetrics", function(x, labels, metrics, k=NULL, ...){
 }
 
 setMethod("getGraphClassMetrics", signature="list",
-          definition=function(x, labels, k=NULL,
-                              metrics=c("SI","NP","AMSP","PWC","NCE"), ...){
+          definition=function(x, labels, metrics=c("SI","NP","AMSP","PWC","NCE"), 
+                              k=NULL, ...){
   .checkInputs(x,labels,checkNNcl=FALSE)
   if(!is.null(k)){
     if(k>ncol(knn$index))
@@ -94,9 +96,28 @@ setMethod("getGraphClassMetrics", signature="data.frame",
 setMethod("getGraphClassMetrics", signature="matrix",
           definition=.getGraphClassMetricsFromEmbedding)
 
-setMethod("getGraphClassMetrics", signature="igraph",
-          definition=.getGraphClassMetricsFromGraph)
 
-.getGraphClassMetricsFromGraph <- function(){
-  
+
+.getGraphClassMetricsFromGraph <- function(x, labels, 
+                                           metrics=c("AMSP","PWC"), ...){
+  labels <- as.factor(labels)
+  x <- set_vertex_attr(x, "class", value=labels)
+  res <- as.data.frame(lapply(setNames(metrics,metrics), FUN=function(m){
+    switch(m,
+           adhesion=.igraphFunPerClass(x, FUN=igraph::adhesion),
+           cohesion=.igraphFunPerClass(x, FUN=igraph::cohesion),
+           AMSP=.igraphFunPerClass(x, FUN=.adjMeanShortestPath),
+           PWC=pwc(x)$PWC,
+           stop("Unknown metric ", m)
+    )
+  }))
+  row.names(res) <- levels(labels)
+  res
 }
+
+setMethod("getGraphClassMetrics", signature="igraph",
+          definition=function(x, labels, ...){
+            stopifnot(is(x,"igraph"))
+            .getGraphClassMetricsFromGraph(x, labels=labels, ...)
+          })
+
