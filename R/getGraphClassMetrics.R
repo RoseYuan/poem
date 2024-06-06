@@ -56,7 +56,7 @@ setGeneric("getGraphClassMetrics", function(x, labels, metrics, k=NULL, ...){
            adhesion=.igraphFunPerClass(g, FUN=igraph::adhesion),
            cohesion=.igraphFunPerClass(g, FUN=igraph::cohesion),
            AMSP=.igraphFunPerClass(g, FUN=.adjMeanShortestPath),
-           PWC=rowsum(as.integer(.nPurity(x,labels)>0.5), labels)[,1]/length(labels),
+           PWC=as.numeric(rowsum(as.integer(.nPurity(x,labels)<=0.5), labels)[,1]/table(labels)),
            stop("Unknown metric ", m)
            )
   }))
