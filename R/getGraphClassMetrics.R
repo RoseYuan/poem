@@ -35,7 +35,7 @@ setGeneric("getGraphClassMetrics", function(x, labels, metrics, k=NULL, ...){
 })
 
 #' @importFrom bluster neighborsToKNNGraph
-#' @importFrom igraph adhesion cohesion
+#' @importFrom igraph adhesion cohesion set_vertex_attr
 .getGraphClassMetricsFromKnn <- function(x, labels, 
                                          metrics=c("SI","NP","AMSP","PWC","NCE"),
                                          ...){
@@ -75,15 +75,15 @@ setMethod("getGraphClassMetrics", signature="list",
   .getGraphClassMetricsFromKnn(x, labels=labels, ...)
 })
 
-.getGraphClassMetricsFromEmbedding <- function(x, labels, k, ...){
+.getGraphClassMetricsFromEmbedding <- function(x, labels, k, emb2knnParams = list(), graphClassMetricsParams = list()){
   stopifnot(is.character(labels) || is.factor(labels))
   stopifnot(length(labels)==nrow(x))
   if(is.data.frame(x)){
     stopifnot(all(!vapply(x, FUN.VALUE=logical(1), FUN=is.numeric)))
     x <- as.matrix(x)
   }
-  res <- .getGraphClassMetricsFromKnn(
-    .emb2knn(x=x, k=k, ...), labels=labels, ...)
+  knnResult <- do.call(.emb2knn, c(list(x = x, k = k), emb2knnParams))
+  res <- do.call(.getGraphClassMetricsFromKnn, c(list(knnResult, labels = labels), graphClassMetricsParams))
   row.names(res) <- row.names(x)
   res
 }
