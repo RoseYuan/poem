@@ -19,7 +19,7 @@
 }
 
 
-# computes nearest neighbors 
+# computes nearest neighbors from embedding
 #' @importFrom BiocNeighbors AnnoyParam ExhaustiveParam findKNN
 .emb2knn <- function(x, k, BNPARAM=NULL){
   stopifnot(is.matrix(x) && is.numeric(x))
@@ -34,21 +34,37 @@
   findKNN(x, k=k, BNPARAM=BNPARAM)
 }
 
-# computes shared nearest neighbors 
-#' @importFrom BiocNeighbors AnnoyParam ExhaustiveParam 
-#' @importFrom bluster makeSNNGraph
-#' @importFrom BiocParallel SerialParam
-.emb2snn <- function(x, k, type=c("rank", "number", "jaccard"), BNPARAM=NULL, 
-                     BPPARAM = BiocParallel::SerialParam()){
-  stopifnot(is.matrix(x) && is.numeric(x))
-  stopifnot(is.numeric(k) && length(k)==1 && k>0 && (k %/% 1)==k)
-  if(is.null(BNPARAM)){
-    if(nrow(x)>500){
-      BNPARAM <- BiocNeighbors::AnnoyParam()
-    }else{
-      BNPARAM <- BiocNeighbors::ExhaustiveParam()
-    }
+# computes shared nearest neighbors from embedding
+#' @importFrom bluster neighborsToSNNGraph
+.emb2snn <- function(x, k, type=c("rank", "number", "jaccard"), BNPARAM=NULL){
+  knn <- .emb2knn(x, k, BNPARAM=BNPARAM)
+  bluster::neighborsToSNNGraph(knn$index, type = type)
+}
+
+# computes nearest neighbors from pairwise distance matrix
+.dist2knn <- function(x, k){
+  stopifnot(is(x,"dist"))
+  x <- as.matrix(x)
+  n <- dim(x)[1]
+  knn_distance <- matrix(NA, n, k)
+  knn_index <- matrix(NA, n, k)
+  
+  for(i in 1:n){
+    distances <- x[i,]    
+    # Exclude the distance to itself
+    distances[i] <- Inf
+    # Get the indices of the k-nearest neighbors
+    neighbors <- order(distances)[1:k]
+    # Store the indices and distances of the k-nearest neighbors
+    knn_index[i, ] <- neighbors
+    knn_distance[i, ] <- distances[neighbors]
   }
-  bluster::makeSNNGraph(x, k, type = type, BNPARAM = BNPARAM,
-               BPPARAM = BPPARAM)
+  return(list(index = knn_index, distance = knn_distance))
+}
+
+# computes shared nearest neighbors from pairwise distance
+#' @importFrom bluster neighborsToSNNGraph
+.dist2snn <- function(x, k, type=c("rank", "number", "jaccard")){
+  knn <- .dist2knn(x, k)
+  bluster::neighborsToSNNGraph(knn$index, type = type)
 }

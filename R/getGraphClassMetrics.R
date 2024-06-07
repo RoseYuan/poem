@@ -91,7 +91,7 @@ setMethod("getGraphClassMetrics", signature="list",
   }
   graphResult <- do.call(emb2graphFun, c(list(x = x), emb2graphParams))
   
-  if(identical(emb2graphFun, .emb2knn)){
+  if(.isKnn(graphResult, checkNNcl=FALSE)){
     res <- do.call(.getGraphClassMetricsFromKnn, c(list(graphResult, 
                                                         labels = labels), 
                                                    graphClassMetricsParams))
@@ -137,3 +137,34 @@ setMethod("getGraphClassMetrics", signature="igraph",
             .getGraphClassMetricsFromGraph(x, labels=labels, ...)
           })
 
+.getGraphClassMetricsFromDist <- function(x, labels, 
+                                          dist2graphFun = .dist2knn, 
+                                          dist2graphParams = list(k=10), 
+                                          graphClassMetricsParams = list()){
+  stopifnot(is.character(labels) || is.factor(labels))
+  stopifnot(length(labels)==nrow(x))
+  if(is.data.frame(x)){
+    stopifnot(all(!vapply(x, FUN.VALUE=logical(1), FUN=is.numeric)))
+    x <- as.matrix(x)
+  }
+  graphResult <- do.call(dist2graphFun, c(list(x = x), dist2graphParams))
+  
+  if(.isKnn(graphResult, checkNNcl=FALSE)){
+    res <- do.call(.getGraphClassMetricsFromKnn, c(list(graphResult, 
+                                                        labels = labels), 
+                                                   graphClassMetricsParams))
+  }else{
+    res <- do.call(.getGraphClassMetricsFromGraph, c(list(graphResult, 
+                                                          labels = labels), 
+                                                     graphClassMetricsParams))
+  }
+  
+  row.names(res) <- row.names(x)
+  res
+}
+
+setMethod("getGraphClassMetrics", signature="dist",
+          definition=function(x, labels, ...){
+            stopifnot(is(x,"dist"))
+            .getGraphClassMetricsFromDist(x, labels=labels, ...)
+          })
