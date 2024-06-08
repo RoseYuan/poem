@@ -46,7 +46,7 @@ setGeneric("getGraphClassMetrics", function(x, labels, metrics, ...){
   labels <- as.factor(labels)
   if(any(c("adhesion","cohesion","AMSP") %in% metrics)){
     # convert to graph
-    g <- bluster::neighborsToKNNGraph(x$index, directed=FALSE)
+    g <- bluster::neighborsToKNNGraph(x$index, directed=TRUE)
     g <- set_vertex_attr(g, "class", value=labels)
   }
   res <- as.data.frame(lapply(setNames(metrics,metrics), FUN=function(m){
@@ -149,7 +149,7 @@ setMethod("getGraphClassMetrics", signature="igraph",
   }
   graphResult <- do.call(dist2graphFun, c(list(x = x), dist2graphParams))
   
-  if(.isKnn(graphResult, checkNNcl=FALSE)){
+  if(.isKnn(graphResult, checkNNcl=FALSE, triggerError=FALSE)){
     res <- do.call(.getGraphClassMetricsFromKnn, c(list(graphResult, 
                                                         labels = labels), 
                                                    graphClassMetricsParams))

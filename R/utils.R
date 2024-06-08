@@ -36,7 +36,7 @@
 
 # computes shared nearest neighbors from embedding
 #' @importFrom bluster neighborsToSNNGraph
-.emb2snn <- function(x, k, type=c("rank", "number", "jaccard"), BNPARAM=NULL){
+.emb2snn <- function(x, k, type="rank", BNPARAM=NULL){
   knn <- .emb2knn(x, k, BNPARAM=BNPARAM)
   bluster::neighborsToSNNGraph(knn$index, type = type)
 }
@@ -64,7 +64,7 @@
 
 # computes shared nearest neighbors from pairwise distance
 #' @importFrom bluster neighborsToSNNGraph
-.dist2snn <- function(x, k, type=c("rank", "number", "jaccard")){
+.dist2snn <- function(x, k, type="rank"){
   knn <- .dist2knn(x, k)
   bluster::neighborsToSNNGraph(knn$index, type = type)
 }
