@@ -30,15 +30,25 @@
 #' labels <- rep(LETTERS[1:3], each=10)
 #' # compute graph metrics:
 #' getGraphClassMetrics(dat, labels, k=4)
-setGeneric("getGraphClassMetrics", function(x, labels, metrics, k=NULL, ...){
-  standardGeneric("getGraphClassMetrics")
-})
+setGeneric("getGraphClassMetrics", signature="x",
+           def=function(x, labels, metrics=c("SI","NP","AMSP","PWC","NCE"), ...)
+             standardGeneric("getGraphClassMetrics"))
+
+setMethod("getGraphClassMetrics", signature="list",
+          definition=function(x, labels, metrics, k=NULL, ...){
+            .checkInputs(x,labels,checkNNcl=FALSE)
+            if(!is.null(k)){
+              if(k>ncol(x$index))
+                stop("The requested `k` is greater than the number of ",
+                     "computed neighbors.")
+              x <- lapply(x, FUN=function(x) x[,seq_len(k)])
+            }
+            .getGraphClassMetricsFromKnn(x, labels=labels, metrics=metrics, ...)
+          })
 
 #' @importFrom bluster neighborsToKNNGraph
 #' @importFrom igraph adhesion cohesion set_vertex_attr
-.getGraphClassMetricsFromKnn <- function(x, labels, 
-                                         metrics=c("SI","NP","AMSP","PWC","NCE"),
-                                         ...){
+.getGraphClassMetricsFromKnn <- function(x, labels, metrics, ...){
   .checkInputs(x,labels,checkNNcl=FALSE)
   x$nncl <- matrix(labels[x$index], nrow=nrow(x$index))
   labels <- as.factor(labels)
@@ -56,7 +66,8 @@ setGeneric("getGraphClassMetrics", function(x, labels, metrics, k=NULL, ...){
            adhesion=.igraphFunPerClass(g, FUN=igraph::adhesion),
            cohesion=.igraphFunPerClass(g, FUN=igraph::cohesion),
            AMSP=.igraphFunPerClass(g, FUN=.adjMeanShortestPath),
-           PWC=as.numeric(rowsum(as.integer(.nPurity(x,labels)<=0.5), labels)[,1]/table(labels)),
+           PWC=as.numeric(rowsum(as.integer(.nPurity(x,labels)<=0.5),
+                                 labels)[,1]/table(labels)),
            stop("Unknown metric ", m)
            )
   }))
@@ -64,27 +75,16 @@ setGeneric("getGraphClassMetrics", function(x, labels, metrics, k=NULL, ...){
   res
 }
 
-setMethod("getGraphClassMetrics", signature="list",
-          definition=function(x, labels, k=NULL,
-                              metrics=c("SI","NP","AMSP","PWC","NCE"), ...){
-  .checkInputs(x,labels,checkNNcl=FALSE)
-  if(!is.null(k)){
-    if(k>ncol(knn$index))
-      stop("The requested `k` is greater than the number of computed neighbors.")
-    x <- lapply(x, FUN=function(x) x[,seq_len(k)])
-  }
-  .getGraphClassMetricsFromKnn(x, labels=labels, metrics=metrics, ...)
-})
 
-.getGraphClassMetricsFromEmbedding <- function(x, labels, k, emb2knnParams = list(), graphClassMetricsParams = list()){
+.getGraphClassMetricsFromEmbedding <- function(x, labels, metrics, k, ...){
   stopifnot(is.character(labels) || is.factor(labels))
   stopifnot(length(labels)==nrow(x))
   if(is.data.frame(x)){
-    stopifnot(all(!vapply(x, FUN.VALUE=logical(1), FUN=is.numeric)))
+    stopifnot(all(vapply(x, FUN.VALUE=logical(1), FUN=is.numeric)))
     x <- as.matrix(x)
   }
-  knnResult <- do.call(.emb2knn, c(list(x = x, k = k), emb2knnParams))
-  res <- do.call(.getGraphClassMetricsFromKnn, c(list(knnResult, labels = labels), graphClassMetricsParams))
+  res <- .getGraphClassMetricsFromKnn(.emb2knn(x,k=k,...), labels=labels,
+                                      metrics=metrics)
   row.names(res) <- row.names(x)
   res
 }
