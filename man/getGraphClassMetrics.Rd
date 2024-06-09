@@ -4,7 +4,12 @@
 \alias{getGraphClassMetrics}
 \title{getGraphClassMetrics}
 \usage{
-getGraphClassMetrics(x, labels, metrics, k = NULL, ...)
+getGraphClassMetrics(
+  x,
+  labels,
+  metrics = c("SI", "NP", "AMSP", "PWC", "NCE"),
+  ...
+)
 }
 \arguments{
 \item{x}{Either an igraph object, or a list of nearest neighbors (see details
@@ -17,10 +22,10 @@ label of each element (i.e. row or vertex) of \code{x}.}
 \item{metrics}{The metrics to compute. If omitted, main metrics will be
 computed.}
 
+\item{...}{Passed to other methods}
+
 \item{k}{The number of nearest neighbors to compute and/or use. Can be
 omitted if \code{x} is a graph or list of nearest neighbors.}
-
-\item{...}{Passed to other methods}
 
 \item{BNPARAM}{A BiocNeighbors parameter object to compute kNNs. Ignored
 unless the input is a matrix or data.frame. If omitted, the Annoy
@@ -36,9 +41,10 @@ Short description...
 Additional details...
 }
 \examples{
-# generate random data:
+# generate random data and labels:
 dat <- matrix(rnorm(300), nrow=30)
 dat[1:10,1:3] <- dat[1:10,1:3]+2
 labels <- rep(LETTERS[1:3], each=10)
+# compute graph metrics:
 getGraphClassMetrics(dat, labels, k=4)
 }
