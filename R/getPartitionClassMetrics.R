@@ -34,7 +34,7 @@ setMethod("getPartitionClassMetrics", signature="ANY",
           })
 
 #' @importFrom aricode sortPairs
-.getPartitionClassMetrics <-function(true, pred, metrics=c("AW", "AV"), ...){
+.getPartitionClassMetrics <-function(true, pred, metrics=c("AWC", "AWH"), ...){
   res <- sortPairs(true, pred)
   n <- length(true)
   
@@ -47,7 +47,7 @@ setMethod("getPartitionClassMetrics", signature="ANY",
   c <- scol-stot
   d <- spairs+stot-srow-scol
   
-  .calAW <- function(){
+  .calAWC <- function(){
     awi <- list()
     for (i in sort(unique(res$pair_c1))){
       idx <- which(res$pair_c1 == i)
@@ -60,7 +60,7 @@ setMethod("getPartitionClassMetrics", signature="ANY",
     return(awi)
   }
 
-  .calAV <- function(){
+  .calAWH <- function(){
     avj <- list()
     for (j in sort(unique(res$pair_c2))){
       idx <- which(res$pair_c2 == j)
@@ -75,8 +75,8 @@ setMethod("getPartitionClassMetrics", signature="ANY",
 
   res <- lapply(setNames(metrics, metrics), FUN=function(m){
     switch(m,
-           AW = .calAW(),
-           AV = .calAV(),
+           AWC = .calAWC(),
+           AWH = .calAWH(),
            stop("Unknown metric.")
     )
   })

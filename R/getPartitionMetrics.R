@@ -34,7 +34,7 @@ setMethod("getPartitionMetrics", signature="ANY",
           })
 
 #' @importFrom aricode sortPairs
-.getPartitionMetrics <-function(true, pred, metrics=c("ARI", "AW", "AV"), ...){
+.getPartitionMetrics <-function(true, pred, metrics=c("ARI", "AWC", "AWH"), ...){
   res <- sortPairs(true, pred)
   n <- length(true)
 
@@ -49,8 +49,8 @@ setMethod("getPartitionMetrics", signature="ANY",
   
   res <- lapply(setNames(metrics,metrics), FUN=function(m){
     switch(m,
-           AW = (a*d-b*c)/((a+b)*(b+d)),
-           AV = (a*d-b*c)/((a+c)*(c+d)),
+           AWC = (a*d-b*c)/((a+b)*(b+d)),
+           AWH = (a*d-b*c)/((a+c)*(c+d)),
            ARI = 2*(a*d-b*c)/((a+b)*(b+d)+(a+c)*(c+d)),
            stop("Unknown metric.")
     )
