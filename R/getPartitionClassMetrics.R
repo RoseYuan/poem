@@ -34,7 +34,7 @@ setMethod("getPartitionClassMetrics", signature="ANY",
           })
 
 #' @importFrom aricode sortPairs
-.getPartitionClassMetrics <-function(true, pred, metrics=c("AW", "AV"), ...){
+.getPartitionClassMetrics <-function(true, pred, metrics=c("WC","WH","AWC","AWH"), ...){
   res <- sortPairs(true, pred)
   n <- length(true)
   
@@ -46,8 +46,20 @@ setMethod("getPartitionClassMetrics", signature="ANY",
   b <- srow-stot
   c <- scol-stot
   d <- spairs+stot-srow-scol
+
+  .calWC <- function(){
+    wi <- list()
+    for (i in sort(unique(res$pair_c1))){
+      idx <- which(res$pair_c1 == i)
+      term1 <- sum(choose(res$nij[idx], 2)) 
+      term3 <- choose(sum(res$nij[idx]), 2) 
+      wi[i+1] <- term1 / term3
+    }
+    names(wi) <- res$levels$c1
+    return(wi)
+  }
   
-  .calAW <- function(){
+  .calAWC <- function(){
     awi <- list()
     for (i in sort(unique(res$pair_c1))){
       idx <- which(res$pair_c1 == i)
@@ -60,7 +72,19 @@ setMethod("getPartitionClassMetrics", signature="ANY",
     return(awi)
   }
 
-  .calAV <- function(){
+  .calWH <- function(){
+    vj <- list()
+    for (j in sort(unique(res$pair_c2))){
+      idx <- which(res$pair_c2 == j)
+      term1 <- sum(choose(res$nij[idx], 2)) 
+      term3 <- choose(sum(res$nij[idx]), 2)
+      vj[j+1] <- term1 / term3
+    }
+    names(vj) <- res$levels$c2
+    return(vj)
+  }
+  
+  .calAWH <- function(){
     avj <- list()
     for (j in sort(unique(res$pair_c2))){
       idx <- which(res$pair_c2 == j)
@@ -75,8 +99,10 @@ setMethod("getPartitionClassMetrics", signature="ANY",
 
   res <- lapply(setNames(metrics, metrics), FUN=function(m){
     switch(m,
-           AW = .calAW(),
-           AV = .calAV(),
+           WC = .calWC(),
+           AWC = .calAWC(),
+           WH = .calWH(),
+           AWH = .calAWH(),
            stop("Unknown metric.")
     )
   })
