@@ -22,7 +22,7 @@ setGeneric("getPartitionMetrics",
            function(true, pred, metrics, ...) standardGeneric("getPartitionMetrics"))
 
 setMethod("getPartitionMetrics", signature="ANY",
-          definition=function(true, pred, ...){
+          definition=function(true, pred, metrics, ...){
             if (anyNA(true) | anyNA(pred))
               stop("NA are not supported.")
             if (((!is.vector(true) & !is.factor(true)) | is.list(true)) | ((!is.vector(pred) & !is.factor(pred)) | is.list(pred)))
@@ -30,7 +30,7 @@ setMethod("getPartitionMetrics", signature="ANY",
             if(length(true) != length(pred)){
               stop("The two input vectors should have the same length.")
             }
-            .getPartitionMetrics(true, pred, ...)
+            .getPartitionMetrics(true, pred, metrics, ...)
           })
 
 #' @importFrom aricode sortPairs
