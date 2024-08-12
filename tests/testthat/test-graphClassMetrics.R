@@ -2,7 +2,7 @@
 set.seed(123)
 d1 <- mockData()
 set.seed(123)
-d2 <- mockData(nSpread=5)
+d2 <- mockData(spread=5)
 set.seed(123)
 d3 <- mockData(classDiff=1)
 
