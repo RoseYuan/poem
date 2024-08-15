@@ -46,7 +46,10 @@ mockData <- function(Ns=c(25,15), classDiff=2, Sds=1, ndims=2, spread=2, rndFn=r
     means <- rbind(c(0,as.numeric(classDiff)),
                    c(0,0))
   }else{
-    means <- cmdscale(classDiff, k=ndims)
+    means <- suppressWarnings(cmdscale(classDiff, k=ndims))
+    while(ncol(means)<ndims){
+      means <- cbind(means,0)
+    } 
   }
   d <- as.data.frame(lapply(seq_len(ndims), FUN=function(x){
     unlist(lapply(seq_along(Ns), FUN=function(i){
