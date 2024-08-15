@@ -22,7 +22,7 @@
 #'
 #' @examples
 #' d <- mockData()
-mockData <- function(Ns=c(25,15), classDiff=2, Sds=1, ndims=2, spread=2, rndFn=rnorm){
+mockData <- function(Ns=c(25,15), classDiff=2, Sds=1, ndims=2, spread=c(1,2), rndFn=rnorm){
   stopifnot(ndims>1 & ndims<=pmax(2,length(Ns)-1))
   stopifnot(length(Ns)>1 && length(Ns)<26 && all(Ns>1))
   ncomp <- lower.tri(matrix(nrow=length(Ns),ncol=length(Ns)), diag=FALSE)

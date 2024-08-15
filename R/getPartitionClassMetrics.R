@@ -12,29 +12,21 @@
 #' @details
 #' Additional details...
 #' 
-#' 
+#' @importFrom aricode sortPairs
 #' @export
 #' @examples
 #' true <- rep(LETTERS[1:3], each=10)
 #' pred <- c(rep("A", 8), rep("B", 9), rep("C", 3), rep("D", 10))
 #' getPartitionClassMetrics(true, pred)
-setGeneric("getPartitionClassMetrics", 
-           function(true, pred, metrics, ...) standardGeneric("getPartitionClassMetrics"))
-
-setMethod("getPartitionClassMetrics", signature="ANY",
-          definition=function(true, pred, metrics, ...){
-            if (anyNA(true) | anyNA(pred))
-              stop("NA are not supported.")
-            if (((!is.vector(true) & !is.factor(true)) | is.list(true)) | ((!is.vector(pred) & !is.factor(pred)) | is.list(pred)))
-              stop("true and pred must be vectors or factors but not lists.")
-            if(length(true) != length(pred)){
-              stop("The two input vectors should have the same length.")
-            }
-            .getPartitionClassMetrics(true, pred, metrics, ...)
-          })
-
-#' @importFrom aricode sortPairs
-.getPartitionClassMetrics <-function(true, pred, metrics=c("WC","WH","AWC","AWH"), ...){
+getPartitionClassMetrics <-function(true, pred, metrics=c("WC","WH","AWC","AWH"), ...){
+  if (anyNA(true) | anyNA(pred))
+    stop("NA are not supported.")
+  if (((!is.vector(true) & !is.factor(true)) | is.list(true)) | ((!is.vector(pred) & !is.factor(pred)) | is.list(pred)))
+    stop("true and pred must be vectors or factors but not lists.")
+  if(length(true) != length(pred)){
+    stop("The two input vectors should have the same length.")
+  }
+  
   res <- sortPairs(true, pred)
   n <- length(true)
   

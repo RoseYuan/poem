@@ -8,6 +8,7 @@ getGraphClassMetrics(
   x,
   labels,
   metrics = c("SI", "NP", "AMSP", "PWC", "NCE"),
+  directed = NULL,
   ...
 )
 }
@@ -22,6 +23,10 @@ label of each element (i.e. row or vertex) of \code{x}.}
 \item{metrics}{The metrics to compute. If omitted, main metrics will be
 computed.}
 
+\item{directed}{Logical; whether to compute the metrics in a directed fashion.
+If left to NULL, conventional choices will be made per metric (adhesion,
+cohesion, PWC AMSP undirected, others directed).}
+
 \item{...}{Passed to other methods}
 
 \item{k}{The number of nearest neighbors to compute and/or use. Can be
@@ -30,6 +35,10 @@ omitted if \code{x} is a graph or list of nearest neighbors.}
 \item{BNPARAM}{A BiocNeighbors parameter object to compute kNNs. Ignored
 unless the input is a matrix or data.frame. If omitted, the Annoy
 approximation will be used if there are more than 500 elements.}
+
+\item{shared}{Logical; whether to use a shared nearest neighbor network
+instead of a nearest neighbor network. Ignored if \code{x} is not an embedding
+or dist object.}
 }
 \value{
 A data.frame of metrics for each class.

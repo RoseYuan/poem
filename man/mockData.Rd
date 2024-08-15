@@ -9,7 +9,7 @@ mockData(
   classDiff = 2,
   Sds = 1,
   ndims = 2,
-  spread = 2,
+  spread = c(1, 2),
   rndFn = rnorm
 )
 }

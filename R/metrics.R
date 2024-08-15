@@ -1,6 +1,8 @@
-#' @importFrom igraph subgraph vertex_attr
-.igraphFunPerClass <- function(g, classAttr="class", FUN, ...){
+#' @importFrom igraph subgraph vertex_attr is_directed
+.igraphFunPerClass <- function(g, classAttr="class", directed=is_directed(g), 
+                               FUN, ...){
   stopifnot(is(g,"igraph"))
+  if(is.null(directed)) directed <- FALSE
   if(is.character(FUN)) FUN <- get(FUN)
   if(!is.null(classAttr)){
     va <- vertex_attr(g,classAttr)
@@ -13,15 +15,30 @@
   FUN(g, ...)
 }
 
-#' @importFrom igraph mean_distance decompose.graph
+#' @importFrom igraph mean_distance decompose.graph is_directed
 .adjMeanShortestPath <- function(g, directed=FALSE){
   stopifnot(is(g,"igraph"))
+  if(is.null(directed)) directed <- FALSE
   gc <- decompose.graph(g)
   msp <- sapply(gc, directed=directed, FUN=mean_distance)
   return(length(gc)+sum(pmax(1L,msp,na.rm=TRUE)))
 }
 
-.simpsonIndex <- function(knn, labels){
+.simpsonIndex <- function(knn, labels=NULL, directed=TRUE){
+  if(is.null(directed)) directed <- TRUE
+  # for undirected, first transform directed nn to graph
+  if(!is(knn,"igraph") && !directed) knn <- .nn2graph(knn, labels)
+  if(is(knn,"igraph")){
+    if(is.null(labels)) labels <- get_vertex_attr(knn, "class")
+    knn <- .igraph2nn(knn, labels, directed=directed)
+  }
+  stopifnot(!is.null(labels))
+  if(.isNNlist(knn)){ # list of varying number of neighbor indices
+    knn <- relist(labels[unlist(knn)],knn)
+    return(sapply(knn, FUN=function(nn){
+        sum((sapply(unique(labels), FUN=function(x) sum(nn=x))/length(nn))^2)
+      }))
+  }
   .checkInputs(knn, labels)
   k <- ncol(knn$index)
   p <- sapply(unique(labels), FUN=function(x){
@@ -31,32 +48,49 @@
 }
 
 # neighborhood purity (i.e. proportion with same labels as target node)
-.nPurity <- function(knn, labels){
+#' @importFrom igraph as_adj_list
+.nPurity <- function(knn, labels=NULL, directed=TRUE){
+  if(is.null(directed)) directed <- TRUE
+  # for undirected, first transform directed nn to graph
+  if(!is(knn,"igraph") && !directed) knn <- .nn2graph(knn, labels)
+  if(is(knn,"igraph")){
+    if(is.null(labels)) labels <- get_vertex_attr(knn, "class")
+    knn <- .igraph2nn(knn, labels, directed=directed)
+  }
+  stopifnot(!is.null(labels))
+  if(.isNNlist(knn)){ # list of varying number of neighbor indices
+    return(mapply(nn=relist(labels[unlist(knn)],knn),
+                  label=labels, FUN=function(nn,label){
+      sum(nn==label)/length(nn)
+    }))
+  }
   .checkInputs(knn, labels)
   rowSums(knn$nncl==labels)/ncol(knn$index)
 }
 
 # neighborhood class over-representation
-.nlog2Enrichment <- function(knn, labels, pseudoCount=1){
+.nlog2Enrichment <- function(knn, labels, directed=TRUE, pseudoCount=1){
+  if(is.null(directed)) directed <- TRUE
+  # for undirected, first transform directed nn to graph
+  if(!is(knn,"igraph") && !directed) knn <- .nn2graph(knn, labels)
+  if(is(knn,"igraph")){
+    if(is.null(labels)) labels <- get_vertex_attr(knn, "class")
+    knn <- .igraph2nn(knn, labels, directed=directed)
+  }
+  stopifnot(!is.null(labels))
+  if(.isNNlist(knn)){ # list of varying number of neighbor indices
+    expect <- table(labels)/length(labels)
+    return(mapply(nn=relist(labels[unlist(knn)],knn),
+                  label=labels, FUN=function(nn,label){
+                    k <- ncol(knn$index)
+                    expected <- length(nn)*expect
+                    log2((pseudoCount+sum(nn==label))/
+                           (pseudoCount+length(nn)*expect))
+                  }))
+  }
   .checkInputs(knn, labels)
   k <- ncol(knn$index)
   expected <- k*as.numeric(table(labels))/length(labels)
   log2((pseudoCount+rowSums(knn$nncl==labels))/
          (pseudoCount+expected[as.integer(labels)]))
-}
-
-# proportion of weakly connected/PWC from igraph object
-#' @importFrom igraph V vertex_attr neighbors
-.pwc <- function(g){
-  weaklyConnected <- c()
-  for(v in V(g)){
-    neighborClass <- sapply(neighbors(g,v), function(n) vertex_attr(g, index = n)$class)
-    if (sum(neighborClass == vertex_attr(g, index = v)$class)/length(neighborClass) <= 0.5){
-      weaklyConnected <- c(weaklyConnected, v)
-    }
-  }
-  labels <- factor(vertex_attr(g)$class)
-  weaklyConnectedLabels <- labels[weaklyConnected]
-  res <- as.vector(table(weaklyConnectedLabels)/table(labels))
-  return(list(PWC=res, weaklyConnected=weaklyConnected))
 }

@@ -12,6 +12,10 @@
   FALSE
 }
 
+.isNNlist <- function(x){
+  !is.matrix(x[[1]]) && is.integer(x[[1]])
+}
+
 .checkInputs <- function(knn, labels, ...){
   .isKnn(knn, ...)
   stopifnot(is.character(labels) || is.factor(labels))
@@ -67,4 +71,27 @@
 .dist2snn <- function(x, k, type="rank"){
   knn <- .dist2knn(x, k)
   bluster::neighborsToSNNGraph(knn$index, type = type)
+}
+
+#' @importFrom igraph as_adj_list
+.igraph2nn <- function(x, labels=NULL, directed=TRUE){
+  if(is.null(labels)) labels <- vertex_attr(x,"class")
+  nn <- lapply(as_adj_list(x, loops="ignore", mode=ifelse(directed,"out","total")),
+               as.integer)
+  if(!directed || !all(lengths(nn)==length(nn[[1]]))) return(nn)
+  knn <- matrix(unlist(nn),nrow=length(nn),byrow=TRUE)
+  knn <- list(index=knn,
+              distance=matrix(NA_integer_,nrow=nrow(knn),ncol=ncol(knn)))
+  if(!is.null(labels)){
+    knn$nncl <- matrix(labels[as.integer(knn$index)], nrow=length(nn))
+  }
+  knn
+}
+
+#' @importFrom bluster neighborsToKNNGraph
+#' @importFrom igraph set_vertex_attr
+.nn2graph <- function(x, labels=NULL){
+  g <- bluster::neighborsToKNNGraph(x$index, directed=TRUE)
+  if(!is.null(labels)) g <- set_vertex_attr(g, "class", value=labels)
+  g
 }
