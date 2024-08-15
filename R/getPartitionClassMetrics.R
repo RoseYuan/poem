@@ -21,7 +21,8 @@
 getPartitionClassMetrics <-function(true, pred, metrics=c("WC","WH","AWC","AWH"), ...){
   if (anyNA(true) | anyNA(pred))
     stop("NA are not supported.")
-  if (((!is.vector(true) & !is.factor(true)) | is.list(true)) | ((!is.vector(pred) & !is.factor(pred)) | is.list(pred)))
+  if (!is.atomic(true) || (!is.factor(true) && !is.integer(true)) ||
+      !is.atomic(pred) || (!is.factor(pred) && !is.integer(pred)) )
     stop("true and pred must be vectors or factors but not lists.")
   if(length(true) != length(pred)){
     stop("The two input vectors should have the same length.")
