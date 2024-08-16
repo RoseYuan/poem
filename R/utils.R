@@ -22,7 +22,6 @@
   stopifnot(length(labels)==nrow(knn$index))
 }
 
-
 # computes nearest neighbors from embedding
 #' @importFrom BiocNeighbors AnnoyParam ExhaustiveParam findKNN
 .emb2knn <- function(x, k, BNPARAM=NULL){

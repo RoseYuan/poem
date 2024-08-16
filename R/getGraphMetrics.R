@@ -1,9 +1,7 @@
-setOldClass("igraph")
-
-#' getGraphClassMetrics
+#' getGraphMetrics
 #' 
 #' Computes a selection of supervised graph evaluation metrics using ground
-#' truth class labels. The metrics are reported (as average) per class.
+#' truth class labels. The metrics are reported (as average) per node/element.
 #'
 #' @param x Either an igraph object, a list of nearest neighbors (see details
 #'   below), or a data.frame or matrix (with features as columns and items as 
@@ -25,7 +23,7 @@ setOldClass("igraph")
 #'   or dist object.
 #' @param ... Passed to other methods
 #'
-#' @return A data.frame of metrics for each class.
+#' @return A data.frame of metrics for each node/element of `x`.
 #' 
 #' @details
 #' Additional details...
@@ -38,48 +36,39 @@ setOldClass("igraph")
 #' dat[1:10,1:3] <- dat[1:10,1:3]+2
 #' labels <- rep(LETTERS[1:3], each=10)
 #' # compute graph metrics:
-#' getGraphClassMetrics(dat, labels, k=4)
-setGeneric("getGraphClassMetrics", signature="x",
-           def=function(x, labels, metrics=c("SI","NP","AMSP","PWC","NCE"), 
+#' head(getGraphMetrics(dat, labels, k=4))
+setGeneric("getGraphMetrics", signature="x",
+           def=function(x, labels, metrics=c("SI","NP","NCE"), 
                         directed=NULL, ...)
-             standardGeneric("getGraphClassMetrics"))
+             standardGeneric("getGraphMetrics"))
 
 
 #' @importFrom bluster neighborsToKNNGraph
 #' @importFrom igraph adhesion cohesion set_vertex_attr
-.getGraphClassMetricsFromKnn <- function(x, labels, metrics, directed=NULL, ...){
+.getGraphMetricsFromKnn <- function(x, labels, metrics, directed=NULL, ...){
   .checkInputs(x,labels,checkNNcl=FALSE)
   x$nncl <- matrix(labels[x$index], nrow=nrow(x$index))
   labels <- as.factor(labels)
-  if(isFALSE(directed) || any(c("adhesion","cohesion","AMSP") %in% metrics)){
-    # convert to graph
-    g <- bluster::neighborsToKNNGraph(x$index, directed=TRUE)
+  if(isFALSE(directed)){
     # if the metrics are all to be computed in an undirected fashion, it's 
     # faster to start from an igraph:
-    if(isFALSE(directed))
-      return(.getGraphClassMetricsFromKnn(x, labels, metrics,
-                                          directed=FALSE, ...))
-    g <- set_vertex_attr(g, "class", value=labels)
+    g <- bluster::neighborsToKNNGraph(x$index, directed=TRUE)
+    return(.getGraphMetricsFromKnn(x, labels, metrics, directed=FALSE,...))
   }
   res <- as.data.frame(lapply(setNames(metrics,metrics), FUN=function(m){
     switch(m,
-           SI=rowsum(.simpsonIndex(x, labels, directed=directed), labels)[,1]/length(labels),
-           ISI=rowsum(1/.simpsonIndex(x, labels, directed=directed), labels)[,1]/length(labels),
-           NP=rowsum(.nPurity(x, labels, directed=directed), labels)[,1]/length(labels),
-           NCE=rowsum(.nlog2Enrichment(x, labels, directed=directed), labels)[,1]/length(labels),
-           adhesion=.igraphFunPerClass(g, FUN=igraph::adhesion, directed=directed),
-           cohesion=.igraphFunPerClass(g, FUN=igraph::cohesion, directed=directed),
-           AMSP=.igraphFunPerClass(g, FUN=.adjMeanShortestPath, directed=directed),
-           PWC=as.numeric(rowsum(as.integer(.nPurity(x,labels, directed=directed)<=0.5),
-                                 labels)[,1]/table(labels)),
-           stop("Unknown metric ", m)
+           SI=.simpsonIndex(x, labels, directed=directed),
+           ISI=1/.simpsonIndex(x, labels, directed=directed),
+           NP=.nPurity(x, labels, directed=directed),
+           NCE=.nlog2Enrichment(x, labels, directed=directed),
+           stop("The metric '",m,"' is either unknown or not available at the",
+                " node-level.")
            )
   }))
-  row.names(res) <- levels(labels)
-  res
+  cbind(class=labels, res)
 }
 
-setMethod("getGraphClassMetrics", signature="list",
+setMethod("getGraphMetrics", signature="list",
           definition=function(x, labels, metrics, directed=NULL, k=NULL, ...){
             .checkInputs(x,labels,checkNNcl=FALSE)
             if(!is.null(k)){
@@ -88,12 +77,12 @@ setMethod("getGraphClassMetrics", signature="list",
                      "computed neighbors.")
               x <- lapply(x, FUN=function(x) x[,seq_len(k)])
             }
-            .getGraphClassMetricsFromKnn(x, labels=labels, metrics=metrics,
-                                         directed=directed, ...)
+            .getGraphMetricsFromKnn(x, labels=labels, metrics=metrics,
+                                    directed=directed, ...)
           })
 
 
-.getGraphClassMetricsFromEmbedding <- function(x, labels, metrics, directed=NULL,
+.getGraphMetricsFromEmbedding <- function(x, labels, metrics, directed=NULL,
                                                k, shared=FALSE, ...){
   stopifnot(is.character(labels) || is.factor(labels))
   stopifnot(length(labels)==nrow(x))
@@ -106,20 +95,17 @@ setMethod("getGraphClassMetrics", signature="list",
   }else{
     g <- .emb2knn(x, k=k, ...)
   }
-  res <- .getGraphClassMetricsFromKnn(g, labels=labels, metrics=metrics,
-                                      directed=directed)
-  row.names(res) <- row.names(x)
-  res
+  .getGraphMetricsFromKnn(g, labels=labels, metrics=metrics, directed=directed)
 }
 
-setMethod("getGraphClassMetrics", signature="data.frame",
-          definition=.getGraphClassMetricsFromEmbedding)
-setMethod("getGraphClassMetrics", signature="matrix",
-          definition=.getGraphClassMetricsFromEmbedding)
+setMethod("getGraphMetrics", signature="data.frame",
+          definition=.getGraphMetricsFromEmbedding)
+setMethod("getGraphMetrics", signature="matrix",
+          definition=.getGraphMetricsFromEmbedding)
 
 
 #' @importFrom igraph gorder set_vertex_attr
-.getGraphClassMetricsFromGraph <- function(x, labels, 
+.getGraphMetricsFromGraph <- function(x, labels, 
                                            metrics=c("AMSP","PWC"),
                                            directed=NULL, ...){
   stopifnot(is.character(labels) || is.factor(labels))
@@ -128,30 +114,25 @@ setMethod("getGraphClassMetrics", signature="matrix",
   x <- set_vertex_attr(x, "class", value=labels)
   res <- as.data.frame(lapply(setNames(metrics,metrics), FUN=function(m){
     switch(m,
-           SI=rowsum(.simpsonIndex(x, labels, directed=directed), labels)[,1]/length(labels),
-           ISI=rowsum(1/.simpsonIndex(x, labels, directed=directed), labels)[,1]/length(labels),
-           NP=rowsum(.nPurity(x, labels, directed=directed), labels)[,1]/length(labels),
-           NCE=rowsum(.nlog2Enrichment(x, labels, directed=directed), labels)[,1]/length(labels),
-           adhesion=.igraphFunPerClass(x, FUN=igraph::adhesion, directed=directed),
-           cohesion=.igraphFunPerClass(x, FUN=igraph::cohesion, directed=directed),
-           AMSP=.igraphFunPerClass(x, FUN=.adjMeanShortestPath, directed=directed),
-           PWC=as.numeric(rowsum(as.integer(.nPurity(x,labels, directed=directed)<=0.5),
-                                 labels)[,1]/table(labels)),
-           stop("Unknown metric ", m)
+           SI=.simpsonIndex(x, labels, directed=directed),
+           ISI=1/.simpsonIndex(x, labels, directed=directed),
+           NP=.nPurity(x, labels, directed=directed),
+           NCE=.nlog2Enrichment(x, labels, directed=directed),
+           stop("The metric '",m,"' is either unknown or not available at the",
+                " node-level.")
     )
   }))
-  row.names(res) <- levels(labels)
-  res
+  cbind(class=labels, res)
 }
 
-setMethod("getGraphClassMetrics", signature="igraph",
+setMethod("getGraphMetrics", signature="igraph",
           definition=function(x, labels, ...){
             stopifnot(is(x,"igraph"))
-            .getGraphClassMetricsFromGraph(x, labels=labels, ...)
+            .getGraphMetricsFromGraph(x, labels=labels, ...)
           })
 
 
-.getGraphClassMetricsFromDist <- function(x, labels, shared=FALSE, k=10, ...){
+.getGraphMetricsFromDist <- function(x, labels, shared=FALSE, k=10, ...){
   stopifnot(is.character(labels) || is.factor(labels))
   stopifnot(length(labels)==nrow(x))
   if(is.data.frame(x)){
@@ -163,11 +144,11 @@ setMethod("getGraphClassMetrics", signature="igraph",
   }else{
     g <- .dist2knn(x, k=k)
   }
-  getGraphClassMetrics(g, labels=labels, ...)
+  getGraphMetrics(g, labels=labels, ...)
 }
 
-setMethod("getGraphClassMetrics", signature="dist",
+setMethod("getGraphMetrics", signature="dist",
           definition=function(x, labels, ...){
             stopifnot(is(x,"dist"))
-            .getGraphClassMetricsFromDist(x, labels=labels, ...)
+            .getGraphMetricsFromDist(x, labels=labels, ...)
           })

@@ -21,6 +21,8 @@
 getPartitionClassMetrics <-function(true, pred, metrics=c("WC","WH","AWC","AWH"), ...){
   if (anyNA(true) | anyNA(pred))
     stop("NA are not supported.")
+  if (is.character(true)) true <- as.factor(true)
+  if (is.character(pred)) pred <- as.factor(pred)
   if (!is.atomic(true) || (!is.factor(true) && !is.integer(true)) ||
       !is.atomic(pred) || (!is.factor(pred) && !is.integer(pred)) )
     stop("true and pred must be vectors or factors but not lists.")

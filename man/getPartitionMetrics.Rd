@@ -22,7 +22,7 @@ be a vector of characters, integers, numerics, or a factor, but not a list.}
 computed.}
 }
 \value{
-A list of metrics.
+A data.frame of metrics for each node/element of \code{x}.
 }
 \description{
 Short description...

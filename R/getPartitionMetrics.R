@@ -8,7 +8,7 @@
 #'  be a vector of characters, integers, numerics, or a factor, but not a list.
 #' @param metrics The metrics to compute. If omitted, main metrics will be 
 #'   computed.
-#' @return A list of metrics.
+#' @return A data.frame of metrics for each node/element of `x`.
 #' @details
 #' Additional details...
 #' 
@@ -22,6 +22,8 @@ getPartitionMetrics <-function(true, pred,
                                 metrics=c("RI","WC","WH","ARI","AWC","AWH"),
                                 ...){
   if (anyNA(true) | anyNA(pred)) stop("NA are not supported.")
+  if (is.character(true)) true <- as.factor(true)
+  if (is.character(pred)) pred <- as.factor(pred)
   if (!is.atomic(true) || (!is.factor(true) && !is.integer(true)) ||
       !is.atomic(pred) || (!is.factor(pred) && !is.integer(pred)) )
     stop("true and pred must be vectors of factors but not lists.")
