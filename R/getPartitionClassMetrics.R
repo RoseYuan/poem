@@ -93,10 +93,10 @@ getPartitionClassMetrics <-function(true, pred, metrics=c("WC","WH","AWC","AWH",
     names(avj) <- res$levels$c2
     return(avj)
   }
-  
+  # adapted from https://github.com/SofieVG/FlowSOM/blob/56892b583a0dbae5535665e45290ffce355bd503/R/4_metaClustering.R#L202
   .calF1 <- function(){
-    realClusters <- aux.conversion(true)
-    predictedClusters <- aux.conversion(pred)
+    realClusters <- .aux.conversion(true)
+    predictedClusters <- .aux.conversion(pred)
     if (sum(predictedClusters) == 0)
       return(0)
     a <- table(realClusters, predictedClusters)

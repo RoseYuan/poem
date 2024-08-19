@@ -73,22 +73,10 @@ getPartitionMetrics <-function(true, pred,
            Mirkin = mclustcomp(as.vector(true), as.vector(pred), types = "mirkin")$scores,
            MHM = mclustcomp(as.vector(true), as.vector(pred), types = "mhm")$scores,
            MMM = mclustcomp(as.vector(true), as.vector(pred), types = "mmm")$scores,
-           FM = FMeasure(aux.conversion(true), 
-                         aux.conversion(pred), silent = TRUE),
+           FM = FMeasure(.aux.conversion(true), 
+                         .aux.conversion(pred), silent = TRUE),
            stop("Unknown metric.")
     )
   })
   return(res)
-}
-
-
-aux.conversion <- function(x){
-  if (is.character(x)){
-    x = as.numeric(as.factor(unlist(strsplit(x,split=""))))
-  } else if (is.factor(x)){
-    x = as.numeric(x)
-  } else {
-    x = as.numeric(as.factor(x))
-  }
-  return(round(x))
 }
