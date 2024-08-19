@@ -1,25 +1,38 @@
 #' getPartitionMetrics
 #' 
-#' Short description...
+#' Computes a selection of external evaluation metrics for partition. The 
+#' metrics are reported per dataset.
 #'
 #' @param true A vector containing the labels of the true classes. Must be a 
 #'  vector of characters, integers, numerics, or a factor, but not a list.
 #' @param pred A vector containing the labels of the predicted clusters. Must 
 #'  be a vector of characters, integers, numerics, or a factor, but not a list.
 #' @param metrics The metrics to compute. If omitted, main metrics will be 
-#'   computed.
+#'   computed. RI: Rand Index; WC: Wallace Completeness; WH: Wallace 
+#'   Homogeneity; ARI:Adjusted Rand Index; AWC: Adjusted Wallace Completeness; 
+#'   AWH: Adjusted Wallace Homogeneity; MI: Mutual Information; AMI: Adjusted 
+#'   Mutual Information; VI: Variation of Information; EH: (Entropy-based)
+#'   Homogeneity; EC: (Entropy-based) Completeness; VM: V-measure; 
+#'   FM: F-measure/weighted average F1 score; VDM: Van Dongen Measure; 
+#'   MHM: Meila-Heckerman Measure; MMM: Maximum-Match Measure; 
+#'   Mirkin: Mirkin Metric.
 #' @return A data.frame of metrics for each node/element of `x`.
 #' @details
 #' Additional details...
 #' 
-#' @importFrom aricode sortPairs
+#' @importFrom aricode sortPairs AMI
+#' @importFrom clevr mutual_info variation_info homogeneity completeness v_measure
+#' @importFrom mclustcomp mclustcomp
+#' @importFrom FlowSOM FMeasure
 #' @export
 #' @examples
 #' true <- rep(LETTERS[1:3], each=10)
 #' pred <- c(rep("A", 8), rep("B", 9), rep("C", 3), rep("D", 10))
 #' getPartitionMetrics(true, pred)
 getPartitionMetrics <-function(true, pred, 
-                                metrics=c("RI","WC","WH","ARI","AWC","AWH"),
+                                metrics=c("RI","WC","WH","ARI","AWC","AWH",
+                                          "MI","AMI","VI","EH","EC","VM",
+                                          "FM","VDM","Mirkin","MHM","MMM"),
                                 ...){
   if (anyNA(true) | anyNA(pred)) stop("NA are not supported.")
   if (is.character(true)) true <- as.factor(true)
@@ -50,8 +63,32 @@ getPartitionMetrics <-function(true, pred,
            AWH = (a*d-b*c)/((a+c)*(c+d)),
            RI = (a+d)/(a+b+c+d),
            ARI = 2*(a*d-b*c)/((a+b)*(b+d)+(a+c)*(c+d)),
+           MI = mutinformation(true, pred, ...),
+           AMI = AMI(true, pred, ...),
+           VI = variation_info(true, pred, ...),
+           EH = homogeneity(true, pred, ...),
+           EC = completeness(true, pred, ...),
+           VM = v_measure(true, pred, ...),
+           VDM = mclustcomp(as.vector(true), as.vector(pred), types = "vdm")$scores,
+           Mirkin = mclustcomp(as.vector(true), as.vector(pred), types = "mirkin")$scores,
+           MHM = mclustcomp(as.vector(true), as.vector(pred), types = "mhm")$scores,
+           MMM = mclustcomp(as.vector(true), as.vector(pred), types = "mmm")$scores,
+           FM = FMeasure(aux.conversion(true), 
+                         aux.conversion(pred), silent = TRUE),
            stop("Unknown metric.")
     )
   })
   return(res)
+}
+
+
+aux.conversion <- function(x){
+  if (is.character(x)){
+    x = as.numeric(as.factor(unlist(strsplit(x,split=""))))
+  } else if (is.factor(x)){
+    x = as.numeric(x)
+  } else {
+    x = as.numeric(as.factor(x))
+  }
+  return(round(x))
 }
