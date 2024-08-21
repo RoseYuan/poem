@@ -73,6 +73,11 @@ m2 <- matrix(c(0.95, 0.025, 0.025,
 colnames(m1) <- colnames(m2) <- LETTERS[1:3]
 fuzzyPartitionMetrics(m1,m2)
 }
+\references{
+Hullermeier et al. 2012; 10.1109/TFUZZ.2011.2179303;
+
+D’Ambrosio et al. 2021; 10.1007/s00357-020-09367-0
+}
 \author{
 Pierre-Luc Germain
 }

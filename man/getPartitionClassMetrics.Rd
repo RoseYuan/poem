@@ -4,7 +4,12 @@
 \alias{getPartitionClassMetrics}
 \title{getPartitionClassMetrics}
 \usage{
-getPartitionClassMetrics(true, pred, metrics = c("WC", "WH", "AWC", "AWH"))
+getPartitionClassMetrics(
+  true,
+  pred,
+  metrics = c("WC", "WH", "AWC", "AWH", "FM"),
+  ...
+)
 }
 \arguments{
 \item{true}{A vector containing the labels of the true classes. Must be a
@@ -20,7 +25,8 @@ computed.}
 A list of metrics.
 }
 \description{
-Short description...
+Computes a selection of external evaluation metrics for partition. The
+metrics are reported per class.
 }
 \details{
 Additional details...

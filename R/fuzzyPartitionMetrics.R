@@ -18,6 +18,9 @@
 #'   precision of the adjusted metrics).
 #' @param BPPARAM BiocParallel params for multithreading (default none)
 #' 
+#' @references Hullermeier et al. 2012; 10.1109/TFUZZ.2011.2179303;
+#' @references D’Ambrosio et al. 2021; 10.1007/s00357-020-09367-0
+#' 
 #' @author Pierre-Luc Germain
 #'
 #' @return A list of metrics:
@@ -29,6 +32,7 @@
 #'   \item fuzzyAdjW1 Adjusted fuzzy Wallace index for each partition of `Q`
 #'   \item fuzzyAdjW2 Adjusted fuzzy Wallace index for each partition of `P`
 #' @importFrom BiocParallel SerialParam bplapply
+#' @export
 #' @examples
 #' # generate fuzzy partitions:
 #' m1 <- matrix(c(0.95, 0.025, 0.025, 
