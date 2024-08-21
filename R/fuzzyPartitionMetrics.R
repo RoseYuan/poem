@@ -1,0 +1,149 @@
+#' fuzzyPartitionMetrics
+#' 
+#' Computes fuzzy versions of pair-sorting partition metrics. This is largely 
+#' based on the permutation-based implementation by Antonio D'Ambrosio from the 
+#' ConsRankClass package, modified to also compute the fuzzy versions of the 
+#' adjusted Wallace indices and implement multithreading.
+#'
+#' @param P A object coercible to a numeric matrix with membership probability 
+#'   of elements (rows) in clusters (columns)
+#' @param Q A object coercible to a numeric matrix with membership probability 
+#'   of elements (rows) in clusters (columns). Must have the same number of rows
+#'   as `P`
+#' @param nperms The number of permutations (for correction for chance)
+#' @param computeWallace Logical; whether to compute the individual fuzzy 
+#'   versions of the Wallace indices (increases running time).
+#' @param verbose Logical; whether to print info and warnings, including the 
+#'   standard error of the mean across permutations (giving an idea of the 
+#'   precision of the adjusted metrics).
+#' @param BPPARAM BiocParallel params for multithreading (default none)
+#' 
+#' @author Pierre-Luc Germain
+#'
+#' @return A list of metrics:
+#'   \item NDC : Hullermeier's NDC (fuzzy rand index)
+#'   \item ACI : Ambrosio's Adjusted Concordance Index (ACI), i.e. a 
+#'     permutation-based fuzzy version of the adjusted Rand index.
+#'   \item fuzzyWallace1 Fuzzy Wallace index for each partition of `Q`
+#'   \item fuzzyWallace2 Fuzzy Wallace index for each partition of `P`
+#'   \item fuzzyAdjW1 Adjusted fuzzy Wallace index for each partition of `Q`
+#'   \item fuzzyAdjW2 Adjusted fuzzy Wallace index for each partition of `P`
+#' @importFrom BiocParallel SerialParam bplapply
+#' @examples
+#' # generate fuzzy partitions:
+#' m1 <- matrix(c(0.95, 0.025, 0.025, 
+#'                0.98, 0.01, 0.01, 
+#'                0.96, 0.02, 0.02, 
+#'                0.95, 0.04, 0.01, 
+#'                0.95, 0.01, 0.04, 
+#'                0.99, 0.005, 0.005, 
+#'                0.025, 0.95, 0.025, 
+#'                0.97, 0.02, 0.01, 
+#'                0.025, 0.025, 0.95), 
+#'                ncol = 3, byrow=TRUE)
+#' m2 <- matrix(c(0.95, 0.025, 0.025,  
+#'                0.98, 0.01, 0.01, 
+#'                0.96, 0.02, 0.02, 
+#'                0.025, 0.95, 0.025, 
+#'                0.02, 0.96, 0.02, 
+#'                0.01, 0.98, 0.01, 
+#'                0.05, 0.05, 0.95, 
+#'                0.02, 0.02, 0.96, 
+#'                0.01, 0.01, 0.98), 
+#'                ncol = 3, byrow=TRUE)
+#' colnames(m1) <- colnames(m2) <- LETTERS[1:3]
+#' fuzzyPartitionMetrics(m1,m2)
+fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=1000,
+                                  verbose=TRUE, 
+                                  BPPARAM=BiocParallel::SerialParam()){ 
+  
+  P <- as.matrix(P)
+  Q <- as.matrix(Q)
+  stopifnot(nrow(P)==nrow(Q))
+  
+  m <- nrow(P)
+  ncomp <- m*((m-1)/2)
+  if(verbose && m>=2000){
+    os <- 8*(4*m^2 + m*nperms)
+    if(computeWallace) os <- os + 8*ncomp*(1+max(ncol(Q),ncol(P)))
+    class(os) = "object_size"
+    message("Projected memory usage: ", format(os, units = "auto"))
+  }
+  
+  ep <- as.matrix(1-(0.5*dist(P,method="manhattan")))
+  eq <- as.matrix(1-(0.5*dist(Q,method="manhattan")))
+  
+  # Hullermeier's NDC
+  NDC <- 1 - ( sum(abs(ep[lower.tri(ep)] - eq[lower.tri(eq)]) )/(ncomp) )
+  
+  # precompute the pairs' class membership (for increased speed in permutations)
+  Ppairs <- apply(P, 2, FUN=function(p) tcrossprod(p)[lower.tri(ep)])
+  
+  getFWallace <- function(emA, emB, fuzzyClB, Bpairs=NULL){
+    a <- sapply(setNames(seq_len(ncol(fuzzyClB)),colnames(fuzzyClB)),
+                FUN=function(i){
+      # get the degree to which the members of each pair are of the given 
+      # class in B
+      if(is.null(Bpairs)){
+        Bpair <- as.matrix(tcrossprod(fuzzyClB[,i])[lower.tri(emA)])
+      }else{
+        Bpair <- Bpairs[,i]
+      }
+      # compute 1 - the distance in A between elements weighted by their being 
+      # of the same class in B
+      Btot <- sum(Bpair)
+      c(c=sum(emA[lower.tri(emA)]*Bpair), n=Btot)
+    })
+    list( global=sum(a[1,])/sum(a[2,]),
+          perPartition=a[1,]/a[2,] )
+  }
+  
+  if(computeWallace){
+    W1 <- getFWallace(ep,eq,Q)
+    W2 <- getFWallace(eq,ep,P,Bpairs=Ppairs)
+  }
+  
+  # generate permutations
+  allp <- apply(matrix( runif(m*nperms), nrow=m ), 2, order)
+  
+  # get metrics for the permutations
+  res <- bplapply(1:nperms, BPPARAM=BPPARAM, function(col){
+    p <- allp[,col]
+    permutedEQ <- eq[p,p]
+    NDC <- 1 - ( sum(abs(ep-permutedEQ) )/(m*((m-1))) )
+    if(!computeWallace) return(NDC)
+    W1 <- getFWallace(ep,permutedEQ,Q[p,])
+    W2 <- getFWallace(permutedEQ,ep,P,Bpairs=Ppairs)
+    list(NDC=NDC, W1=W1, W2=W2)
+  })
+  
+  NDCs <- sapply(res, \(x) x[[1]])
+  
+  if(verbose){
+    SE <- sd(NDCs)/sqrt(nperms)
+    message("Standard error of the mean NDC across permutations:", 
+            format(SE, digits=3))
+    if(SE>0.0025)
+      message("You might want to increase the number of permutations to ",
+              "increase the robustness of the adjusted metrics.")
+  }
+  
+  adj <- function(x, m) (x-m)/(1-m)
+  
+  ACI <- adj(NDC,mean(NDCs))
+  if(!computeWallace) return(list(NDC=NDC, ACI=ACI))
+  
+  if(computeWallace){
+    W1m <- mean(sapply(res, \(x) x[[2]][[1]]))
+    W2m <- mean(sapply(res, \(x) x[[3]][[1]]))
+    W1pm <- rowMeans(sapply(res, \(x) x[[2]][[2]]))
+    W2pm <- rowMeans(sapply(res, \(x) x[[3]][[2]]))
+    AW1 <- list( global=adj(W1$global,W1m),
+                 perPartition=mapply(x=W1$perPartition, m=W1pm, FUN=adj) )
+    AW2 <- list( global=adj(W2$global,W2m),
+                 perPartition=mapply(x=W2$perPartition, m=W2pm, FUN=adj) )
+  }
+  
+  return(list(NDC=NDC, ACI=ACI, fuzzyWallace1=W1, fuzzyWallace2=W2,
+              fuzzyAdjW1=AW1, fuzzyAdjW2=AW2))
+}

@@ -76,7 +76,7 @@ setGeneric("getGraphClassMetrics", signature="x",
            )
   }))
   row.names(res) <- levels(labels)
-  res
+  cbind(class=levels(labels),res)
 }
 
 setMethod("getGraphClassMetrics", signature="list",

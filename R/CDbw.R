@@ -29,7 +29,8 @@
 #' approach using multi-representatives. Pattern Recognition Letters 29, 773-786.
 #' Halkidi, M., Vazirgiannis, M. and Hennig, C. (2015) Method-independent 
 #' indices for cluster validation. In C. Hennig, M. Meila, F. Murtagh, R. Rocci 
-#' (eds.) Handbook of Cluster Analysis, CRC Press/Taylor \code{&} Francis, Boca Raton.
+#' (eds.) Handbook of Cluster Analysis, CRC Press/Taylor \code{&} Francis, Boca 
+#' Raton.
 #'
 #' @author Christian Hennig
 #' @examples
@@ -115,7 +116,8 @@ CDbw <- function(x, clustering, r=10, s=seq(0.1,0.8,by=0.1),
       for (k in 1:nrcr){
         u <- (x[rcr[[i]][[j]][k,1],]+x[rcr[[i]][[j]][k,2],])/2
 #        browser()
-        ud <- sqrt(mahalanobis(x[clustering==i | clustering==j,,drop=FALSE],u,diag(p)))
+        ud <- sqrt(mahalanobis(x[clustering==i | clustering==j,,drop=FALSE],
+                               u,diag(p)))
         dkd <-  sqrt(sum((x[rcr[[i]][[j]][k,1],]-x[rcr[[i]][[j]][k,2],])^2))
         dk[i,j] <- dk[i,j]+dkd
         dens[i,j] <- dens[i,j]+dkd*sum(ud<wsdij)/(2*wsdij*(nc[i]+nc[j]))

@@ -31,7 +31,7 @@ getEmbeddingMetrics <-function(x, labels, metrics=c("SW"), distance="euclidean",
              SW=cluster::silhouette(as.integer(labels), dist=d)[,3])
 }
 
-#' getClassEmbeddingMetrics
+#' getEmbeddingClassMetrics
 #' 
 #' Computes class-level, embedding-based metrics.
 #'
@@ -49,8 +49,8 @@ getEmbeddingMetrics <-function(x, labels, metrics=c("SW"), distance="euclidean",
 #' @export
 #' @examples
 #' d1 <- mockData()
-#' getClassEmbeddingMetrics(d1[,1:2], labels=d1$class)
-getClassEmbeddingMetrics <-function(x, labels,
+#' getEmbeddingClassMetrics(d1[,1:2], labels=d1$class)
+getEmbeddingClassMetrics <-function(x, labels,
                                     metrics=c("meanSW", "minSW", "pnSW"),
                                     distance="euclidean", ...){
   stopifnot(is.atomic(labels) && (is.factor(labels) | is.integer(labels)))
@@ -72,7 +72,7 @@ getClassEmbeddingMetrics <-function(x, labels,
   res
 }
 
-#' getGlobalEmbeddingMetrics
+#' getEmbeddingGlobalMetrics
 #' 
 #' Computes global, embedding-based metrics.
 #'
@@ -90,8 +90,8 @@ getClassEmbeddingMetrics <-function(x, labels,
 #' @export
 #' @examples
 #' d1 <- mockData()
-#' getGlobalEmbeddingMetrics(d1[,1:2], labels=d1$class)
-getGlobalEmbeddingMetrics <-function(x, labels,
+#' getEmbeddingGlobalMetrics(d1[,1:2], labels=d1$class)
+getEmbeddingGlobalMetrics <-function(x, labels,
                                      metrics=c("meanSW", "meanClassSW", "pnSW",
                                                "minClassSW", "cdbw", "cohesion",
                                                "compactness", "sep"),

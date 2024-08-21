@@ -18,7 +18,7 @@
 #' true <- rep(LETTERS[1:3], each=10)
 #' pred <- c(rep("A", 8), rep("B", 9), rep("C", 3), rep("D", 10))
 #' getPartitionClassMetrics(true, pred)
-getPartitionClassMetrics <-function(true, pred, metrics=c("WC","WH","AWC","AWH"), ...){
+getPartitionClassMetrics <-function(true, pred, metrics=c("WC","WH","AWC","AWH")){
   if (anyNA(true) | anyNA(pred))
     stop("NA are not supported.")
   if (is.character(true)) true <- as.factor(true)
@@ -103,3 +103,27 @@ getPartitionClassMetrics <-function(true, pred, metrics=c("WC","WH","AWC","AWH")
   })
   return(res)
 }
+
+
+#' getPartitionGlobalMetrics
+#' 
+#' Short description...
+#'
+#' @param true A vector containing the labels of the true classes. Must be a 
+#'  vector of characters, integers, numerics, or a factor, but not a list.
+#' @param pred A vector containing the labels of the predicted clusters. Must 
+#'  be a vector of characters, integers, numerics, or a factor, but not a list.
+#' @param metrics The metrics to compute. If omitted, main metrics will be 
+#'   computed.
+#' @return A list of metrics.
+#' 
+#' @export
+#' @examples
+#' true <- rep(LETTERS[1:3], each=10)
+#' pred <- c(rep("A", 8), rep("B", 9), rep("C", 3), rep("D", 10))
+#' getPartitionGlobalMetrics(true, pred)
+getPartitionGlobalMetrics <-function(true, pred, ...){
+  pm <- getPartitionClassMetrics(true, pred, ...)
+  as.data.frame(lapply(pm, FUN=function(x) mean(unlist(x))))
+}
+  
