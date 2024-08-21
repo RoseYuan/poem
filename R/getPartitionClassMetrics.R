@@ -1,6 +1,7 @@
 #' getPartitionClassMetrics
 #' 
-#' Short description...
+#' Computes a selection of external evaluation metrics for partition. The 
+#' metrics are reported per class.
 #'
 #' @param true A vector containing the labels of the true classes. Must be a 
 #'  vector of characters, integers, numerics, or a factor, but not a list.
@@ -18,7 +19,8 @@
 #' true <- rep(LETTERS[1:3], each=10)
 #' pred <- c(rep("A", 8), rep("B", 9), rep("C", 3), rep("D", 10))
 #' getPartitionClassMetrics(true, pred)
-getPartitionClassMetrics <-function(true, pred, metrics=c("WC","WH","AWC","AWH")){
+getPartitionClassMetrics <-function(true, pred, metrics=c("WC","WH","AWC","AWH",
+                                                          "FM"), ...){
   if (anyNA(true) | anyNA(pred))
     stop("NA are not supported.")
   if (is.character(true)) true <- as.factor(true)
@@ -91,6 +93,19 @@ getPartitionClassMetrics <-function(true, pred, metrics=c("WC","WH","AWC","AWH")
     names(avj) <- res$levels$c2
     return(avj)
   }
+  # adapted from https://github.com/SofieVG/FlowSOM/blob/56892b583a0dbae5535665e45290ffce355bd503/R/4_metaClustering.R#L202
+  .calF1 <- function(){
+    realClusters <- .aux.conversion(true)
+    predictedClusters <- .aux.conversion(pred)
+    if (sum(predictedClusters) == 0)
+      return(0)
+    a <- table(realClusters, predictedClusters)
+    p <- t(apply(a, 1, function(x) x / colSums(a)))
+    r <- apply(a, 2, function(x) x / rowSums(a))
+    f <- 2 * r * p / (r + p)
+    f[is.na(f)] <- 0
+    return(as.list(apply(f, 1, max)))
+  }
 
   res <- lapply(setNames(metrics, metrics), FUN=function(m){
     switch(m,
@@ -98,6 +113,7 @@ getPartitionClassMetrics <-function(true, pred, metrics=c("WC","WH","AWC","AWH")
            AWC = .calAWC(),
            WH = .calWH(),
            AWH = .calAWH(),
+           FM = .calF1(),
            stop("Unknown metric.")
     )
   })
