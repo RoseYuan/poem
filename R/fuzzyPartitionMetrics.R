@@ -137,17 +137,15 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=1000,
   ACI <- adj(NDC,mean(NDCs))
   if(!computeWallace) return(list(NDC=NDC, ACI=ACI))
   
-  if(computeWallace){
-    W1m <- mean(sapply(res, \(x) x[[2]][[1]]))
-    W2m <- mean(sapply(res, \(x) x[[3]][[1]]))
-    W1pm <- rowMeans(sapply(res, \(x) x[[2]][[2]]))
-    W2pm <- rowMeans(sapply(res, \(x) x[[3]][[2]]))
-    AW1 <- list( global=adj(W1$global,W1m),
-                 perPartition=mapply(x=W1$perPartition, m=W1pm, FUN=adj) )
-    AW2 <- list( global=adj(W2$global,W2m),
-                 perPartition=mapply(x=W2$perPartition, m=W2pm, FUN=adj) )
-  }
-  
+  W1m <- mean(sapply(res, \(x) x[[2]][[1]]))
+  W2m <- mean(sapply(res, \(x) x[[3]][[1]]))
+  W1pm <- rowMeans(sapply(res, \(x) x[[2]][[2]]))
+  W2pm <- rowMeans(sapply(res, \(x) x[[3]][[2]]))
+  AW1 <- list( global=adj(W1$global,W1m),
+               perPartition=mapply(x=W1$perPartition, m=W1pm, FUN=adj) )
+  AW2 <- list( global=adj(W2$global,W2m),
+               perPartition=mapply(x=W2$perPartition, m=W2pm, FUN=adj) )
+
   return(list(NDC=NDC, ACI=ACI, fuzzyWallace1=W1, fuzzyWallace2=W2,
               fuzzyAdjW1=AW1, fuzzyAdjW2=AW2))
 }
