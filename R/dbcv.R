@@ -167,6 +167,10 @@ convert_singleton_clusters_to_noise <- function(y, noise_id) {
 #' If FALSE, use MST implementation in igraph.
 #' @return Numeric value representing the DBCV metric.
 #' @importFrom parallel mclapply
+#' @examples
+#' data <- noisy_moon
+#' dbcv(data[, c("x", "y")], data$kmeans_label)
+#' dbcv(data[, c("x", "y")], data$hdbscan_label)
 dbcv <- function(X, y, metric = "euclidean", noise_id = -1, check_duplicates = FALSE,
                  n_processes = "auto", use_scipy_mst_implementation = TRUE) {
   X <- as.matrix(X)
