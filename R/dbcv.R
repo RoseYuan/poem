@@ -4,7 +4,12 @@
 #' @param metric String specifying the metric to compute the distances.
 #' @return Numeric matrix of pairwise distances with self-distances set to `Inf`.
 compute_pair_to_pair_dists <- function(X, metric="euclidean") {
-  dists <- as.matrix(dist(X, method = metric))
+  if(metric == "sqeuclidean"){
+    dists <- as.matrix(dist(X, method = "euclidean"))
+    dists <- dists^2
+  }else{
+    dists <- as.matrix(dist(X, method = metric))
+  }
   dists[dists < 1e-12] <- 1e-12
   diag(dists) <- Inf
   return(dists)
@@ -157,7 +162,7 @@ convert_singleton_clusters_to_noise <- function(y, noise_id) {
 #' @description Compute the DBCV (Density-Based Clustering Validation) metric.
 #' @param X Numeric matrix of sample embeddings.
 #' @param y Integer vector of cluster IDs.
-#' @param metric String specifying the distance metric. See `method` in `stats::dist()`.
+#' @param metric String specifying the distance metric. "sqeuclidean", or possible `method` in `stats::dist()`.
 #' @param noise_id Integer, the ID for noise.
 #' @param check_duplicates Logical flag to check for duplicate samples.
 #' @param n_processes Integer or "auto", specifying the number of parallel processes.
@@ -175,7 +180,7 @@ dbcv <- function(X, y, metric = "euclidean", noise_id = -1, check_duplicates = F
                  n_processes = "auto", use_scipy_mst_implementation = TRUE) {
   X <- as.matrix(X)
   y <- as.integer(y)
-  
+  n <- dim(X)[1]
   if (nrow(X) != length(y)) {
     stop("Mismatch in number of samples and cluster labels.")
   }
@@ -235,7 +240,6 @@ dbcv <- function(X, y, metric = "euclidean", noise_id = -1, check_duplicates = F
   
   vcs <- (min_dspcs - dscs) / pmax(min_dspcs, dscs)
   vcs[is.nan(vcs)] <- 0.0
-  dbcv <- sum(vcs * table(y)) / length(y)
-  
+  dbcv <- sum(vcs * table(y)) / n
   return(dbcv)
 }
