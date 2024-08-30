@@ -51,7 +51,7 @@ getEmbeddingMetrics <-function(x, labels, metrics=c("SW"), distance="euclidean",
 #' d1 <- mockData()
 #' getEmbeddingClassMetrics(d1[,1:2], labels=d1$class)
 getEmbeddingClassMetrics <-function(x, labels,
-                                    metrics=c("meanSW", "minSW", "pnSW"),
+                                    metrics=c("meanSW", "minSW", "pnSW", "dbcv"),
                                     distance="euclidean", ...){
   stopifnot(is.atomic(labels) && (is.factor(labels) | is.integer(labels)))
   metrics <- match.arg(metrics, several.ok = TRUE)
@@ -69,6 +69,9 @@ getEmbeddingClassMetrics <-function(x, labels,
     res$pnSW <- aggregate(nsw$SW, by=list(nsw$class), FUN=function(x){
       sum(x<0)/length(x)
   })[,2]
+  if("dbcv" %in% metrics){
+    y <- as.integer(factor(labels, levels = sort(unique(labels))))
+    res$dbcv <- dbcv(x, y, metric = distance, ...)$vcs}
   res
 }
 
@@ -94,7 +97,7 @@ getEmbeddingClassMetrics <-function(x, labels,
 getEmbeddingGlobalMetrics <-function(x, labels,
                                      metrics=c("meanSW", "meanClassSW", "pnSW",
                                                "minClassSW", "cdbw", "cohesion",
-                                               "compactness", "sep"),
+                                               "compactness", "sep", "dbcv"),
                                      distance="euclidean", ...){
   stopifnot(is.atomic(labels) && (is.factor(labels) | is.integer(labels)))
   metrics <- match.arg(metrics, several.ok = TRUE)
@@ -108,5 +111,16 @@ getEmbeddingGlobalMetrics <-function(x, labels,
   res <- c(CDbw(x, as.integer(labels), ...),
     meanSW=mean(nsw$SW), pnSW=sum(nsw$SW<0)/nrow(nsw),
     meanClassSW=mean(ag), minClassSW=min(ag))[metrics]
+  if("dbcv" %in% metrics){ # lazy computation of dbcv, because it's relatively slow
+  y <- as.integer(factor(labels, levels = sort(unique(labels))))
+  dbcv <- dbcv(x, y, metric = distance, ...)$dbcv
+  res <- c(CDbw(x, as.integer(labels), ...),
+           meanSW=mean(nsw$SW), pnSW=sum(nsw$SW<0)/nrow(nsw),
+           meanClassSW=mean(ag), minClassSW=min(ag), dbcv=dbcv)[metrics]
+  }else{
+    res <- c(CDbw(x, as.integer(labels), ...),
+             meanSW=mean(nsw$SW), pnSW=sum(nsw$SW<0)/nrow(nsw),
+             meanClassSW=mean(ag), minClassSW=min(ag))[metrics]
+  }
   as.data.frame(t(res))
 }

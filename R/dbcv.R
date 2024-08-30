@@ -166,11 +166,13 @@ convert_singleton_clusters_to_noise <- function(y, noise_id) {
 #' @param noise_id Integer, the ID for noise.
 #' @param check_duplicates Logical flag to check for duplicate samples.
 #' @param n_processes Integer or "auto", specifying the number of parallel processes.
-#' @param use_scipy_mst_implementation Logical flag to use MST implementation 
-#' in scipy. If TRUE, python is required, and this will reproduce the same results as
-#' the original MATLAB implementation of DBCV at https://github.com/pajaskowiak/dbcv/.
+#' @param use_scipy_mst_implementation Logical flag to use scipy's Kruskal's MST 
+#' implementation. If TRUE, python is required, and this will reproduce the same results as
+#' this python implementation of DBCV at https://github.com/FelSiq/DBCV.
 #' If FALSE, use MST implementation in igraph.
-#' @return Numeric value representing the DBCV metric.
+#' @return a list:
+#' \item {vcs} Numeric vector of validity index for each cluster.
+#' \item {dbcv} Numeric value representing the overall DBCV metric.
 #' @importFrom parallel mclapply
 #' @examples
 #' data <- noisy_moon
@@ -241,5 +243,5 @@ dbcv <- function(X, y, metric = "euclidean", noise_id = -1, check_duplicates = F
   vcs <- (min_dspcs - dscs) / pmax(min_dspcs, dscs)
   vcs[is.nan(vcs)] <- 0.0
   dbcv <- sum(vcs * table(y)) / n
-  return(dbcv)
+  return(list(vcs=vcs ,dbcv=dbcv))
 }
