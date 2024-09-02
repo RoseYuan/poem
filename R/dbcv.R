@@ -243,5 +243,5 @@ dbcv <- function(X, y, metric = "euclidean", noise_id = -1, check_duplicates = F
   vcs <- (min_dspcs - dscs) / pmax(min_dspcs, dscs)
   vcs[is.nan(vcs)] <- 0.0
   dbcv <- sum(vcs * table(y)) / n
-  return(list(vcs=vcs ,dbcv=dbcv))
+  return(list("vcs"=vcs ,"dbcv"=dbcv))
 }

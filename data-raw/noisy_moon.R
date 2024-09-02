@@ -13,7 +13,7 @@ moon_maker <- function(n = 50, noise = 0.1,
 # Combine the data into a data frame for easier manipulation
 df1 <- moon_maker(x_center = 1, y_center = -1)
 df1$label = 1
-df2 <- moon_maker(x_center = 2, y_center = 1)
+df2 <- moon_maker(x_center = 2, y_center = 0.5)
 df2$label = 2
 df2$y <- - df2$y
 data <- rbind(df1, df2)
