@@ -16,7 +16,7 @@
 #'   FM: F-measure/weighted average F1 score; VDM: Van Dongen Measure; 
 #'   MHM: Meila-Heckerman Measure; MMM: Maximum-Match Measure; 
 #'   Mirkin: Mirkin Metric.
-#' @return A data.frame of metrics for each node/element of `x`.
+#' @return A list of metric results.
 #' @details
 #' Additional details...
 #' 
@@ -63,7 +63,7 @@ getPartitionMetrics <-function(true, pred,
            AWH = (a*d-b*c)/((a+c)*(c+d)),
            RI = (a+d)/(a+b+c+d),
            ARI = 2*(a*d-b*c)/((a+b)*(b+d)+(a+c)*(c+d)),
-           MI = mutinformation(true, pred, ...),
+           MI = mutual_info(true, pred, ...),
            AMI = AMI(true, pred, ...),
            VI = variation_info(true, pred, ...),
            EH = homogeneity(true, pred, ...),
