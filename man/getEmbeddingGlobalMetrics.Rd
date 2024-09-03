@@ -8,7 +8,7 @@ getEmbeddingGlobalMetrics(
   x,
   labels,
   metrics = c("meanSW", "meanClassSW", "pnSW", "minClassSW", "cdbw", "cohesion",
-    "compactness", "sep"),
+    "compactness", "sep", "dbcv"),
   distance = "euclidean",
   ...
 )

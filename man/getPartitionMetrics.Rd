@@ -30,7 +30,7 @@ MHM: Meila-Heckerman Measure; MMM: Maximum-Match Measure;
 Mirkin: Mirkin Metric.}
 }
 \value{
-A data.frame of metrics for each node/element of \code{x}.
+A list of metric results.
 }
 \description{
 Computes a selection of external evaluation metrics for partition. The

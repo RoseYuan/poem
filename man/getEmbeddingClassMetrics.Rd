@@ -7,7 +7,7 @@
 getEmbeddingClassMetrics(
   x,
   labels,
-  metrics = c("meanSW", "minSW", "pnSW"),
+  metrics = c("meanSW", "minSW", "pnSW", "dbcv"),
   distance = "euclidean",
   ...
 )
