@@ -8,7 +8,7 @@ fuzzyPartitionMetrics(
   P,
   Q,
   computeWallace = TRUE,
-  nperms = 1000,
+  nperms = NULL,
   verbose = TRUE,
   BPPARAM = BiocParallel::SerialParam()
 )
@@ -24,7 +24,10 @@ as \code{P}}
 \item{computeWallace}{Logical; whether to compute the individual fuzzy
 versions of the Wallace indices (increases running time).}
 
-\item{nperms}{The number of permutations (for correction for chance)}
+\item{nperms}{The number of permutations (for correction for chance). If
+NULL (default), a first set of 10 permutations will be run to estimate
+whether the variation across permutations is above 0.0025, in which case
+more (max 1000) permutations will be run.}
 
 \item{verbose}{Logical; whether to print info and warnings, including the
 standard error of the mean across permutations (giving an idea of the

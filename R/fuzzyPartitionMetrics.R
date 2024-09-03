@@ -10,7 +10,10 @@
 #' @param Q A object coercible to a numeric matrix with membership probability 
 #'   of elements (rows) in clusters (columns). Must have the same number of rows
 #'   as `P`
-#' @param nperms The number of permutations (for correction for chance)
+#' @param nperms The number of permutations (for correction for chance). If 
+#'   NULL (default), a first set of 10 permutations will be run to estimate 
+#'   whether the variation across permutations is above 0.0025, in which case 
+#'   more (max 1000) permutations will be run.
 #' @param computeWallace Logical; whether to compute the individual fuzzy 
 #'   versions of the Wallace indices (increases running time).
 #' @param verbose Logical; whether to print info and warnings, including the 
@@ -57,18 +60,20 @@
 #'                ncol = 3, byrow=TRUE)
 #' colnames(m1) <- colnames(m2) <- LETTERS[1:3]
 #' fuzzyPartitionMetrics(m1,m2)
-fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=1000,
+fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
                                   verbose=TRUE, 
                                   BPPARAM=BiocParallel::SerialParam()){ 
   
-  P <- as.matrix(P)
-  Q <- as.matrix(Q)
+  if(is.data.frame(P)) P <- as.matrix(P)
+  if(is.data.frame(Q)) Q <- as.matrix(Q)
+  stopifnot(is.matrix(P) && (is.numeric(P) | is.integer(P)))
+  stopifnot(is.matrix(Q) && (is.numeric(Q) | is.integer(Q)))
   stopifnot(nrow(P)==nrow(Q))
   
   m <- nrow(P)
   ncomp <- m*((m-1)/2)
   if(verbose && m>=2000){
-    os <- 8*(4*m^2 + m*nperms)
+    os <- 8*(4*m^2 + m*ifelse(is.null(nperms),10,nperms))
     if(computeWallace) os <- os + 8*ncomp*(1+max(ncol(Q),ncol(P)))
     class(os) = "object_size"
     message("Projected memory usage: ", format(os, units = "auto"))
@@ -107,11 +112,11 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=1000,
     W2 <- getFWallace(eq,ep,P,Bpairs=Ppairs)
   }
   
-  # generate permutations
-  allp <- apply(matrix( runif(m*nperms), nrow=m ), 2, order)
   
   # get metrics for the permutations
-  res <- bplapply(1:nperms, BPPARAM=BPPARAM, function(col){
+  
+  # fn for one permutation:
+  onePerm <- function(col){
     p <- allp[,col]
     permutedEQ <- eq[p,p]
     NDC <- 1 - ( sum(abs(ep-permutedEQ) )/(m*((m-1))) )
@@ -119,12 +124,32 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=1000,
     W1 <- getFWallace(ep,permutedEQ,Q[p,])
     W2 <- getFWallace(permutedEQ,ep,P,Bpairs=Ppairs)
     list(NDC=NDC, W1=W1, W2=W2)
-  })
+  }
   
-  NDCs <- sapply(res, \(x) x[[1]])
+  res1 <- NULL
+  if(is.null(nperms)){
+    # try few permutations to estimate if more are needed
+    allp <- apply(matrix( runif(m*10), nrow=m ), 2, order)
+    res1 <- bplapply(1:10, BPPARAM=BPPARAM, onePerm)
+    NDCs <- sapply(res1, \(x) x[[1]])
+    SE <- sd(NDCs)/sqrt(length(res1))
+    if(SE>0.0025) nperms <- 100
+    if(SE>0.01) nperms <- 1000
+    if(verbose && !is.null(nperms))
+      message("Running ", nperms, " extra permutations.")
+  }
+  
+  if(!is.null(nperms)){
+    # generate more permutations
+    allp <- apply(matrix( runif(m*nperms), nrow=m ), 2, order)
+  
+    res <- bplapply(1:nperms, BPPARAM=BPPARAM, onePerm)
+    if(!is.null(res1)) res <- c(res1,res)
+    NDCs <- sapply(res, \(x) x[[1]])
+    SE <- sd(NDCs)/sqrt(nperms)
+  }
   
   if(verbose){
-    SE <- sd(NDCs)/sqrt(nperms)
     message("Standard error of the mean NDC across permutations:", 
             format(SE, digits=3))
     if(SE>0.0025)
