@@ -147,6 +147,8 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
     if(!is.null(res1)) res <- c(res1,res)
     NDCs <- sapply(res, \(x) x[[1]])
     SE <- sd(NDCs)/sqrt(nperms)
+  }else{
+    res <- res1
   }
   
   if(verbose){
