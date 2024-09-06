@@ -49,7 +49,8 @@ permutation-based fuzzy version of the adjusted Rand index.
 Computes fuzzy versions of pair-sorting partition metrics. This is largely
 based on the permutation-based implementation by Antonio D'Ambrosio from the
 ConsRankClass package, modified to also compute the fuzzy versions of the
-adjusted Wallace indices and implement multithreading.
+adjusted Wallace indices, implement multithreading, and adjust the number of
+permutations according to their variability.
 }
 \examples{
 # generate fuzzy partitions:
@@ -79,7 +80,7 @@ fuzzyPartitionMetrics(m1,m2)
 \references{
 Hullermeier et al. 2012; 10.1109/TFUZZ.2011.2179303;
 
-D’Ambrosio et al. 2021; 10.1007/s00357-020-09367-0
+D'Ambrosio et al. 2021; 10.1007/s00357-020-09367-0
 }
 \author{
 Pierre-Luc Germain

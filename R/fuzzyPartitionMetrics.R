@@ -3,7 +3,8 @@
 #' Computes fuzzy versions of pair-sorting partition metrics. This is largely 
 #' based on the permutation-based implementation by Antonio D'Ambrosio from the 
 #' ConsRankClass package, modified to also compute the fuzzy versions of the 
-#' adjusted Wallace indices and implement multithreading.
+#' adjusted Wallace indices, implement multithreading, and adjust the number of
+#' permutations according to their variability.
 #'
 #' @param P A object coercible to a numeric matrix with membership probability 
 #'   of elements (rows) in clusters (columns)
@@ -22,7 +23,7 @@
 #' @param BPPARAM BiocParallel params for multithreading (default none)
 #' 
 #' @references Hullermeier et al. 2012; 10.1109/TFUZZ.2011.2179303;
-#' @references D’Ambrosio et al. 2021; 10.1007/s00357-020-09367-0
+#' @references D'Ambrosio et al. 2021; 10.1007/s00357-020-09367-0
 #' 
 #' @author Pierre-Luc Germain
 #'
