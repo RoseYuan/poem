@@ -1,7 +1,7 @@
 # Functions to turn neighborhood class distribution into fuzzy clusterings
 
 #' @description For the i-th object, return the indices of its knn
-findKNN <- function(i, location_in, k){
+findSpatialKNN <- function(i, location_in, k){
   require(pdist)
   line_i <- rep(0,dim(location_in)[1])
   line_i <- pdist(location_in[i,],location_in)@dist
@@ -16,7 +16,7 @@ findKNN <- function(i, location_in, k){
 #' for its knn is then 1-alpha.
 knnComposition <- function(i, location, k=6, label, alpha="equal"){
   label <- factor(label)
-  ind <- findKNN(i, location, k)
+  ind <- findSpatialKNN(i, location, k)
   knnLabels <- label[ind[2:length(ind)]]
   if(alpha=="equal"){ 
     alpha <- 1/(k+1) 
