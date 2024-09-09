@@ -16,12 +16,14 @@
 }
 
 #' @importFrom igraph mean_distance decompose.graph is_directed
-.adjMeanShortestPath <- function(g, directed=FALSE){
+.adjMeanShortestPath <- function(g, directed=FALSE, normalize=TRUE){
   stopifnot(is(g,"igraph"))
   if(is.null(directed)) directed <- FALSE
   gc <- decompose.graph(g)
   msp <- sapply(gc, directed=directed, FUN=mean_distance)
-  return(length(gc)+sum(pmax(1L,msp,na.rm=TRUE)))
+  amsp <- length(gc)+sum(pmax(1L,msp,na.rm=TRUE))
+  if(normalize) amsp <- amsp/sqrt(length(V(g)))
+  return(amsp)
 }
 
 .simpsonIndex <- function(knn, labels=NULL, directed=TRUE){
