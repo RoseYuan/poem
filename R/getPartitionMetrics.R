@@ -10,9 +10,10 @@
 #' @param metrics The metrics to compute. If omitted, main metrics will be 
 #'   computed. RI: Rand Index; WC: Wallace Completeness; WH: Wallace 
 #'   Homogeneity; ARI:Adjusted Rand Index; AWC: Adjusted Wallace Completeness; 
-#'   AWH: Adjusted Wallace Homogeneity; MI: Mutual Information; AMI: Adjusted 
-#'   Mutual Information; VI: Variation of Information; EH: (Entropy-based)
-#'   Homogeneity; EC: (Entropy-based) Completeness; VM: V-measure; 
+#'   AWH: Adjusted Wallace Homogeneity; NCR: Normalized class size Rand index;
+#'   MI: Mutual Information; AMI: Adjusted Mutual Information;
+#'   VI: Variation of Information; EH: (Entropy-based) Homogeneity; 
+#'   EC: (Entropy-based) Completeness; VM: V-measure; 
 #'   FM: F-measure/weighted average F1 score; VDM: Van Dongen Measure; 
 #'   MHM: Meila-Heckerman Measure; MMM: Maximum-Match Measure; 
 #'   Mirkin: Mirkin Metric.
@@ -30,8 +31,8 @@
 #' pred <- c(rep("A", 8), rep("B", 9), rep("C", 3), rep("D", 10))
 #' getPartitionMetrics(true, pred)
 getPartitionMetrics <-function(true, pred, 
-                                metrics=c("RI","WC","WH","ARI","AWC","AWH",
-                                          "MI","AMI","VI","EH","EC","VM",
+                                metrics=c("RI","WC","WH","ARI","NCR","AWC",
+                                          "AWH","MI","AMI","VI","EH","EC","VM",
                                           "FM","VDM","Mirkin","MHM","MMM"),
                                 ...){
   if (anyNA(true) | anyNA(pred)) stop("NA are not supported.")
@@ -75,8 +76,18 @@ getPartitionMetrics <-function(true, pred,
            MMM = mclustcomp(as.vector(true), as.vector(pred), types = "mmm")$scores,
            FM = FMeasure(.aux.conversion(true), 
                          .aux.conversion(pred), silent = TRUE),
+           NCR = .NCR(true, pred),
            stop("Unknown metric.")
     )
   })
   return(res)
+}
+
+.NCR <- function(true, pred){
+  co <- table(pred, true)
+  a <- mean(colSums(choose(co,2))/choose(table(true),2),na.rm=TRUE)
+  dmax <- tcrossprod(table(true))
+  d <- (dmax-crossprod(co))/dmax
+  d <- mean(d[lower.tri(d)])
+  (a+d)/2
 }

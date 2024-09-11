@@ -7,8 +7,8 @@
 getPartitionMetrics(
   true,
   pred,
-  metrics = c("RI", "WC", "WH", "ARI", "AWC", "AWH", "MI", "AMI", "VI", "EH", "EC", "VM",
-    "FM", "VDM", "Mirkin", "MHM", "MMM"),
+  metrics = c("RI", "WC", "WH", "ARI", "NCR", "AWC", "AWH", "MI", "AMI", "VI", "EH",
+    "EC", "VM", "FM", "VDM", "Mirkin", "MHM", "MMM"),
   ...
 )
 }
@@ -22,9 +22,10 @@ be a vector of characters, integers, numerics, or a factor, but not a list.}
 \item{metrics}{The metrics to compute. If omitted, main metrics will be
 computed. RI: Rand Index; WC: Wallace Completeness; WH: Wallace
 Homogeneity; ARI:Adjusted Rand Index; AWC: Adjusted Wallace Completeness;
-AWH: Adjusted Wallace Homogeneity; MI: Mutual Information; AMI: Adjusted
-Mutual Information; VI: Variation of Information; EH: (Entropy-based)
-Homogeneity; EC: (Entropy-based) Completeness; VM: V-measure;
+AWH: Adjusted Wallace Homogeneity; NCR: Normalized class size Rand index;
+MI: Mutual Information; AMI: Adjusted Mutual Information;
+VI: Variation of Information; EH: (Entropy-based) Homogeneity;
+EC: (Entropy-based) Completeness; VM: V-measure;
 FM: F-measure/weighted average F1 score; VDM: Van Dongen Measure;
 MHM: Meila-Heckerman Measure; MMM: Maximum-Match Measure;
 Mirkin: Mirkin Metric.}
