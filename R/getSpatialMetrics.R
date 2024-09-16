@@ -1,15 +1,29 @@
 #' getSpatialGlobalInternalMetrics
 #' 
 #' Computes a selection of internal clustering evaluation metrics for spatial 
-#' data at the global level.
+#' data at the global level. MPC, PC and PE are internal metrics for fuzzy 
+#' clustering. Use the implementations in package `fclust`.
+#' @references Wang, et al. "A survey of fuzzy clustering validity evaluation 
+#' methods." Information Sciences 618 (2022): 270-297.
+#' @return A vector with the following values (see refs for details):
+#'   \item{PAS}{}
+#'   \item{ELSA}{}
+#'   \item{CHAOS}{}
+#'   \item{MPC}{Modified partition coefficient} 
+#'   \item{PC}{Partition coefficient} 
+#'   \item{PE}{Partition entropy} 
 getSpatialGlobalInternalMetrics <- function(label, location, k=6,
                                             metrics=c("PAS", "ELSA", "CHAOS"),
                                             ...){
+  if(length(intersect(metrics, c("MPC", "PC", "PE")))>0){require(fclust)}
   res <- lapply(setNames(metrics, metrics), FUN=function(m){
     switch(m,
            PAS = PAS(label, location, k=k, ...)$PAS,
            ELSA = colMeans(ELSA(label, location, k=k), na.rm = TRUE),
            CHAOS = CHAOS(label, location, BNPARAM=NULL),
+           MPC = fclust::MPC(getFuzzyLabel(label, location)),
+           PC = fclust::PC(getFuzzyLabel(label, location)),
+           PE = fclust::PE(getFuzzyLabel(label, location)),
            stop("Unknown metric.")
     )}
     )
