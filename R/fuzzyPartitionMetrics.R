@@ -63,7 +63,7 @@
 #' fuzzyPartitionMetrics(m1,m2)
 fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
                                   verbose=TRUE, 
-                                  BPPARAM=BiocParallel::SerialParam()){ 
+                                  BPPARAM=BiocParallel::SerialParam(), ...){ 
   
   if(is.data.frame(P)) P <- as.matrix(P)
   if(is.data.frame(Q)) Q <- as.matrix(Q)
