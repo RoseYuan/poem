@@ -11,7 +11,7 @@
 #' @param k Number of nearest neighbors
 #'
 #' @return A scalar representing the weighted accuracy.
-nnWeightedAccuracy <- function(location, truth, pred, k=5, ...){
+nnWeightedAccuracy <- function(truth, pred, location, k=5, ...){
   pred <- as.factor(pred)
   levels(pred) <- matchSets(pred, truth, returnIndices=TRUE)
   pred <- as.integer(pred)
@@ -29,7 +29,7 @@ nnWeightedAccuracy <- function(location, truth, pred, k=5, ...){
 #' @param k size of the neighborhood.
 #' @return A numeric value for PAS score, and a boolean vector about the abnormal spots.
 #' @export
-PAS <- function(location, label, k=10, ...){
+PAS <- function(label, location, k=10, ...){
   matched_location=location
   NAs = which(is.na(label))
   if(length(NAs>0)){
@@ -51,7 +51,7 @@ PAS <- function(location, label, k=10, ...){
 #' @param BNPARAM 
 #' @return A numeric value for CHAOS score.
 #' @export
-CHAOS <- function(location, label, BNPARAM=NULL) {
+CHAOS <- function(label, location, BNPARAM=NULL) {
   BNPARAM <- .decideBNPARAM(nrow(location), BNPARAM)
   label <- as.vector(label)
   location <- as.matrix(location)
@@ -80,7 +80,7 @@ CHAOS <- function(location, label, BNPARAM=NULL) {
   
 #' @importFrom sp SpatialPointsDataFrame
 #' @importFrom spdep knn2nb knearneigh nbdists
-ELSA <- function(location, label, k=10){
+ELSA <- function(label, location, k=10){
   require(elsa)
   spdf <- SpatialPointsDataFrame(location, data=data.frame(label=label))
   k1 <- knn2nb(knearneigh(location, k=k))
@@ -100,4 +100,40 @@ ELSA <- function(location, label, k=10){
     }
   }
   return(BNPARAM)
+}
+
+#' getAgreement
+#' 
+#' Per-spot agreement between a clustering and a ground truth
+#'
+#' @param pred A vector of predicted clusters
+#' @param truth A vector of true class labels
+#' @param usePairs Logical; whether to compute over pairs instead of elements
+#'
+#' @return A vector of agreement scores
+#'
+#' @examples
+#' # Give the SPE:
+#' spe$agreement <- getAgreement(spe$BayesSpace_default, truth=spe$ground_truth)
+getAgreement <- function(pred, truth, usePairs=TRUE){
+  co <- table(truth, pred)
+  # number of spots in the union between any class and any cluster:
+  tot <- matrix(rep(rowSums(co),ncol(co)),nrow=nrow(co))+
+    matrix(rep(colSums(co),each=nrow(co)),nrow=nrow(co))-co
+  if(usePairs){
+    pairs <- choose(co,2)
+    truePairsPerCluster <- matrix(rep(colSums(pairs),each=nrow(co)),nrow=nrow(co))
+    # wrongPairsPerCluster <- matrix(rep(choose(colSums(co),2),each=nrow(co)),nrow=nrow(co))-
+    #   truePairsPerCluster
+    truePairs <- truePairsPerCluster + #per cluster
+      rowSums(pairs) - pairs # per class minus double-counting
+    p <- unclass(truePairs/choose(tot,2))
+  }else{
+    # intersection over union, i.e. proportion of spots in the class-or-cluster
+    # that agree:
+    p <- unclass(co/tot)
+  }
+  # assign each spot its score:
+  p <- setNames(as.numeric(p), paste(rep(row.names(p),ncol(p)),rep(colnames(p),each=nrow(p))))
+  p[paste(truth, pred)]
 }
