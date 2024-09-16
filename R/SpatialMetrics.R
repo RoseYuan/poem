@@ -6,20 +6,23 @@
 #' happening at the boundary between domains.
 #'
 #' @param location The spatial coordinates to compute the nearest neighbors.
-#' @param truth True class labels (vector coercible to factor)
+#' @param true True class labels (vector coercible to factor)
 #' @param pred Predicted labels (vector coercible to factor)
 #' @param k Number of nearest neighbors
 #'
 #' @return A scalar representing the weighted accuracy.
-nnWeightedAccuracy <- function(truth, pred, location, k=5, ...){
+nnWeightedAccuracy <- function(true, pred, location, k=5, ...){
   pred <- as.factor(pred)
-  levels(pred) <- matchSets(pred, truth, returnIndices=TRUE)
+  levels(pred) <- matchSets(pred, true, returnIndices=TRUE)
   pred <- as.integer(pred)
-  truth <- as.integer(as.factor(truth))
+  true <- as.integer(as.factor(true))
   nn <- findSpatialKNN(location, k, ...)
-  nn_dis <- relist(truth[unlist(nn)]!=rep(pred[w],lengths(nn)),nn)
+  w <- which(pred!=true)
+  nn <- nn[w]
+  nn_dis <- relist(true[unlist(nn)]!=rep(pred[w],lengths(nn)),nn)
   1-sum(sapply(nn_dis, mean))/nrow(location)
 }
+
 
 #' @title Calculate PAS score to measure clustering performance.
 #' @description PAS score measures the randomness of the spots that located outside of the spatial region where it was clustered to.
@@ -107,16 +110,16 @@ ELSA <- function(label, location, k=10){
 #' Per-spot agreement between a clustering and a ground truth
 #'
 #' @param pred A vector of predicted clusters
-#' @param truth A vector of true class labels
+#' @param true A vector of true class labels
 #' @param usePairs Logical; whether to compute over pairs instead of elements
 #'
 #' @return A vector of agreement scores
 #'
 #' @examples
 #' # Give the SPE:
-#' spe$agreement <- getAgreement(spe$BayesSpace_default, truth=spe$ground_truth)
-getAgreement <- function(pred, truth, usePairs=TRUE){
-  co <- table(truth, pred)
+#' spe$agreement <- getAgreement(spe$BayesSpace_default, true=spe$ground_truth)
+getAgreement <- function(pred, true, usePairs=TRUE){
+  co <- table(true, pred)
   # number of spots in the union between any class and any cluster:
   tot <- matrix(rep(rowSums(co),ncol(co)),nrow=nrow(co))+
     matrix(rep(colSums(co),each=nrow(co)),nrow=nrow(co))-co
@@ -135,5 +138,5 @@ getAgreement <- function(pred, truth, usePairs=TRUE){
   }
   # assign each spot its score:
   p <- setNames(as.numeric(p), paste(rep(row.names(p),ncol(p)),rep(colnames(p),each=nrow(p))))
-  p[paste(truth, pred)]
+  p[paste(true, pred)]
 }
