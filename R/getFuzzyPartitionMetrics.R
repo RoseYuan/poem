@@ -26,8 +26,9 @@
 #' @importFrom FlowSOM FMeasure
 #' @export
 getFuzzyPartitionMetrics <-function(true, pred, location, k=6, alpha="equal", ...){
-    P <- getFuzzyLabel(true, location, k=k, alpha=alpha)
-    Q <- getFuzzyLabel(pred, location, k=k, alpha=alpha)
-    res <- fuzzyPartitionMetrics(t(P), t(Q), ...)
-    return(res)
-  }
+  P <- getFuzzyLabel(true, location, k=k, alpha=alpha)
+  Q <- getFuzzyLabel(pred, location, k=k, alpha=alpha)
+  res <- fuzzyPartitionMetrics(P, Q, ...)
+  return(res)
+}
+
