@@ -88,9 +88,9 @@ ELSA <- function(label, location, k=10){
   spdf <- SpatialPointsDataFrame(location, data=data.frame(label=label))
   k1 <- knn2nb(knearneigh(location, k=k))
   all.linked <- max(unlist(nbdists(k1, location)))
-  elc <- elsa(x=spdf, d=dneigh(spdf, d1=0, d2=all.linked, longlat=FALSE), zcol=label)
+  elc <- elsa(x=spdf, d=dneigh(spdf, d1=0, d2=all.linked, longlat=FALSE), 
+              zcol="label")
   df <- as.data.frame(elc@data)
-  colnames(df) <- c("ELSA.Ea", "ELSA.Ec","ELSA")
   return(df)
 }
 

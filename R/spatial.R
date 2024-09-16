@@ -96,3 +96,39 @@ getPredLabels <- function(ref_labels, pred_clusters) {
   
   return(cluster_map)
 }
+
+#' matchSets
+#' 
+#' Match sets from a partitions to a reference partition using the Hungarian
+#' algorithm.
+#'
+#' @param pred An integer or factor of cluster labels
+#' @param true An integer or factor of reference labels
+#' @param forceMatch Logical; whether to enforce a match for every set of `pred`
+#' @param returnIndices Logical; whether to return indices rather than levels
+#'
+#' @return A vector of matching sets (i.e. level) from `true` for every set 
+#'   (i.e. level) of `pred`.
+#' @importFrom clue solve_LSAP
+matchSets <- function(pred, true, forceMatch=TRUE, returnIndices=is.integer(true)){
+  true <- as.factor(true)
+  pred <- as.factor(pred)
+  co <- unclass(table(true, pred))
+  recall <- co/rowSums(co)
+  prec <- t(t(co)/colSums(co))
+  F1 <- 2*(prec*recall)/(prec+recall)
+  F1[is.na(F1)] <- 0
+  if(nrow(F1)>ncol(F1)){
+    match <- as.integer(clue::solve_LSAP(t(F1), maximum=TRUE))
+  }else{
+    match1 <- as.integer(clue::solve_LSAP(F1, maximum=TRUE))
+    match <- rep(NA_integer_, length(levels(pred)))
+    nonMatched <- setdiff(seq_along(match), match1)
+    match[match1] <- seq_along(match1)
+    if(forceMatch){
+      for(i in nonMatched) match[i] <- which.max(F1[,i])
+    }
+  }
+  if(!returnIndices) match <- levels(true)[match]
+  setNames(match, levels(pred))
+}
