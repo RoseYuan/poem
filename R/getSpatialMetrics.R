@@ -27,7 +27,9 @@ getSpatialGlobalInternalMetrics <- function(label, location, k=6,
            stop("Unknown metric.")
     )}
     )
-  return(unlist(res))
+  res <- unlist(res)
+  names(res)[names(res) == "ELSA.ELSA"] <- "ELSA"
+  return(res)
 }
 
 #' getSpatialInternalMetrics
@@ -82,7 +84,7 @@ getSpatialGlobalExternalMetrics <- function(true, pred, location, k=6,
            stop("Unknown metric.")
     )
   })
-  return(res)
+  return(unlist(res))
 }
 
 #' getSpatialClassExternalMetrics

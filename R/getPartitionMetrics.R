@@ -80,7 +80,7 @@ getPartitionMetrics <-function(true, pred,
            stop("Unknown metric.")
     )
   })
-  return(res)
+  return(unlist(res))
 }
 
 .NCR <- function(true, pred){

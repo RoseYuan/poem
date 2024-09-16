@@ -85,6 +85,7 @@ CHAOS <- function(label, location, BNPARAM=NULL) {
 #' @importFrom spdep knn2nb knearneigh nbdists
 ELSA <- function(label, location, k=10){
   require(elsa)
+  require(spdep)
   spdf <- SpatialPointsDataFrame(location, data=data.frame(label=label))
   k1 <- knn2nb(knearneigh(location, k=k))
   all.linked <- max(unlist(nbdists(k1, location)))
