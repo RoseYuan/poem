@@ -1,12 +1,25 @@
 # Functions to turn neighborhood class distribution into fuzzy clusterings
 
-#' @description For the i-th object, return the indices of its knn
-findSpatialKNN <- function(i, location_in, k){
-  require(pdist)
-  line_i <- rep(0,dim(location_in)[1])
-  line_i <- pdist(location_in[i,],location_in)@dist
-  ind <- order(line_i)[1:(k+1)]
-  return(ind)
+#' @description For a dataset, return the indices of knn for each object
+findSpatialKNN <- function(xy, k, keep_ties=TRUE, n=5, BNPARAM=NULL){
+  if(is.null(BNPARAM)){
+    if(nrow(xy)>500){
+      BNPARAM <- BiocNeighbors::AnnoyParam()
+    }else{
+      BNPARAM <- BiocNeighbors::ExhaustiveParam()
+    }
+  }
+  if(keep_ties){
+    nn <- BiocNeighbors::findKNN(xy, k=k*n, warn.ties=FALSE, BNPARAM=BNPARAM)
+    nn <- lapply(seq_len(nrow(nn[[1]])), FUN=function(i){
+      d <- nn$distance[i,]
+      nn$index[i,sort(which(d<=d[order(d)[k]]))]
+    })
+  }else{
+    nn <- BiocNeighbors::findKNN(xy, k=k, warn.ties=FALSE, BNPARAM=BNPARAM)$index
+    nn <- split(nn, seq_len(nrow(nn)))
+  }
+  return(nn)
 }
 
 #' @alpha the parameter to control to what extend the spot itself contribute 
@@ -14,10 +27,10 @@ findSpatialKNN <- function(i, location_in, k){
 #' same as other NNs. A numeric value between 0 and 1 means the weight of the 
 #' frequency contribution for the spot itself, and the frequency contribution 
 #' for its knn is then 1-alpha.
-knnComposition <- function(i, location, k=6, label, alpha="equal"){
+knnComposition <- function(location, k=6, label, alpha="equal", ...){
   label <- factor(label)
-  ind <- findSpatialKNN(i, location, k)
-  knnLabels <- label[ind[2:length(ind)]]
+  ind <- findSpatialKNN(location, k, ...)
+  knnLabels <- lapply(ind, function(x){label[x[2:length(x)]]})
   if(alpha=="equal"){ 
     alpha <- 1/(k+1) 
   }else{
@@ -25,21 +38,21 @@ knnComposition <- function(i, location, k=6, label, alpha="equal"){
       stop("alpha must be either 'equal', or a numeric between 0 and 1.")
     }
   }
-  knn_weights <- matrix(table(knnLabels)/k) * (1-alpha)
-  i_weights <-  matrix(table(label[i])) * (alpha)
+  knn_weights <- lapply(knnLabels, function(x){x<-factor(x, levels=levels(label)); as.vector(table(x)/k) * (1-alpha)})
+  knn_weights <- do.call(rbind, knn_weights)
+  i_weights <-  as.matrix(table(seq_along(label), label)) * (alpha)
   return(knn_weights + i_weights)
 }
 
-getFuzzyLabel <- function(label, location, k=6, alpha="equal"){
-  require(parallel)
+getFuzzyLabel <- function(label, location, k=6, alpha="equal", ...){
   label <- factor(label)
   NAs <- which(is.na(label))
   if(length(NAs>0)){
     label <- label[-NAs]
     location <- location[-NAs,]
   }
-  res <- mclapply(1:dim(location)[1], knnComposition, location=location, k=k, label=label, alpha=alpha, mc.cores = 5)
-  return(do.call(cbind, res))
+  res <- knnComposition(location=location, k=k, label=label, alpha=alpha, ...)
+  return(res)
 }
 
 library(clue)
