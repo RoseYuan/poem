@@ -1,22 +1,16 @@
 # Functions to turn neighborhood class distribution into fuzzy clusterings
 
 #' @description For a dataset, return the indices of knn for each object
-findSpatialKNN <- function(xy, k, keep_ties=TRUE, n=5, BNPARAM=NULL){
-  if(is.null(BNPARAM)){
-    if(nrow(xy)>500){
-      BNPARAM <- BiocNeighbors::AnnoyParam()
-    }else{
-      BNPARAM <- BiocNeighbors::ExhaustiveParam()
-    }
-  }
+findSpatialKNN <- function(location, k, keep_ties=TRUE, n=5, BNPARAM=NULL){
+  BNPARAM <- .decideBNPARAM(nrow(location), BNPARAM)
   if(keep_ties){
-    nn <- BiocNeighbors::findKNN(xy, k=k*n, warn.ties=FALSE, BNPARAM=BNPARAM)
+    nn <- BiocNeighbors::findKNN(location, k=k*n, warn.ties=FALSE, BNPARAM=BNPARAM)
     nn <- lapply(seq_len(nrow(nn[[1]])), FUN=function(i){
       d <- nn$distance[i,]
       nn$index[i,sort(which(d<=d[order(d)[k]]))]
     })
   }else{
-    nn <- BiocNeighbors::findKNN(xy, k=k, warn.ties=FALSE, BNPARAM=BNPARAM)$index
+    nn <- BiocNeighbors::findKNN(location, k=k, warn.ties=FALSE, BNPARAM=BNPARAM)$index
     nn <- split(nn, seq_len(nrow(nn)))
   }
   return(nn)
@@ -38,7 +32,7 @@ knnComposition <- function(location, k=6, label, alpha="equal", ...){
       stop("alpha must be either 'equal', or a numeric between 0 and 1.")
     }
   }
-  knn_weights <- lapply(knnLabels, function(x){x<-factor(x, levels=levels(label)); as.vector(table(x)/k) * (1-alpha)})
+  knn_weights <- lapply(knnLabels, function(x){x<-factor(x, levels=levels(label)); as.vector(table(x)/length(x)) * (1-alpha)})
   knn_weights <- do.call(rbind, knn_weights)
   i_weights <-  as.matrix(table(seq_along(label), label)) * (alpha)
   return(knn_weights + i_weights)
