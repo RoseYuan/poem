@@ -13,8 +13,8 @@
 #' @return A scalar representing the weighted accuracy.
 nnWeightedAccuracy <- function(true, pred, location, k=5, ...){
   pred <- as.factor(pred)
-  levels(pred) <- matchSets(pred, true, returnIndices=TRUE)
-  pred <- as.integer(pred)
+  matching <- matchSets(pred, true, returnIndices=TRUE)
+  pred <- matching[as.integer(pred)]
   true <- as.integer(as.factor(true))
   nn <- findSpatialKNN(location, k, ...)
   w <- which(pred!=true)
@@ -23,6 +23,19 @@ nnWeightedAccuracy <- function(true, pred, location, k=5, ...){
   1-sum(sapply(nn_dis, mean))/nrow(location)
 }
 
+#' Just the non-spatially-weighted counterpart of nnWeightedAccuracy
+#' 
+#' @param true True class labels (vector coercible to factor)
+#' @param pred Predicted labels (vector coercible to factor)
+#'
+#' @return A scalar representing the weighted accuracy.
+.setMatchingAccuracy <- function(true, pred){
+  pred <- as.factor(pred)
+  matching <- matchSets(pred, true, returnIndices=TRUE)
+  pred <- matching[as.integer(pred)]
+  true <- as.integer(as.factor(true))
+  sum(pred==true,na.rm=TRUE)/length(pred)
+}
 
 #' @title Calculate PAS score to measure clustering performance.
 #' @description PAS score measures the randomness of the spots that located outside of the spatial region where it was clustered to.

@@ -40,7 +40,7 @@ getSpatialInternalMetrics <- function(label, location, k=6,
                                       metrics=c("PAS", "ELSA"), ...){
   res <- as.data.frame(lapply(setNames(metrics, metrics), FUN=function(m){
     switch(m,
-           PAS.abnormal = PAS(label, location, k=k, ...)$abnormalty,
+           PAS = PAS(label, location, k=k, ...)$abnormalty,
            ELSA = ELSA(label, location, k=k),
            stop("Unknown metric.")
            )})
@@ -62,6 +62,9 @@ getSpatialGlobalExternalMetrics <- function(true, pred, location, k=6,
   if("SpatialAccuracy" %in% metrics){
     SpatialAccuracy <- nnWeightedAccuracy(true, pred, location, k=k, ...)
   }
+  if("setMatchingAccuracy" %in% metrics){
+    setMatchingAccuracy<- .setMatchingAccuracy(true, pred)
+  }
   if(length(intersect(metrics, c("SpatialRI","SpatialARI","SpatialWH",
                                  "SpatialAWH", "SpatialWC","SpatialAWC")))>0){
     fuzzyMetrics <- getFuzzyPartitionMetrics(true, pred, location, k=k, ...)
@@ -81,6 +84,7 @@ getSpatialGlobalExternalMetrics <- function(true, pred, location, k=6,
            SpatialAWH = SpatialAWH,
            SpatialWC = SpatialWC,
            SpatialAWC = SpatialAWC,
+           setMatchingAccuracy = setMatchingAccuracy,
            stop("Unknown metric.")
     )
   })
