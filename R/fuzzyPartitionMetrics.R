@@ -20,6 +20,9 @@
 #' @param verbose Logical; whether to print info and warnings, including the 
 #'   standard error of the mean across permutations (giving an idea of the 
 #'   precision of the adjusted metrics).
+#' @param returnElementPairAccuracy Logical. If TRUE, returns the per-element
+#'   pair accuracy instead of the various parition-level and global metrics.
+#'   Default FALSE.
 #' @param BPPARAM BiocParallel params for multithreading (default none)
 #' 
 #' @references Hullermeier et al. 2012; 10.1109/TFUZZ.2011.2179303;
@@ -62,7 +65,7 @@
 #' colnames(m1) <- colnames(m2) <- LETTERS[1:3]
 #' fuzzyPartitionMetrics(m1,m2)
 fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
-                                  verbose=TRUE, 
+                                  verbose=TRUE, returnElementPairAccuracy=FALSE,
                                   BPPARAM=BiocParallel::SerialParam(), ...){ 
   
   if(is.data.frame(P)) P <- as.matrix(P)
@@ -74,14 +77,22 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
   m <- nrow(P)
   ncomp <- m*((m-1)/2)
   if(verbose && m>=2000){
-    os <- 8*(4*m^2 + m*ifelse(is.null(nperms),10,nperms))
-    if(computeWallace) os <- os + 8*ncomp*(1+max(ncol(Q),ncol(P)))
+    if(returnElementPairAccuracy){
+      os <- 8*(3*m^2)
+    }else{
+      os <- 8*(4*m^2 + m*ifelse(is.null(nperms),10,nperms))
+      if(computeWallace) os <- os + 8*ncomp*(1+max(ncol(Q),ncol(P)))
+    }
     class(os) = "object_size"
     message("Projected memory usage: ", format(os, units = "auto"))
   }
   
   ep <- as.matrix(1-(0.5*dist(P,method="manhattan")))
   eq <- as.matrix(1-(0.5*dist(Q,method="manhattan")))
+  
+  if(returnElementPairAccuracy){
+    return(1-rowMeans(abs(ep - eq)))
+  }
   
   # Hullermeier's NDC
   NDC <- 1 - ( sum(abs(ep[lower.tri(ep)] - eq[lower.tri(eq)]) )/(ncomp) )
