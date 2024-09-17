@@ -34,11 +34,10 @@
 #'   \item NDC : Hullermeier's NDC (fuzzy rand index)
 #'   \item ACI : Ambrosio's Adjusted Concordance Index (ACI), i.e. a 
 #'     permutation-based fuzzy version of the adjusted Rand index.
-#'   \item fuzzyWallace1 Fuzzy Wallace index for each partition of `Q`
-#'   \item fuzzyWallace2 Fuzzy Wallace index for each partition of `P`
-#'   \item fuzzyAdjW1 Adjusted fuzzy Wallace index for each partition of `Q`
-#'   \item fuzzyAdjW2 Adjusted fuzzy Wallace index for each partition of `P`
-#'   
+#'   \item fuzzyWH Fuzzy Wallace Homogeneity index
+#'   \item fuzzyWC Fuzzy Wallace Completeness index
+#'   \item fuzzyAWH Adjusted fuzzy Wallace Homogeneity index
+#'   \item fuzzyAWC Adjusted fuzzy Wallace Completeness index
 #' @importFrom BiocParallel SerialParam bplapply
 #' @export
 #' @examples
@@ -67,7 +66,7 @@
 #' fuzzyPartitionMetrics(m1,m2)
 fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
                                   verbose=TRUE, returnElementPairAccuracy=FALSE,
-                                  BPPARAM=BiocParallel::SerialParam()){ 
+                                  BPPARAM=BiocParallel::SerialParam(), ...){ 
   
   if(is.data.frame(P)) P <- as.matrix(P)
   if(is.data.frame(Q)) Q <- as.matrix(Q)
@@ -186,6 +185,6 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
   AW2 <- list( global=adj(W2$global,W2m),
                perPartition=mapply(x=W2$perPartition, m=W2pm, FUN=adj) )
 
-  return(list(NDC=NDC, ACI=ACI, fuzzyWallace1=W1, fuzzyWallace2=W2,
-              fuzzyAdjW1=AW1, fuzzyAdjW2=AW2))
+  return(list(NDC=NDC, ACI=ACI, fuzzyWH=W1, fuzzyWC=W2,
+              fuzzyAWH=AW1, fuzzyAWC=AW2))
 }

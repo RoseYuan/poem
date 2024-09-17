@@ -179,7 +179,7 @@ convert_singleton_clusters_to_noise <- function(y, noise_id) {
 #' dbcv(data[, c("x", "y")], data$kmeans_label)
 #' dbcv(data[, c("x", "y")], data$hdbscan_label)
 dbcv <- function(X, y, metric = "euclidean", noise_id = -1, check_duplicates = FALSE,
-                 n_processes = "auto", use_scipy_mst_implementation = TRUE) {
+                 n_processes = "auto", use_scipy_mst_implementation = TRUE, ...) {
   X <- as.matrix(X)
   y <- as.integer(y)
   n <- dim(X)[1]

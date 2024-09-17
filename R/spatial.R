@@ -1,12 +1,19 @@
 # Functions to turn neighborhood class distribution into fuzzy clusterings
 
-#' @description For the i-th object, return the indices of its knn
-findSpatialKNN <- function(i, location_in, k){
-  require(pdist)
-  line_i <- rep(0,dim(location_in)[1])
-  line_i <- pdist(location_in[i,],location_in)@dist
-  ind <- order(line_i)[1:(k+1)]
-  return(ind)
+#' @description For a dataset, return the indices of knn for each object
+findSpatialKNN <- function(location, k, keep_ties=TRUE, n=5, BNPARAM=NULL){
+  BNPARAM <- .decideBNPARAM(nrow(location), BNPARAM)
+  if(keep_ties){
+    nn <- BiocNeighbors::findKNN(location, k=k*n, warn.ties=FALSE, BNPARAM=BNPARAM)
+    nn <- lapply(seq_len(nrow(nn[[1]])), FUN=function(i){
+      d <- nn$distance[i,]
+      nn$index[i,sort(which(d<=d[order(d)[k]]))]
+    })
+  }else{
+    nn <- BiocNeighbors::findKNN(location, k=k, warn.ties=FALSE, BNPARAM=BNPARAM)$index
+    nn <- split(nn, seq_len(nrow(nn)))
+  }
+  return(nn)
 }
 
 #' @alpha the parameter to control to what extend the spot itself contribute 
@@ -14,10 +21,10 @@ findSpatialKNN <- function(i, location_in, k){
 #' same as other NNs. A numeric value between 0 and 1 means the weight of the 
 #' frequency contribution for the spot itself, and the frequency contribution 
 #' for its knn is then 1-alpha.
-knnComposition <- function(i, location, k=6, label, alpha="equal"){
+knnComposition <- function(location, k=6, label, alpha="equal", ...){
   label <- factor(label)
-  ind <- findSpatialKNN(i, location, k)
-  knnLabels <- label[ind[2:length(ind)]]
+  ind <- findSpatialKNN(location, k, ...)
+  knnLabels <- lapply(ind, function(x){label[x[2:length(x)]]})
   if(alpha=="equal"){ 
     alpha <- 1/(k+1) 
   }else{
@@ -25,21 +32,21 @@ knnComposition <- function(i, location, k=6, label, alpha="equal"){
       stop("alpha must be either 'equal', or a numeric between 0 and 1.")
     }
   }
-  knn_weights <- matrix(table(knnLabels)/k) * (1-alpha)
-  i_weights <-  matrix(table(label[i])) * (alpha)
+  knn_weights <- lapply(knnLabels, function(x){x<-factor(x, levels=levels(label)); as.vector(table(x)/length(x)) * (1-alpha)})
+  knn_weights <- do.call(rbind, knn_weights)
+  i_weights <-  as.matrix(table(seq_along(label), label)) * (alpha)
   return(knn_weights + i_weights)
 }
 
-getFuzzyLabel <- function(label, location, k=6, alpha="equal"){
-  require(parallel)
+getFuzzyLabel <- function(label, location, k=6, alpha="equal", ...){
   label <- factor(label)
   NAs <- which(is.na(label))
   if(length(NAs>0)){
     label <- label[-NAs]
     location <- location[-NAs,]
   }
-  res <- mclapply(1:dim(location)[1], knnComposition, location=location, k=k, label=label, alpha=alpha, mc.cores = 5)
-  return(do.call(cbind, res))
+  res <- knnComposition(location=location, k=k, label=label, alpha=alpha, ...)
+  return(res)
 }
 
 library(clue)
@@ -88,4 +95,40 @@ getPredLabels <- function(ref_labels, pred_clusters) {
   }
   
   return(cluster_map)
+}
+
+#' matchSets
+#' 
+#' Match sets from a partitions to a reference partition using the Hungarian
+#' algorithm.
+#'
+#' @param pred An integer or factor of cluster labels
+#' @param true An integer or factor of reference labels
+#' @param forceMatch Logical; whether to enforce a match for every set of `pred`
+#' @param returnIndices Logical; whether to return indices rather than levels
+#'
+#' @return A vector of matching sets (i.e. level) from `true` for every set 
+#'   (i.e. level) of `pred`.
+#' @importFrom clue solve_LSAP
+matchSets <- function(pred, true, forceMatch=TRUE, returnIndices=is.integer(true)){
+  true <- as.factor(true)
+  pred <- as.factor(pred)
+  co <- unclass(table(true, pred))
+  recall <- co/rowSums(co)
+  prec <- t(t(co)/colSums(co))
+  F1 <- 2*(prec*recall)/(prec+recall)
+  F1[is.na(F1)] <- 0
+  if(nrow(F1)>ncol(F1)){
+    match <- as.integer(clue::solve_LSAP(t(F1), maximum=TRUE))
+  }else{
+    match1 <- as.integer(clue::solve_LSAP(F1, maximum=TRUE))
+    match <- rep(NA_integer_, length(levels(pred)))
+    nonMatched <- setdiff(seq_along(match), match1)
+    match[match1] <- seq_along(match1)
+    if(forceMatch){
+      for(i in nonMatched) match[i] <- which.max(F1[,i])
+    }
+  }
+  if(!returnIndices) match <- levels(true)[match]
+  setNames(match, levels(pred))
 }
