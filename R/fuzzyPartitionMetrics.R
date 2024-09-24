@@ -141,10 +141,11 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
   onePerm <- function(col){
     p <- allp[,col]
     permutedEQ <- eq[p,p]
-    NDC <- 1 - ( sum(abs(ep-permutedEQ) )/(m*((m-1))) )
+    diff <- abs(ep[lower.tri(ep)] - permutedEQ[lower.tri(eq)])
+    NDC <- 1 -  sum( diff )/ncomp
     if(!computeWallace) return(NDC)
-    W1 <- getFWallace(ep,permutedEQ,Q[p,])
-    W2 <- getFWallace(permutedEQ,ep,P,Bpairs=Ppairs)
+    W1 <- getFWallace(ep, permutedEQ, Q[p,], diff=diff)
+    W2 <- getFWallace(permutedEQ, ep, P, Bpairs=Ppairs, diff=diff)
     list(NDC=NDC, W1=W1, W2=W2)
   }
   
