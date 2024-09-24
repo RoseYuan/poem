@@ -10,7 +10,10 @@ fuzzyPartitionMetrics(
   computeWallace = TRUE,
   nperms = NULL,
   verbose = TRUE,
-  BPPARAM = BiocParallel::SerialParam()
+  returnElementPairAccuracy = FALSE,
+  BPPARAM = BiocParallel::SerialParam(),
+  tnorm = c("product", "min"),
+  ...
 )
 }
 \arguments{
@@ -33,17 +36,25 @@ more (max 1000) permutations will be run.}
 standard error of the mean across permutations (giving an idea of the
 precision of the adjusted metrics).}
 
+\item{returnElementPairAccuracy}{Logical. If TRUE, returns the per-element
+pair accuracy instead of the various parition-level and global metrics.
+Default FALSE.}
+
 \item{BPPARAM}{BiocParallel params for multithreading (default none)}
+
+\item{tnorm}{Which type of t-norm operation to use for class membership of
+pairs (either product or min) when calculating the Wallace indices. Does
+not influence the NDC/ACI metrics.}
 }
 \value{
 A list of metrics:
 \item NDC : Hullermeier's NDC (fuzzy rand index)
 \item ACI : Ambrosio's Adjusted Concordance Index (ACI), i.e. a
 permutation-based fuzzy version of the adjusted Rand index.
-\item fuzzyWallace1 Fuzzy Wallace index for each partition of \code{Q}
-\item fuzzyWallace2 Fuzzy Wallace index for each partition of \code{P}
-\item fuzzyAdjW1 Adjusted fuzzy Wallace index for each partition of \code{Q}
-\item fuzzyAdjW2 Adjusted fuzzy Wallace index for each partition of \code{P}
+\item fuzzyWH Fuzzy Wallace Homogeneity index
+\item fuzzyWC Fuzzy Wallace Completeness index
+\item fuzzyAWH Adjusted fuzzy Wallace Homogeneity index
+\item fuzzyAWC Adjusted fuzzy Wallace Completeness index
 }
 \description{
 Computes fuzzy versions of pair-sorting partition metrics. This is largely

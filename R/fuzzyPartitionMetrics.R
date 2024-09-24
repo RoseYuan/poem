@@ -24,6 +24,9 @@
 #'   pair accuracy instead of the various parition-level and global metrics.
 #'   Default FALSE.
 #' @param BPPARAM BiocParallel params for multithreading (default none)
+#' @param tnorm Which type of t-norm operation to use for class membership of
+#'   pairs (either product or min) when calculating the Wallace indices. Does
+#'   not influence the NDC/ACI metrics.
 #' 
 #' @references Hullermeier et al. 2012; 10.1109/TFUZZ.2011.2179303;
 #' @references D'Ambrosio et al. 2021; 10.1007/s00357-020-09367-0
@@ -66,8 +69,10 @@
 #' fuzzyPartitionMetrics(m1,m2)
 fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
                                   verbose=TRUE, returnElementPairAccuracy=FALSE,
-                                  BPPARAM=BiocParallel::SerialParam(), ...){ 
+                                  BPPARAM=BiocParallel::SerialParam(), 
+                                  tnorm=c("product","min"), ...){ 
   
+  tnorm <- match.arg(tnorm)
   if(is.data.frame(P)) P <- as.matrix(P)
   if(is.data.frame(Q)) Q <- as.matrix(Q)
   stopifnot(is.matrix(P) && (is.numeric(P) | is.integer(P)))
@@ -95,35 +100,39 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
   }
   
   # Hullermeier's NDC
-  NDC <- 1 - ( sum(abs(ep[lower.tri(ep)] - eq[lower.tri(eq)]) )/(ncomp) )
+  diff <- abs(ep[lower.tri(ep)] - eq[lower.tri(eq)])
+  NDC <- 1 - ( sum( diff )/(ncomp) )
   
+  membershipFn <- switch(tnorm,
+    product=tcrossprod,
+    min=function(p){ sapply(seq_along(p), FUN=function(i) pmin(p,p[i])) }
+  )
   # precompute the pairs' class membership (for increased speed in permutations)
-  Ppairs <- apply(P, 2, FUN=function(p) tcrossprod(p)[lower.tri(ep)])
+  Ppairs <- apply(P, 2, FUN=function(p) membershipFn(p)[lower.tri(ep)])
   
-  getFWallace <- function(emA, emB, fuzzyClB, Bpairs=NULL){
+  getFWallace <- function(emA, emB, fuzzyClB, Bpairs=NULL, diff=NULL){
+    if(is.null(diff)) diff <- abs(emA[lower.tri(emA)]-emB[lower.tri(emB)])
     a <- sapply(setNames(seq_len(ncol(fuzzyClB)),colnames(fuzzyClB)),
                 FUN=function(i){
       # get the degree to which the members of each pair are of the given 
       # class in B
       if(is.null(Bpairs)){
-        Bpair <- as.matrix(tcrossprod(fuzzyClB[,i])[lower.tri(emA)])
+        Bpair <- as.matrix(membershipFn(fuzzyClB[,i])[lower.tri(emA)])
       }else{
         Bpair <- Bpairs[,i]
       }
-      # compute 1 - the distance in A between elements weighted by their being 
+      # compute 1 - the distance between pair agreements weighted by their being 
       # of the same class in B
-      Btot <- sum(Bpair)
-      c(c=sum(emA[lower.tri(emA)]*Bpair), n=Btot)
+      c(c=sum((1-diff)*Bpair), n=sum(Bpair))
     })
     list( global=sum(a[1,])/sum(a[2,]),
           perPartition=a[1,]/a[2,] )
   }
   
   if(computeWallace){
-    W1 <- getFWallace(ep,eq,Q)
-    W2 <- getFWallace(eq,ep,P,Bpairs=Ppairs)
+    W1 <- getFWallace(ep,eq,Q,diff=diff)
+    W2 <- getFWallace(eq,ep,P,Bpairs=Ppairs,diff)
   }
-  
   
   # get metrics for the permutations
   
