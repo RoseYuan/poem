@@ -125,7 +125,8 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
       # of the same class in B
       c(c=sum((1-diff)*Bpair), n=sum(Bpair))
     })
-    list( global=sum(a[1,])/sum(a[2,]),
+    a[2,which(a[2,]==0)] <- 1  # avoid NaNs for singletons
+    list( global=sum(a[1,])/sum(a[2,], na.rm=TRUE),
           perPartition=a[1,]/a[2,] )
   }
   
@@ -175,7 +176,7 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
   if(verbose){
     message("Standard error of the mean NDC across permutations:", 
             format(SE, digits=3))
-    if(SE>0.0025)
+    if(!isFALSE(SE>0.0025))
       message("You might want to increase the number of permutations to ",
               "increase the robustness of the adjusted metrics.")
   }
