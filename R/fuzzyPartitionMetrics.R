@@ -25,8 +25,8 @@
 #'   Default FALSE.
 #' @param BPPARAM BiocParallel params for multithreading (default none)
 #' @param tnorm Which type of t-norm operation to use for class membership of
-#'   pairs (either product or min) when calculating the Wallace indices. Does
-#'   not influence the NDC/ACI metrics.
+#'   pairs (either product, min, or lukasiewicz) when calculating the Wallace 
+#'   indices. Does not influence the NDC/ACI metrics.
 #' 
 #' @references Hullermeier et al. 2012; 10.1109/TFUZZ.2011.2179303;
 #' @references D'Ambrosio et al. 2021; 10.1007/s00357-020-09367-0
@@ -70,7 +70,7 @@
 fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
                                   verbose=TRUE, returnElementPairAccuracy=FALSE,
                                   BPPARAM=BiocParallel::SerialParam(), 
-                                  tnorm=c("product","min"), ...){ 
+                                  tnorm=c("product","min","lukasiewicz"), ...){ 
   
   tnorm <- match.arg(tnorm)
   if(is.data.frame(P)) P <- as.matrix(P)
@@ -105,6 +105,7 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
   
   membershipFn <- switch(tnorm,
     product=tcrossprod,
+    lukasiewicz=function(p){ sapply(seq_along(p), FUN=function(i) pmax(0,p+p[i]-1)) },
     min=function(p){ sapply(seq_along(p), FUN=function(i) pmin(p,p[i])) }
   )
   # precompute the pairs' class membership (for increased speed in permutations)

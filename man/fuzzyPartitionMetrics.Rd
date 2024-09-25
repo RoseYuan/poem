@@ -12,7 +12,7 @@ fuzzyPartitionMetrics(
   verbose = TRUE,
   returnElementPairAccuracy = FALSE,
   BPPARAM = BiocParallel::SerialParam(),
-  tnorm = c("product", "min"),
+  tnorm = c("product", "min", "lukasiewicz"),
   ...
 )
 }
@@ -43,8 +43,8 @@ Default FALSE.}
 \item{BPPARAM}{BiocParallel params for multithreading (default none)}
 
 \item{tnorm}{Which type of t-norm operation to use for class membership of
-pairs (either product or min) when calculating the Wallace indices. Does
-not influence the NDC/ACI metrics.}
+pairs (either product, min, or lukasiewicz) when calculating the Wallace
+indices. Does not influence the NDC/ACI metrics.}
 }
 \value{
 A list of metrics:
