@@ -1,7 +1,7 @@
 # Functions to turn neighborhood class distribution into fuzzy clusterings
 
 #' @description For a dataset, return the indices of knn for each object
-findSpatialKNN <- function(location, k, keep_ties=TRUE, n=5, BNPARAM=NULL){
+findSpatialKNN <- function(location, k, keep_ties=TRUE, n=5, BNPARAM=NULL, ...){
   BNPARAM <- .decideBNPARAM(nrow(location), BNPARAM)
   if(keep_ties){
     nn <- BiocNeighbors::findKNN(location, k=k*n, warn.ties=FALSE, BNPARAM=BNPARAM)

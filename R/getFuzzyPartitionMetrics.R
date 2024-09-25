@@ -33,12 +33,12 @@ getFuzzyPartitionMetrics <-function(true, pred, location, fuzzy_true=TRUE, fuzzy
   if(fuzzy_true){
     P <- getFuzzyLabel(true, location, k=k, alpha=alpha)
   }else{
-    P <- Matrix::sparseMatrix(i=seq_along(true), j=as.integer(true), x = 1L)
+    P <- as.matrix(Matrix::sparseMatrix(i=seq_along(true), j=as.integer(true), x = 1L))
   }
   if(fuzzy_pred){
     Q <- getFuzzyLabel(pred, location, k=k, alpha=alpha)
   }else{
-    Q <- Matrix::sparseMatrix(i=seq_along(pred), j=as.integer(pred), x = 1L)
+    Q <- as.matrix(Matrix::sparseMatrix(i=seq_along(pred), j=as.integer(pred), x = 1L))
   }
   res <- fuzzyPartitionMetrics(P, Q, ...)
   return(res)
