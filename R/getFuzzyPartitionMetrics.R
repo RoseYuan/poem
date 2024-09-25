@@ -8,6 +8,10 @@
 #' @param pred A vector containing the labels of the predicted clusters. Must 
 #'  be a vector of characters, integers, numerics, or a factor, but not a list.
 #' @param location
+#' @param fuzzy_true A boolean indicating if the `true` label will be transformed 
+#' into fuzzy cluster membership representation.
+#' @param fuzzy_pred A boolean indicating if the `pred` label will be transformed 
+#' into fuzzy cluster membership representation.
 #' @param k the number of neighbors to consider when transforming the location
 #' information into fuzzy class memberships.
 #' @param alpha The parameter to control to what extend the spot itself 
@@ -25,9 +29,17 @@
 #' @importFrom mclustcomp mclustcomp
 #' @importFrom FlowSOM FMeasure
 #' @export
-getFuzzyPartitionMetrics <-function(true, pred, location, k=6, alpha="equal", ...){
-  P <- getFuzzyLabel(true, location, k=k, alpha=alpha)
-  Q <- getFuzzyLabel(pred, location, k=k, alpha=alpha)
+getFuzzyPartitionMetrics <-function(true, pred, location, fuzzy_true=TRUE, fuzzy_pred=TRUE, k=6, alpha="equal", ...){
+  if(fuzzy_true){
+    P <- getFuzzyLabel(true, location, k=k, alpha=alpha)
+  }else{
+    P <- Matrix::sparseMatrix(i=seq_along(true), j=as.integer(true), x = 1L)
+  }
+  if(fuzzy_pred){
+    Q <- getFuzzyLabel(pred, location, k=k, alpha=alpha)
+  }else{
+    Q <- Matrix::sparseMatrix(i=seq_along(pred), j=as.integer(pred), x = 1L)
+  }
   res <- fuzzyPartitionMetrics(P, Q, ...)
   return(res)
 }
