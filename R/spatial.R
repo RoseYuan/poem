@@ -1,5 +1,17 @@
 # Functions to turn neighborhood class distribution into fuzzy clusterings
 
+
+#' findSpatialKNN
+#' @param location A numeric data matrix containing location information, where 
+#' rows are points and columns are dimensions.
+#' @param k The number of nearest neighbors to look at.
+#' @param keep_ties A Boolean indicating if ties of neighbors are counted once
+#'  or not. If TRUE, neighbors of the same distances will be counted only once,
+#'  and the resulting KNN will be more than k if there are any ties exist.
+#' @param n 
+#' @param BNPARAM 
+#' @param ... 
+#'
 #' @description For a dataset, return the indices of knn for each object
 findSpatialKNN <- function(location, k, keep_ties=TRUE, n=5, BNPARAM=NULL, ...){
   BNPARAM <- .decideBNPARAM(nrow(location), BNPARAM)

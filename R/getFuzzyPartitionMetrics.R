@@ -7,7 +7,8 @@
 #'  vector of characters, integers, numerics, or a factor, but not a list.
 #' @param pred A vector containing the labels of the predicted clusters. Must 
 #'  be a vector of characters, integers, numerics, or a factor, but not a list.
-#' @param location
+#' @param location A numeric data matrix containing location information, where 
+#' rows are points and columns are dimensions. 
 #' @param fuzzy_true A boolean indicating if the `true` label will be transformed 
 #' into fuzzy cluster membership representation.
 #' @param fuzzy_pred A boolean indicating if the `pred` label will be transformed 
