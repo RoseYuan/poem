@@ -29,18 +29,32 @@
 #' @importFrom mclustcomp mclustcomp
 #' @importFrom FlowSOM FMeasure
 #' @export
-getFuzzyPartitionMetrics <-function(true, pred, location, fuzzy_true=TRUE, fuzzy_pred=TRUE, k=6, alpha="equal", ...){
-  if(fuzzy_true){
+getFuzzyPartitionMetrics <-function(true, pred, location, fuzzy_true=TRUE, 
+                                    fuzzy_pred=FALSE, k=6, alpha="equal", ...){
+  if(fuzzy_true & fuzzy_pred){
+    message("Comparing between a fuzzy truth and a fuzzy prediction...")
     P <- getFuzzyLabel(true, location, k=k, alpha=alpha)
-  }else{
-    P <- as.matrix(Matrix::sparseMatrix(i=seq_along(true), j=as.integer(true), x = 1L))
-  }
-  if(fuzzy_pred){
     Q <- getFuzzyLabel(pred, location, k=k, alpha=alpha)
-  }else{
-    Q <- as.matrix(Matrix::sparseMatrix(i=seq_along(pred), j=as.integer(pred), x = 1L))
+    res <- fuzzyPartitionMetrics(P, Q, ...)
   }
-  res <- fuzzyPartitionMetrics(P, Q, ...)
+  if(fuzzy_true & (!fuzzy_pred)){
+    message("Comparing between a fuzzy truth and a hard prediction...")
+    P <- getFuzzyLabel(true, location, k=k, alpha=alpha)
+    res <- fuzzyHardMetrics(pred, true, P, ...)
+  }
+  if((!fuzzy_true) & fuzzy_pred){
+    message("Comparing between a hard truth and a fuzzy prediction...")
+    Q <- getFuzzyLabel(pred, location, k=k, alpha=alpha)
+    res <- fuzzyHardMetrics(true, pred, Q, ...)
+    res <- .switchListItem(mylist, "fuzzyWH", "fuzzyWC")
+    res <- .switchListItem(mylist, "fuzzyAWH", "fuzzyAWC")
+  }
+  if((!fuzzy_true) & (!fuzzy_pred)){
+    warning("You are comparing between two hard clusterings! Use function
+            `getPartitionMetrics()` to access more metrics for this.")
+    res <- getPartitionMetrics(true, pred, 
+                               metrics=c("RI","WC","WH","ARI","AWC","AWH"), ...)
+  }
   return(res)
 }
 
