@@ -311,10 +311,10 @@ fuzzyHardMetrics <- function(hardPred, hardTruth, fuzzyTruth, nperms=NULL,
                 abs(as.matrix(ep2) - eq) )
   NDC <- 1 - ( sum( diff )/(2*ncomp) )
   
-  getFWallace <- function(hardTruthVector, diff){
-    a <- sapply(split(seq_along(hardTruthVector),hardTruthVector),
+  getFWallace <- function(membership, diff){
+    a <- sapply(split(seq_along(membership),membership),
                 FUN=function(i){
-      c(c=sum(diff[i,]), n=(length(i)*ncol(diff)-length(i)))
+      c(c=sum(diff[i,i]), n=(length(i)^2-length(i)))
     })
     a[2,which(a[2,]==0)] <- 1  # avoid NaNs for singletons
     list( global=1-sum(a[1,])/sum(a[2,], na.rm=TRUE),
@@ -334,8 +334,10 @@ fuzzyHardMetrics <- function(hardPred, hardTruth, fuzzyTruth, nperms=NULL,
     NDC <- 1 -  sum( diff )/(2*ncomp)
     W1 <- getFWallace(hardPredVector[p], diff)
     W2 <- getFWallace(hardTruthVector, diff)
-    # rm(diff, permutedEQ)
-    # gc(verbose=FALSE)
+    if(m>2000){
+      rm(diff, permutedEQ)
+      gc(verbose=FALSE)
+    }
     list(NDC=NDC, W1=W1, W2=W2)
   }
   
