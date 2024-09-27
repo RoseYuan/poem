@@ -314,7 +314,7 @@ fuzzyHardMetrics <- function(hardPred, hardTruth, fuzzyTruth, nperms=NULL,
   getFWallace <- function(hardTruthVector, diff){
     a <- sapply(split(seq_along(hardTruthVector),hardTruthVector),
                 FUN=function(i){
-      c(c=sum(diff[i,]), n=(length(i)*ncol(diff)-i))
+      c(c=sum(diff[i,]), n=(length(i)*ncol(diff)-length(i)))
     })
     a[2,which(a[2,]==0)] <- 1  # avoid NaNs for singletons
     list( global=1-sum(a[1,])/sum(a[2,], na.rm=TRUE),
