@@ -23,8 +23,8 @@ findSpatialKNN <- function(location, k, keep_ties=TRUE, n=5, BNPARAM=NULL, ...){
 #' for its knn is then 1-alpha.
 knnComposition <- function(location, k=6, label, alpha="equal", ...){
   label <- factor(label)
-  ind <- findSpatialKNN(location, k, ...)
-  knnLabels <- lapply(ind, function(x){label[x[2:length(x)]]})
+  ind <- findSpatialKNN(location, k=k, ...)
+  knnLabels <- relist(as.integer(label)[unlist(ind)], ind)
   if(alpha=="equal"){ 
     alpha <- 1/(k+1) 
   }else{
@@ -32,13 +32,13 @@ knnComposition <- function(location, k=6, label, alpha="equal", ...){
       stop("alpha must be either 'equal', or a numeric between 0 and 1.")
     }
   }
-  knn_weights <- lapply(knnLabels, function(x){x<-factor(x, levels=levels(label)); as.vector(table(x)/length(x)) * (1-alpha)})
-  knn_weights <- do.call(rbind, knn_weights)
-  i_weights <-  as.matrix(table(seq_along(label), label)) * (alpha)
+  knn_weights <- lapply(knnLabels, function(x) as.vector(table(x)/length(x)))
+  knn_weights <- do.call(rbind, knn_weights) * (1-alpha)
+  i_weights <-  as.matrix(table(seq_along(label), label)) * alpha
   return(knn_weights + i_weights)
 }
 
-getFuzzyLabel <- function(label, location, k=6, alpha="equal", ...){
+getFuzzyLabel <- function(label, location, k=6, alpha=0.5, ...){
   label <- factor(label)
   NAs <- which(is.na(label))
   if(length(NAs>0)){
