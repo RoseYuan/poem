@@ -1,17 +1,28 @@
-#' getSpatialGlobalInternalMetrics
+#' Compute global-level internal evaluation metrics for spatially-resolved data
 #' 
 #' Computes a selection of internal clustering evaluation metrics for spatial 
 #' data at the global level. MPC, PC and PE are internal metrics for fuzzy 
-#' clustering. Use the implementations in package `fclust`.
-#' @references Wang, et al. "A survey of fuzzy clustering validity evaluation 
-#' methods." Information Sciences 618 (2022): 270-297.
-#' @return A vector with the following values (see refs for details):
-#'   \item{PAS}{}
-#'   \item{ELSA}{}
-#'   \item{CHAOS}{}
+#' clustering, and their implementations in package `fclust` are used.
+#' 
+#' @param label A vector containing the labels to be evaluated.
+#' @param location A numerical matrix containing the location information, with
+#' rows as samples and columns as location dimensions.
+#' @param k The size of the spatial neighborhood to look at for each spot. 
+#' This is used for calculating PAS and ELSA scores.
+#' @param metric The metrics to compute. See below for more details.
+#' @references Yuan, Zhiyuan, et al., 2024; 10.1038/s41592-024-02215-8
+#' @references Naimi, Babak, et al., 2019; 10.1016/j.spasta.2018.10.001
+#' @references Wang, et al., 2022; 10.1016/j.ins.2022.11.010
+#' 
+#' @return A named vector containing metric values. Possible metrics are:
+#'   \item{PAS}{Proportion of abnormal spots (PAS score).}
+#'   \item{ELSA}{Entropy-based Local indicator of Spatial Association (ELSA score).}
+#'   \item{CHAOS}{Spatial Chaos Score.}
 #'   \item{MPC}{Modified partition coefficient} 
 #'   \item{PC}{Partition coefficient} 
 #'   \item{PE}{Partition entropy} 
+#' @export
+#' @examples
 getSpatialGlobalInternalMetrics <- function(label, location, k=6,
                                             metrics=c("PAS", "ELSA", "CHAOS"),
                                             ...){
@@ -32,10 +43,18 @@ getSpatialGlobalInternalMetrics <- function(label, location, k=6,
   return(res)
 }
 
-#' getSpatialInternalMetrics
+#' Compute spot-level internal evaluation metrics for spatially-resolved data
 #' 
 #' Computes a selection of internal clustering evaluation metrics for spatial 
-#' data at the spot level.
+#' data at each spot level.
+#'
+#' @inheritParams getSpatialGlobalInternalMetrics
+#' @param metrics Possible metrics: "PAS" and "ELSA".
+#' @param ... Optional params for [PAS()].
+#' @return A dataframe containing the metric values for all samples in the dataset.
+#' If PAS is calculated, the value is a Boolean about the abnormality of a spot.
+#' If ELSA is calculated, Ea, Ec and ELSA for all spots will be returned.
+#' @examples 
 getSpatialInternalMetrics <- function(label, location, k=6, 
                                       metrics=c("PAS", "ELSA"), ...){
   res <- as.data.frame(lapply(setNames(metrics, metrics), FUN=function(m){

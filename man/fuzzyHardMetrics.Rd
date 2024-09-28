@@ -43,13 +43,13 @@ precision of the adjusted metrics).}
 }
 \value{
 A list of metrics:
-\item NDC : Hullermeier's NDC (fuzzy rand index)
-\item ACI : Ambrosio's Adjusted Concordance Index (ACI), i.e. a
-permutation-based fuzzy version of the adjusted Rand index.
-\item fuzzyWH Fuzzy Wallace Homogeneity index
-\item fuzzyWC Fuzzy Wallace Completeness index
-\item fuzzyAWH Adjusted fuzzy Wallace Homogeneity index
-\item fuzzyAWC Adjusted fuzzy Wallace Completeness index
+\item{NDC}{Hullermeier's NDC (fuzzy rand index)}
+\item{ACI}{Ambrosio's Adjusted Concordance Index (ACI), i.e. a
+permutation-based fuzzy version of the adjusted Rand index.}
+\item{fuzzyWH}{Fuzzy Wallace Homogeneity index}
+\item{fuzzyWC}{Fuzzy Wallace Completeness index}
+\item{fuzzyAWH}{Adjusted fuzzy Wallace Homogeneity index}
+\item{fuzzyAWC}{Adjusted fuzzy Wallace Completeness index}
 }
 \description{
 Computes fuzzy-hard versions of pair-sorting partition metrics to compare a

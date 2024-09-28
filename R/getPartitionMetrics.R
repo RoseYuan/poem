@@ -8,16 +8,26 @@
 #' @param pred A vector containing the labels of the predicted clusters. Must 
 #'  be a vector of characters, integers, numerics, or a factor, but not a list.
 #' @param metrics The metrics to compute. If omitted, main metrics will be 
-#'   computed. RI: Rand Index; WC: Wallace Completeness; WH: Wallace 
-#'   Homogeneity; ARI:Adjusted Rand Index; AWC: Adjusted Wallace Completeness; 
-#'   AWH: Adjusted Wallace Homogeneity; NCR: Normalized class size Rand index;
-#'   MI: Mutual Information; AMI: Adjusted Mutual Information;
-#'   VI: Variation of Information; EH: (Entropy-based) Homogeneity; 
-#'   EC: (Entropy-based) Completeness; VM: V-measure; 
-#'   FM: F-measure/weighted average F1 score; VDM: Van Dongen Measure; 
-#'   MHM: Meila-Heckerman Measure; MMM: Maximum-Match Measure; 
-#'   Mirkin: Mirkin Metric.
-#' @return A list of metric results.
+#'   computed. See below for more details.
+#' @return A list of metric results. Possible metrics are:
+#' \item{RI}{Rand Index} 
+#' \item{WC}{Wallace Completeness}
+#' \item{WH}{Wallace Homogeneity}
+#' \item{ARI}{Adjusted Rand Index}
+#' \item{AWC}{Adjusted Wallace Completeness}
+#' \item{AWH}{Adjusted Wallace Homogeneity}
+#' \item{NCR}{Normalized class size Rand index}
+#' \item{MI}{Mutual Information}
+#' \item{AMI}{Adjusted Mutual Information}
+#' \item{VI}{Variation of Information}
+#' \item{EH}{(Entropy-based) Homogeneity}
+#' \item{EC}{(Entropy-based) Completeness}
+#' \item{VM}{V-measure}
+#' \item{FM}{F-measure/weighted average F1 score}
+#' \item{VDM}{Van Dongen Measure}
+#' \item{MHM}{Meila-Heckerman Measure}
+#' \item{MMM}{Maximum-Match Measure}
+#' \item{Mirkin}{Mirkin Metric}
 #' @details
 #' Additional details...
 #' 

@@ -10,7 +10,8 @@ CDbw(
   r = 10,
   s = seq(0.1, 0.8, by = 0.1),
   clusterstdev = TRUE,
-  trace = FALSE
+  trace = FALSE,
+  ...
 )
 }
 \arguments{

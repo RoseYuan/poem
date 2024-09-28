@@ -2,7 +2,7 @@
 #' 
 #' Computes fuzzy versions of pair-sorting partition metrics. This is largely 
 #' based on the permutation-based implementation by Antonio D'Ambrosio from the 
-#' ConsRankClass package, modified to also compute the fuzzy versions of the 
+#' `ConsRankClass` package, modified to also compute the fuzzy versions of the 
 #' adjusted Wallace indices, implement multithreading, and adjust the number of
 #' permutations according to their variability.
 #'
@@ -32,15 +32,16 @@
 #' @references D'Ambrosio et al. 2021; 10.1007/s00357-020-09367-0
 #' 
 #' @author Pierre-Luc Germain
-#'
-#' @return A list of metrics:
-#'   \item NDC : Hullermeier's NDC (fuzzy rand index)
-#'   \item ACI : Ambrosio's Adjusted Concordance Index (ACI), i.e. a 
-#'     permutation-based fuzzy version of the adjusted Rand index.
-#'   \item fuzzyWH Fuzzy Wallace Homogeneity index
-#'   \item fuzzyWC Fuzzy Wallace Completeness index
-#'   \item fuzzyAWH Adjusted fuzzy Wallace Homogeneity index
-#'   \item fuzzyAWC Adjusted fuzzy Wallace Completeness index
+#' 
+#' @return When `returnElementPairAccuracy` is `FALSE`, return a list of metrics:
+#'   \item{NDC}{Hullermeier's NDC (fuzzy rand index)}
+#'   \item{ACI}{Ambrosio's Adjusted Concordance Index (ACI), i.e. a 
+#'     permutation-based fuzzy version of the adjusted Rand index.}
+#'   \item{fuzzyWH}{Fuzzy Wallace Homogeneity index}
+#'   \item{fuzzyWC}{Fuzzy Wallace Completeness index}
+#'   \item{fuzzyAWH}{Adjusted fuzzy Wallace Homogeneity index}
+#'   \item{fuzzyAWC}{Adjusted fuzzy Wallace Completeness index}
+#'   
 #' @importFrom BiocParallel SerialParam bplapply
 #' @export
 #' @examples
@@ -242,13 +243,13 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
 #' @author Pierre-Luc Germain
 #'
 #' @return A list of metrics:
-#'   \item NDC : Hullermeier's NDC (fuzzy rand index)
-#'   \item ACI : Ambrosio's Adjusted Concordance Index (ACI), i.e. a 
-#'     permutation-based fuzzy version of the adjusted Rand index.
-#'   \item fuzzyWH Fuzzy Wallace Homogeneity index
-#'   \item fuzzyWC Fuzzy Wallace Completeness index
-#'   \item fuzzyAWH Adjusted fuzzy Wallace Homogeneity index
-#'   \item fuzzyAWC Adjusted fuzzy Wallace Completeness index
+#'   \item{NDC}{Hullermeier's NDC (fuzzy rand index)}
+#'   \item{ACI}{Ambrosio's Adjusted Concordance Index (ACI), i.e. a 
+#'     permutation-based fuzzy version of the adjusted Rand index.}
+#'   \item{fuzzyWH}{Fuzzy Wallace Homogeneity index}
+#'   \item{fuzzyWC}{Fuzzy Wallace Completeness index}
+#'   \item{fuzzyAWH}{Adjusted fuzzy Wallace Homogeneity index}
+#'   \item{fuzzyAWC}{Adjusted fuzzy Wallace Completeness index}
 #' @importFrom BiocParallel SerialParam bplapply bpnworkers
 #' @importFrom stats dist
 #' @importFrom Matrix sparseMatrix

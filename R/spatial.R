@@ -1,9 +1,10 @@
-# Functions to turn neighborhood class distribution into fuzzy clusterings
 
 
-#' findSpatialKNN
+#' Find the k nearest spatial neighbors
+#' @description For a given dataset, find the `k` nearest neighbors for each 
+#' object based on their spatial locations, with the option of handling ties.
 #' @param location A numeric data matrix containing location information, where 
-#' rows are points and columns are dimensions.
+#' rows are points and columns are location dimensions.
 #' @param k The number of nearest neighbors to look at.
 #' @param keep_ties A Boolean indicating if ties are counted once or not. If 
 #'  TRUE, neighbors of the same distances will be included even if it means 
@@ -15,7 +16,6 @@
 #'  Annoy for larger ones.
 #' @param ... Ignored
 #'
-#' @description For a dataset, return the indices of knn for each object
 #' @return A list of indices.
 #' @importFrom BiocNeighbors findKNN
 #' @export
@@ -37,11 +37,20 @@ findSpatialKNN <- function(location, k, keep_ties=TRUE, useMedianDist=FALSE,
   return(nn)
 }
 
-#' @alpha the parameter to control to what extend the spot itself contribute 
-#' to the class composition calculation. "equal" means it is weighted the 
-#' same as other NNs. A numeric value between 0 and 1 means the weight of the 
+#' Compute neighborhood composition
+#' @description For a given dataset with locations and labels, compute the label
+#' composition of the neighborhood for each sample.
+#' @param alpha The parameter to control to what extend the spot itself contribute 
+#' to the class composition calculation. `"equal"` means it is weighted the 
+#' same as other neighbors. A numeric value between `0` and `1` means the weight of the 
 #' frequency contribution for the spot itself, and the frequency contribution 
-#' for its knn is then 1-alpha.
+#' for its knn is then `1-alpha`. By default `0.5`.
+#' @inheritParams findSpatialKNN 
+#' @param label A vector containing the label for the dataset.
+#' @export
+#' @return A numerical matrix indicating the composition, where rows correspond 
+#' to samples and columns correspond to the classes in `label`. 
+
 knnComposition <- function(location, k=6, label, alpha=0.5, ...){
   label <- factor(label)
   ind <- findSpatialKNN(location, k=k, ...)
@@ -64,34 +73,24 @@ knnComposition <- function(location, k=6, label, alpha=0.5, ...){
   return(knn_weights + i_weights)
 }
 
-#' getFuzzyLabel
-#'
+#' Get fuzzy representation of labels
+#' Get fuzzy representation of labels according to the spatial neighborhood 
+#' label composition.
 #' @param label An anomic vector of cluster labels
 #' @param location A matrix or data.frame of coordinates
 #' @param k The wished number of nearest neighbors
-#' @param alpha the parameter to control to what extend the spot itself 
-#'   contribute to the class composition calculation. "equal" means it is 
-#'   weighted the same as other NNs. A numeric value between 0 and 1 means the 
-#'   weight of the frequency contribution for the spot itself, and the 
-#'   frequency contribution for its knn is then 1-alpha.
-#' @param ... Passed to \code{\link{findSpatialKNN}}.
+#' @inheritParams knnComposition
+#' @param ... Passed to [findSpatialKNN()].
 #'
 #' @return A matrix of fuzzy memberships.
 #' @export
+
 getFuzzyLabel <- function(label, location, k=6, alpha=0.5, ...){
   label <- factor(label)
   stopifnot(!any(is.na(label)))
   res <- knnComposition(location=location, k=k, label=label, alpha=alpha, ...)
   return(res)
 }
-
-getPredLabels <- function(ref_labels, pred_clusters) {
-  cluster_map <- matchSets(pred_clusters, ref_labels)
-  pred_labels <- unlist(cluster_map[pred_clusters])
-  names(pred_labels) <- NULL
-  return(pred_labels)
-}
-
 
 #' matchSets
 #' 

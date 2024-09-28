@@ -9,7 +9,7 @@
 #' @param true True class labels (vector coercible to factor)
 #' @param pred Predicted labels (vector coercible to factor)
 #' @param k Number of nearest neighbors
-#'
+#' @export
 #' @return A scalar representing the weighted accuracy.
 nnWeightedAccuracy <- function(true, pred, location, k=5, ...){
   pred <- as.factor(pred)
@@ -37,14 +37,16 @@ nnWeightedAccuracy <- function(true, pred, location, k=5, ...){
   sum(pred==true,na.rm=TRUE)/length(pred)
 }
 
-#' @title Calculate PAS score to measure clustering performance.
-#' @description PAS score measures the randomness of the spots that located outside of the spatial region where it was clustered to.
+#' @title Calculate PAS score
+#' @description PAS score measures the clustering performance by calculating 
+#' the randomness of the spots that located outside of the spatial region where it was clustered to.
 #' Lower PAS score indicates better spatial domian clustering performance.
 #' @param label Cluster labels.
-#' @param location A n by k matrix of spatial locations.
-#' @param k size of the neighborhood.
+#' @param k Number of nearest neighbors.
+#' @inheritParams getSpatialGlobalInternalMetrics
 #' @return A numeric value for PAS score, and a boolean vector about the abnormal spots.
 #' @export
+#' @examples 
 PAS <- function(label, location, k=10, ...){
   matched_location=location
   NAs = which(is.na(label))
@@ -58,14 +60,15 @@ PAS <- function(label, location, k=10, ...){
   return(list(PAS=sum(results)/length(results), abnormalty=results))
 }
 
-#' @title Calculate CHAOS score to measure clustering performance.
-#' @description CHAOS score measures the mean length of the graph edges in the 
-#' 1-nearest neighbor (1NN) graph for each cluster, averaged across clusters.
+#' @title Calculate CHAOS score
+#' @description CHAOS score measures the clustering performance by calculating 
+#' the mean length of the graph edges in the 1-nearest neighbor (1NN) graph 
+#' for each cluster, averaged across clusters.
 #' Lower CHAOS score indicates better spatial domain clustering performance.
-#' @param location A n by k matrix of spatial locations.
 #' @param label Cluster labels.
-#' @param BNPARAM 
+#' @inheritParams findSpatialKNN
 #' @return A numeric value for CHAOS score.
+#' @examples 
 #' @export
 CHAOS <- function(label, location, BNPARAM=NULL) {
   BNPARAM <- .decideBNPARAM(nrow(location), BNPARAM)
@@ -94,8 +97,20 @@ CHAOS <- function(label, location, BNPARAM=NULL) {
   }
 }
   
+#' Calculate ELSA scores
+#' @description
+#' Calculating the Entropy-based Local indicator of Spatial Association (ELSA) 
+#' scores, which consist of Ea, Ec and the overall ELSA.
+#' 
+#' @inheritParams PAS
 #' @importFrom sp SpatialPointsDataFrame
 #' @importFrom spdep knn2nb knearneigh nbdists
+#' @references Naimi, Babak, et al., 2019; 10.1016/j.spasta.2018.10.001
+#' @return A dataframe containing the Ea, Ec and ELSA for all samples in the dataset.
+#' @examples
+#' # example code
+#' 
+#' @export
 ELSA <- function(label, location, k=10){
   require(elsa)
   require(spdep)

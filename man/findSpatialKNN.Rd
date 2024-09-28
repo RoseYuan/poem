@@ -2,7 +2,7 @@
 % Please edit documentation in R/spatial.R
 \name{findSpatialKNN}
 \alias{findSpatialKNN}
-\title{findSpatialKNN}
+\title{Find the k nearest spatial neighbors}
 \usage{
 findSpatialKNN(
   location,
@@ -15,7 +15,7 @@ findSpatialKNN(
 }
 \arguments{
 \item{location}{A numeric data matrix containing location information, where
-rows are points and columns are dimensions.}
+rows are points and columns are location dimensions.}
 
 \item{k}{The number of nearest neighbors to look at.}
 
@@ -36,5 +36,6 @@ Annoy for larger ones.}
 A list of indices.
 }
 \description{
-For a dataset, return the indices of knn for each object
+For a given dataset, find the \code{k} nearest neighbors for each
+object based on their spatial locations, with the option of handling ties.
 }
