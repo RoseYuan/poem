@@ -1,18 +1,20 @@
-# Functions to turn neighborhood class distribution into fuzzy clusterings
 
 
-#' findSpatialKNN
+#' Find the k nearest spatial neighbors
+#' @description For a given dataset, find the `k` nearest neighbors for each 
+#' object based on their spatial locations, with the option of handling ties.
 #' @param location A numeric data matrix containing location information, where 
-#' rows are points and columns are dimensions.
+#' rows are points and columns are location dimensions.
 #' @param k The number of nearest neighbors to look at.
 #' @param keep_ties A Boolean indicating if ties of neighbors are counted once
 #'  or not. If TRUE, neighbors of the same distances will be counted only once,
 #'  and the resulting KNN will be more than k if there are any ties exist.
-#' @param n 
-#' @param BNPARAM 
-#' @param ... 
+#' @param n When ties are kept, maximally `k*n` neighbors will be looked at.
+#' @param BNPARAM A `BiocNeighborParam` object specifying the algorithm to use. 
+#' If NULL, automatically deciding from the size of the dataset.
+#' @return return a list containing the indices of knn for each object.
 #'
-#' @description For a dataset, return the indices of knn for each object
+
 findSpatialKNN <- function(location, k, keep_ties=TRUE, n=5, BNPARAM=NULL, ...){
   BNPARAM <- .decideBNPARAM(nrow(location), BNPARAM)
   if(keep_ties){
@@ -28,11 +30,20 @@ findSpatialKNN <- function(location, k, keep_ties=TRUE, n=5, BNPARAM=NULL, ...){
   return(nn)
 }
 
-#' @alpha the parameter to control to what extend the spot itself contribute 
-#' to the class composition calculation. "equal" means it is weighted the 
-#' same as other NNs. A numeric value between 0 and 1 means the weight of the 
+#' Compute neighborhood composition
+#' @description For a given dataset with locations and labels, compute the label
+#' composition of the neighborhood for each sample.
+#' @param alpha The parameter to control to what extend the spot itself contribute 
+#' to the class composition calculation. `"equal"` means it is weighted the 
+#' same as other neighbors. A numeric value between `0` and `1` means the weight of the 
 #' frequency contribution for the spot itself, and the frequency contribution 
-#' for its knn is then 1-alpha.
+#' for its knn is then `1-alpha`. By default `0.5`.
+#' @inheritParams findSpatialKNN 
+#' @param label A vector containing the label for the dataset.
+#' @export
+#' @return A numerical matrix indicating the composition, where rows correspond 
+#' to samples and columns correspond to the classes in `label`. 
+
 knnComposition <- function(location, k=6, label, alpha=0.5, ...){
   label <- factor(label)
   ind <- findSpatialKNN(location, k=k, ...)
@@ -52,6 +63,16 @@ knnComposition <- function(location, k=6, label, alpha=0.5, ...){
   return(knn_weights + i_weights)
 }
 
+#' Get fuzzy representation of labels
+#' @description
+#' Get fuzzy representation of labels according to the spatial neighborhood 
+#' label composition.
+#' @inheritParams knnComposition
+#' @return A numerical matrix indicating the composition, where rows correspond 
+#' to samples and columns correspond to the classes in `label`. 
+#' @export
+#'
+#' @examples
 getFuzzyLabel <- function(label, location, k=6, alpha=0.5, ...){
   label <- factor(label)
   NAs <- which(is.na(label))
@@ -60,54 +81,6 @@ getFuzzyLabel <- function(label, location, k=6, alpha=0.5, ...){
   }
   res <- knnComposition(location=location, k=k, label=label, alpha=alpha, ...)
   return(res)
-}
-
-library(clue)
-library(mclust)
-library(RcppHungarian)
-
-
-getPredLabels <- function(ref_labels, pred_clusters) {
-  cost_matrix <- .computeCostMatrix(ref_labels, pred_clusters)
-  cluster_map <- .getClusterMapping(cost_matrix)
-  
-  pred_labels <- unlist(cluster_map[pred_clusters])
-  names(pred_labels) <- NULL
-  
-  return(pred_labels)
-}
-
-.computeCostMatrix <- function(ref_labels, pred_clusters) {
-  # Create a matrix to store the cost
-  unique_ref_labels <- unique(ref_labels)
-  unique_pred_clusters <- unique(pred_clusters)
-  count_matrix <- matrix(0, nrow = length(unique_ref_labels), ncol = length(unique_pred_clusters), dimnames = list(unique_ref_labels, unique_pred_clusters))
-  
-  # Iterate over the indices and update the matrix
-  for (i in seq_along(ref_labels)) {
-    count_matrix[ref_labels[i], pred_clusters[i]] <- count_matrix[ref_labels[i], pred_clusters[i]] + 1
-  }
-  
-  if (ncol(count_matrix) > 1) {
-    cost_matrix <- apply(count_matrix, 1, function(row) max(row) - row)
-  } else {
-    cost_matrix <- t(max(count_matrix) - count_matrix)
-  }
-  
-  return(cost_matrix)
-}
-
-.getClusterMapping <- function(cost_matrix) {
-  solved <- HungarianSolver(cost_matrix)
-  
-  cluster_map <- list()
-  for (i in 1:nrow(solved$pairs)) {
-    from <- rownames(cost_matrix)[solved$pairs[i, 1]]
-    to <- if(solved$pairs[i, 2] == 0) from else colnames(cost_matrix)[solved$pairs[i, 2]] 
-    cluster_map[[from]] <- to
-  }
-  
-  return(cluster_map)
 }
 
 #' matchSets

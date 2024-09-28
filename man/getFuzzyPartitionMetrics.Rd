@@ -4,7 +4,16 @@
 \alias{getFuzzyPartitionMetrics}
 \title{getFuzzyPartitionMetrics}
 \usage{
-getFuzzyPartitionMetrics(true, pred, location, k = 6, alpha = "equal", ...)
+getFuzzyPartitionMetrics(
+  true,
+  pred,
+  location,
+  fuzzy_true = TRUE,
+  fuzzy_pred = FALSE,
+  k = 6,
+  alpha = 0.5,
+  ...
+)
 }
 \arguments{
 \item{true}{A vector containing the labels of the true classes. Must be a
@@ -13,21 +22,29 @@ vector of characters, integers, numerics, or a factor, but not a list.}
 \item{pred}{A vector containing the labels of the predicted clusters. Must
 be a vector of characters, integers, numerics, or a factor, but not a list.}
 
-\item{k}{the number of neighbors to consider when transforming the location
+\item{location}{A numeric data matrix containing location information, where
+rows are points and columns are dimensions.}
+
+\item{fuzzy_true}{A boolean indicating if the \code{true} label will be transformed
+into fuzzy cluster membership representation.}
+
+\item{fuzzy_pred}{A boolean indicating if the \code{pred} label will be transformed
+into fuzzy cluster membership representation.}
+
+\item{k}{The number of neighbors to consider when transforming the location
 information into fuzzy class memberships.}
 
-\item{alpha}{The parameter to control to what extend the spot itself
-contribute to the class composition calculation. "equal" means it is
-weighted the same as other NNs. A numeric value between 0 and 1 means the
-weight of the frequency contribution for the spot itself, and the frequency
-contribution for its knn is then 1-alpha.}
+\item{alpha}{The parameter to control to what extend the spot itself contribute
+to the class composition calculation. \code{"equal"} means it is weighted the
+same as other neighbors. A numeric value between \code{0} and \code{1} means the weight of the
+frequency contribution for the spot itself, and the frequency contribution
+for its knn is then \code{1-alpha}. By default \code{0.5}.}
+
+\item{...}{Optional params for \code{\link[=fuzzyPartitionMetrics]{fuzzyPartitionMetrics()}} or \code{\link[=fuzzyHardMetrics]{fuzzyHardMetrics()}}.}
 }
 \value{
 A list of metric results.
 }
 \description{
 Computes a selection of external fuzzy clustering evaluation metrics for spatial data.
-}
-\details{
-Additional details...
 }
