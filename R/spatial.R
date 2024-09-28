@@ -56,8 +56,7 @@ getFuzzyLabel <- function(label, location, k=6, alpha=0.5, ...){
   label <- factor(label)
   NAs <- which(is.na(label))
   if(length(NAs>0)){
-    label <- label[-NAs]
-    location <- location[-NAs,]
+    stop("Error: there is NA in label.")
   }
   res <- knnComposition(location=location, k=k, label=label, alpha=alpha, ...)
   return(res)
