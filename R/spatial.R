@@ -62,58 +62,18 @@ getFuzzyLabel <- function(label, location, k=6, alpha=0.5, ...){
   return(res)
 }
 
-library(clue)
-library(mclust)
-library(RcppHungarian)
-
-
 getPredLabels <- function(ref_labels, pred_clusters) {
-  cost_matrix <- .computeCostMatrix(ref_labels, pred_clusters)
-  cluster_map <- .getClusterMapping(cost_matrix)
-  
+  cluster_map <- matchSets(pred_clusters, ref_labels)
   pred_labels <- unlist(cluster_map[pred_clusters])
   names(pred_labels) <- NULL
-  
   return(pred_labels)
 }
 
-.computeCostMatrix <- function(ref_labels, pred_clusters) {
-  # Create a matrix to store the cost
-  unique_ref_labels <- unique(ref_labels)
-  unique_pred_clusters <- unique(pred_clusters)
-  count_matrix <- matrix(0, nrow = length(unique_ref_labels), ncol = length(unique_pred_clusters), dimnames = list(unique_ref_labels, unique_pred_clusters))
-  
-  # Iterate over the indices and update the matrix
-  for (i in seq_along(ref_labels)) {
-    count_matrix[ref_labels[i], pred_clusters[i]] <- count_matrix[ref_labels[i], pred_clusters[i]] + 1
-  }
-  
-  if (ncol(count_matrix) > 1) {
-    cost_matrix <- apply(count_matrix, 1, function(row) max(row) - row)
-  } else {
-    cost_matrix <- t(max(count_matrix) - count_matrix)
-  }
-  
-  return(cost_matrix)
-}
-
-.getClusterMapping <- function(cost_matrix) {
-  solved <- HungarianSolver(cost_matrix)
-  
-  cluster_map <- list()
-  for (i in 1:nrow(solved$pairs)) {
-    from <- rownames(cost_matrix)[solved$pairs[i, 1]]
-    to <- if(solved$pairs[i, 2] == 0) from else colnames(cost_matrix)[solved$pairs[i, 2]] 
-    cluster_map[[from]] <- to
-  }
-  
-  return(cluster_map)
-}
 
 #' matchSets
 #' 
 #' Match sets from a partitions to a reference partition using the Hungarian
-#' algorithm.
+#' algorithm to optimize F1 scores.
 #'
 #' @param pred An integer or factor of cluster labels
 #' @param true An integer or factor of reference labels
@@ -123,7 +83,8 @@ getPredLabels <- function(ref_labels, pred_clusters) {
 #' @return A vector of matching sets (i.e. level) from `true` for every set 
 #'   (i.e. level) of `pred`.
 #' @importFrom clue solve_LSAP
-matchSets <- function(pred, true, forceMatch=TRUE, returnIndices=is.integer(true)){
+matchSets <- function(pred, true, forceMatch=TRUE,
+                      returnIndices=is.integer(true)){
   true <- as.factor(true)
   pred <- as.factor(pred)
   co <- unclass(table(true, pred))
@@ -132,8 +93,13 @@ matchSets <- function(pred, true, forceMatch=TRUE, returnIndices=is.integer(true
   F1 <- 2*(prec*recall)/(prec+recall)
   F1[is.na(F1)] <- 0
   if(nrow(F1)>ncol(F1)){
+    # using alternative dependencies:
+    # match <- RcppHungarian::HungarianSolver(-t(F1))$pairs[,2]
     match <- as.integer(clue::solve_LSAP(t(F1), maximum=TRUE))
   }else{
+    # using alternative dependencies:
+    # match1 <- RcppHungarian::HungarianSolver(-F1)$pairs[,2]
+    # match1[which(match1==0)] <- NA_integer_ 
     match1 <- as.integer(clue::solve_LSAP(F1, maximum=TRUE))
     match <- rep(NA_integer_, length(levels(pred)))
     nonMatched <- setdiff(seq_along(match), match1)
