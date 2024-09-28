@@ -46,7 +46,7 @@ knnComposition <- function(location, k=6, label, alpha="equal", ...){
   }
   knn_weights <- lapply(knnLabels, function(x){x<-factor(x, levels=levels(label)); as.vector(table(x)/length(x)) * (1-alpha)})
   knn_weights <- do.call(rbind, knn_weights)
-  i_weights <-  as.matrix(table(seq_along(label), label)) * (alpha)
+  i_weights <-  as.data.frame.matrix(table(seq_along(label), label)) * (alpha)
   return(knn_weights + i_weights)
 }
 
