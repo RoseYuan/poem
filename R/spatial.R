@@ -5,21 +5,30 @@
 #' @param location A numeric data matrix containing location information, where 
 #' rows are points and columns are dimensions.
 #' @param k The number of nearest neighbors to look at.
-#' @param keep_ties A Boolean indicating if ties of neighbors are counted once
-#'  or not. If TRUE, neighbors of the same distances will be counted only once,
-#'  and the resulting KNN will be more than k if there are any ties exist.
-#' @param n 
-#' @param BNPARAM 
-#' @param ... 
+#' @param keep_ties A Boolean indicating if ties are counted once or not. If 
+#'  TRUE, neighbors of the same distances will be included even if it means 
+#'  returning more than `k` neighbors.
+#' @param useMedianDist Use the median distance of the k nearest neighbor as
+#'  maximum distance to be included. Ignored if `keep_ties=FALSE`.
+#' @param BNPARAM BNPARAM object passed to BiocNeighbors::findKNN specifying the
+#'  kNN approximation method to use. Defaults to exact for small datasets, and 
+#'  Annoy for larger ones.
+#' @param ... Ignored
 #'
 #' @description For a dataset, return the indices of knn for each object
-findSpatialKNN <- function(location, k, keep_ties=TRUE, n=5, BNPARAM=NULL, ...){
+#' @return A list of indices.
+#' @importFrom BiocNeighbors findKNN
+#' @export
+findSpatialKNN <- function(location, k, keep_ties=TRUE, useMedianDist=FALSE,
+                           BNPARAM=NULL, ...){
   BNPARAM <- .decideBNPARAM(nrow(location), BNPARAM)
   if(keep_ties){
-    nn <- BiocNeighbors::findKNN(location, k=k*n, warn.ties=FALSE, BNPARAM=BNPARAM)
+    nn <- BiocNeighbors::findKNN(location, k=k*3, warn.ties=FALSE, BNPARAM=BNPARAM)
+    mkd <- median(nn$distance[,k])
     nn <- lapply(seq_len(nrow(nn[[1]])), FUN=function(i){
       d <- nn$distance[i,]
-      nn$index[i,sort(which(d<=d[order(d)[k]]))]
+      if(!useMedianDist) mkd <- d[order(d)[k]]
+      nn$index[i,sort(which(d<=mkd))]
     })
   }else{
     nn <- BiocNeighbors::findKNN(location, k=k, warn.ties=FALSE, BNPARAM=BNPARAM)$index
@@ -52,12 +61,23 @@ knnComposition <- function(location, k=6, label, alpha=0.5, ...){
   return(knn_weights + i_weights)
 }
 
+#' getFuzzyLabel
+#'
+#' @param label An anomic vector of cluster labels
+#' @param location A matrix or data.frame of coordinates
+#' @param k The wished number of nearest neighbors
+#' @param alpha the parameter to control to what extend the spot itself 
+#'   contribute to the class composition calculation. "equal" means it is 
+#'   weighted the same as other NNs. A numeric value between 0 and 1 means the 
+#'   weight of the frequency contribution for the spot itself, and the 
+#'   frequency contribution for its knn is then 1-alpha.
+#' @param ... Passed to \code{\link{findSpatialKNN}}.
+#'
+#' @return A matrix of fuzzy memberships.
+#' @export
 getFuzzyLabel <- function(label, location, k=6, alpha=0.5, ...){
   label <- factor(label)
-  NAs <- which(is.na(label))
-  if(length(NAs>0)){
-    stop("Error: there is NA in label.")
-  }
+  stopifnot(!any(is.na(label)))
   res <- knnComposition(location=location, k=k, label=label, alpha=alpha, ...)
   return(res)
 }
@@ -83,6 +103,7 @@ getPredLabels <- function(ref_labels, pred_clusters) {
 #' @return A vector of matching sets (i.e. level) from `true` for every set 
 #'   (i.e. level) of `pred`.
 #' @importFrom clue solve_LSAP
+#' @export
 matchSets <- function(pred, true, forceMatch=TRUE,
                       returnIndices=is.integer(true)){
   true <- as.factor(true)
