@@ -1,5 +1,17 @@
 # Functions to turn neighborhood class distribution into fuzzy clusterings
 
+
+#' findSpatialKNN
+#' @param location A numeric data matrix containing location information, where 
+#' rows are points and columns are dimensions.
+#' @param k The number of nearest neighbors to look at.
+#' @param keep_ties A Boolean indicating if ties of neighbors are counted once
+#'  or not. If TRUE, neighbors of the same distances will be counted only once,
+#'  and the resulting KNN will be more than k if there are any ties exist.
+#' @param n 
+#' @param BNPARAM 
+#' @param ... 
+#'
 #' @description For a dataset, return the indices of knn for each object
 findSpatialKNN <- function(location, k, keep_ties=TRUE, n=5, BNPARAM=NULL, ...){
   BNPARAM <- .decideBNPARAM(nrow(location), BNPARAM)
@@ -21,7 +33,7 @@ findSpatialKNN <- function(location, k, keep_ties=TRUE, n=5, BNPARAM=NULL, ...){
 #' same as other NNs. A numeric value between 0 and 1 means the weight of the 
 #' frequency contribution for the spot itself, and the frequency contribution 
 #' for its knn is then 1-alpha.
-knnComposition <- function(location, k=6, label, alpha="equal", ...){
+knnComposition <- function(location, k=6, label, alpha=0.5, ...){
   label <- factor(label)
   ind <- findSpatialKNN(location, k=k, ...)
   knnLabels <- relist(as.integer(label)[unlist(ind)], ind)
@@ -32,9 +44,11 @@ knnComposition <- function(location, k=6, label, alpha="equal", ...){
       stop("alpha must be either 'equal', or a numeric between 0 and 1.")
     }
   }
+
   knn_weights <- lapply(knnLabels, function(x) as.vector(table(x)/length(x)))
   knn_weights <- do.call(rbind, knn_weights) * (1-alpha)
-  i_weights <-  as.matrix(table(seq_along(label), label)) * alpha
+  i_weights <-  as.data.frame.matrix(table(seq_along(label), label)) * alpha
+
   return(knn_weights + i_weights)
 }
 
@@ -42,8 +56,7 @@ getFuzzyLabel <- function(label, location, k=6, alpha=0.5, ...){
   label <- factor(label)
   NAs <- which(is.na(label))
   if(length(NAs>0)){
-    label <- label[-NAs]
-    location <- location[-NAs,]
+    stop("Error: there is NA in label.")
   }
   res <- knnComposition(location=location, k=k, label=label, alpha=alpha, ...)
   return(res)
