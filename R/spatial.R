@@ -70,33 +70,18 @@ knnComposition <- function(location, k=6, label, alpha=0.5, ...){
   return(knn_weights + i_weights)
 }
 
-<<<<<<< HEAD
 #' Get fuzzy representation of labels
-#' @description
 #' Get fuzzy representation of labels according to the spatial neighborhood 
 #' label composition.
-#' @inheritParams knnComposition
-#' @return A numerical matrix indicating the composition, where rows correspond 
-#' to samples and columns correspond to the classes in `label`. 
-#' @export
-#'
-#' @examples
-=======
-#' getFuzzyLabel
-#'
 #' @param label An anomic vector of cluster labels
 #' @param location A matrix or data.frame of coordinates
 #' @param k The wished number of nearest neighbors
-#' @param alpha the parameter to control to what extend the spot itself 
-#'   contribute to the class composition calculation. "equal" means it is 
-#'   weighted the same as other NNs. A numeric value between 0 and 1 means the 
-#'   weight of the frequency contribution for the spot itself, and the 
-#'   frequency contribution for its knn is then 1-alpha.
-#' @param ... Passed to \code{\link{findSpatialKNN}}.
+#' @inheritParams knnComposition
+#' @param ... Passed to [findSpatialKNN()].
 #'
 #' @return A matrix of fuzzy memberships.
 #' @export
->>>>>>> f4635f2f568ffc2f1d5776f391c089eabe490a7d
+
 getFuzzyLabel <- function(label, location, k=6, alpha=0.5, ...){
   label <- factor(label)
   stopifnot(!any(is.na(label)))
@@ -104,17 +89,6 @@ getFuzzyLabel <- function(label, location, k=6, alpha=0.5, ...){
   return(res)
 }
 
-<<<<<<< HEAD
-=======
-getPredLabels <- function(ref_labels, pred_clusters) {
-  cluster_map <- matchSets(pred_clusters, ref_labels)
-  pred_labels <- unlist(cluster_map[pred_clusters])
-  names(pred_labels) <- NULL
-  return(pred_labels)
-}
-
-
->>>>>>> f4635f2f568ffc2f1d5776f391c089eabe490a7d
 #' matchSets
 #' 
 #' Match sets from a partitions to a reference partition using the Hungarian
