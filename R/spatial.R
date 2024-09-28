@@ -33,7 +33,7 @@ findSpatialKNN <- function(location, k, keep_ties=TRUE, n=5, BNPARAM=NULL, ...){
 #' same as other NNs. A numeric value between 0 and 1 means the weight of the 
 #' frequency contribution for the spot itself, and the frequency contribution 
 #' for its knn is then 1-alpha.
-knnComposition <- function(location, k=6, label, alpha="equal", ...){
+knnComposition <- function(location, k=6, label, alpha=0.5, ...){
   label <- factor(label)
   ind <- findSpatialKNN(location, k, ...)
   knnLabels <- lapply(ind, function(x){label[x[2:length(x)]]})
