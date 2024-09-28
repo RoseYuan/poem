@@ -86,7 +86,9 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
     if(returnElementPairAccuracy){
       os <- 8*(3*m^2)
     }else{
-      os <- 8*(4*m^2 + m*ifelse(is.null(nperms),10,nperms))
+      nSim <- min(BiocParallel::bpnworkers(BPPARAM),
+                  ifelse(is.null(nperms),10,nperms))
+      os <- 8*((3+nSim)*m^2)
       if(computeWallace) os <- os + 8*ncomp*(1+max(ncol(Q),ncol(P)))
     }
     class(os) = "object_size"
@@ -97,7 +99,7 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
   eq <- as.matrix(1-(0.5*dist(Q,method="manhattan")))
   
   if(returnElementPairAccuracy){
-    return(1-rowMeans(abs(ep - eq)))
+    return(1-rowSums(abs(ep - eq))/(ncol(ep)-1))
   }
   
   # Hullermeier's NDC
@@ -225,6 +227,9 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
 #'   NULL (default), a first set of 10 permutations will be run to estimate 
 #'   whether the variation across permutations is above 0.0025, in which case 
 #'   more (max 1000) permutations will be run.
+#' @param returnElementPairAccuracy Logical. If TRUE, returns the per-element
+#'   pair accuracy instead of the various parition-level and global metrics.
+#'   Default FALSE.
 #' @param verbose Logical; whether to print info and warnings, including the 
 #'   standard error of the mean across permutations (giving an idea of the 
 #'   precision of the adjusted metrics).
@@ -268,8 +273,8 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
 #' hardPred <- c(1,1,1,1,1,1,2,2,2)
 #' fuzzyHardMetrics(hardPred, hardTruth, fuzzyTruth, nperms=3)
 fuzzyHardMetrics <- function(hardPred, hardTruth, fuzzyTruth, nperms=NULL, 
-                             verbose=TRUE, BPPARAM=BiocParallel::SerialParam(),
-                             ...){ 
+                             returnElementPairAccuracy=FALSE, verbose=TRUE,
+                             BPPARAM=BiocParallel::SerialParam(), ...){ 
   
   stopifnot(is.atomic(hardPred))
   hardPredVector <- hardPred <- as.integer(as.factor(hardPred))
@@ -310,6 +315,11 @@ fuzzyHardMetrics <- function(hardPred, hardTruth, fuzzyTruth, nperms=NULL,
   # compute the minimum difference of the pred with either truth
   diff <- pmin( abs(as.matrix(ep) - eq),
                 abs(as.matrix(ep2) - eq) )
+  
+  if(returnElementPairAccuracy){
+    return(1-rowSums(diff)/(ncol(diff)-1))
+  }
+  
   NDC <- 1 - ( sum( diff )/(2*ncomp) )
   
   getFWallace <- function(membership, diff){

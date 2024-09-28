@@ -6,22 +6,29 @@
 #' @param location A numeric data matrix containing location information, where 
 #' rows are points and columns are location dimensions.
 #' @param k The number of nearest neighbors to look at.
-#' @param keep_ties A Boolean indicating if ties of neighbors are counted once
-#'  or not. If TRUE, neighbors of the same distances will be counted only once,
-#'  and the resulting KNN will be more than k if there are any ties exist.
-#' @param n When ties are kept, maximally `k*n` neighbors will be looked at.
-#' @param BNPARAM A `BiocNeighborParam` object specifying the algorithm to use. 
-#' If NULL, automatically deciding from the size of the dataset.
-#' @return return a list containing the indices of knn for each object.
+#' @param keep_ties A Boolean indicating if ties are counted once or not. If 
+#'  TRUE, neighbors of the same distances will be included even if it means 
+#'  returning more than `k` neighbors.
+#' @param useMedianDist Use the median distance of the k nearest neighbor as
+#'  maximum distance to be included. Ignored if `keep_ties=FALSE`.
+#' @param BNPARAM BNPARAM object passed to BiocNeighbors::findKNN specifying the
+#'  kNN approximation method to use. Defaults to exact for small datasets, and 
+#'  Annoy for larger ones.
+#' @param ... Ignored
 #'
-
-findSpatialKNN <- function(location, k, keep_ties=TRUE, n=5, BNPARAM=NULL, ...){
+#' @return A list of indices.
+#' @importFrom BiocNeighbors findKNN
+#' @export
+findSpatialKNN <- function(location, k, keep_ties=TRUE, useMedianDist=FALSE,
+                           BNPARAM=NULL, ...){
   BNPARAM <- .decideBNPARAM(nrow(location), BNPARAM)
   if(keep_ties){
-    nn <- BiocNeighbors::findKNN(location, k=k*n, warn.ties=FALSE, BNPARAM=BNPARAM)
+    nn <- BiocNeighbors::findKNN(location, k=k*3, warn.ties=FALSE, BNPARAM=BNPARAM)
+    mkd <- median(nn$distance[,k])
     nn <- lapply(seq_len(nrow(nn[[1]])), FUN=function(i){
       d <- nn$distance[i,]
-      nn$index[i,sort(which(d<=d[order(d)[k]]))]
+      if(!useMedianDist) mkd <- d[order(d)[k]]
+      nn$index[i,sort(which(d<=mkd))]
     })
   }else{
     nn <- BiocNeighbors::findKNN(location, k=k, warn.ties=FALSE, BNPARAM=BNPARAM)$index
@@ -63,6 +70,7 @@ knnComposition <- function(location, k=6, label, alpha=0.5, ...){
   return(knn_weights + i_weights)
 }
 
+<<<<<<< HEAD
 #' Get fuzzy representation of labels
 #' @description
 #' Get fuzzy representation of labels according to the spatial neighborhood 
@@ -73,20 +81,44 @@ knnComposition <- function(location, k=6, label, alpha=0.5, ...){
 #' @export
 #'
 #' @examples
+=======
+#' getFuzzyLabel
+#'
+#' @param label An anomic vector of cluster labels
+#' @param location A matrix or data.frame of coordinates
+#' @param k The wished number of nearest neighbors
+#' @param alpha the parameter to control to what extend the spot itself 
+#'   contribute to the class composition calculation. "equal" means it is 
+#'   weighted the same as other NNs. A numeric value between 0 and 1 means the 
+#'   weight of the frequency contribution for the spot itself, and the 
+#'   frequency contribution for its knn is then 1-alpha.
+#' @param ... Passed to \code{\link{findSpatialKNN}}.
+#'
+#' @return A matrix of fuzzy memberships.
+#' @export
+>>>>>>> f4635f2f568ffc2f1d5776f391c089eabe490a7d
 getFuzzyLabel <- function(label, location, k=6, alpha=0.5, ...){
   label <- factor(label)
-  NAs <- which(is.na(label))
-  if(length(NAs>0)){
-    stop("Error: there is NA in label.")
-  }
+  stopifnot(!any(is.na(label)))
   res <- knnComposition(location=location, k=k, label=label, alpha=alpha, ...)
   return(res)
 }
 
+<<<<<<< HEAD
+=======
+getPredLabels <- function(ref_labels, pred_clusters) {
+  cluster_map <- matchSets(pred_clusters, ref_labels)
+  pred_labels <- unlist(cluster_map[pred_clusters])
+  names(pred_labels) <- NULL
+  return(pred_labels)
+}
+
+
+>>>>>>> f4635f2f568ffc2f1d5776f391c089eabe490a7d
 #' matchSets
 #' 
 #' Match sets from a partitions to a reference partition using the Hungarian
-#' algorithm.
+#' algorithm to optimize F1 scores.
 #'
 #' @param pred An integer or factor of cluster labels
 #' @param true An integer or factor of reference labels
@@ -96,7 +128,9 @@ getFuzzyLabel <- function(label, location, k=6, alpha=0.5, ...){
 #' @return A vector of matching sets (i.e. level) from `true` for every set 
 #'   (i.e. level) of `pred`.
 #' @importFrom clue solve_LSAP
-matchSets <- function(pred, true, forceMatch=TRUE, returnIndices=is.integer(true)){
+#' @export
+matchSets <- function(pred, true, forceMatch=TRUE,
+                      returnIndices=is.integer(true)){
   true <- as.factor(true)
   pred <- as.factor(pred)
   co <- unclass(table(true, pred))
@@ -105,8 +139,13 @@ matchSets <- function(pred, true, forceMatch=TRUE, returnIndices=is.integer(true
   F1 <- 2*(prec*recall)/(prec+recall)
   F1[is.na(F1)] <- 0
   if(nrow(F1)>ncol(F1)){
+    # using alternative dependencies:
+    # match <- RcppHungarian::HungarianSolver(-t(F1))$pairs[,2]
     match <- as.integer(clue::solve_LSAP(t(F1), maximum=TRUE))
   }else{
+    # using alternative dependencies:
+    # match1 <- RcppHungarian::HungarianSolver(-F1)$pairs[,2]
+    # match1[which(match1==0)] <- NA_integer_ 
     match1 <- as.integer(clue::solve_LSAP(F1, maximum=TRUE))
     match <- rep(NA_integer_, length(levels(pred)))
     nonMatched <- setdiff(seq_along(match), match1)
