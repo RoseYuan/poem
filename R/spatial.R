@@ -54,7 +54,10 @@ knnComposition <- function(location, k=6, label, alpha=0.5, ...){
     }
   }
 
-  knn_weights <- lapply(knnLabels, function(x) as.vector(table(x)/length(x)))
+  ulabs <- seq_len(max(ind))
+  knn_weights <- lapply(knnLabels, function(x){
+    sapply(ulabs, FUN=function(y) sum(x==y))/length(x)
+  })
   knn_weights <- do.call(rbind, knn_weights) * (1-alpha)
   i_weights <-  as.data.frame.matrix(table(seq_along(label), label)) * alpha
 
