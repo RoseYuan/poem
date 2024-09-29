@@ -16,7 +16,8 @@
 #' @param k The number of neighbors to consider when transforming the location
 #' information into fuzzy class memberships.
 #' @inheritParams getFuzzyLabel
-#' @param ... Optional params for [fuzzyPartitionMetrics()] or [fuzzyHardMetrics()].
+#' @param ... Optional params for [fuzzyPartitionMetrics()], 
+#' [fuzzyHardMetrics()] or [getFuzzyLabel()].
 
 #' @return A list of metric results.
 #' 
@@ -29,18 +30,18 @@ getFuzzyPartitionMetrics <-function(true, pred, location, fuzzy_true=TRUE,
                                     fuzzy_pred=FALSE, k=6, alpha=0.5, ...){
   if(fuzzy_true & fuzzy_pred){
     message("Comparing between a fuzzy truth and a fuzzy prediction...")
-    P <- getFuzzyLabel(true, location, k=k, alpha=alpha)
-    Q <- getFuzzyLabel(pred, location, k=k, alpha=alpha)
+    P <- getFuzzyLabel(true, location, k=k, alpha=alpha, ...)
+    Q <- getFuzzyLabel(pred, location, k=k, alpha=alpha, ...)
     res <- fuzzyPartitionMetrics(P, Q, ...)
   }
   if(fuzzy_true & (!fuzzy_pred)){
     message("Comparing between a fuzzy truth and a hard prediction...")
-    P <- getFuzzyLabel(true, location, k=k, alpha=alpha)
+    P <- getFuzzyLabel(true, location, k=k, alpha=alpha, ...)
     res <- fuzzyHardMetrics(pred, true, P, ...)
   }
   if((!fuzzy_true) & fuzzy_pred){
     message("Comparing between a hard truth and a fuzzy prediction...")
-    Q <- getFuzzyLabel(pred, location, k=k, alpha=alpha)
+    Q <- getFuzzyLabel(pred, location, k=k, alpha=alpha, ...)
     res <- fuzzyHardMetrics(true, pred, Q, ...)
     res <- .switchListItem(mylist, "fuzzyWH", "fuzzyWC")
     res <- .switchListItem(mylist, "fuzzyAWH", "fuzzyAWC")

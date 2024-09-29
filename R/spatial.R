@@ -50,11 +50,10 @@ findSpatialKNN <- function(location, k, keep_ties=TRUE, useMedianDist=FALSE,
 #' @export
 #' @return A numerical matrix indicating the composition, where rows correspond 
 #' to samples and columns correspond to the classes in `label`. 
-
 knnComposition <- function(location, k=6, label, alpha=0.5, ...){
   label <- factor(label)
-  ind <- findSpatialKNN(location, k=k, ...)
-  knnLabels <- relist(as.integer(label)[unlist(ind)], ind)
+  ind <- findSpatialKNN(location, k, ...)
+  knnLabels <- lapply(ind, function(x){label[x[1:length(x)]]})
   if(alpha=="equal"){ 
     alpha <- 1/(k+1) 
   }else{
@@ -62,14 +61,9 @@ knnComposition <- function(location, k=6, label, alpha=0.5, ...){
       stop("alpha must be either 'equal', or a numeric between 0 and 1.")
     }
   }
-
-  ulabs <- seq_len(max(ind))
-  knn_weights <- lapply(knnLabels, function(x){
-    sapply(ulabs, FUN=function(y) sum(x==y))/length(x)
-  })
-  knn_weights <- do.call(rbind, knn_weights) * (1-alpha)
-  i_weights <-  as.data.frame.matrix(table(seq_along(label), label)) * alpha
-
+  knn_weights <- lapply(knnLabels, function(x){x<-factor(x, levels=levels(label)); as.vector(table(x)/length(x)) * (1-alpha)})
+  knn_weights <- do.call(rbind, knn_weights)
+  i_weights <-  as.data.frame.matrix(table(seq_along(label), label)) * (alpha)
   return(knn_weights + i_weights)
 }
 

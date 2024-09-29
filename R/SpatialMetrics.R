@@ -105,6 +105,7 @@ CHAOS <- function(label, location, BNPARAM=NULL) {
 #' @inheritParams PAS
 #' @importFrom sp SpatialPointsDataFrame
 #' @importFrom spdep knn2nb knearneigh nbdists
+#' @importFrom elsa elsa dneigh
 #' @references Naimi, Babak, et al., 2019; 10.1016/j.spasta.2018.10.001
 #' @return A dataframe containing the Ea, Ec and ELSA for all samples in the dataset.
 #' @examples
@@ -112,12 +113,10 @@ CHAOS <- function(label, location, BNPARAM=NULL) {
 #' 
 #' @export
 ELSA <- function(label, location, k=10){
-  require(elsa)
-  require(spdep)
-  spdf <- SpatialPointsDataFrame(location, data=data.frame(label=label))
-  k1 <- knn2nb(knearneigh(location, k=k))
-  all.linked <- max(unlist(nbdists(k1, location)))
-  elc <- elsa(x=spdf, d=dneigh(spdf, d1=0, d2=all.linked, longlat=FALSE), 
+  spdf <- sp::SpatialPointsDataFrame(location, data=data.frame(label=label))
+  k1 <- spdep::knn2nb(spdep::knearneigh(location, k=k))
+  all.linked <- max(unlist(spdep::nbdists(k1, location)))
+  elc <- elsa::elsa(x=spdf, d=elsa::dneigh(spdf, d1=0, d2=all.linked, longlat=FALSE), 
               zcol="label")
   df <- as.data.frame(elc@data)
   return(df)
