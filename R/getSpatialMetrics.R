@@ -10,6 +10,9 @@
 #' @param k The size of the spatial neighborhood to look at for each spot. 
 #' This is used for calculating PAS and ELSA scores.
 #' @param metric The metrics to compute. See below for more details.
+#' 
+#' @importFrom fclust MPC PC PE
+#' 
 #' @references Yuan, Zhiyuan, et al., 2024; 10.1038/s41592-024-02215-8
 #' @references Naimi, Babak, et al., 2019; 10.1016/j.spasta.2018.10.001
 #' @references Wang, et al., 2022; 10.1016/j.ins.2022.11.010
@@ -32,9 +35,9 @@ getSpatialGlobalInternalMetrics <- function(label, location, k=6,
            PAS = PAS(label, location, k=k, ...)$PAS,
            ELSA = colMeans(ELSA(label, location, k=k), na.rm = TRUE),
            CHAOS = CHAOS(label, location, BNPARAM=NULL),
-           MPC = fclust::MPC(getFuzzyLabel(label, location)),
-           PC = fclust::PC(getFuzzyLabel(label, location)),
-           PE = fclust::PE(getFuzzyLabel(label, location)),
+           MPC = MPC(getFuzzyLabel(label, location)),
+           PC = PC(getFuzzyLabel(label, location)),
+           PE = PE(getFuzzyLabel(label, location)),
            stop("Unknown metric.")
     )}
     )

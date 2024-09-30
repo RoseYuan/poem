@@ -24,7 +24,6 @@
 #' @importFrom aricode sortPairs AMI
 #' @importFrom clevr mutual_info variation_info homogeneity completeness v_measure
 #' @importFrom mclustcomp mclustcomp
-#' @importFrom FlowSOM FMeasure
 #' @export
 getFuzzyPartitionMetrics <-function(true, pred, location, fuzzy_true=TRUE, 
                                     fuzzy_pred=FALSE, k=6, alpha=0.5, ...){
