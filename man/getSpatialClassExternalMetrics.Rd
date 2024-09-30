@@ -2,7 +2,7 @@
 % Please edit documentation in R/getSpatialMetrics.R
 \name{getSpatialClassExternalMetrics}
 \alias{getSpatialClassExternalMetrics}
-\title{getSpatialClassExternalMetrics}
+\title{Compute class-level external evaluation metrics for spatially-resolved data}
 \usage{
 getSpatialClassExternalMetrics(
   true,
@@ -13,7 +13,29 @@ getSpatialClassExternalMetrics(
   ...
 )
 }
+\arguments{
+\item{true}{A vector containing the labels of the true classes. Must be a
+vector of characters, integers, numerics, or a factor, but not a list.}
+
+\item{pred}{A vector containing the labels of the predicted clusters. Must
+be a vector of characters, integers, numerics, or a factor, but not a list.}
+
+\item{location}{A numeric data matrix containing location information, where
+rows are points and columns are dimensions.}
+
+\item{k}{The number of neighbors used when calculating the fuzzy
+class memberships for fuzzy metrics.}
+
+\item{metrics}{a vector of metric names to compute.}
+
+\item{...}{Optional params for \code{\link[=getFuzzyPartitionMetrics]{getFuzzyPartitionMetrics()}}.}
+}
 \description{
 Computes a selection of external clustering evaluation metrics for spatial
 data at the class/cluster level.
+}
+\examples{
+data <- sp_toys
+getSpatialClassExternalMetrics(data$label, data$p1, data[,c("x", "y")], k=6)
+getSpatialClassExternalMetrics(data$label, data$p2, data[,c("x", "y")], k=6)
 }

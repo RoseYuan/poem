@@ -2,7 +2,7 @@
 % Please edit documentation in R/getSpatialMetrics.R
 \name{getSpatialGlobalExternalMetrics}
 \alias{getSpatialGlobalExternalMetrics}
-\title{getSpatiaGloballExternalMetrics}
+\title{Compute global-level external evaluation metrics for spatially-resolved data}
 \usage{
 getSpatialGlobalExternalMetrics(
   true,
@@ -14,7 +14,31 @@ getSpatialGlobalExternalMetrics(
   ...
 )
 }
+\arguments{
+\item{true}{A vector containing the labels of the true classes. Must be a
+vector of characters, integers, numerics, or a factor, but not a list.}
+
+\item{pred}{A vector containing the labels of the predicted clusters. Must
+be a vector of characters, integers, numerics, or a factor, but not a list.}
+
+\item{location}{A numeric data matrix containing location information, where
+rows are points and columns are dimensions.}
+
+\item{k}{The number of neighbors used when calculating the fuzzy
+class memberships for fuzzy metrics, or when calculating the weighted
+accuracy.}
+
+\item{metrics}{a vector of metric names to compute.}
+
+\item{...}{Optional params for \code{\link[=getFuzzyPartitionMetrics]{getFuzzyPartitionMetrics()}} or \link{nnWeightedAccuracy}.}
+}
 \description{
 Computes a selection of external clustering evaluation metrics for spatial
-data at the global level.
+data at the global level. Options include a series of fuzzy pair-counting
+metrics and set matching-based accuracy.
+}
+\examples{
+data <- sp_toys
+getSpatialGlobalExternalMetrics(data$label, data$p1, data[,c("x", "y")], k=6)
+getSpatialGlobalExternalMetrics(data$label, data$p2, data[,c("x", "y")], k=6)
 }
