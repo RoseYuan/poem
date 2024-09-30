@@ -34,7 +34,6 @@
 #' @importFrom aricode sortPairs AMI
 #' @importFrom clevr mutual_info variation_info homogeneity completeness v_measure
 #' @importFrom mclustcomp mclustcomp
-#' @importFrom FlowSOM FMeasure
 #' @export
 #' @examples
 #' true <- rep(LETTERS[1:3], each=10)
@@ -84,7 +83,7 @@ getPartitionMetrics <-function(true, pred,
            Mirkin = mclustcomp(as.vector(true), as.vector(pred), types = "mirkin")$scores,
            MHM = mclustcomp(as.vector(true), as.vector(pred), types = "mhm")$scores,
            MMM = mclustcomp(as.vector(true), as.vector(pred), types = "mmm")$scores,
-           FM = FMeasure(.aux.conversion(true), 
+           FM = .FMeasure(.aux.conversion(true), 
                          .aux.conversion(pred), silent = TRUE),
            NCR = .NCR(true, pred),
            stop("Unknown metric.")

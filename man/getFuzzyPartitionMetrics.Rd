@@ -40,7 +40,8 @@ same as other neighbors. A numeric value between \code{0} and \code{1} means the
 frequency contribution for the spot itself, and the frequency contribution
 for its knn is then \code{1-alpha}. By default \code{0.5}.}
 
-\item{...}{Optional params for \code{\link[=fuzzyPartitionMetrics]{fuzzyPartitionMetrics()}} or \code{\link[=fuzzyHardMetrics]{fuzzyHardMetrics()}}.}
+\item{...}{Optional params for \code{\link[=fuzzyPartitionMetrics]{fuzzyPartitionMetrics()}},
+\code{\link[=fuzzyHardMetrics]{fuzzyHardMetrics()}} or \code{\link[=getFuzzyLabel]{getFuzzyLabel()}}.}
 }
 \value{
 A list of metric results.

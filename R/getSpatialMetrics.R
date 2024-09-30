@@ -26,7 +26,7 @@
 getSpatialGlobalInternalMetrics <- function(label, location, k=6,
                                             metrics=c("PAS", "ELSA", "CHAOS"),
                                             ...){
-  if(length(intersect(metrics, c("MPC", "PC", "PE")))>0){require(fclust)}
+  # if(length(intersect(metrics, c("MPC", "PC", "PE")))>0){require(fclust)}
   res <- lapply(setNames(metrics, metrics), FUN=function(m){
     switch(m,
            PAS = PAS(label, location, k=k, ...)$PAS,

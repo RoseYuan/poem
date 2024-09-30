@@ -96,3 +96,37 @@
   log2((pseudoCount+rowSums(knn$nncl==labels))/
          (pseudoCount+expected[as.integer(labels)]))
 }
+
+#' F measure
+#' 
+#' Compute the F measure between two clustering results. This is directly copied
+#' from the package `FlowSOM`.
+#'
+#' @param true Array containing real cluster labels for each sample
+#' @param pred Array containing predicted cluster labels for each
+#'                          sample
+#' @param silent    Logical, if FALSE, print some information about 
+#'                  precision and recall
+#' 
+#' @return  F measure score
+#' @examples
+#' # Generate some random data as an example
+#' true <- sample(1:5,100,replace = TRUE)
+#' pred <- sample(1:6, 100, replace = TRUE)
+#' 
+#' # Calculate the FMeasure
+#' FMeasure(true,pred)
+#' @export
+.FMeasure <- function(true, pred, silent=TRUE){
+  if (sum(pred)==0)
+    return(0);
+  a <- table(true, pred);
+  p <- t(apply(a,1,function(x)x/colSums(a)))
+  r <- apply(a,2,function(x)x/rowSums(a))
+  if(!silent) message("Precision: ",
+                      sum(apply(p,1,max) * (rowSums(a)/sum(a))),
+                      "\nRecall: ",sum(apply(r,1,max) * (rowSums(a)/sum(a))),"\n")
+  f <- 2*r*p / (r+p)
+  f[is.na(f)] <- 0
+  sum(apply(f,1,max) * (rowSums(a)/sum(a)))
+}
