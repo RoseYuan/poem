@@ -47,14 +47,13 @@ nnWeightedAccuracy <- function(true, pred, location, k=5, ...){
 #' @return A numeric value for PAS score, and a boolean vector about the abnormal spots.
 #' @export
 #' @examples 
+#' data <- sp_toys
+#' PAS(data$label, data[,c("x", "y")], k=6)
+#' PAS(data$p1, data[,c("x", "y")], k=6)
+#' PAS(data$p2, data[,c("x", "y")], k=6)
 PAS <- function(label, location, k=10, ...){
-  matched_location=location
-  NAs = which(is.na(label))
-  if(length(NAs>0)){
-    label=label[-NAs]
-    matched_location = matched_location[-NAs,]
-  }
-  comp <- knnComposition(matched_location, k=k, label, alpha=0, ...)
+  stopifnot(!any(is.na(label)))
+  comp <- knnComposition(location, k=k, label, alpha=0, ...)
   prop <- unlist(lapply(seq_along(1:dim(comp)[1]), function(i){comp[i,label[i]]}))
   results <- prop < 0.5
   return(list(PAS=sum(results)/length(results), abnormalty=results))
@@ -69,6 +68,10 @@ PAS <- function(label, location, k=10, ...){
 #' @inheritParams findSpatialKNN
 #' @return A numeric value for CHAOS score.
 #' @examples 
+#' data <- sp_toys
+#' CHAOS(data$label, data[,c("x", "y")])
+#' CHAOS(data$p1, data[,c("x", "y")])
+#' CHAOS(data$p2, data[,c("x", "y")])
 #' @export
 CHAOS <- function(label, location, BNPARAM=NULL) {
   BNPARAM <- .decideBNPARAM(nrow(location), BNPARAM)
@@ -109,8 +112,10 @@ CHAOS <- function(label, location, BNPARAM=NULL) {
 #' @references Naimi, Babak, et al., 2019; 10.1016/j.spasta.2018.10.001
 #' @return A dataframe containing the Ea, Ec and ELSA for all samples in the dataset.
 #' @examples
-#' # example code
-#' 
+#' data <- sp_toys
+#' ELSA(data$label, data[,c("x", "y")], k=6)
+#' ELSA(data$p1, data[,c("x", "y")], k=6)
+#' ELSA(data$p2, data[,c("x", "y")], k=6)
 #' @export
 ELSA <- function(label, location, k=10){
   spdf <- sp::SpatialPointsDataFrame(location, data=data.frame(label=label))
@@ -124,7 +129,7 @@ ELSA <- function(label, location, k=10){
 
 .decideBNPARAM <- function(ncells, BNPARAM){
   if(is.null(BNPARAM)){
-    if(nrow(location)>500){
+    if(ncells>500){
       BNPARAM <- BiocNeighbors::AnnoyParam()
     }else{
       BNPARAM <- BiocNeighbors::ExhaustiveParam()

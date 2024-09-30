@@ -22,8 +22,10 @@ Calculating the Entropy-based Local indicator of Spatial Association (ELSA)
 scores, which consist of Ea, Ec and the overall ELSA.
 }
 \examples{
-# example code
-
+data <- sp_toys
+ELSA(data$label, data[,c("x", "y")], k=6)
+ELSA(data$p1, data[,c("x", "y")], k=6)
+ELSA(data$p2, data[,c("x", "y")], k=6)
 }
 \references{
 Naimi, Babak, et al., 2019; 10.1016/j.spasta.2018.10.001

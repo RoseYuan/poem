@@ -25,3 +25,9 @@ the mean length of the graph edges in the 1-nearest neighbor (1NN) graph
 for each cluster, averaged across clusters.
 Lower CHAOS score indicates better spatial domain clustering performance.
 }
+\examples{
+data <- sp_toys
+CHAOS(data$label, data[,c("x", "y")])
+CHAOS(data$p1, data[,c("x", "y")])
+CHAOS(data$p2, data[,c("x", "y")])
+}

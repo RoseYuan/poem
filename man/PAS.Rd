@@ -22,3 +22,9 @@ PAS score measures the clustering performance by calculating
 the randomness of the spots that located outside of the spatial region where it was clustered to.
 Lower PAS score indicates better spatial domian clustering performance.
 }
+\examples{
+data <- sp_toys
+PAS(data$label, data[,c("x", "y")], k=6)
+PAS(data$p1, data[,c("x", "y")], k=6)
+PAS(data$p2, data[,c("x", "y")], k=6)
+}

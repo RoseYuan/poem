@@ -34,3 +34,7 @@ If ELSA is calculated, Ea, Ec and ELSA for all spots will be returned.
 Computes a selection of internal clustering evaluation metrics for spatial
 data at each spot level.
 }
+\examples{
+data <- sp_toys
+getSpatialInternalMetrics(data$label, data[,c("x", "y")], k=6)
+}

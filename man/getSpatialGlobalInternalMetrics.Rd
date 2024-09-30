@@ -37,6 +37,10 @@ Computes a selection of internal clustering evaluation metrics for spatial
 data at the global level. MPC, PC and PE are internal metrics for fuzzy
 clustering, and their implementations in package \code{fclust} are used.
 }
+\examples{
+data <- sp_toys
+getSpatialGlobalInternalMetrics(data$label, data[,c("x", "y")], k=6)
+}
 \references{
 Yuan, Zhiyuan, et al., 2024; 10.1038/s41592-024-02215-8
 

@@ -25,11 +25,13 @@
 #'   \item{PC}{Partition coefficient} 
 #'   \item{PE}{Partition entropy} 
 #' @export
+#' 
 #' @examples
+#' data <- sp_toys
+#' getSpatialGlobalInternalMetrics(data$label, data[,c("x", "y")], k=6)
 getSpatialGlobalInternalMetrics <- function(label, location, k=6,
                                             metrics=c("PAS", "ELSA", "CHAOS"),
                                             ...){
-  # if(length(intersect(metrics, c("MPC", "PC", "PE")))>0){require(fclust)}
   res <- lapply(setNames(metrics, metrics), FUN=function(m){
     switch(m,
            PAS = PAS(label, location, k=k, ...)$PAS,
@@ -58,6 +60,8 @@ getSpatialGlobalInternalMetrics <- function(label, location, k=6,
 #' If PAS is calculated, the value is a Boolean about the abnormality of a spot.
 #' If ELSA is calculated, Ea, Ec and ELSA for all spots will be returned.
 #' @examples 
+#' data <- sp_toys
+#' getSpatialInternalMetrics(data$label, data[,c("x", "y")], k=6)
 getSpatialInternalMetrics <- function(label, location, k=6, 
                                       metrics=c("PAS", "ELSA"), ...){
   res <- as.data.frame(lapply(setNames(metrics, metrics), FUN=function(m){

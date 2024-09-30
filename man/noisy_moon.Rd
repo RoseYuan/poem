@@ -3,7 +3,8 @@
 \docType{data}
 \name{noisy_moon}
 \alias{noisy_moon}
-\title{A simple toy dataset consists of two interleaving half circles.}
+\title{The noisy moon dataset
+A simple toy dataset consists of two interleaving half circles.}
 \format{
 \subsection{\code{noisy_moon}}{
 
@@ -20,6 +21,7 @@ A data frame with 100 rows and 5 columns:
 noisy_moon
 }
 \description{
+The noisy moon dataset
 A simple toy dataset consists of two interleaving half circles.
 }
 \keyword{datasets}
