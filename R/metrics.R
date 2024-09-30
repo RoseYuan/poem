@@ -22,7 +22,7 @@
   gc <- decompose.graph(g)
   msp <- sapply(gc, directed=directed, FUN=mean_distance)
   amsp <- length(gc)+sum(pmax(1L,msp,na.rm=TRUE))
-  if(normalize) amsp <- amsp/sqrt(length(V(g)))
+  if(normalize) amsp <- amsp/length(V(g))
   return(amsp)
 }
 
