@@ -84,7 +84,8 @@ setMethod("getGraphMetrics", signature="list",
 
 .getGraphMetricsFromEmbedding <- function(x, labels, metrics, directed=NULL,
                                                k, shared=FALSE, ...){
-  stopifnot(is.character(labels) || is.factor(labels))
+  stopifnot(is.character(labels) || is.factor(labels) || is.integer(labels))
+  labels <- as.factor(labels)
   stopifnot(length(labels)==nrow(x))
   if(is.data.frame(x)){
     stopifnot(all(vapply(x, FUN.VALUE=logical(1), FUN=is.numeric)))
@@ -92,10 +93,14 @@ setMethod("getGraphMetrics", signature="list",
   }
   if(shared){
     g <- .emb2snn(x, k=k, ...)
+    res <- .getGraphMetricsFromGraph(g, labels=labels, metrics=metrics,
+                                     directed=directed)
   }else{
     g <- .emb2knn(x, k=k, ...)
+    res <- .getGraphMetricsFromKnn(g, labels=labels, metrics=metrics,
+                                   directed=directed)
   }
-  .getGraphMetricsFromKnn(g, labels=labels, metrics=metrics, directed=directed)
+  res
 }
 
 setMethod("getGraphMetrics", signature="data.frame",
