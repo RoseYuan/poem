@@ -96,7 +96,7 @@ setMethod("getGraphClassMetrics", signature="list",
 
 .getGraphClassMetricsFromEmbedding <- function(x, labels, metrics, directed=NULL,
                                                k, shared=FALSE, ...){
-  stopifnot(is.character(labels) || is.factor(labels))
+  stopifnot(is.character(labels) || is.factor(labels) || is.integer(labels))
   stopifnot(length(labels)==nrow(x))
   if(is.data.frame(x)){
     stopifnot(all(vapply(x, FUN.VALUE=logical(1), FUN=is.numeric)))
@@ -109,7 +109,6 @@ setMethod("getGraphClassMetrics", signature="list",
   }
   res <- .getGraphClassMetricsFromKnn(g, labels=labels, metrics=metrics,
                                       directed=directed)
-  row.names(res) <- row.names(x)
   res
 }
 
