@@ -38,7 +38,7 @@
   if(.isNNlist(knn)){ # list of varying number of neighbor indices
     knn <- relist(labels[unlist(knn)],knn)
     return(sapply(knn, FUN=function(nn){
-        sum((sapply(unique(labels), FUN=function(x) sum(nn=x))/length(nn))^2)
+        sum((sapply(unique(labels), FUN=function(x) sum(nn==x))/length(nn))^2)
       }))
   }
   .checkInputs(knn, labels)
