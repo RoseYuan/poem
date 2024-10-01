@@ -19,6 +19,9 @@
 #' @return A list of indices.
 #' @importFrom BiocNeighbors findKNN
 #' @export
+#' @examples
+#' data <- sp_toy
+#' findSpatialKNN(data[,c("x", "y")], k=6)
 findSpatialKNN <- function(location, k, keep_ties=TRUE, useMedianDist=FALSE,
                            BNPARAM=NULL, ...){
   BNPARAM <- .decideBNPARAM(nrow(location), BNPARAM)
@@ -50,10 +53,13 @@ findSpatialKNN <- function(location, k, keep_ties=TRUE, useMedianDist=FALSE,
 #' @export
 #' @return A numerical matrix indicating the composition, where rows correspond 
 #' to samples and columns correspond to the classes in `label`. 
+#' @examples
+#' data <- sp_toy
+#' knnComposition(data[,c("x", "y")], k=6, data$label)
 knnComposition <- function(location, k=6, label, alpha=0.5, ...){
   label <- factor(label)
   ind <- findSpatialKNN(location, k, ...)
-  knnLabels <- lapply(ind, function(x){label[x[1:length(x)]]})
+  knnLabels <- lapply(ind, function(x){label[x]})
   if(alpha=="equal"){ 
     alpha <- 1/(k+1) 
   }else{
@@ -78,6 +84,9 @@ knnComposition <- function(location, k=6, label, alpha=0.5, ...){
 #'
 #' @return A matrix of fuzzy memberships.
 #' @export
+#' @examples
+#' data <- sp_toy
+#' getFuzzyLabel(data$label, data[,c("x", "y")], k=6)
 
 getFuzzyLabel <- function(label, location, k=6, alpha=0.5, ...){
   label <- factor(label)

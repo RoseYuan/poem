@@ -43,8 +43,6 @@
   rownames(mutual_reach_dists) <- NULL
   colnames(mutual_reach_dists) <- NULL
   if (use_scipy_mst) {
-    require(reticulate)
-    require(Matrix)
     # Convert the R matrix to a Python object
     mutual_reach_dists_py <- reticulate::r_to_py(mutual_reach_dists)
     # Run the Python code
@@ -54,7 +52,6 @@
     mst <- as.matrix(mst %*% Diagonal(n = ncol(mst)))
     mst <- mst + t(mst)
   }else{
-    require(igraph)
     mst_g <- igraph::mst(igraph::graph_from_adjacency_matrix(
       mutual_reach_dists, mode = "undirected", weighted = TRUE), 
       algorithm = "prim")
