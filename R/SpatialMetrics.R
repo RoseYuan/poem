@@ -54,7 +54,7 @@ nnWeightedAccuracy <- function(true, pred, location, k=5, ...){
 PAS <- function(label, location, k=10, ...){
   stopifnot(!any(is.na(label)))
   comp <- knnComposition(location, k=k, label, alpha=0, ...)
-  prop <- unlist(lapply(seq_along(1:dim(comp)[1]), function(i){comp[i,label[i]]}))
+  prop <- unlist(lapply(seq_len(dim(comp)[1]), function(i){comp[i,label[i]]}))
   results <- prop < 0.5
   return(list(PAS=sum(results)/length(results), abnormalty=results))
 }

@@ -52,7 +52,7 @@
   knn_distance <- matrix(NA, n, k)
   knn_index <- matrix(NA, n, k)
   
-  for(i in 1:n){
+  for(i in seq_len(n)){
     distances <- x[i,]    
     # Exclude the distance to itself
     distances[i] <- Inf
