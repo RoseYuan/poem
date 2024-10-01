@@ -97,6 +97,7 @@ setMethod("getGraphClassMetrics", signature="list",
 .getGraphClassMetricsFromEmbedding <- function(x, labels, metrics, directed=NULL,
                                                k, shared=FALSE, ...){
   stopifnot(is.character(labels) || is.factor(labels) || is.integer(labels))
+  labels <- as.factor(labels)
   stopifnot(length(labels)==nrow(x))
   if(is.data.frame(x)){
     stopifnot(all(vapply(x, FUN.VALUE=logical(1), FUN=is.numeric)))
@@ -104,11 +105,13 @@ setMethod("getGraphClassMetrics", signature="list",
   }
   if(shared){
     g <- .emb2snn(x, k=k, ...)
+    res <- .getGraphClassMetricsFromGraph(g, labels=labels, metrics=metrics,
+                                          directed=directed)
   }else{
     g <- .emb2knn(x, k=k, ...)
+    res <- .getGraphClassMetricsFromKnn(g, labels=labels, metrics=metrics,
+                                        directed=directed)
   }
-  res <- .getGraphClassMetricsFromKnn(g, labels=labels, metrics=metrics,
-                                      directed=directed)
   res
 }
 
@@ -142,7 +145,7 @@ setMethod("getGraphClassMetrics", signature="matrix",
     )
   }))
   row.names(res) <- levels(labels)
-  res
+  cbind(class=levels(labels), res)
 }
 
 setMethod("getGraphClassMetrics", signature="igraph",

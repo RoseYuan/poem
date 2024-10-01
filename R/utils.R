@@ -18,7 +18,7 @@
 
 .checkInputs <- function(knn, labels, ...){
   .isKnn(knn, ...)
-  stopifnot(is.character(labels) || is.factor(labels))
+  stopifnot(is.character(labels) || is.factor(labels) || is.integer(labels))
   stopifnot(length(labels)==nrow(knn$index))
 }
 
