@@ -15,7 +15,7 @@
   FUN(g, ...)
 }
 
-#' @importFrom igraph mean_distance decompose.graph is_directed
+#' @importFrom igraph mean_distance decompose.graph is_directed V
 .adjMeanShortestPath <- function(g, directed=FALSE, normalize=TRUE){
   stopifnot(is(g,"igraph"))
   if(is.null(directed)) directed <- FALSE
