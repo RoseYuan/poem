@@ -251,7 +251,7 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
 #'   \item{fuzzyAWH}{Adjusted fuzzy Wallace Homogeneity index}
 #'   \item{fuzzyAWC}{Adjusted fuzzy Wallace Completeness index}
 #' @importFrom BiocParallel SerialParam bplapply bpnworkers
-#' @importFrom stats dist
+#' @importFrom stats dist setNames runif
 #' @importFrom Matrix sparseMatrix
 #' @export
 #' @examples

@@ -2,9 +2,52 @@
 % Please edit documentation in R/getGraphClassMetrics.R
 \name{getGraphClassMetrics}
 \alias{getGraphClassMetrics}
+\alias{getGraphClassMetrics,list-method}
+\alias{getGraphClassMetrics,data.frame-method}
+\alias{getGraphClassMetrics,matrix-method}
+\alias{getGraphClassMetrics,igraph-method}
+\alias{getGraphClassMetrics,dist-method}
 \title{getGraphClassMetrics}
 \usage{
 getGraphClassMetrics(
+  x,
+  labels,
+  metrics = c("SI", "NP", "AMSP", "PWC", "NCE"),
+  directed = NULL,
+  ...
+)
+
+\S4method{getGraphClassMetrics}{list}(x, labels, metrics, directed = NULL, k = NULL, ...)
+
+\S4method{getGraphClassMetrics}{data.frame}(
+  x,
+  labels,
+  metrics,
+  directed = NULL,
+  k,
+  shared = FALSE,
+  ...
+)
+
+\S4method{getGraphClassMetrics}{matrix}(
+  x,
+  labels,
+  metrics,
+  directed = NULL,
+  k,
+  shared = FALSE,
+  ...
+)
+
+\S4method{getGraphClassMetrics}{igraph}(
+  x,
+  labels,
+  metrics = c("SI", "NP", "AMSP", "PWC", "NCE"),
+  directed = NULL,
+  ...
+)
+
+\S4method{getGraphClassMetrics}{dist}(
   x,
   labels,
   metrics = c("SI", "NP", "AMSP", "PWC", "NCE"),
@@ -32,13 +75,13 @@ cohesion, PWC AMSP undirected, others directed).}
 \item{k}{The number of nearest neighbors to compute and/or use. Can be
 omitted if \code{x} is a graph or list of nearest neighbors.}
 
-\item{BNPARAM}{A BiocNeighbors parameter object to compute kNNs. Ignored
-unless the input is a matrix or data.frame. If omitted, the Annoy
-approximation will be used if there are more than 500 elements.}
-
 \item{shared}{Logical; whether to use a shared nearest neighbor network
 instead of a nearest neighbor network. Ignored if \code{x} is not an embedding
 or dist object.}
+
+\item{BNPARAM}{A BiocNeighbors parameter object to compute kNNs. Ignored
+unless the input is a matrix or data.frame. If omitted, the Annoy
+approximation will be used if there are more than 500 elements.}
 }
 \value{
 A data.frame of metrics for each class.

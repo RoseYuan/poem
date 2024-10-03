@@ -18,6 +18,7 @@
 #'
 #' @return A list of indices.
 #' @importFrom BiocNeighbors findKNN
+#' @importFrom stats median
 #' @export
 #' @examples
 #' data <- sp_toy

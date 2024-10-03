@@ -1,22 +1,33 @@
 Package: ClusteringMetrics
 Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9006
+Version: 0.0.0.9007
 Authors@R: 
     person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Imports:
-    igraph,
-    bluster,
+    aricode,
     BiocNeighbors,
     BiocParallel,
+    bluster,
+    clevr,
+    clue,
+    cluster,
+    elsa,
+    fclust,
+    igraph,
+    Matrix,
+    mclustcomp,
+    methods,
+    parallel,
+    sp,
+    spdep,
     stats,
-    Matrix
+    utils
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

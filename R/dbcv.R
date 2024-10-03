@@ -175,6 +175,8 @@
 #' @return A list:
 #' \item{vcs}{Numeric vector of validity index for each cluster.}
 #' \item{dbcv}{Numeric value representing the overall DBCV metric.}
+#'
+#' @importFrom utils combn
 #' 
 #' @references Davoud Moulavi, et al. 2014; 10.1137/1.9781611973440.96.
 #' 

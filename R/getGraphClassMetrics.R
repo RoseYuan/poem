@@ -32,6 +32,7 @@ setOldClass("igraph")
 #' 
 #' 
 #' @export
+#' @rdname getGraphClassMetrics
 #' @examples
 #' # generate random data and labels:
 #' dat <- matrix(rnorm(300), nrow=30)
@@ -80,6 +81,9 @@ setGeneric("getGraphClassMetrics", signature="x",
   cbind(class=levels(labels),res)
 }
 
+
+#' @rdname getGraphClassMetrics
+#' @export
 setMethod("getGraphClassMetrics", signature="list",
           definition=function(x, labels, metrics, directed=NULL, k=NULL, ...){
             .checkInputs(x,labels,checkNNcl=FALSE)
@@ -115,8 +119,13 @@ setMethod("getGraphClassMetrics", signature="list",
   res
 }
 
+#' @rdname getGraphClassMetrics
+#' @export
 setMethod("getGraphClassMetrics", signature="data.frame",
           definition=.getGraphClassMetricsFromEmbedding)
+
+#' @rdname getGraphClassMetrics
+#' @export
 setMethod("getGraphClassMetrics", signature="matrix",
           definition=.getGraphClassMetricsFromEmbedding)
 
@@ -148,6 +157,8 @@ setMethod("getGraphClassMetrics", signature="matrix",
   cbind(class=levels(labels), res)
 }
 
+#' @rdname getGraphClassMetrics
+#' @export
 setMethod("getGraphClassMetrics", signature="igraph",
           definition=function(x, labels, ...){
             stopifnot(is(x,"igraph"))
@@ -170,6 +181,8 @@ setMethod("getGraphClassMetrics", signature="igraph",
   getGraphClassMetrics(g, labels=labels, ...)
 }
 
+#' @rdname getGraphClassMetrics
+#' @export
 setMethod("getGraphClassMetrics", signature="dist",
           definition=function(x, labels, ...){
             stopifnot(is(x,"dist"))

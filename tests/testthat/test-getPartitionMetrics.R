@@ -2,7 +2,6 @@
 # generate 3 test datasets in "Warrens, Matthijs J., et, al. Journal of Classification 39.3 (2022): 487-509".
 #################
 
-library(dplyr)
 total_instances <- 56
 # dataset 1 (in Table 6)
 reference_partition <- c(rep("U1", 20), rep("U2", 20), rep("U3", 8), rep("U4", 8))

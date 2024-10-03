@@ -15,6 +15,7 @@
 #' Additional details...
 #' 
 #' @importFrom cluster silhouette
+#' @importFrom stats dist
 #' @export
 #' @examples
 #' d1 <- mockData()
@@ -46,6 +47,7 @@ getEmbeddingMetrics <-function(x, labels, metrics=c("SW"), distance="euclidean",
 #' @details
 #' Additional details...
 #' 
+#' @importFrom stats aggregate
 #' @export
 #' @examples
 #' d1 <- mockData()
