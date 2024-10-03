@@ -175,6 +175,7 @@
 #' \item{dbcv}{Numeric value representing the overall DBCV metric.}
 #' 
 #' @importFrom parallel mclapply
+#' @importFrom utils combn
 #' 
 #' @references Davoud Moulavi, et al. 2014; 10.1137/1.9781611973440.96.
 #' 

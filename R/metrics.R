@@ -26,6 +26,7 @@
   return(amsp)
 }
 
+#' @importFrom utils relist
 .simpsonIndex <- function(knn, labels=NULL, directed=TRUE){
   if(is.null(directed)) directed <- TRUE
   # for undirected, first transform directed nn to graph

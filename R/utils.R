@@ -45,6 +45,7 @@
 }
 
 # computes nearest neighbors from pairwise distance matrix
+#' @importFrom methods is
 .dist2knn <- function(x, k){
   stopifnot(is(x,"dist"))
   x <- as.matrix(x)

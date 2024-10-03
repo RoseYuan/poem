@@ -24,6 +24,7 @@
 #'   \item{compactness}{compactness.}
 #'   \item{sep}{separation.} 
 #' @export
+#' @importFrom stats mahalanobis dist
 #' @references 
 #' Halkidi, M. and Vazirgiannis, M. (2008) A density-based cluster validity 
 #' approach using multi-representatives. Pattern Recognition Letters 29, 773-786.

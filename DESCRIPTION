@@ -22,10 +22,12 @@ Imports:
     igraph,
     Matrix,
     mclustcomp,
+    methods,
     parallel,
     sp,
     spdep,
-    stats
+    stats,
+    utils
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

@@ -18,6 +18,7 @@
 #'   for `rlnorm` and similar.
 #'
 #' @return A data.frame with coordinates and a `class` column.
+#' @importFrom stats rnorm as.dist cmdscale
 #' @export
 #'
 #' @examples
