@@ -8,7 +8,7 @@
 #'
 #' @param x Something that can be coerced into a numerical matrix, with elements
 #'   as rows.
-#' @param clustering A vector of integers with length `=nrow(x)` indicating the 
+#' @param labels A vector of integers with length `=nrow(x)` indicating the 
 #'   cluster for each observation.
 #' @param r Number of cluster border representatives.
 #' @param s Vector of shrinking factors.
@@ -37,12 +37,12 @@
 #' @examples
 #' d1 <- mockData()
 #' CDbw(d1[,1:2], d1[,3])
-CDbw <- function(x, clustering, r=10, s=seq(0.1,0.8,by=0.1),
+CDbw <- function(x, labels, r=10, s=seq(0.1,0.8,by=0.1),
                  clusterstdev=TRUE, trace=FALSE, ...){
   p <- ncol(x)
   n <- nrow(x)
   x <- as.matrix(x)
-  cn <- max(clustering)
+  cn <- max(labels)
   repc <- list()
   repr <- rep(0,cn)
   mrepr <- vrepc <- numeric(0)
@@ -54,9 +54,9 @@ CDbw <- function(x, clustering, r=10, s=seq(0.1,0.8,by=0.1),
   if (trace)
     print("Find representatives")
   for (i in 1:cn){
-    nc[i] <- sum(clustering==i)
-    xcc[i,] <- colMeans(x[clustering==i,,drop=FALSE])
-    rrx <- findrep(x,xcc[i,],clustering,i,r,p,n,nc[i])
+    nc[i] <- sum(labels==i)
+    xcc[i,] <- colMeans(x[labels==i,,drop=FALSE])
+    rrx <- findrep(x,xcc[i,],labels,i,r,p,n,nc[i])
     repc[[i]] <- rrx$repc
     repx[[i]] <- rrx$repx
     repr[i] <- rrx$maxr
@@ -117,7 +117,7 @@ CDbw <- function(x, clustering, r=10, s=seq(0.1,0.8,by=0.1),
       for (k in 1:nrcr){
         u <- (x[rcr[[i]][[j]][k,1],]+x[rcr[[i]][[j]][k,2],])/2
 #        browser()
-        ud <- sqrt(mahalanobis(x[clustering==i | clustering==j,,drop=FALSE],
+        ud <- sqrt(mahalanobis(x[labels==i | labels==j,,drop=FALSE],
                                u,diag(p)))
         dkd <-  sqrt(sum((x[rcr[[i]][[j]][k,1],]-x[rcr[[i]][[j]][k,2],])^2))
         dk[i,j] <- dk[i,j]+dkd
@@ -148,12 +148,12 @@ CDbw <- function(x, clustering, r=10, s=seq(0.1,0.8,by=0.1),
   for (i in 1:ns){
     for (j in 1:cn){
 #     browser()
-      xcj <- x[clustering==j,,drop=FALSE]
+      xcj <- x[labels==j,,drop=FALSE]
       if (clusterstdev)
         stdevj <- sqrt(wvar[j])
       else
         stdevj <- stdev
-#      dxj <- as.matrix(dist(x))[clustering==j,clustering==j]
+#      dxj <- as.matrix(dist(x))[labels==j,labels==j]
       for (k in 1:repr[j]){
         srep <- (1-s[i])*xcj[repx[[j]][k],]+s[i]*xcc[j,]
         dsjk <- mahalanobis(xcj,srep,diag(p))
@@ -186,10 +186,10 @@ CDbw <- function(x, clustering, r=10, s=seq(0.1,0.8,by=0.1),
 
 # Find representative objects and within-cluster variance
 
-findrep <- function(x,xcen,clustering,cluster,r,p=ncol(x),n=nrow(x),
-                    nc=sum(clustering==cluster)){
+findrep <- function(x,xcen,labels,cluster,r,p=ncol(x),n=nrow(x),
+                    nc=sum(labels==cluster)){
   repxx <- matrix(0,nrow=r,ncol=p)
-  xc <- x[clustering==cluster,,drop=FALSE]
+  xc <- x[labels==cluster,,drop=FALSE]
   drx <- matrix(0,nrow=r,ncol=nc)
   drx[1,] <- mahalanobis(xc,xcen,diag(p))
   wvar <- sum(drx[1,])/(nc-1)
@@ -215,6 +215,6 @@ findrep <- function(x,xcen,clustering,cluster,r,p=ncol(x),n=nrow(x),
       }
     }
   }
-  list(repc=(1:n)[clustering==cluster][repxi],repx=repxi,
+  list(repc=(1:n)[labels==cluster][repxi],repx=repxi,
        maxr=maxr,wvar=wvar)
 }

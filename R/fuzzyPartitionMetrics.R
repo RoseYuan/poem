@@ -218,11 +218,11 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
 #'
 #' @param hardPred An atomic vector coercible to a factor or integer vector 
 #'  containing the predicted hard labels.
-#' @param hardTruth An atomic vector coercible to a factor or integer vector 
+#' @param hardTrue An atomic vector coercible to a factor or integer vector 
 #'  containing the true hard labels. Must have the same length as `hardPred`.
-#' @param fuzzyTruth A object coercible to a numeric matrix with membership 
+#' @param fuzzyTrue A object coercible to a numeric matrix with membership 
 #'   probability of elements (rows) in clusters (columns). Must have the same 
-#'   number of rows as the length of `hardTruth`.
+#'   number of rows as the length of `hardTrue`.
 #' @param nperms The number of permutations (for correction for chance). If 
 #'   NULL (default), a first set of 10 permutations will be run to estimate 
 #'   whether the variation across permutations is above 0.0025, in which case 
@@ -256,7 +256,7 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
 #' @export
 #' @examples
 #' # generate a fuzzy truth:
-#' fuzzyTruth <- matrix(c(
+#' fuzzyTrue <- matrix(c(
 #'   0.95, 0.025, 0.025, 
 #'   0.98, 0.01, 0.01, 
 #'   0.96, 0.02, 0.02, 
@@ -268,36 +268,36 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
 #'   0.025, 0.025, 0.95), 
 #'   ncol = 3, byrow=TRUE)
 #' # a hard truth:
-#' hardTruth <- apply(fuzzyTruth,1,FUN=which.max)
+#' hardTrue <- apply(fuzzyTrue,1,FUN=which.max)
 #' # some predicted labels:
 #' hardPred <- c(1,1,1,1,1,1,2,2,2)
-#' fuzzyHardMetrics(hardPred, hardTruth, fuzzyTruth, nperms=3)
-fuzzyHardMetrics <- function(hardPred, hardTruth, fuzzyTruth, nperms=NULL, 
+#' fuzzyHardMetrics(hardPred, hardTrue, fuzzyTrue, nperms=3)
+fuzzyHardMetrics <- function(hardPred, hardTrue, fuzzyTrue, nperms=NULL, 
                              returnElementPairAccuracy=FALSE, verbose=TRUE,
                              BPPARAM=BiocParallel::SerialParam(), ...){ 
   
   stopifnot(is.atomic(hardPred))
   hardPredVector <- hardPred <- as.integer(as.factor(hardPred))
-  if(is.atomic(hardTruth)){
-    hardTruthVector <- hardTruth <- as.integer(as.factor(hardTruth))
-    hardTruth <- Matrix::sparseMatrix(seq_along(hardTruth), hardTruth, x=1L)
+  if(is.atomic(hardTrue)){
+    hardTrueVector <- hardTrue <- as.integer(as.factor(hardTrue))
+    hardTrue <- Matrix::sparseMatrix(seq_along(hardTrue), hardTrue, x=1L)
   }else{
-    if(is.data.frame(hardTruth)) hardTruth <- as.matrix(hardTruth)
-    stopifnot(is.matrix(hardTruth) && 
-                (is.numeric(hardTruth) | is.integer(hardTruth)))
-    hardTruthVector <- apply(hardTruth, 1, FUN=which.max)
+    if(is.data.frame(hardTrue)) hardTrue <- as.matrix(hardTrue)
+    stopifnot(is.matrix(hardTrue) && 
+                (is.numeric(hardTrue) | is.integer(hardTrue)))
+    hardTrueVector <- apply(hardTrue, 1, FUN=which.max)
   }
   hardPred <- Matrix::sparseMatrix(seq_along(hardPred), hardPred, x=1L)
   
-  if(is.data.frame(fuzzyTruth)) fuzzyTruth <- as.matrix(fuzzyTruth)
+  if(is.data.frame(fuzzyTrue)) fuzzyTrue <- as.matrix(fuzzyTrue)
   
-  stopifnot(is.matrix(fuzzyTruth) && 
-              (is.numeric(fuzzyTruth) | is.integer(fuzzyTruth)))
-  stopifnot(nrow(hardTruth)==nrow(fuzzyTruth))
-  stopifnot(nrow(hardPred)==nrow(hardTruth))
-  stopifnot(ncol(hardTruth)==ncol(fuzzyTruth))
+  stopifnot(is.matrix(fuzzyTrue) && 
+              (is.numeric(fuzzyTrue) | is.integer(fuzzyTrue)))
+  stopifnot(nrow(hardTrue)==nrow(fuzzyTrue))
+  stopifnot(nrow(hardPred)==nrow(hardTrue))
+  stopifnot(ncol(hardTrue)==ncol(fuzzyTrue))
   
-  m <- nrow(fuzzyTruth)
+  m <- nrow(fuzzyTrue)
   ncomp <- m*((m-1)/2)
   if(verbose && m>=2000){
     nSim <- min(BiocParallel::bpnworkers(BPPARAM),
@@ -309,8 +309,8 @@ fuzzyHardMetrics <- function(hardPred, hardTruth, fuzzyTruth, nperms=NULL,
   
   # compute pair agreement for all the three labelings
   eq <- as.matrix(1-(0.5*dist(hardPred, method="manhattan")))
-  ep <- 1-(0.5*dist(fuzzyTruth, method="manhattan"))
-  ep2 <- 1-(0.5*dist(hardTruth, method="manhattan"))
+  ep <- 1-(0.5*dist(fuzzyTrue, method="manhattan"))
+  ep2 <- 1-(0.5*dist(hardTrue, method="manhattan"))
   
   # compute the minimum difference of the pred with either truth
   diff <- pmin( abs(as.matrix(ep) - eq),
@@ -333,7 +333,7 @@ fuzzyHardMetrics <- function(hardPred, hardTruth, fuzzyTruth, nperms=NULL,
   }
   
   W1 <- getFWallace(hardPredVector, diff)
-  W2 <- getFWallace(hardTruthVector, diff)
+  W2 <- getFWallace(hardTrueVector, diff)
   # get metrics for the permutations
   
   # fn for one permutation:
@@ -344,7 +344,7 @@ fuzzyHardMetrics <- function(hardPred, hardTruth, fuzzyTruth, nperms=NULL,
                   abs(as.matrix(ep2) - permutedEQ) )
     NDC <- 1 -  sum( diff )/(2*ncomp)
     W1 <- getFWallace(hardPredVector[p], diff)
-    W2 <- getFWallace(hardTruthVector, diff)
+    W2 <- getFWallace(hardTrueVector, diff)
     if(m>2000){
       rm(diff, permutedEQ)
       gc(verbose=FALSE)
