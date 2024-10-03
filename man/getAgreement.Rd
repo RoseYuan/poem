@@ -4,7 +4,7 @@
 \alias{getAgreement}
 \title{getAgreement}
 \usage{
-getAgreement(pred, true, usePairs = TRUE)
+getAgreement(pred, true, usePairs = TRUE, useNegatives = FALSE)
 }
 \arguments{
 \item{pred}{A vector of predicted clusters}
@@ -12,6 +12,9 @@ getAgreement(pred, true, usePairs = TRUE)
 \item{true}{A vector of true class labels}
 
 \item{usePairs}{Logical; whether to compute over pairs instead of elements}
+
+\item{useNegatives}{Logical; whether to include the consistency of negative
+pairs in the score (default FALSE).}
 }
 \value{
 A vector of agreement scores
@@ -20,6 +23,7 @@ A vector of agreement scores
 Per-spot agreement between a clustering and a ground truth
 }
 \examples{
-# Give the SPE:
-spe$agreement <- getAgreement(spe$BayesSpace_default, true=spe$ground_truth)
+true <- rep(1:3,each=3)
+pred <- rep(1:2, c(4,5))
+getAgreement(true, pred)
 }
