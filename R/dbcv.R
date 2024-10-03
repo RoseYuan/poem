@@ -164,17 +164,17 @@
 #' possible `method` in `stats::dist()`. By default `"euclidean"`.
 #' @param noise_id Integer, the cluster ID in `y` for noise (default `-1`). 
 #' @param check_duplicates Logical flag to check for duplicate samples.
-#' @param n_processes Integer or `"auto"`, specifying the number of parallel processes.
 #' @param use_scipy_mst Logical flag to use `scipy`'s Kruskal's MST 
 #' implementation. If `TRUE`, python is required, and this will reproduce the same results as
 #' this python implementation of DBCV at \url{https://github.com/FelSiq/DBCV}.
 #' If `FALSE`, use MST implementation in `igraph`.
+#' @param BPPARAM BiocParallel params for multithreading (default none)
+#' 
+#' @importFrom BiocParallel SerialParam bplapply
 #' 
 #' @return A list:
 #' \item{vcs}{Numeric vector of validity index for each cluster.}
 #' \item{dbcv}{Numeric value representing the overall DBCV metric.}
-#' 
-#' @importFrom parallel mclapply
 #' 
 #' @references Davoud Moulavi, et al. 2014; 10.1137/1.9781611973440.96.
 #' 
@@ -183,7 +183,7 @@
 #' dbcv(data[, c("x", "y")], data$kmeans_label)
 #' dbcv(data[, c("x", "y")], data$hdbscan_label)
 dbcv <- function(X, y, metric = "euclidean", noise_id = -1, check_duplicates = FALSE,
-                 n_processes = "auto", use_scipy_mst = FALSE, ...) {
+                 use_scipy_mst = FALSE, BPPARAM=BiocParallel::SerialParam(), ...) {
   X <- as.matrix(X)
   y <- as.integer(y)
   n <- dim(X)[1]
@@ -221,10 +221,10 @@ dbcv <- function(X, y, metric = "euclidean", noise_id = -1, check_duplicates = F
     n_processes <- ifelse(length(y) > 500, 4, 1)
   }
   
-  density_sparseness_results <- mclapply(seq_along(cls_inds), function(cls_id) {
+  density_sparseness_results <- bplapply(seq_along(cls_inds), function(cls_id) {
     .fn_density_sparseness(cls_inds[[cls_id]], .get_submatrix(dists, inds_a = cls_inds[[cls_id]]), 
                           d = ncol(X), use_scipy_mst = use_scipy_mst)
-  }, mc.cores = n_processes)
+  }, BPPARAM)
   
   for (cls_id in seq_along(density_sparseness_results)) {
     internal_objects_per_cls[[cls_id]] <- density_sparseness_results[[cls_id]]$internal_node_inds
@@ -233,10 +233,10 @@ dbcv <- function(X, y, metric = "euclidean", noise_id = -1, check_duplicates = F
   }
   
   if (length(cluster_ids) > 1) {
-    density_separation_results <- mclapply(combn(length(cluster_ids), 2, simplify = FALSE), function(pair) {
+    density_separation_results <- bplapply(combn(length(cluster_ids), 2, simplify = FALSE), function(pair) {
       .fn_density_separation(pair[1], pair[2], .get_submatrix(dists, inds_a = internal_objects_per_cls[[pair[1]]], inds_b = internal_objects_per_cls[[pair[2]]]),
                             internal_core_dists_per_cls[[pair[1]]], internal_core_dists_per_cls[[pair[2]]])
-    }, mc.cores = n_processes)
+    }, BPPARAM)
     
     for (result in density_separation_results) {
       min_dspcs[result$cls_i] <- min(min_dspcs[result$cls_i], result$dspc_ij)

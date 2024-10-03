@@ -30,3 +30,7 @@ to samples and columns correspond to the classes in \code{label}.
 For a given dataset with locations and labels, compute the label
 composition of the neighborhood for each sample.
 }
+\examples{
+data <- sp_toy
+knnComposition(data[,c("x", "y")], k=6, data$label)
+}
