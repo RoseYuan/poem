@@ -1,0 +1,46 @@
+on:
+  push:
+    paths:
+      - 'DESCRIPTION'
+  pull_request:
+    branches:
+      - master
+    paths-ignore:
+      - 'README.md'
+
+name: R-CMD-check
+
+jobs:
+  R-CMD-check:
+    runs-on: ubuntu-latest
+    container: plger/metrics:latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+
+      - name: Install latest BiocCheck
+        run: BiocManager::install(c("BiocCheck"))
+        shell: Rscript {0}
+
+      - name: Check
+        env:
+          _R_CHECK_CRAN_INCOMING_REMOTE_: false
+        run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error", check_dir = "check")
+        shell: Rscript {0}
+
+      - name: BiocCheck
+        run: BiocCheck::BiocCheck(".")
+        shell: Rscript {0}
+
+      - name: Upload check results
+        if: failure()
+        uses: actions/upload-artifact@master
+        with:
+          name: ${{ runner.os }}-r${{ matrix.config.r }}-results
+          path: check
+
+      - name: Show testthat output
+        if: always()
+        run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
+        shell: bash
