@@ -1,14 +1,14 @@
 #' @title Compute Pair to Pair Distances
 #' @description Compute the pairwise distances between points in matrix `X`.
 #' @param X Numeric matrix.
-#' @param metric String specifying the metric to compute the distances.
+#' @param distance String specifying the metric to compute the distances.
 #' @return Numeric matrix of pairwise distances with self-distances set to `Inf`.
-.compute_pair_to_pair_dists <- function(X, metric="euclidean") {
-  if(metric == "sqeuclidean"){
+.compute_pair_to_pair_dists <- function(X, distance="euclidean") {
+  if(distance == "sqeuclidean"){
     dists <- as.matrix(dist(X, method = "euclidean"))
     dists <- dists^2
   }else{
-    dists <- as.matrix(dist(X, method = metric))
+    dists <- as.matrix(dist(X, method = distance))
   }
   dists[dists < 1e-12] <- 1e-12
   diag(dists) <- Inf
@@ -143,38 +143,39 @@
 
 #' @title Convert Singleton Clusters to Noise
 #' @description Converts clusters containing a single instance to noise.
-#' @param y Integer vector of cluster IDs.
+#' @param labels Integer vector of cluster IDs.
 #' @param noise_id Integer, the ID for noise.
 #' @return Integer vector with singleton clusters converted to noise.
-.convert_singleton_clusters_to_noise <- function(y, noise_id) {
-  cluster_sizes <- table(y)
+.convert_singleton_clusters_to_noise <- function(labels, noise_id) {
+  cluster_sizes <- table(labels)
   singleton_clusters <- names(cluster_sizes[cluster_sizes == 1])
   if (length(singleton_clusters) == 0) {
-    return(y)
+    return(labels)
   }
-  return(ifelse(y %in% singleton_clusters, noise_id, y))
+  return(ifelse(labels %in% singleton_clusters, noise_id, labels))
 }
 
 #' @title DBCV Metric Calculation
 #' @description Compute the DBCV (Density-Based Clustering Validation) metric.
 #' 
 #' @param X Numeric matrix of samples.
-#' @param y Integer vector of cluster IDs.
-#' @param metric String specifying the distance metric. `"sqeuclidean"`, or 
+#' @param labels Integer vector of cluster IDs.
+#' @param distance String specifying the distance metric. `"sqeuclidean"`, or 
 #' possible `method` in `stats::dist()`. By default `"euclidean"`.
 #' @param noise_id Integer, the cluster ID in `y` for noise (default `-1`). 
 #' @param check_duplicates Logical flag to check for duplicate samples.
-#' @param n_processes Integer or `"auto"`, specifying the number of parallel processes.
 #' @param use_scipy_mst Logical flag to use `scipy`'s Kruskal's MST 
 #' implementation. If `TRUE`, python is required, and this will reproduce the same results as
 #' this python implementation of DBCV at \url{https://github.com/FelSiq/DBCV}.
 #' If `FALSE`, use MST implementation in `igraph`.
+#' @param BPPARAM BiocParallel params for multithreading (default none)
+#' 
+#' @importFrom BiocParallel SerialParam bplapply
 #' 
 #' @return A list:
 #' \item{vcs}{Numeric vector of validity index for each cluster.}
 #' \item{dbcv}{Numeric value representing the overall DBCV metric.}
-#' 
-#' @importFrom parallel mclapply
+#'
 #' @importFrom utils combn
 #' 
 #' @references Davoud Moulavi, et al. 2014; 10.1137/1.9781611973440.96.
@@ -183,32 +184,32 @@
 #' data <- noisy_moon
 #' dbcv(data[, c("x", "y")], data$kmeans_label)
 #' dbcv(data[, c("x", "y")], data$hdbscan_label)
-dbcv <- function(X, y, metric = "euclidean", noise_id = -1, check_duplicates = FALSE,
-                 n_processes = "auto", use_scipy_mst = FALSE, ...) {
+dbcv <- function(X, labels, distance = "euclidean", noise_id = -1, check_duplicates = FALSE,
+                 use_scipy_mst = FALSE, BPPARAM=BiocParallel::SerialParam(), ...) {
   X <- as.matrix(X)
-  y <- as.integer(y)
+  labels <- as.integer(labels)
   n <- dim(X)[1]
-  if (nrow(X) != length(y)) {
+  if (nrow(X) != length(labels)) {
     stop("Mismatch in number of samples and cluster labels.")
   }
   
-  y <- .convert_singleton_clusters_to_noise(y, noise_id = noise_id)
+  labels <- .convert_singleton_clusters_to_noise(labels, noise_id = noise_id)
   
-  non_noise_inds <- y != noise_id
+  non_noise_inds <- labels != noise_id
   X <- X[non_noise_inds, ]
-  y <- y[non_noise_inds]
+  labels <- labels[non_noise_inds]
   
-  if (length(y) == 0) {
+  if (length(labels) == 0) {
     return(0.0)
   }
   
-  cluster_ids <- sort(unique(y))
+  cluster_ids <- sort(unique(labels))
   
   if (check_duplicates) {
     .check_duplicated_samples(X)
   }
   
-  dists <- .compute_pair_to_pair_dists(X, metric = metric)
+  dists <- .compute_pair_to_pair_dists(X, distance = distance)
   
   dscs <- numeric(length(cluster_ids))
   min_dspcs <- rep(Inf, length(cluster_ids))
@@ -216,16 +217,16 @@ dbcv <- function(X, y, metric = "euclidean", noise_id = -1, check_duplicates = F
   internal_objects_per_cls <- list()
   internal_core_dists_per_cls <- list()
   
-  cls_inds <- lapply(cluster_ids, function(cls_id) which(y == cls_id))
+  cls_inds <- lapply(cluster_ids, function(cls_id) which(labels == cls_id))
   
   if (n_processes == "auto") {
-    n_processes <- ifelse(length(y) > 500, 4, 1)
+    n_processes <- ifelse(length(labels) > 500, 4, 1)
   }
   
-  density_sparseness_results <- mclapply(seq_along(cls_inds), function(cls_id) {
+  density_sparseness_results <- bplapply(seq_along(cls_inds), function(cls_id) {
     .fn_density_sparseness(cls_inds[[cls_id]], .get_submatrix(dists, inds_a = cls_inds[[cls_id]]), 
                           d = ncol(X), use_scipy_mst = use_scipy_mst)
-  }, mc.cores = n_processes)
+  }, BPPARAM)
   
   for (cls_id in seq_along(density_sparseness_results)) {
     internal_objects_per_cls[[cls_id]] <- density_sparseness_results[[cls_id]]$internal_node_inds
@@ -234,10 +235,10 @@ dbcv <- function(X, y, metric = "euclidean", noise_id = -1, check_duplicates = F
   }
   
   if (length(cluster_ids) > 1) {
-    density_separation_results <- mclapply(combn(length(cluster_ids), 2, simplify = FALSE), function(pair) {
+    density_separation_results <- bplapply(combn(length(cluster_ids), 2, simplify = FALSE), function(pair) {
       .fn_density_separation(pair[1], pair[2], .get_submatrix(dists, inds_a = internal_objects_per_cls[[pair[1]]], inds_b = internal_objects_per_cls[[pair[2]]]),
                             internal_core_dists_per_cls[[pair[1]]], internal_core_dists_per_cls[[pair[2]]])
-    }, mc.cores = n_processes)
+    }, BPPARAM)
     
     for (result in density_separation_results) {
       min_dspcs[result$cls_i] <- min(min_dspcs[result$cls_i], result$dspc_ij)
@@ -247,6 +248,6 @@ dbcv <- function(X, y, metric = "euclidean", noise_id = -1, check_duplicates = F
   
   vcs <- (min_dspcs - dscs) / pmax(min_dspcs, dscs)
   vcs[is.nan(vcs)] <- 0.0
-  dbcv <- sum(vcs * table(y)) / n
+  dbcv <- sum(vcs * table(labels)) / n
   return(list("vcs"=vcs ,"dbcv"=dbcv))
 }

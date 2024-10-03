@@ -10,8 +10,8 @@ dbcv(
   metric = "euclidean",
   noise_id = -1,
   check_duplicates = FALSE,
-  n_processes = "auto",
   use_scipy_mst = FALSE,
+  BPPARAM = BiocParallel::SerialParam(),
   ...
 )
 }
@@ -27,12 +27,12 @@ possible \code{method} in \code{stats::dist()}. By default \code{"euclidean"}.}
 
 \item{check_duplicates}{Logical flag to check for duplicate samples.}
 
-\item{n_processes}{Integer or \code{"auto"}, specifying the number of parallel processes.}
-
 \item{use_scipy_mst}{Logical flag to use \code{scipy}'s Kruskal's MST
 implementation. If \code{TRUE}, python is required, and this will reproduce the same results as
 this python implementation of DBCV at \url{https://github.com/FelSiq/DBCV}.
 If \code{FALSE}, use MST implementation in \code{igraph}.}
+
+\item{BPPARAM}{BiocParallel params for multithreading (default none)}
 }
 \value{
 A list:
