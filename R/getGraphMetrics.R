@@ -28,7 +28,7 @@
 #' @details
 #' Additional details...
 #' 
-#' 
+#' @rdname getGraphMetrics
 #' @export
 #' @examples
 #' # generate random data and labels:
@@ -68,6 +68,8 @@ setGeneric("getGraphMetrics", signature="x",
   cbind(class=labels, res)
 }
 
+#' @rdname getGraphMetrics
+#' @export
 setMethod("getGraphMetrics", signature="list",
           definition=function(x, labels, metrics, directed=NULL, k=NULL, ...){
             .checkInputs(x,labels,checkNNcl=FALSE)
@@ -103,8 +105,13 @@ setMethod("getGraphMetrics", signature="list",
   res
 }
 
+#' @rdname getGraphMetrics
+#' @export
 setMethod("getGraphMetrics", signature="data.frame",
           definition=.getGraphMetricsFromEmbedding)
+
+#' @rdname getGraphMetrics
+#' @export
 setMethod("getGraphMetrics", signature="matrix",
           definition=.getGraphMetricsFromEmbedding)
 
@@ -130,6 +137,8 @@ setMethod("getGraphMetrics", signature="matrix",
   cbind(class=labels, res)
 }
 
+#' @rdname getGraphMetrics
+#' @export
 setMethod("getGraphMetrics", signature="igraph",
           definition=function(x, labels, ...){
             stopifnot(is(x,"igraph"))
@@ -152,6 +161,8 @@ setMethod("getGraphMetrics", signature="igraph",
   getGraphMetrics(g, labels=labels, ...)
 }
 
+#' @rdname getGraphMetrics
+#' @export
 setMethod("getGraphMetrics", signature="dist",
           definition=function(x, labels, ...){
             stopifnot(is(x,"dist"))

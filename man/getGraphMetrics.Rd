@@ -2,9 +2,36 @@
 % Please edit documentation in R/getGraphMetrics.R
 \name{getGraphMetrics}
 \alias{getGraphMetrics}
+\alias{getGraphMetrics,list-method}
+\alias{getGraphMetrics,data.frame-method}
+\alias{getGraphMetrics,matrix-method}
+\alias{getGraphMetrics,igraph-method}
+\alias{getGraphMetrics,dist-method}
 \title{getGraphMetrics}
 \usage{
 getGraphMetrics(
+  x,
+  labels,
+  metrics = c("SI", "NP", "NCE"),
+  directed = NULL,
+  ...
+)
+
+\S4method{getGraphMetrics}{list}(x, labels, metrics, directed = NULL, k = NULL, ...)
+
+\S4method{getGraphMetrics}{data.frame}(x, labels, metrics, directed = NULL, k, shared = FALSE, ...)
+
+\S4method{getGraphMetrics}{matrix}(x, labels, metrics, directed = NULL, k, shared = FALSE, ...)
+
+\S4method{getGraphMetrics}{igraph}(
+  x,
+  labels,
+  metrics = c("SI", "NP", "NCE"),
+  directed = NULL,
+  ...
+)
+
+\S4method{getGraphMetrics}{dist}(
   x,
   labels,
   metrics = c("SI", "NP", "NCE"),
@@ -32,13 +59,13 @@ cohesion, PWC AMSP undirected, others directed).}
 \item{k}{The number of nearest neighbors to compute and/or use. Can be
 omitted if \code{x} is a graph or list of nearest neighbors.}
 
-\item{BNPARAM}{A BiocNeighbors parameter object to compute kNNs. Ignored
-unless the input is a matrix or data.frame. If omitted, the Annoy
-approximation will be used if there are more than 500 elements.}
-
 \item{shared}{Logical; whether to use a shared nearest neighbor network
 instead of a nearest neighbor network. Ignored if \code{x} is not an embedding
 or dist object.}
+
+\item{BNPARAM}{A BiocNeighbors parameter object to compute kNNs. Ignored
+unless the input is a matrix or data.frame. If omitted, the Annoy
+approximation will be used if there are more than 500 elements.}
 }
 \value{
 A data.frame of metrics for each node/element of \code{x}.
