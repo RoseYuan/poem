@@ -7,10 +7,10 @@
 #' permutations according to their variability.
 #'
 #' @param P A object coercible to a numeric matrix with membership probability 
-#'   of elements (rows) in clusters (columns)
+#'   of elements (rows) in ground-truth classes (columns).
 #' @param Q A object coercible to a numeric matrix with membership probability 
-#'   of elements (rows) in clusters (columns). Must have the same number of rows
-#'   as `P`
+#'   of elements (rows) in predicted clusters (columns). Must have the same 
+#' number of rows as `P`.
 #' @param nperms The number of permutations (for correction for chance). If 
 #'   NULL (default), a first set of 10 permutations will be run to estimate 
 #'   whether the variation across permutations is above 0.0025, in which case 
@@ -272,7 +272,7 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
 #' # some predicted labels:
 #' hardPred <- c(1,1,1,1,1,1,2,2,2)
 #' fuzzyHardMetrics(hardPred, hardTrue, fuzzyTrue, nperms=3)
-fuzzyHardMetrics <- function(hardPred, hardTrue, fuzzyTrue, nperms=NULL, 
+fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL, 
                              returnElementPairAccuracy=FALSE, verbose=TRUE,
                              BPPARAM=BiocParallel::SerialParam(), ...){ 
   

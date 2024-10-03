@@ -36,12 +36,12 @@ getFuzzyPartitionMetrics <-function(true, pred, location, fuzzy_true=TRUE,
   if(fuzzy_true & (!fuzzy_pred)){
     message("Comparing between a fuzzy truth and a hard prediction...")
     P <- getFuzzyLabel(true, location, k=k, alpha=alpha, ...)
-    res <- fuzzyHardMetrics(pred, true, P, ...)
+    res <- fuzzyHardMetrics(true, P, pred, ...)
   }
   if((!fuzzy_true) & fuzzy_pred){
     message("Comparing between a hard truth and a fuzzy prediction...")
     Q <- getFuzzyLabel(pred, location, k=k, alpha=alpha, ...)
-    res <- fuzzyHardMetrics(true, pred, Q, ...)
+    res <- fuzzyHardMetrics(pred, Q, true, ...)
     res <- .switchListItem(mylist, "fuzzyWH", "fuzzyWC")
     res <- .switchListItem(mylist, "fuzzyAWH", "fuzzyAWC")
   }

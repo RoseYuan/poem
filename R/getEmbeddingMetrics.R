@@ -73,7 +73,7 @@ getEmbeddingClassMetrics <-function(x, labels,
   })[,2]
   if("dbcv" %in% metrics){
     y <- as.integer(factor(labels, levels = sort(unique(labels))))
-    res$dbcv <- dbcv(x, y, metric = distance, ...)$vcs}
+    res$dbcv <- dbcv(x, y, distance = distance, ...)$vcs}
   res
 }
 
@@ -115,7 +115,7 @@ getEmbeddingGlobalMetrics <-function(x, labels,
     meanClassSW=mean(ag), minClassSW=min(ag))[metrics]
   if("dbcv" %in% metrics){ # lazy computation of dbcv, because it's relatively slow
   y <- as.integer(factor(labels, levels = sort(unique(labels))))
-  dbcv <- dbcv(x, y, metric = distance, ...)$dbcv
+  dbcv <- dbcv(x, y, distance = distance, ...)$dbcv
   res <- c(CDbw(x, as.integer(labels), ...),
            meanSW=mean(nsw$SW), pnSW=sum(nsw$SW<0)/nrow(nsw),
            meanClassSW=mean(ag), minClassSW=min(ag), dbcv=dbcv)[metrics]
