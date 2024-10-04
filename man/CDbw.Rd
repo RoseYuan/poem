@@ -6,7 +6,7 @@
 \usage{
 CDbw(
   x,
-  clustering,
+  labels,
   r = 10,
   s = seq(0.1, 0.8, by = 0.1),
   clusterstdev = TRUE,
@@ -18,7 +18,7 @@ CDbw(
 \item{x}{Something that can be coerced into a numerical matrix, with elements
 as rows.}
 
-\item{clustering}{A vector of integers with length \verb{=nrow(x)} indicating the
+\item{labels}{A vector of integers with length \verb{=nrow(x)} indicating the
 cluster for each observation.}
 
 \item{r}{Number of cluster border representatives.}

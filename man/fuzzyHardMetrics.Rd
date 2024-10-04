@@ -5,9 +5,9 @@
 \title{fuzzyHardMetrics}
 \usage{
 fuzzyHardMetrics(
+  hardTrue,
+  fuzzyTrue,
   hardPred,
-  hardTruth,
-  fuzzyTruth,
   nperms = NULL,
   returnElementPairAccuracy = FALSE,
   verbose = TRUE,
@@ -16,15 +16,15 @@ fuzzyHardMetrics(
 )
 }
 \arguments{
-\item{hardPred}{An atomic vector coercible to a factor or integer vector
-containing the predicted hard labels.}
-
-\item{hardTruth}{An atomic vector coercible to a factor or integer vector
+\item{hardTrue}{An atomic vector coercible to a factor or integer vector
 containing the true hard labels. Must have the same length as \code{hardPred}.}
 
-\item{fuzzyTruth}{A object coercible to a numeric matrix with membership
+\item{fuzzyTrue}{A object coercible to a numeric matrix with membership
 probability of elements (rows) in clusters (columns). Must have the same
-number of rows as the length of \code{hardTruth}.}
+number of rows as the length of \code{hardTrue}.}
+
+\item{hardPred}{An atomic vector coercible to a factor or integer vector
+containing the predicted hard labels.}
 
 \item{nperms}{The number of permutations (for correction for chance). If
 NULL (default), a first set of 10 permutations will be run to estimate
@@ -62,7 +62,7 @@ the more standard implementation of the metrics.
 }
 \examples{
 # generate a fuzzy truth:
-fuzzyTruth <- matrix(c(
+fuzzyTrue <- matrix(c(
   0.95, 0.025, 0.025, 
   0.98, 0.01, 0.01, 
   0.96, 0.02, 0.02, 
@@ -74,10 +74,10 @@ fuzzyTruth <- matrix(c(
   0.025, 0.025, 0.95), 
   ncol = 3, byrow=TRUE)
 # a hard truth:
-hardTruth <- apply(fuzzyTruth,1,FUN=which.max)
+hardTrue <- apply(fuzzyTrue,1,FUN=which.max)
 # some predicted labels:
 hardPred <- c(1,1,1,1,1,1,2,2,2)
-fuzzyHardMetrics(hardPred, hardTruth, fuzzyTruth, nperms=3)
+fuzzyHardMetrics(hardPred, hardTrue, fuzzyTrue, nperms=3)
 }
 \references{
 Hullermeier et al. 2012; 10.1109/TFUZZ.2011.2179303;

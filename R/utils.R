@@ -118,3 +118,17 @@
   # Display the modified list
   print(my_list)
 }
+
+# Check for unrecognized arguments and filter arguments for each function
+# example usage: function1(!!!.checkEllipsisArgs(fnList = list(function1, function2), a = 1, b = 2, c = 3)[[1]])
+.checkEllipsisArgs <- function(fnList=list(), ...) {
+  args <- list(...)
+  formal_args <- lapply(fnList, FUN=\(x) names(formals(x)))
+  
+  if(length(unknown <- setdiff(names(args), unlist(formal_args)))>0)
+    stop("Some unrecognized arguments were given: ", paste(unknown, collapse=", "))
+  
+  lapply(formal_args, FUN=\(x){
+    args[names(args) %in% x]
+  })
+}

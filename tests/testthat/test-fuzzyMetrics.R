@@ -7,7 +7,7 @@ test_that("fuzzy metrics work and match non-fuzzy ones in a binary setting", {
   fm2 <- c(RI=fm$NDC, WC=fm$fuzzyWallace2$global, WH=fm$fuzzyWallace1$global,
            ARI=fm$ACI, AWC=fm$fuzzyAdjW2$global, AWH=fm$fuzzyAdjW1$global)
   fm <- unlist(fm)
-  pm <- getPartitionMetrics(as.factor(apply(Q1,1,which.max)),
+  pm <- getPartitionGlobalMetrics(as.factor(apply(Q1,1,which.max)),
                             as.factor(apply(Q2,1,which.max)),
                             metrics=names(fm2))
   expect_true(all(!is.na(fm) & fm>=-1 & fm<=1))  

@@ -6,8 +6,8 @@
 \usage{
 dbcv(
   X,
-  y,
-  metric = "euclidean",
+  labels,
+  distance = "euclidean",
   noise_id = -1,
   check_duplicates = FALSE,
   use_scipy_mst = FALSE,
@@ -18,9 +18,9 @@ dbcv(
 \arguments{
 \item{X}{Numeric matrix of samples.}
 
-\item{y}{Integer vector of cluster IDs.}
+\item{labels}{Integer vector of cluster IDs.}
 
-\item{metric}{String specifying the distance metric. \code{"sqeuclidean"}, or
+\item{distance}{String specifying the distance metric. \code{"sqeuclidean"}, or
 possible \code{method} in \code{stats::dist()}. By default \code{"euclidean"}.}
 
 \item{noise_id}{Integer, the cluster ID in \code{y} for noise (default \code{-1}).}
@@ -33,6 +33,8 @@ this python implementation of DBCV at \url{https://github.com/FelSiq/DBCV}.
 If \code{FALSE}, use MST implementation in \code{igraph}.}
 
 \item{BPPARAM}{BiocParallel params for multithreading (default none)}
+
+\item{...}{}
 }
 \value{
 A list:

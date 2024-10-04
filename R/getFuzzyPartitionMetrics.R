@@ -47,8 +47,8 @@ getFuzzyPartitionMetrics <-function(true, pred, location, fuzzy_true=TRUE,
   }
   if((!fuzzy_true) & (!fuzzy_pred)){
     warning("You are comparing between two hard clusterings! Use function
-            `getPartitionMetrics()` to access more metrics for this.")
-    res <- getPartitionMetrics(true, pred, 
+            `getPartitionGlobalMetrics()` to access more metrics for this.")
+    res <- getPartitionGlobalMetrics(true, pred, 
                                metrics=c("RI","WC","WH","ARI","AWC","AWH"), ...)
   }
   return(res)

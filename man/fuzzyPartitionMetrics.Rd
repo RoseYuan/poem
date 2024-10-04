@@ -18,11 +18,11 @@ fuzzyPartitionMetrics(
 }
 \arguments{
 \item{P}{A object coercible to a numeric matrix with membership probability
-of elements (rows) in clusters (columns)}
+of elements (rows) in ground-truth classes (columns).}
 
 \item{Q}{A object coercible to a numeric matrix with membership probability
-of elements (rows) in clusters (columns). Must have the same number of rows
-as \code{P}}
+of elements (rows) in predicted clusters (columns). Must have the same
+number of rows as \code{P}.}
 
 \item{computeWallace}{Logical; whether to compute the individual fuzzy
 versions of the Wallace indices (increases running time).}
