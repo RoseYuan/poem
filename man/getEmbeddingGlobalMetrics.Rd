@@ -23,15 +23,14 @@ be a vector of characters, integers, numerics, or a factor, but not a list.}
 \item{metrics}{The metrics to compute.}
 
 \item{distance}{The distance metric to use (default euclidean).}
+
+\item{...}{Optional arguments. See details.}
 }
 \value{
 A data.frame (with 1 row) of metrics.
 }
 \description{
 Computes global, embedding-based metrics.
-}
-\details{
-Additional details...
 }
 \examples{
 d1 <- mockData()

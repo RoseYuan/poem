@@ -1,24 +1,35 @@
 #' getEmbeddingMetrics
 #' 
-#' Computes element-level, embedding-based metrics.
+#' Computes embedding-based metrics for the specified level.
 #'
 #' @param x A data.frame or matrix (with features as columns and items as rows) 
 #'  from which the metrics will be computed.
 #' @param labels A vector containing the labels of the predicted clusters. Must 
 #'  be a vector of characters, integers, numerics, or a factor, but not a list.
-#' @param metrics The metrics to compute. 
+#' @param metrics The metrics to compute. See details. 
 #' @param distance The distance metric to use (default euclidean).
 #' @param level The level to calculate the metrics. Options include "element", 
 #' "class" and "global".
+#' @param ... Optional arguments. See details.
 #'   
 #' @return A data.frame of metrics.
 #' @details
-#' Additional details...
-#' 
+#' The allowed values for `metrics` depend on the value of `level`:
+#'   - If `level = "element"`, the allowed `metrics` are: `"SW"`.
+#'   - If `level = "class"`, the allowed `metrics` are: `"meanSW"`, `"minSW"`, `"pnSW"`, `"dbcv"`.
+#'   - If `level = "global"`, the allowed `metrics` are: `"meanSW"`, 
+#'   `"meanClassSW"`, `"pnSW"`, `"minClassSW"`, `"cdbw"`, `"cohesion"`, `"compactness"`, `"sep"`, `"dbcv"`.
+#'   
+#' The function(s) that the optional arguments `...` passed to depend on the 
+#' value of `level`:
+#'   - If `level = "element"`, optional arguments are passed to [stats::dist()].
+#'   - If `level = "class"`, optional arguments are passed to [dbcv()].
+#'   - If `level = "global"`, optional arguments are passed to [dbcv()] or [CDbw()].
 #' @export
 #' @examples
 #' d1 <- mockData()
-#' getEmbeddingMetrics(d1[,1:2], labels=d1$class, level="class")
+#' getEmbeddingMetrics(d1[,1:2], labels=d1$class, 
+#' metrics=c("meanSW", "minSW", "pnSW", "dbcv"), level="class")
 getEmbeddingMetrics <-function(x, labels, metrics=c("meanSW", "minSW", "pnSW", "dbcv"), 
                                distance="euclidean", level="class", ...){
   # Map level to the corresponding function
@@ -42,12 +53,9 @@ getEmbeddingMetrics <-function(x, labels, metrics=c("meanSW", "minSW", "pnSW", "
 #' @inheritParams getEmbeddingMetrics
 #'   
 #' @return A data.frame of metrics for each node/element of `x`.
-#' @details
-#' Additional details...
 #' 
 #' @importFrom cluster silhouette
 #' @importFrom stats dist
-#' @export
 #' @examples
 #' d1 <- mockData()
 #' head(getEmbeddingElementMetrics(d1[,1:2], labels=d1$class))
@@ -74,11 +82,8 @@ getEmbeddingElementMetrics <-function(x, labels, metrics=c("SW"),
 #' @param metrics The metrics to compute.
 #'   
 #' @return A data.frame of metrics for each node/element of `x`.
-#' @details
-#' Additional details...
 #' 
 #' @importFrom stats aggregate
-#' @export
 #' @examples
 #' d1 <- mockData()
 #' getEmbeddingClassMetrics(d1[,1:2], labels=d1$class)
@@ -118,10 +123,6 @@ getEmbeddingClassMetrics <-function(x, labels,
 #' @inheritParams getEmbeddingMetrics
 #'   
 #' @return A data.frame (with 1 row) of metrics.
-#' @details
-#' Additional details...
-#' 
-#' @export
 #' @examples
 #' d1 <- mockData()
 #' getEmbeddingGlobalMetrics(d1[,1:2], labels=d1$class)
