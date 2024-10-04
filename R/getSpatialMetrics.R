@@ -59,6 +59,7 @@ getSpatialGlobalInternalMetrics <- function(label, location, k=6,
 #' @return A dataframe containing the metric values for all samples in the dataset.
 #' If PAS is calculated, the value is a Boolean about the abnormality of a spot.
 #' If ELSA is calculated, Ea, Ec and ELSA for all spots will be returned.
+#' @export
 #' @examples 
 #' data <- sp_toys
 #' getSpatialInternalMetrics(data$label, data[,c("x", "y")], k=6)

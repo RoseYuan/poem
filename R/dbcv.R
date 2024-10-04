@@ -220,14 +220,10 @@ dbcv <- function(X, labels, distance = "euclidean", noise_id = -1, check_duplica
   
   cls_inds <- lapply(cluster_ids, function(cls_id) which(labels == cls_id))
   
-  if (n_processes == "auto") {
-    n_processes <- ifelse(length(labels) > 500, 4, 1)
-  }
-  
   density_sparseness_results <- bplapply(seq_along(cls_inds), function(cls_id) {
     .fn_density_sparseness(cls_inds[[cls_id]], .get_submatrix(dists, inds_a = cls_inds[[cls_id]]), 
                           d = ncol(X), use_scipy_mst = use_scipy_mst)
-  }, BPPARAM)
+  }, BPPARAM=BPPARAM)
   
   for (cls_id in seq_along(density_sparseness_results)) {
     internal_objects_per_cls[[cls_id]] <- density_sparseness_results[[cls_id]]$internal_node_inds
@@ -239,7 +235,7 @@ dbcv <- function(X, labels, distance = "euclidean", noise_id = -1, check_duplica
     density_separation_results <- bplapply(combn(length(cluster_ids), 2, simplify = FALSE), function(pair) {
       .fn_density_separation(pair[1], pair[2], .get_submatrix(dists, inds_a = internal_objects_per_cls[[pair[1]]], inds_b = internal_objects_per_cls[[pair[2]]]),
                             internal_core_dists_per_cls[[pair[1]]], internal_core_dists_per_cls[[pair[2]]])
-    }, BPPARAM)
+    }, BPPARAM=BPPARAM)
     
     for (result in density_separation_results) {
       min_dspcs[result$cls_i] <- min(min_dspcs[result$cls_i], result$dspc_ij)
