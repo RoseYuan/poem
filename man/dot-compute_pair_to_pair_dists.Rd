@@ -4,12 +4,12 @@
 \alias{.compute_pair_to_pair_dists}
 \title{Compute Pair to Pair Distances}
 \usage{
-.compute_pair_to_pair_dists(X, metric = "euclidean")
+.compute_pair_to_pair_dists(X, distance = "euclidean")
 }
 \arguments{
 \item{X}{Numeric matrix.}
 
-\item{metric}{String specifying the metric to compute the distances.}
+\item{distance}{String specifying the metric to compute the distances.}
 }
 \value{
 Numeric matrix of pairwise distances with self-distances set to \code{Inf}.

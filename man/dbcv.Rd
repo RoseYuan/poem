@@ -6,8 +6,8 @@
 \usage{
 dbcv(
   X,
-  y,
-  metric = "euclidean",
+  labels,
+  distance = "euclidean",
   noise_id = -1,
   check_duplicates = FALSE,
   use_scipy_mst = FALSE,
@@ -18,9 +18,9 @@ dbcv(
 \arguments{
 \item{X}{Numeric matrix of samples.}
 
-\item{y}{Integer vector of cluster IDs.}
+\item{labels}{Integer vector of cluster IDs.}
 
-\item{metric}{String specifying the distance metric. \code{"sqeuclidean"}, or
+\item{distance}{String specifying the distance metric. \code{"sqeuclidean"}, or
 possible \code{method} in \code{stats::dist()}. By default \code{"euclidean"}.}
 
 \item{noise_id}{Integer, the cluster ID in \code{y} for noise (default \code{-1}).}

@@ -4,12 +4,12 @@
 \alias{getAgreement}
 \title{getAgreement}
 \usage{
-getAgreement(pred, true, usePairs = TRUE, useNegatives = FALSE)
+getAgreement(true, pred, usePairs = TRUE, useNegatives = FALSE)
 }
 \arguments{
-\item{pred}{A vector of predicted clusters}
-
 \item{true}{A vector of true class labels}
+
+\item{pred}{A vector of predicted clusters}
 
 \item{usePairs}{Logical; whether to compute over pairs instead of elements}
 

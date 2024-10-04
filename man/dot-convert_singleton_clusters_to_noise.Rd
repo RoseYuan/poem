@@ -4,10 +4,10 @@
 \alias{.convert_singleton_clusters_to_noise}
 \title{Convert Singleton Clusters to Noise}
 \usage{
-.convert_singleton_clusters_to_noise(y, noise_id)
+.convert_singleton_clusters_to_noise(labels, noise_id)
 }
 \arguments{
-\item{y}{Integer vector of cluster IDs.}
+\item{labels}{Integer vector of cluster IDs.}
 
 \item{noise_id}{Integer, the ID for noise.}
 }

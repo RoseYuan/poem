@@ -5,21 +5,21 @@
 \title{fuzzyHardSpotAgreement}
 \usage{
 fuzzyHardSpotAgreement(
+  hardTrue,
+  fuzzyTrue,
   hardPred,
-  hardTruth,
-  fuzzyTruth,
   useNegatives = TRUE,
   verbose = TRUE
 )
 }
 \arguments{
-\item{hardPred}{A vector of predicted cluster labels}
+\item{hardTrue}{A vector of true cluster labels}
 
-\item{hardTruth}{A vector of true cluster labels}
-
-\item{fuzzyTruth}{A object coercible to a numeric matrix with membership
+\item{fuzzyTrue}{A object coercible to a numeric matrix with membership
 probability of elements (rows) in clusters (columns). Must have the same
-number of rows as the length of \code{hardTruth}.}
+number of rows as the length of \code{hardTrue}.}
+
+\item{hardPred}{A vector of predicted cluster labels}
 
 \item{useNegatives}{Logical; whether to include negative pairs in the
 agreement score (tends to result in a larger overall agreement and lower
