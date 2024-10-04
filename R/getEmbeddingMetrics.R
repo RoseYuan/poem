@@ -15,8 +15,6 @@
 #' @details
 #' Additional details...
 #' 
-#' @importFrom cluster silhouette
-#' @importFrom stats dist
 #' @export
 #' @examples
 #' d1 <- mockData()
@@ -39,14 +37,9 @@ getEmbeddingMetrics <-function(x, labels, metrics=c("meanSW", "minSW", "pnSW", "
 #' getEmbeddingElementMetrics
 #' 
 #' Computes element-level, embedding-based metrics.
-#'
-#' @param x A data.frame or matrix (with features as columns and items as rows) 
-#'  from which the metrics will be computed.
-#' @param labels A vector containing the labels of the predicted clusters. Must 
-#'  be a vector of characters, integers, numerics, or a factor, but not a list.
 #' @param metrics The metrics to compute. Currently, only the silhouette width
 #'   is supported at the node-level.
-#' @param distance The distance metric to use (default euclidean).
+#' @inheritParams getEmbeddingMetrics
 #'   
 #' @return A data.frame of metrics for each node/element of `x`.
 #' @details
@@ -77,12 +70,8 @@ getEmbeddingElementMetrics <-function(x, labels, metrics=c("SW"),
 #' 
 #' Computes class-level, embedding-based metrics.
 #'
-#' @param x A data.frame or matrix (with features as columns and items as rows) 
-#'  from which the metrics will be computed.
-#' @param labels A vector containing the labels of the predicted clusters. Must 
-#'  be a vector of characters, integers, numerics, or a factor, but not a list.
+#' @inheritParams getEmbeddingMetrics
 #' @param metrics The metrics to compute.
-#' @param distance The distance metric to use (default euclidean).
 #'   
 #' @return A data.frame of metrics for each node/element of `x`.
 #' @details
@@ -124,13 +113,9 @@ getEmbeddingClassMetrics <-function(x, labels,
 #' getEmbeddingGlobalMetrics
 #' 
 #' Computes global, embedding-based metrics.
-#'
-#' @param x A data.frame or matrix (with features as columns and items as rows) 
-#'  from which the metrics will be computed.
-#' @param labels A vector containing the labels of the predicted clusters. Must 
-#'  be a vector of characters, integers, numerics, or a factor, but not a list.
+#' 
 #' @param metrics The metrics to compute.
-#' @param distance The distance metric to use (default euclidean).
+#' @inheritParams getEmbeddingMetrics
 #'   
 #' @return A data.frame (with 1 row) of metrics.
 #' @details
