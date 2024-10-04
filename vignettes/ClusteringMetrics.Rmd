@@ -1,0 +1,111 @@
+---
+title: ClusteringMetrics
+package: ClusteringMetrics
+author: 
+- name: Siyuan Luo
+  email: roseluosy@gmail.com
+date: "`r Sys.Date()`"
+output:
+  BiocStyle::html_document
+vignette: |
+  %\VignetteIndexEntry{1_introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo=FALSE, message=FALSE}
+knitr::opts_chunk$set(error=FALSE, message=FALSE, warning=FALSE)
+library(BiocStyle)
+```
+
+# Getting started
+
+A partition is a way of organizing a dataset into distinct, non-overlapping, and non-empty subsets. For example, a clustering is a partition. This package provides multiple approaches for comparing two partitions of the same dataset, and evaluating the alignment between a dataset’s embedding/graph representations and its partition.
+
+Unlike a hard partition, a fuzzy partition allows data points to belong to multiple subsets with varying degrees of membership. This package further offers methods for comparing two fuzzy partitions as well as for comparing a hard partition with a fuzzy partition.
+
+Additionally, spatial clustering can be evaluated by evaluating the hard or fuzzy partitions, or by using internal metrics. This package provides functions for all these types of analysis.
+
+## Installation
+
+```{r, eval=FALSE}
+if (!requireNamespace("devtools", quietly = TRUE))
+    install.packages("devtools")
+devtools::install_github("RoseYuan/ClusteringMetrics")
+```
+
+## Example data
+
+To showcase the main functions, we will use an example object which contains (a 
+subset of) RNAseq of mouse hippocampi after Forskolin-induced long-term 
+potentiation:
+
+```{r}
+suppressPackageStartupMessages({
+  library(SummarizedExperiment)
+  library(sechm)
+})
+data("Chen2017", package="sechm")
+SE <- Chen2017
+```
+
+This is taken from 
+[Chen et al., 2017](https://doi.org/10.3389/fnmol.2017.00039).
+
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+

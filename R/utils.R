@@ -132,3 +132,49 @@
     args[names(args) %in% x]
   })
 }
+
+# Check the argument where multiple values can be inputed once
+# difference with match.arg: if the input arguments contain anything that is not
+# recognised, this will throw an error or warning (depend on the argument "warning").
+.checkInvalidArgs <- function(args, allowed_args, arg_name, warning=TRUE){
+  valid_args <- match.arg(args, allowed_args, several.ok = TRUE)
+  invalid_args <- setdiff(args, valid_args)
+  if (length(invalid_args) > 0) {
+    if (warning){
+      warning("Invalid ", arg_name, ": ", paste(invalid_args, collapse = ", "),
+           ". Allowed ", arg_name, " are: ", paste(allowed_args, collapse = ", "))
+    }else{
+      stop("Invalid ", arg_name, ": ", paste(invalid_args, collapse = ", "),
+           ". Allowed ", arg_name, " are: ", paste(allowed_args, collapse = ", "))
+    }
+  }
+}
+.get_allowed_args <- function(function_with_args, arg_name, use_default=TRUE, 
+                                 use_attribute=FALSE){
+  if(use_default & (!use_attribute)){
+    # Get the allowed args from the default args settings
+    allowed_args <- eval(formals(function_with_args)[[arg_name]])
+  }else if((!use_default) & use_attribute){
+    # Get the allowed args from the function's attributes
+    allowed_args <- attr(function_with_args, "allowed_args")
+  }else{stop("Either use default, or use the function attribute.")}
+  if (is.null(allowed_args)) {
+    stop("The candidate args are not defined for the function.")
+  }
+  return(allowed_args)
+}
+
+.checkMetricsLevel <- function(metrics, level, level_functions, ...) {
+  # Check if level is valid by looking it up in level_functions
+  if (!level %in% names(level_functions)) {
+    stop(paste("Invalid level:", level, ". Allowed levels are:", 
+               paste(names(level_functions), collapse = ", ")))
+  }
+  
+  # Retrieve the formal argument list of the function for the given level
+  function_for_level <- level_functions[[level]]
+  # Extract allowed metrics from function
+  allowed_metrics <- .get_allowed_args(function_for_level, "metrics",...)  
+  # Check that all provided metrics are valid for this level
+  .checkInvalidArgs(metrics, allowed_metrics, "metrics", warning=FALSE)
+}
