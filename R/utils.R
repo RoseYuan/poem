@@ -149,14 +149,17 @@
     }
   }
 }
+
+# for a function and an argument, get all the possibilities for this argument,
+# either by looking at the default, or looking at the attribute of the function.
 .get_allowed_args <- function(function_with_args, arg_name, use_default=TRUE, 
-                                 use_attribute=FALSE){
+                                 use_attribute=FALSE, attr_name=NULL){
   if(use_default & (!use_attribute)){
     # Get the allowed args from the default args settings
     allowed_args <- eval(formals(function_with_args)[[arg_name]])
   }else if((!use_default) & use_attribute){
     # Get the allowed args from the function's attributes
-    allowed_args <- attr(function_with_args, "allowed_args")
+    allowed_args <- attr(function_with_args, attr_name)
   }else{stop("Either use default, or use the function attribute.")}
   if (is.null(allowed_args)) {
     stop("The candidate args are not defined for the function.")
@@ -164,6 +167,7 @@
   return(allowed_args)
 }
 
+# check if the "metrics" argument is valide for the specified "level" of calculation
 .checkMetricsLevel <- function(metrics, level, level_functions, ...) {
   # Check if level is valid by looking it up in level_functions
   if (!level %in% names(level_functions)) {
@@ -178,3 +182,10 @@
   # Check that all provided metrics are valid for this level
   .checkInvalidArgs(metrics, allowed_metrics, "metrics", warning=FALSE)
 }
+
+
+.class2global <- function(class_res, summarize_fun=base::mean){
+  stopifnot(is.data.frame(classres))
+  aggregate(. ~ label, data = class_res, FUN = summarize_fun)
+}
+
