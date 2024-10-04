@@ -439,10 +439,10 @@ fuzzySpotAgreement <- function(P, Q){
 #'   ground truth labels.
 #' 
 #' @param hardPred A vector of predicted cluster labels
-#' @param hardTruth A vector of true cluster labels
-#' @param fuzzyTruth A object coercible to a numeric matrix with membership 
+#' @param hardTrue A vector of true cluster labels
+#' @param fuzzyTrue A object coercible to a numeric matrix with membership 
 #'   probability of elements (rows) in clusters (columns). Must have the same 
-#'   number of rows as the length of `hardTruth`.
+#'   number of rows as the length of `hardTrue`.
 #' @param useNegatives Logical; whether to include negative pairs in the 
 #'   agreement score (tends to result in a larger overall agreement and lower
 #'   dynamic range of the score). Default TRUE.
@@ -451,30 +451,30 @@ fuzzySpotAgreement <- function(P, Q){
 #'
 #' @return A numeric vector of agreement scores for each element of `hardPred`
 #' @export
-fuzzyHardSpotAgreement <- function(hardPred, hardTruth, fuzzyTruth,
+fuzzyHardSpotAgreement <- function(hardTrue, fuzzyTrue, hardPred, 
                                    useNegatives=TRUE, verbose=TRUE){
   stopifnot(is.atomic(hardPred))
   hardPredVector <- hardPred <- as.integer(as.factor(hardPred))
-  if(is.atomic(hardTruth)){
-    hardTruthVector <- hardTruth <- as.integer(as.factor(hardTruth))
-    hardTruth <- Matrix::sparseMatrix(seq_along(hardTruth), hardTruth, x=1L)
+  if(is.atomic(hardTrue)){
+    hardTrueVector <- hardTrue <- as.integer(as.factor(hardTrue))
+    hardTrue <- Matrix::sparseMatrix(seq_along(hardTrue), hardTrue, x=1L)
   }else{
-    if(is.data.frame(hardTruth)) hardTruth <- as.matrix(hardTruth)
-    stopifnot(is.matrix(hardTruth) && 
-                (is.numeric(hardTruth) | is.integer(hardTruth)))
-    hardTruthVector <- apply(hardTruth, 1, FUN=which.max)
+    if(is.data.frame(hardTrue)) hardTrue <- as.matrix(hardTrue)
+    stopifnot(is.matrix(hardTrue) && 
+                (is.numeric(hardTrue) | is.integer(hardTrue)))
+    hardTrueVector <- apply(hardTrue, 1, FUN=which.max)
   }
   hardPred <- Matrix::sparseMatrix(seq_along(hardPred), hardPred, x=1L)
   
-  if(is.data.frame(fuzzyTruth)) fuzzyTruth <- as.matrix(fuzzyTruth)
+  if(is.data.frame(fuzzyTrue)) fuzzyTrue <- as.matrix(fuzzyTrue)
   
-  stopifnot(is.matrix(fuzzyTruth) && 
-              (is.numeric(fuzzyTruth) | is.integer(fuzzyTruth)))
-  stopifnot(nrow(hardTruth)==nrow(fuzzyTruth))
-  stopifnot(nrow(hardPred)==nrow(hardTruth))
-  stopifnot(ncol(hardTruth)==ncol(fuzzyTruth))
+  stopifnot(is.matrix(fuzzyTrue) && 
+              (is.numeric(fuzzyTrue) | is.integer(fuzzyTrue)))
+  stopifnot(nrow(hardTrue)==nrow(fuzzyTrue))
+  stopifnot(nrow(hardPred)==nrow(hardTrue))
+  stopifnot(ncol(hardTrue)==ncol(fuzzyTrue))
   
-  m <- nrow(fuzzyTruth)
+  m <- nrow(fuzzyTrue)
   if(verbose && m>=2000){
     os <- 8 * m^2 * 4
     class(os) = "object_size"
@@ -483,8 +483,8 @@ fuzzyHardSpotAgreement <- function(hardPred, hardTruth, fuzzyTruth,
   
   # compute pair agreement for all the three labelings
   eq <- as.matrix(1-(0.5*dist(hardPred, method="manhattan")))
-  ep <- 1-(0.5*dist(fuzzyTruth, method="manhattan"))
-  ep2 <- 1-(0.5*dist(hardTruth, method="manhattan"))
+  ep <- 1-(0.5*dist(fuzzyTrue, method="manhattan"))
+  ep2 <- 1-(0.5*dist(hardTrue, method="manhattan"))
   
   # compute the minimum difference of the pred with either truth
   diff <- pmin( abs(as.matrix(ep) - eq),
@@ -498,7 +498,7 @@ fuzzyHardSpotAgreement <- function(hardPred, hardTruth, fuzzyTruth,
   # blend out the negative pairs
   1-apply(seq_len(nrow(diff)), FUN=function(i){
     w <- which(hardPredVector==hardPredVector[[i]] |
-                 hardTruthVector==hardTruthVector[[i]])
+                 hardTrueVector==hardTrueVector[[i]])
     sum(diff[i,w])/(length(w)-1)
   })
   

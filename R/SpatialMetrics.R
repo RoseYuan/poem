@@ -154,7 +154,7 @@ ELSA <- function(label, location, k=10){
 #' true <- rep(1:3,each=3)
 #' pred <- rep(1:2, c(4,5))
 #' getAgreement(true, pred)
-getAgreement <- function(pred, true, usePairs=TRUE, useNegatives=FALSE){
+getAgreement <- function(true, pred, usePairs=TRUE, useNegatives=FALSE){
   co <- table(true, pred)
   # number of spots in the union between any class and any cluster:
   tot <- matrix(rep(rowSums(co),ncol(co)),nrow=nrow(co))+
