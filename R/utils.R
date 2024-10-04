@@ -185,7 +185,7 @@
 
 
 .class2global <- function(class_res, summarize_fun=base::mean){
-  stopifnot(is.data.frame(classres))
-  aggregate(. ~ label, data = class_res, FUN = summarize_fun)
+  stopifnot(is.data.frame(class_res))
+  aggregate(. ~ class, data = class_res, FUN = summarize_fun)
 }
 
