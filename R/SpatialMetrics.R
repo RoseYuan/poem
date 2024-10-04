@@ -145,31 +145,39 @@ ELSA <- function(label, location, k=10){
 #' @param pred A vector of predicted clusters
 #' @param true A vector of true class labels
 #' @param usePairs Logical; whether to compute over pairs instead of elements
+#' @param useNegatives Logical; whether to include the consistency of negative
+#'   pairs in the score (default FALSE).
 #'
 #' @return A vector of agreement scores
 #'
 #' @examples
-#' # Give the SPE:
-#' spe$agreement <- getAgreement(spe$BayesSpace_default, true=spe$ground_truth)
-getAgreement <- function(pred, true, usePairs=TRUE){
+#' true <- rep(1:3,each=3)
+#' pred <- rep(1:2, c(4,5))
+#' getAgreement(true, pred)
+getAgreement <- function(pred, true, usePairs=TRUE, useNegatives=FALSE){
   co <- table(true, pred)
   # number of spots in the union between any class and any cluster:
   tot <- matrix(rep(rowSums(co),ncol(co)),nrow=nrow(co))+
     matrix(rep(colSums(co),each=nrow(co)),nrow=nrow(co))-co
   if(usePairs){
-    pairs <- choose(co,2)
-    truePairsPerCluster <- matrix(rep(colSums(pairs),each=nrow(co)),nrow=nrow(co))
-    # wrongPairsPerCluster <- matrix(rep(choose(colSums(co),2),each=nrow(co)),nrow=nrow(co))-
-    #   truePairsPerCluster
-    truePairs <- truePairsPerCluster + #per cluster
-      rowSums(pairs) - pairs # per class minus double-counting
-    p <- unclass(truePairs/choose(tot,2))
+    if(useNegatives){
+      return(sapply(seq_along(pred), FUN=function(i){
+        1-sum(abs( (pred==pred[[i]]) - (true==true[[i]]) ))/(length(pred)-1)
+      }))
+    }else{
+      pairs <- choose(co,2)
+      truePairsPerCluster <- matrix(rep(colSums(pairs),each=nrow(co)),nrow=nrow(co))
+      truePairs <- truePairsPerCluster + #per cluster
+        rowSums(pairs) - pairs # per class minus double-counting
+      p <- unclass(truePairs/choose(tot,2))
+    }
   }else{
+    if(useNegatives) stop("useNegatives only implemented for usePairs=TRUE")
     # intersection over union, i.e. proportion of spots in the class-or-cluster
     # that agree:
     p <- unclass(co/tot)
   }
   # assign each spot its score:
   p <- setNames(as.numeric(p), paste(rep(row.names(p),ncol(p)),rep(colnames(p),each=nrow(p))))
-  p[paste(true, pred)]
+  as.numeric(p[paste(true, pred)])
 }
