@@ -11,8 +11,8 @@
 #' @param directed Logical; whether to compute the metrics in a directed fashion.
 #'   If left to NULL, conventional choices will be made per metric (adhesion, 
 #'   cohesion, PWC AMSP undirected, others directed).
-#' @param level The level to calculate the metrics. Options include "element", 
-#' "class" and "global".
+#' @param level The level to calculate the metrics. Options include `"element"`, 
+#' `"class"` and `"global"`.
 #' @param k The number of nearest neighbors to compute and/or use. Can be 
 #'   omitted if `x` is a graph or list of nearest neighbors.
 #' @param BNPARAM A BiocNeighbors parameter object to compute kNNs. Ignored 

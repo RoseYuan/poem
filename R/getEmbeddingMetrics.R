@@ -8,8 +8,8 @@
 #'  be a vector of characters, integers, numerics, or a factor, but not a list.
 #' @param metrics The metrics to compute. See details. 
 #' @param distance The distance metric to use (default euclidean).
-#' @param level The level to calculate the metrics. Options include "element", 
-#' "class" and "global".
+#' @param level The level to calculate the metrics. Options include `"element"`, 
+#' `"class"` and `"global"`.
 #' @param ... Optional arguments. See details.
 #'   
 #' @return A data.frame of metrics.

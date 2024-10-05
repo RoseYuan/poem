@@ -36,8 +36,8 @@ omitted if \code{x} is a graph or list of nearest neighbors.}
 instead of a nearest neighbor network. Ignored if \code{x} is not an embedding
 or dist object.}
 
-\item{level}{The level to calculate the metrics. Options include "element",
-"class" and "global".}
+\item{level}{The level to calculate the metrics. Options include \code{"element"},
+\code{"class"} and \code{"global"}.}
 
 \item{BNPARAM}{A BiocNeighbors parameter object to compute kNNs. Ignored
 unless the input is a matrix or data.frame. If omitted, the Annoy
@@ -60,7 +60,7 @@ The allowed values for \code{metrics} depend on the value of \code{level}:
 \item \code{"NP"}: Neighborhood Purity
 \item \code{"AMSP"}: Adjusted Mean Shortest Path
 \item \code{"PWC"}: Proportion of Weakly Connected
-\item \code{"NCE"}: xxx
+\item \code{"NCE"}:
 \item \code{"adhesion"}: adhesion of a graph, is the minumum number of nodes that must be removed to split a graph.
 \item \code{"cohesion"}: cohesion of a graph, is the minumum number of edges that must be removed to split a graph.
 }

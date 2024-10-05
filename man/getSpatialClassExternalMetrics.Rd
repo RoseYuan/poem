@@ -14,15 +14,6 @@ getSpatialClassExternalMetrics(
 )
 }
 \arguments{
-\item{true}{A vector containing the labels of the true classes. Must be a
-vector of characters, integers, numerics, or a factor, but not a list.}
-
-\item{pred}{A vector containing the labels of the predicted clusters. Must
-be a vector of characters, integers, numerics, or a factor, but not a list.}
-
-\item{location}{A numeric data matrix containing location information, where
-rows are points and columns are dimensions.}
-
 \item{k}{The number of neighbors used when calculating the fuzzy
 class memberships for fuzzy metrics.}
 

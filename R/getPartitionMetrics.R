@@ -9,7 +9,7 @@
 #' @param metrics The metrics to compute. If omitted, main metrics will be 
 #'   computed. See details.
 #' @param level The level to calculate the metrics. Options include 
-#' "class" and "global".
+#' `"class"` and `"global"`.
 #' @param ... 
 #' @return A data.frame of metrics.
 #' @details

@@ -23,7 +23,7 @@ be a vector of characters, integers, numerics, or a factor, but not a list.}
 computed. See details.}
 
 \item{level}{The level to calculate the metrics. Options include
-"class" and "global".}
+\code{"class"} and \code{"global"}.}
 
 \item{...}{}
 }

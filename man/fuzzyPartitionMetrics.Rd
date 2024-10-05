@@ -12,8 +12,7 @@ fuzzyPartitionMetrics(
   verbose = TRUE,
   returnElementPairAccuracy = FALSE,
   BPPARAM = BiocParallel::SerialParam(),
-  tnorm = c("product", "min", "lukasiewicz"),
-  ...
+  tnorm = c("product", "min", "lukasiewicz")
 )
 }
 \arguments{

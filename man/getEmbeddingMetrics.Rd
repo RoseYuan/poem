@@ -24,8 +24,8 @@ be a vector of characters, integers, numerics, or a factor, but not a list.}
 
 \item{distance}{The distance metric to use (default euclidean).}
 
-\item{level}{The level to calculate the metrics. Options include "element",
-"class" and "global".}
+\item{level}{The level to calculate the metrics. Options include \code{"element"},
+\code{"class"} and \code{"global"}.}
 
 \item{...}{Optional arguments. See details.}
 }

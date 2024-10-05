@@ -5,47 +5,82 @@
 \title{getFuzzyPartitionMetrics}
 \usage{
 getFuzzyPartitionMetrics(
-  true,
-  pred,
-  location,
+  hardTrue = NULL,
+  fuzzyTrue = NULL,
+  hardPred = NULL,
+  fuzzyPred = NULL,
   fuzzy_true = TRUE,
   fuzzy_pred = FALSE,
-  k = 6,
-  alpha = 0.5,
+  metrics = c("fuzzyRI", "fuzzyARI", "fuzzyWH", "fuzzyAWH", "fuzzyWC", "fuzzyAWC"),
+  level = "class",
+  nperms = NULL,
+  verbose = TRUE,
+  returnElementPairAccuracy = FALSE,
+  BPPARAM = BiocParallel::SerialParam(),
+  useNegatives = NULL,
+  usePairs = NULL,
   ...
 )
 }
 \arguments{
-\item{true}{A vector containing the labels of the true classes. Must be a
-vector of characters, integers, numerics, or a factor, but not a list.}
+\item{hardTrue}{An atomic vector coercible to a factor or integer vector
+containing the true hard labels.}
 
-\item{pred}{A vector containing the labels of the predicted clusters. Must
-be a vector of characters, integers, numerics, or a factor, but not a list.}
+\item{fuzzyTrue}{A object coercible to a numeric matrix with membership
+probability of elements (rows) in clusters (columns).}
 
-\item{location}{A numeric data matrix containing location information, where
-rows are points and columns are dimensions.}
+\item{hardPred}{An atomic vector coercible to a factor or integer vector
+containing the predicted hard labels.}
 
-\item{fuzzy_true}{A boolean indicating if the \code{true} label will be transformed
+\item{fuzzyPred}{A object coercible to a numeric matrix with membership
+probability of elements (rows) in clusters (columns).}
+
+\item{fuzzy_true}{Logical. Indicating if the \code{true} label will be transformed
 into fuzzy cluster membership representation.}
 
-\item{fuzzy_pred}{A boolean indicating if the \code{pred} label will be transformed
+\item{fuzzy_pred}{Logical. Indicating if the \code{pred} label will be transformed
 into fuzzy cluster membership representation.}
 
-\item{k}{The number of neighbors to consider when transforming the location
-information into fuzzy class memberships.}
+\item{metrics}{The metrics to compute. See details.}
 
-\item{alpha}{The parameter to control to what extend the spot itself contribute
-to the class composition calculation. \code{"equal"} means it is weighted the
-same as other neighbors. A numeric value between \code{0} and \code{1} means the weight of the
-frequency contribution for the spot itself, and the frequency contribution
-for its knn is then \code{1-alpha}. By default \code{0.5}.}
+\item{level}{The level to calculate the metrics. Options include \code{"element"},
+\code{"class"} and \code{"global"}.}
 
-\item{...}{Optional params for \code{\link[=fuzzyPartitionMetrics]{fuzzyPartitionMetrics()}},
-\code{\link[=fuzzyHardMetrics]{fuzzyHardMetrics()}} or \code{\link[=getFuzzyLabel]{getFuzzyLabel()}}.}
+\item{nperms}{The number of permutations (for correction for chance). If
+NULL (default), a first set of 10 permutations will be run to estimate
+whether the variation across permutations is above 0.0025, in which case
+more (max 1000) permutations will be run.}
+
+\item{verbose}{Logical; whether to print info and warnings, including the
+standard error of the mean across permutations (giving an idea of the
+precision of the adjusted metrics).}
+
+\item{returnElementPairAccuracy}{Logical. If TRUE, returns the per-element
+pair accuracy instead of the various parition-level and global metrics.
+Default FALSE.}
+
+\item{BPPARAM}{BiocParallel params for multithreading (default none)}
+
+\item{useNegatives}{Logical; whether to include negative pairs in the
+agreement score (tends to result in a larger overall agreement and lower
+dynamic range of the score). Default TRUE.}
+
+\item{usePairs}{Logical; whether to compute over pairs instead of elements}
+
+\item{...}{Optional arguments for \code{\link[=fuzzyPartitionMetrics]{fuzzyPartitionMetrics()}}: \code{tnorm}. Only
+useful when \code{fuzzy_true=TRUE} and \code{fuzzy_pred=TRUE}.}
 }
 \value{
 A list of metric results.
 }
 \description{
-Computes a selection of external fuzzy clustering evaluation metrics for spatial data.
+Computes a selection of external fuzzy clustering evaluation metrics.
+}
+\details{
+The allowed values for \code{metrics} depend on the value of \code{level}:
+\itemize{
+\item If \code{level = "element"}, the allowed \code{metrics} are: \code{"spotAgreement"}.
+\item If \code{level = "class"}, the allowed \code{metrics} are: \code{"fuzzyWH"}, \code{"fuzzyAWH"}, \code{"fuzzyWC"}, \code{"fuzzyAWC"}.
+\item If \code{level = "global"}, the allowed \code{metrics} are: \code{"fuzzyRI"}, \code{"fuzzyARI"}, \code{"fuzzyWH"}, \code{"fuzzyAWH"}, \code{"fuzzyWC"}, \code{"fuzzyAWC"}.
+}
 }
