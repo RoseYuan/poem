@@ -186,6 +186,21 @@
 
 .class2global <- function(class_res, summarize_fun=base::mean){
   stopifnot(is.data.frame(class_res))
-  aggregate(. ~ class, data = class_res, FUN = summarize_fun)
+  class_res$class <- 1
+  res <- aggregate(. ~ class, data = class_res, FUN = summarize_fun)
+  subset(res, select = -class)
 }
 
+# row-bind two dataframes with no common columns
+.rbind_na <- function(df1, df2){
+  # Find the columns that are missing in each data frame
+  missing_cols_df1 <- setdiff(names(df2), names(df1))
+  missing_cols_df2 <- setdiff(names(df1), names(df2))
+  
+  # Add the missing columns with NA values to each data frame
+  df1[missing_cols_df1] <- NA
+  df2[missing_cols_df2] <- NA
+  
+  # Now bind the two data frames using rbind
+  return(rbind(df1, df2))
+}

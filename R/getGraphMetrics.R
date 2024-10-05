@@ -24,11 +24,17 @@
 #' @return A data.frame of metrics.
 #' @details
 #' The allowed values for `metrics` depend on the value of `level`:
-#'   - If `level = "element"`, the allowed `metrics` are: `"SI"`,`"ISI"`,`"NP"`,`"NCE"`.
-#'   - If `level = "class"`, the allowed `metrics` are: `"SI"`,`"ISI"`,`"NP"`,`"AMSP"`,`"PWC"`,`"NCE"`, `"adhesion"`,`"cohesion"`.
+#'   - If `level = "element"`, the allowed `metrics` are: `"SI"`,`"ISI"`,`"NP"`,`"NCE"` (see below for details).
+#'   - If `level = "class"`, the allowed `metrics` are: 
+#'      - `"SI"`: Simpson’s Index.
+#'      - `"ISI"`: Inverse Simpson’s Index
+#'      - `"NP"`: Neighborhood Purity
+#'      - `"AMSP"`: Adjusted Mean Shortest Path
+#'      - `"PWC"`: Proportion of Weakly Connected 
+#'      - `"NCE"`: 
+#'      - `"adhesion"`: adhesion of a graph, is the minumum number of nodes that must be removed to split a graph.
+#'      - `"cohesion"`: cohesion of a graph, is the minumum number of edges that must be removed to split a graph.
 #'   - If `level = "global"`, the allowed `metrics` are: `"SI"`,`"ISI"`,`"NP"`,`"AMSP"`,`"PWC"`,`"NCE"`, `"adhesion"`,`"cohesion"`.
-#' 
-#' 
 #' @export
 #' @examples
 #' d1 <- mockData()
@@ -50,9 +56,9 @@ getGraphMetrics <-function(x, labels, metrics=c("SI","NP","AMSP","PWC","NCE"),
 }
 
 getGraphGlobalMetrics <- function(x, labels, metrics=c("SI","NP","AMSP","PWC","NCE"),
-                                  directed=NULL, ...){
+                                  directed=NULL, k=10, shared=FALSE,...){
   .class2global(getGraphClassMetrics(x=x, labels=labels, metrics=metrics,
-                                     directed=directed, ...))
+                                     directed=directed, k=k, shared=shared, ...))
 }
 
 attr(getGraphGlobalMetrics, "allowed_metrics") <- c("SI", "ISI", "NP", "NCE", "AMSP", "PWC", "adhesion", "cohesion")

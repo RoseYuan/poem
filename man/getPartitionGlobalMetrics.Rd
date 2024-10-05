@@ -8,7 +8,7 @@ getPartitionGlobalMetrics(
   true,
   pred,
   metrics = c("RI", "WC", "WH", "ARI", "NCR", "AWC", "AWH", "MI", "AMI", "VI", "EH",
-    "EC", "VM", "FM", "VDM", "Mirkin", "MHM", "MMM"),
+    "EC", "VM", "FM"),
   ...
 )
 }

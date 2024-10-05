@@ -52,8 +52,18 @@ Computes a selection of graph evaluation metrics using class labels.
 \details{
 The allowed values for \code{metrics} depend on the value of \code{level}:
 \itemize{
-\item If \code{level = "element"}, the allowed \code{metrics} are: \code{"SI"},\code{"ISI"},\code{"NP"},\code{"NCE"}.
-\item If \code{level = "class"}, the allowed \code{metrics} are: \code{"SI"},\code{"ISI"},\code{"NP"},\code{"AMSP"},\code{"PWC"},\code{"NCE"}, \code{"adhesion"},\code{"cohesion"}.
+\item If \code{level = "element"}, the allowed \code{metrics} are: \code{"SI"},\code{"ISI"},\code{"NP"},\code{"NCE"} (see below for details).
+\item If \code{level = "class"}, the allowed \code{metrics} are:
+\itemize{
+\item \code{"SI"}: Simpson’s Index.
+\item \code{"ISI"}: Inverse Simpson’s Index
+\item \code{"NP"}: Neighborhood Purity
+\item \code{"AMSP"}: Adjusted Mean Shortest Path
+\item \code{"PWC"}: Proportion of Weakly Connected
+\item \code{"NCE"}: xxx
+\item \code{"adhesion"}: adhesion of a graph, is the minumum number of nodes that must be removed to split a graph.
+\item \code{"cohesion"}: cohesion of a graph, is the minumum number of edges that must be removed to split a graph.
+}
 \item If \code{level = "global"}, the allowed \code{metrics} are: \code{"SI"},\code{"ISI"},\code{"NP"},\code{"AMSP"},\code{"PWC"},\code{"NCE"}, \code{"adhesion"},\code{"cohesion"}.
 }
 }
