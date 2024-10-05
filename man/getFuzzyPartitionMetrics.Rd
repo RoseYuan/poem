@@ -11,13 +11,13 @@ getFuzzyPartitionMetrics(
   fuzzyPred = NULL,
   fuzzy_true = TRUE,
   fuzzy_pred = FALSE,
-  metrics = c("fuzzyRI", "fuzzyARI", "fuzzyWH", "fuzzyAWH", "fuzzyWC", "fuzzyAWC"),
+  metrics = c("fuzzyWH", "fuzzyAWH", "fuzzyWC", "fuzzyAWC"),
   level = "class",
   nperms = NULL,
   verbose = TRUE,
   returnElementPairAccuracy = FALSE,
   BPPARAM = BiocParallel::SerialParam(),
-  useNegatives = NULL,
+  useNegatives = TRUE,
   usePairs = NULL,
   ...
 )
@@ -71,7 +71,7 @@ dynamic range of the score). Default TRUE.}
 useful when \code{fuzzy_true=TRUE} and \code{fuzzy_pred=TRUE}.}
 }
 \value{
-A list of metric results.
+A dataframe of metric results.
 }
 \description{
 Computes a selection of external fuzzy clustering evaluation metrics.
@@ -83,4 +83,48 @@ The allowed values for \code{metrics} depend on the value of \code{level}:
 \item If \code{level = "class"}, the allowed \code{metrics} are: \code{"fuzzyWH"}, \code{"fuzzyAWH"}, \code{"fuzzyWC"}, \code{"fuzzyAWC"}.
 \item If \code{level = "global"}, the allowed \code{metrics} are: \code{"fuzzyRI"}, \code{"fuzzyARI"}, \code{"fuzzyWH"}, \code{"fuzzyAWH"}, \code{"fuzzyWC"}, \code{"fuzzyAWC"}.
 }
+}
+\examples{
+# generate fuzzy partitions:
+m1 <- matrix(c(0.95, 0.025, 0.025, 
+               0.98, 0.01, 0.01, 
+               0.96, 0.02, 0.02, 
+               0.95, 0.04, 0.01, 
+               0.95, 0.01, 0.04, 
+               0.99, 0.005, 0.005, 
+               0.025, 0.95, 0.025, 
+               0.97, 0.02, 0.01, 
+               0.025, 0.025, 0.95), 
+               ncol = 3, byrow=TRUE)
+m2 <- matrix(c(0.95, 0.025, 0.025,  
+               0.98, 0.01, 0.01, 
+               0.96, 0.02, 0.02, 
+               0.025, 0.95, 0.025, 
+               0.02, 0.96, 0.02, 
+               0.01, 0.98, 0.01, 
+               0.05, 0.05, 0.95, 
+               0.02, 0.02, 0.96, 
+               0.01, 0.01, 0.98), 
+               ncol = 3, byrow=TRUE)
+colnames(m1) <- colnames(m2) <- LETTERS[1:3]
+getFuzzyPartitionMetrics(fuzzyTrue=m1,fuzzyPred=m2, fuzzy_true=TRUE, fuzzy_pred=TRUE, level="class")
+
+# generate a fuzzy truth:
+fuzzyTrue <- matrix(c(
+  0.95, 0.025, 0.025, 
+  0.98, 0.01, 0.01, 
+  0.96, 0.02, 0.02, 
+  0.95, 0.04, 0.01, 
+  0.95, 0.01, 0.04, 
+  0.99, 0.005, 0.005, 
+  0.025, 0.95, 0.025, 
+  0.97, 0.02, 0.01, 
+  0.025, 0.025, 0.95), 
+  ncol = 3, byrow=TRUE)
+# a hard truth:
+hardTrue <- apply(fuzzyTrue,1,FUN=which.max)
+# some predicted labels:
+hardPred <- c(1,1,1,1,1,1,2,2,2)
+getFuzzyPartitionMetrics(hardPred=hardPred, hardTrue=hardTrue, fuzzyTrue=fuzzyTrue, nperms=3, level="class")
+
 }

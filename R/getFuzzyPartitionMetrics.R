@@ -28,6 +28,7 @@
 
 #' @return A dataframe of metric results.
 #' @export
+#' @examples
 #'# generate fuzzy partitions:
 #' m1 <- matrix(c(0.95, 0.025, 0.025, 
 #'                0.98, 0.01, 0.01, 
@@ -69,7 +70,7 @@
 #' # some predicted labels:
 #' hardPred <- c(1,1,1,1,1,1,2,2,2)
 #' getFuzzyPartitionMetrics(hardPred=hardPred, hardTrue=hardTrue, fuzzyTrue=fuzzyTrue, nperms=3, level="class")
-#' @examples
+#' 
 getFuzzyPartitionMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL, 
                                      hardPred=NULL, fuzzyPred=NULL, 
                                      fuzzy_true=TRUE, fuzzy_pred=FALSE,
