@@ -82,8 +82,8 @@ CHAOS <- function(label, location, BNPARAM=NULL) {
   # Initialize a vector to hold the distance values
   dist_val <- numeric(length(label_unique))
   
-  count <- 1
-  for (k in label_unique) {
+  for (count in seq_along(label_unique)) {
+    k <- label_unique[count]
     # Get the locations belonging to the current cluster
     location_cluster <- matched_location[label == k, ]
     # Skip clusters with fewer than or equal to 2 points
@@ -95,9 +95,8 @@ CHAOS <- function(label, location, BNPARAM=NULL) {
     # The distances to the nearest neighbors are stored in the knn_result$distance
     # We sum the distances to the nearest neighbor for each point in the cluster
     dist_val[count] <- sum(knn_result$distance[, 1])  # 2nd column for the nearest neighbor (not itself)
-    count <- count + 1
-    return(sum(dist_val) / length(label))
   }
+  return(list(CHAOS=sum(dist_val) / length(label), CHAOS_class=dist_val/unlist(lapply(label_unique, function(x){sum(label==x)}))))
 }
   
 #' Calculate ELSA scores
