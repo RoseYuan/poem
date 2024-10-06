@@ -9,6 +9,7 @@
 #' @param true True class labels (vector coercible to factor)
 #' @param pred Predicted labels (vector coercible to factor)
 #' @param k Number of nearest neighbors
+#' @param ... Optional params passed to [findSpatialKNN()].
 #' @export
 #' @return A scalar representing the weighted accuracy.
 nnWeightedAccuracy <- function(true, pred, location, k=5, ...){

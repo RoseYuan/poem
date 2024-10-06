@@ -19,8 +19,6 @@ to the class composition calculation. \code{"equal"} means it is weighted the
 same as other neighbors. A numeric value between \code{0} and \code{1} means the weight of the
 frequency contribution for the spot itself, and the frequency contribution
 for its knn is then \code{1-alpha}. By default \code{0.5}.}
-
-\item{...}{Ignored}
 }
 \value{
 A numerical matrix indicating the composition, where rows correspond

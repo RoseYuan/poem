@@ -14,6 +14,8 @@ nnWeightedAccuracy(true, pred, location, k = 5, ...)
 \item{location}{The spatial coordinates to compute the nearest neighbors.}
 
 \item{k}{Number of nearest neighbors}
+
+\item{...}{Optional params passed to \code{\link[=findSpatialKNN]{findSpatialKNN()}}.}
 }
 \value{
 A scalar representing the weighted accuracy.

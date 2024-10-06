@@ -14,7 +14,6 @@
 #' @param BNPARAM BNPARAM object passed to BiocNeighbors::findKNN specifying the
 #'  kNN approximation method to use. Defaults to exact for small datasets, and 
 #'  Annoy for larger ones.
-#' @param ... Ignored
 #'
 #' @return A list of indices.
 #' @importFrom BiocNeighbors findKNN
@@ -24,7 +23,7 @@
 #' data <- sp_toy
 #' findSpatialKNN(data[,c("x", "y")], k=6)
 findSpatialKNN <- function(location, k, keep_ties=TRUE, useMedianDist=FALSE,
-                           BNPARAM=NULL, ...){
+                           BNPARAM=NULL){
   BNPARAM <- .decideBNPARAM(nrow(location), BNPARAM)
   if(keep_ties){
     nn <- BiocNeighbors::findKNN(location, k=k*3, warn.ties=FALSE, BNPARAM=BNPARAM)
