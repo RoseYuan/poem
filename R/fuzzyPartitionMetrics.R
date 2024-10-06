@@ -429,7 +429,7 @@ fuzzySpotAgreement <- function(P, Q){
   stopifnot(nrow(P)==nrow(Q))
   
   diff <- as.matrix(0.5*abs(dist(P,method="manhattan")-dist(Q,method="manhattan")))
-  return(1-diff/(ncol(diff)-1))
+  return(1-rowSums(diff/(ncol(diff)-1)))
 }
 
 
@@ -496,7 +496,7 @@ fuzzyHardSpotAgreement <- function(hardTrue, fuzzyTrue, hardPred,
   }
   
   # blend out the negative pairs
-  1-apply(seq_len(nrow(diff)), FUN=function(i){
+  1-vapply(seq_len(nrow(diff)), FUN.VALUE=numeric(1), FUN=function(i){
     w <- which(hardPredVector==hardPredVector[[i]] |
                  hardTrueVector==hardTrueVector[[i]])
     sum(diff[i,w])/(length(w)-1)
