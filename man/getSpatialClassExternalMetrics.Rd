@@ -17,8 +17,22 @@ getSpatialClassExternalMetrics(
 )
 }
 \arguments{
+\item{true}{A vector containing the labels of the true classes. Must be a
+vector of characters, integers, numerics, or a factor, but not a list.}
+
+\item{pred}{A vector containing the labels of the predicted clusters. Must
+be a vector of characters, integers, numerics, or a factor, but not a list.}
+
+\item{location}{A matrix or data.frame of coordinates}
+
 \item{k}{The number of neighbors used when calculating the fuzzy
 class memberships for fuzzy metrics.}
+
+\item{alpha}{The parameter to control to what extend the spot itself contribute
+to the class composition calculation. \code{"equal"} means it is weighted the
+same as other neighbors. A numeric value between \code{0} and \code{1} means the weight of the
+frequency contribution for the spot itself, and the frequency contribution
+for its knn is then \code{1-alpha}. By default \code{0.5}.}
 
 \item{metrics}{a vector of metric names to compute.}
 

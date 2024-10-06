@@ -4,9 +4,11 @@
 \alias{ELSA}
 \title{Calculate ELSA scores}
 \usage{
-ELSA(label, location, k = 10)
+ELSA(labels, location, k = 10)
 }
 \arguments{
+\item{labels}{Cluster labels.}
+
 \item{location}{A numerical matrix containing the location information, with
 rows as samples and columns as location dimensions.}
 

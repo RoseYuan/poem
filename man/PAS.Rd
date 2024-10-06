@@ -13,6 +13,8 @@ PAS(labels, location, k = 10, ...)
 rows as samples and columns as location dimensions.}
 
 \item{k}{Number of nearest neighbors.}
+
+\item{...}{Optional params for \code{\link[=findSpatialKNN]{findSpatialKNN()}}.}
 }
 \value{
 A numeric value for PAS score, and a boolean vector about the abnormal spots.

@@ -43,6 +43,7 @@
 #'   \item{fuzzyAWC}{Adjusted fuzzy Wallace Completeness index}
 #'   
 #' @importFrom BiocParallel SerialParam bplapply
+#' @importFrom stats sd
 #' @export
 #' @examples
 #' # generate fuzzy partitions:
@@ -259,6 +260,7 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
 #' @importFrom BiocParallel SerialParam bplapply bpnworkers
 #' @importFrom stats dist setNames runif
 #' @importFrom Matrix sparseMatrix
+#' @importFrom stats sd
 #' @export
 #' @examples
 #' # generate a fuzzy truth:

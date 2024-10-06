@@ -4,6 +4,8 @@
 #' data.
 #' @inheritParams getSpatialElementExternalMetrics
 #' @param metrics The metrics to compute. See details.
+#' @param level The level to calculate the metrics. Options include `"element"`,
+#' `"class"` and `"global"`.
 #' @return A data.frame of metrics.
 #' @export
 #' @details
@@ -43,6 +45,11 @@ getSpatialExternalMetrics <- function(true, pred, location, k=6, alpha=0.5, leve
 #' data at the global level. Options include a series of fuzzy pair-counting 
 #' metrics and set matching-based accuracy.
 #' @inheritParams getFuzzyPartitionMetrics
+#' @inheritParams getFuzzyLabel
+#' @param true A vector containing the labels of the true classes. Must be a 
+#'  vector of characters, integers, numerics, or a factor, but not a list.
+#' @param pred A vector containing the labels of the predicted clusters. Must 
+#'  be a vector of characters, integers, numerics, or a factor, but not a list.
 #' @param k The number of neighbors used when calculating the fuzzy 
 #' class memberships for fuzzy metrics, or when calculating the weighted
 #' accuracy.

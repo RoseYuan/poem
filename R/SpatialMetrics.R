@@ -44,6 +44,7 @@ nnWeightedAccuracy <- function(true, pred, location, k=5, ...){
 #' Lower PAS score indicates better spatial domian clustering performance.
 #' @param labels Cluster labels.
 #' @param k Number of nearest neighbors.
+#' @param ... Optional params for [findSpatialKNN()].
 #' @inheritParams getSpatialGlobalInternalMetrics
 #' @return A numeric value for PAS score, and a boolean vector about the abnormal spots.
 #' @export
@@ -97,7 +98,7 @@ CHAOS <- function(labels, location, BNPARAM=NULL) {
     # We sum the distances to the nearest neighbor for each point in the cluster
     dist_val[count] <- sum(knn_result$distance[, 1])  # 2nd column for the nearest neighbor (not itself)
   }
-  res_class <- dist_val/unlist(lapply(label_unique, function(x){sum(label==x)}))
+  res_class <- dist_val/unlist(lapply(label_unique, function(x){sum(labels==x)}))
   names(res_class) <- label_unique
   return(list(CHAOS=sum(dist_val) / length(labels), CHAOS_class=res_class))
 }
@@ -119,8 +120,8 @@ CHAOS <- function(labels, location, BNPARAM=NULL) {
 #' ELSA(data$p1, data[,c("x", "y")], k=6)
 #' ELSA(data$p2, data[,c("x", "y")], k=6)
 #' @export
-ELSA <- function(label, location, k=10){
-  spdf <- sp::SpatialPointsDataFrame(location, data=data.frame(label=label))
+ELSA <- function(labels, location, k=10){
+  spdf <- sp::SpatialPointsDataFrame(location, data=data.frame(label=labels))
   k1 <- spdep::knn2nb(spdep::knearneigh(location, k=k))
   all.linked <- max(unlist(spdep::nbdists(k1, location)))
   elc <- elsa::elsa(x=spdf, d=elsa::dneigh(spdf, d1=0, d2=all.linked, longlat=FALSE), 

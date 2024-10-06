@@ -23,13 +23,15 @@ Imports:
     Matrix,
     mclustcomp,
     methods,
-    parallel,
     sp,
     spdep,
     stats,
-    utils
+    utils,
+    reticulate
 Suggests: 
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    knitr
+VignetteBuilder: knitr
 Config/testthat/edition: 3
 Depends: 
     R (>= 2.10)

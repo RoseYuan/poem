@@ -21,7 +21,9 @@ rows as samples and columns as location dimensions.}
 \item{k}{The size of the spatial neighborhood to look at for each spot.
 This is used for calculating PAS and ELSA scores.}
 
-\item{metric}{The metrics to compute. See below for more details.}
+\item{metrics}{The metrics to compute. See below for more details.}
+
+\item{...}{Optional arguments for \code{\link[=PAS]{PAS()}}.}
 }
 \value{
 A named vector containing metric values. Possible metrics are:

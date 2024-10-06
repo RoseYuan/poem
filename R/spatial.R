@@ -50,6 +50,7 @@ findSpatialKNN <- function(location, k, keep_ties=TRUE, useMedianDist=FALSE,
 #' for its knn is then `1-alpha`. By default `0.5`.
 #' @inheritParams findSpatialKNN 
 #' @param labels A vector containing the label for the dataset.
+#' @param ... Optional arguments for [findSpatialKNN()].
 #' @export
 #' @return A numerical matrix indicating the composition, where rows correspond 
 #' to samples and columns correspond to the classes in `label`. 

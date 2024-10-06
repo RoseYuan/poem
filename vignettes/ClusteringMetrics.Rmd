@@ -42,15 +42,11 @@ potentiation:
 
 ```{r}
 suppressPackageStartupMessages({
-  library(SummarizedExperiment)
-  library(sechm)
+
 })
-data("Chen2017", package="sechm")
-SE <- Chen2017
+
 ```
 
-This is taken from 
-[Chen et al., 2017](https://doi.org/10.3389/fnmol.2017.00039).
 
 
 ```{r}
@@ -108,4 +104,3 @@ This is taken from
 ```{r}
 
 ```
-

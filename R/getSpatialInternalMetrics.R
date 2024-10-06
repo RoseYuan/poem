@@ -5,6 +5,8 @@
 #' data.
 #' @inheritParams getSpatialElementInternalMetrics
 #' @param metrics The metrics to compute. See details.
+#' @param level The level to calculate the metrics. Options include `"element"`,
+#' `"class"` and `"global"`.
 #' @return A data.frame of metrics.
 #' @export
 #' @details
@@ -48,8 +50,8 @@ getSpatialInternalMetrics <- function(labels, location, k=6, level="class",
 #' rows as samples and columns as location dimensions.
 #' @param k The size of the spatial neighborhood to look at for each spot. 
 #' This is used for calculating PAS and ELSA scores.
-#' @param metric The metrics to compute. See below for more details.
-#' 
+#' @param metrics The metrics to compute. See below for more details.
+#' @param ... Optional arguments for [PAS()].
 #' @importFrom fclust MPC PC PE
 #' 
 #' @references Yuan, Zhiyuan, et al., 2024; 10.1038/s41592-024-02215-8

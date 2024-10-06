@@ -10,8 +10,6 @@
 #' @param metrics The metrics to compute. If omitted, main metrics will be 
 #'   computed.
 #' @return A dataframe of metrics.
-#' @details
-#' Additional details...
 #' 
 #' @importFrom aricode sortPairs
 #' @examples
@@ -19,7 +17,7 @@
 #' pred <- c(rep("A", 8), rep("B", 9), rep("C", 3), rep("D", 10))
 #' getPartitionClassMetrics(true, pred)
 getPartitionClassMetrics <-function(true, pred, metrics=c("WC","WH","AWC","AWH",
-                                                          "FM"), ...){
+                                                          "FM")){
   if (anyNA(true) | anyNA(pred))
     stop("NA are not supported.")
   if (is.character(true)) true <- as.factor(true)

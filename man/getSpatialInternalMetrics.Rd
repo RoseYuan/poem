@@ -22,6 +22,9 @@ rows as samples and columns as location dimensions.}
 \item{k}{The size of the spatial neighborhood to look at for each spot.
 This is used for calculating PAS and ELSA scores.}
 
+\item{level}{The level to calculate the metrics. Options include \code{"element"},
+\code{"class"} and \code{"global"}.}
+
 \item{metrics}{The metrics to compute. See details.}
 
 \item{...}{Optional params for \code{\link[=PAS]{PAS()}}.}

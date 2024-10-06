@@ -139,8 +139,8 @@ getFuzzyPartitionMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
     res <- fuzzyHardMetrics(hardPred, fuzzyPred, hardTrue, nperms=nperms, verbose=verbose, 
                             returnElementPairAccuracy=returnElementPairAccuracy,
                             BPPARAM=BPPARAM)
-    res <- .switchListItem(mylist, "fuzzyWH", "fuzzyWC")
-    res <- .switchListItem(mylist, "fuzzyAWH", "fuzzyAWC")
+    res <- .switchListItem(res, "fuzzyWH", "fuzzyWC")
+    res <- .switchListItem(res, "fuzzyAWH", "fuzzyAWC")
   }else if((!fuzzy_true) & (!fuzzy_pred)){
     stop("You are comparing between two hard clusterings! Use function
               `getPartitionMetrics()` to do this.")
@@ -229,6 +229,41 @@ getFuzzyPartitionClassMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
   return(res)
 }
 
+#' getFuzzyPartitionElementMetrics
+#'
+#' Computes a selection of external fuzzy clustering evaluation metrics at the element level.
+#' @param metrics The metrics to compute. Currently only `"spotAgreement"` is included at the element level.
+#' @inheritParams fuzzyHardSpotAgreement
+#' @inheritParams getAgreement
+#' @inheritParams getFuzzyPartitionMetrics
+#' @param usePairs Logical; whether to compute over pairs instead of elements. 
+#' Only useful when `fuzzy_true=TRUE` and `fuzzy_pred=FALSE`.
+#'
+#' @return A dataframe of metric values.
+#' @examples
+#'# generate fuzzy partitions:
+#' m1 <- matrix(c(0.95, 0.025, 0.025, 
+#'                0.98, 0.01, 0.01, 
+#'                0.96, 0.02, 0.02, 
+#'                0.95, 0.04, 0.01, 
+#'                0.95, 0.01, 0.04, 
+#'                0.99, 0.005, 0.005, 
+#'                0.025, 0.95, 0.025, 
+#'                0.97, 0.02, 0.01, 
+#'                0.025, 0.025, 0.95), 
+#'                ncol = 3, byrow=TRUE)
+#' m2 <- matrix(c(0.95, 0.025, 0.025,  
+#'                0.98, 0.01, 0.01, 
+#'                0.96, 0.02, 0.02, 
+#'                0.025, 0.95, 0.025, 
+#'                0.02, 0.96, 0.02, 
+#'                0.01, 0.98, 0.01, 
+#'                0.05, 0.05, 0.95, 
+#'                0.02, 0.02, 0.96, 
+#'                0.01, 0.01, 0.98), 
+#'                ncol = 3, byrow=TRUE)
+#' colnames(m1) <- colnames(m2) <- LETTERS[1:3]
+#' getFuzzyPartitionElementMetrics(fuzzyTrue=m1,fuzzyPred=m2, fuzzy_true=TRUE, fuzzy_pred=TRUE)
 getFuzzyPartitionElementMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL, 
                                             hardPred=NULL, fuzzyPred=NULL, 
                                             fuzzy_true=TRUE, fuzzy_pred=FALSE,
