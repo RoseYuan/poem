@@ -5,7 +5,7 @@
 \title{Compute global-level internal evaluation metrics for spatially-resolved data}
 \usage{
 getSpatialGlobalInternalMetrics(
-  label,
+  labels,
   location,
   k = 6,
   metrics = c("PAS", "ELSA", "CHAOS"),
@@ -13,7 +13,7 @@ getSpatialGlobalInternalMetrics(
 )
 }
 \arguments{
-\item{label}{A vector containing the labels to be evaluated.}
+\item{labels}{A vector containing the labels to be evaluated.}
 
 \item{location}{A numerical matrix containing the location information, with
 rows as samples and columns as location dimensions.}

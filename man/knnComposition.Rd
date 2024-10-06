@@ -4,7 +4,7 @@
 \alias{knnComposition}
 \title{Compute neighborhood composition}
 \usage{
-knnComposition(location, k = 6, label, alpha = 0.5, ...)
+knnComposition(location, k = 6, labels, alpha = 0.5, ...)
 }
 \arguments{
 \item{location}{A numeric data matrix containing location information, where
@@ -12,7 +12,7 @@ rows are points and columns are location dimensions.}
 
 \item{k}{The number of nearest neighbors to look at.}
 
-\item{label}{A vector containing the label for the dataset.}
+\item{labels}{A vector containing the label for the dataset.}
 
 \item{alpha}{The parameter to control to what extend the spot itself contribute
 to the class composition calculation. \code{"equal"} means it is weighted the

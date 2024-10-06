@@ -4,10 +4,10 @@
 \alias{PAS}
 \title{Calculate PAS score}
 \usage{
-PAS(label, location, k = 10, ...)
+PAS(labels, location, k = 10, ...)
 }
 \arguments{
-\item{label}{Cluster labels.}
+\item{labels}{Cluster labels.}
 
 \item{location}{A numerical matrix containing the location information, with
 rows as samples and columns as location dimensions.}

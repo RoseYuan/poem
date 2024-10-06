@@ -191,6 +191,10 @@
   subset(res, select = -class)
 }
 
+.element2class <- function(element_res, summarize_fun=base::mean){
+  stopifnot(is.data.frame(element_res))
+  aggregate(. ~ class, data = element_res, FUN = summarize_fun)
+}
 # row-bind two dataframes with no common columns
 .rbind_na <- function(df1, df2){
   # Find the columns that are missing in each data frame

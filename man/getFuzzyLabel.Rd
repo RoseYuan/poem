@@ -6,10 +6,10 @@
 Get fuzzy representation of labels according to the spatial neighborhood
 label composition.}
 \usage{
-getFuzzyLabel(label, location, k = 6, alpha = 0.5, ...)
+getFuzzyLabel(labels, location, k = 6, alpha = 0.5, ...)
 }
 \arguments{
-\item{label}{An anomic vector of cluster labels}
+\item{labels}{An anomic vector of cluster labels}
 
 \item{location}{A matrix or data.frame of coordinates}
 

@@ -4,10 +4,10 @@
 \alias{CHAOS}
 \title{Calculate CHAOS score}
 \usage{
-CHAOS(label, location, BNPARAM = NULL)
+CHAOS(labels, location, BNPARAM = NULL)
 }
 \arguments{
-\item{label}{Cluster labels.}
+\item{labels}{Cluster labels.}
 
 \item{location}{A numeric data matrix containing location information, where
 rows are points and columns are location dimensions.}
