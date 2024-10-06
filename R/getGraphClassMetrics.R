@@ -5,16 +5,7 @@ setOldClass("igraph")
 #' Computes a selection of supervised graph evaluation metrics using ground
 #' truth class labels. The metrics are reported (as average) per class.
 #'
-#' @param x Either an igraph object, a list of nearest neighbors (see details
-#'   below), or a data.frame or matrix (with features as columns and items as 
-#'   rows) from which nearest neighbors will be computed.
-#' @param labels Either a factor or a character vector indicating the true class
-#'   label of each element (i.e. row or vertex) of `x`.
-#' @param metrics The metrics to compute. If omitted, main metrics will be 
-#'   computed.
-#' @param directed Logical; whether to compute the metrics in a directed fashion.
-#'   If left to NULL, conventional choices will be made per metric (adhesion, 
-#'   cohesion, PWC AMSP undirected, others directed).
+#' @inheritParams getGraphMetrics
 #' @param k The number of nearest neighbors to compute and/or use. Can be 
 #'   omitted if `x` is a graph or list of nearest neighbors.
 #' @param BNPARAM A BiocNeighbors parameter object to compute kNNs. Ignored 
@@ -45,6 +36,7 @@ setGeneric("getGraphClassMetrics", signature="x",
                         directed=NULL, ...)
              standardGeneric("getGraphClassMetrics"))
 
+attr(getGraphClassMetrics, "allowed_metrics") <- c("SI", "ISI", "NP", "NCE", "AMSP", "PWC", "adhesion", "cohesion")
 
 #' @importFrom bluster neighborsToKNNGraph
 #' @importFrom igraph adhesion cohesion set_vertex_attr

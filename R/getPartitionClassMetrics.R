@@ -9,12 +9,11 @@
 #'  be a vector of characters, integers, numerics, or a factor, but not a list.
 #' @param metrics The metrics to compute. If omitted, main metrics will be 
 #'   computed.
-#' @return A list of metrics.
+#' @return A dataframe of metrics.
 #' @details
 #' Additional details...
 #' 
 #' @importFrom aricode sortPairs
-#' @export
 #' @examples
 #' true <- rep(LETTERS[1:3], each=10)
 #' pred <- c(rep("A", 8), rep("B", 9), rep("C", 3), rep("D", 10))
@@ -104,18 +103,32 @@ getPartitionClassMetrics <-function(true, pred, metrics=c("WC","WH","AWC","AWH",
     r <- apply(a, 2, function(x) x / rowSums(a))
     f <- 2 * r * p / (r + p)
     f[is.na(f)] <- 0
-    return(as.list(apply(f, 1, max)))
+    f1 <- as.list(apply(f, 1, max))
+    names(f1) <- levels(factor(true))
+    return(f1)
   }
 
-  res <- lapply(setNames(metrics, metrics), FUN=function(m){
+  res_class <- lapply(setNames(metrics, metrics), FUN=function(m){
     switch(m,
            WC = .calWC(),
            AWC = .calAWC(),
-           WH = .calWH(),
-           AWH = .calAWH(),
-           FM = .calF1(),
-           stop("Unknown metric.")
+           FM = .calF1()
     )
-  })
+  })[metrics %in% c("WC", "AWC","FM")]
+  res_class <- as.data.frame(lapply(res_class, unlist))
+  res_class$class <- rownames(res_class)
+
+  res_cluster <- lapply(setNames(metrics, metrics), FUN=function(m){
+    switch(m,
+           WH = .calWH(),
+           AWH = .calAWH()
+    )
+  })[metrics %in% c("WH", "AWH")]
+  res_cluster <- as.data.frame(lapply(res_cluster, unlist))
+  res_cluster$cluster <- rownames(res_cluster)
+  
+  res <- .rbind_na(res_class, res_cluster)
+  rownames(res) <- NULL
   return(res)
 }
+attr(getPartitionClassMetrics, "allowed_metrics") <- c("WC","WH","AWC","AWH","FM")

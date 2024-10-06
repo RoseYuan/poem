@@ -22,7 +22,7 @@ be a vector of characters, integers, numerics, or a factor, but not a list.}
 computed.}
 }
 \value{
-A list of metrics.
+A dataframe of metrics.
 }
 \description{
 Computes a selection of external evaluation metrics for partition. The

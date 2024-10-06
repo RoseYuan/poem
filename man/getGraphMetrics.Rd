@@ -2,40 +2,16 @@
 % Please edit documentation in R/getGraphMetrics.R
 \name{getGraphMetrics}
 \alias{getGraphMetrics}
-\alias{getGraphMetrics,list-method}
-\alias{getGraphMetrics,data.frame-method}
-\alias{getGraphMetrics,matrix-method}
-\alias{getGraphMetrics,igraph-method}
-\alias{getGraphMetrics,dist-method}
 \title{getGraphMetrics}
 \usage{
 getGraphMetrics(
   x,
   labels,
-  metrics = c("SI", "NP", "NCE"),
+  metrics = c("SI", "NP", "AMSP", "PWC", "NCE"),
   directed = NULL,
-  ...
-)
-
-\S4method{getGraphMetrics}{list}(x, labels, metrics, directed = NULL, k = NULL, ...)
-
-\S4method{getGraphMetrics}{data.frame}(x, labels, metrics, directed = NULL, k, shared = FALSE, ...)
-
-\S4method{getGraphMetrics}{matrix}(x, labels, metrics, directed = NULL, k, shared = FALSE, ...)
-
-\S4method{getGraphMetrics}{igraph}(
-  x,
-  labels,
-  metrics = c("SI", "NP", "NCE"),
-  directed = NULL,
-  ...
-)
-
-\S4method{getGraphMetrics}{dist}(
-  x,
-  labels,
-  metrics = c("SI", "NP", "NCE"),
-  directed = NULL,
+  k = 10,
+  shared = FALSE,
+  level = "class",
   ...
 )
 }
@@ -47,14 +23,11 @@ rows) from which nearest neighbors will be computed.}
 \item{labels}{Either a factor or a character vector indicating the true class
 label of each element (i.e. row or vertex) of \code{x}.}
 
-\item{metrics}{The metrics to compute. If omitted, main metrics will be
-computed.}
+\item{metrics}{The metrics to compute. See details.}
 
 \item{directed}{Logical; whether to compute the metrics in a directed fashion.
 If left to NULL, conventional choices will be made per metric (adhesion,
 cohesion, PWC AMSP undirected, others directed).}
-
-\item{...}{Passed to other methods}
 
 \item{k}{The number of nearest neighbors to compute and/or use. Can be
 omitted if \code{x} is a graph or list of nearest neighbors.}
@@ -63,25 +36,38 @@ omitted if \code{x} is a graph or list of nearest neighbors.}
 instead of a nearest neighbor network. Ignored if \code{x} is not an embedding
 or dist object.}
 
+\item{level}{The level to calculate the metrics. Options include \code{"element"},
+\code{"class"} and \code{"global"}.}
+
 \item{BNPARAM}{A BiocNeighbors parameter object to compute kNNs. Ignored
 unless the input is a matrix or data.frame. If omitted, the Annoy
 approximation will be used if there are more than 500 elements.}
 }
 \value{
-A data.frame of metrics for each node/element of \code{x}.
+A data.frame of metrics.
 }
 \description{
-Computes a selection of supervised graph evaluation metrics using ground
-truth class labels. The metrics are reported (as average) per node/element.
+Computes a selection of graph evaluation metrics using class labels.
 }
 \details{
-Additional details...
+The allowed values for \code{metrics} depend on the value of \code{level}:
+\itemize{
+\item If \code{level = "element"}, the allowed \code{metrics} are: \code{"SI"},\code{"ISI"},\code{"NP"},\code{"NCE"} (see below for details).
+\item If \code{level = "class"}, the allowed \code{metrics} are:
+\itemize{
+\item \code{"SI"}: Simpson’s Index.
+\item \code{"ISI"}: Inverse Simpson’s Index
+\item \code{"NP"}: Neighborhood Purity
+\item \code{"AMSP"}: Adjusted Mean Shortest Path
+\item \code{"PWC"}: Proportion of Weakly Connected
+\item \code{"NCE"}:
+\item \code{"adhesion"}: adhesion of a graph, is the minumum number of nodes that must be removed to split a graph.
+\item \code{"cohesion"}: cohesion of a graph, is the minumum number of edges that must be removed to split a graph.
+}
+\item If \code{level = "global"}, the allowed \code{metrics} are: \code{"SI"},\code{"ISI"},\code{"NP"},\code{"AMSP"},\code{"PWC"},\code{"NCE"}, \code{"adhesion"},\code{"cohesion"}.
+}
 }
 \examples{
-# generate random data and labels:
-dat <- matrix(rnorm(300), nrow=30)
-dat[1:10,1:3] <- dat[1:10,1:3]+2
-labels <- rep(LETTERS[1:3], each=10)
-# compute graph metrics:
-head(getGraphMetrics(dat, labels, k=4))
+d1 <- mockData()
+getGraphMetrics(d1[,1:2], labels=d1$class, level="class")
 }

@@ -33,6 +33,8 @@ this python implementation of DBCV at \url{https://github.com/FelSiq/DBCV}.
 If \code{FALSE}, use MST implementation in \code{igraph}.}
 
 \item{BPPARAM}{BiocParallel params for multithreading (default none)}
+
+\item{...}{}
 }
 \value{
 A list:

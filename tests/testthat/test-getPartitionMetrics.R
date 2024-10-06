@@ -63,14 +63,14 @@ dataset3 <- data.frame(
 
 # Check the results
 test_that("dataset1: RI,ARI,WC,AWC,WH,AWH match the expected values", {
-  res <- getPartitionMetrics(dataset1$Reference_Partition, dataset1$Trial_Partition)
+  res <- getPartitionGlobalMetrics(dataset1$Reference_Partition, dataset1$Trial_Partition)
   expect_equal(round(as.numeric(res), 2), c(0.96,0.93,0.93,0.90,0.90,0.90))
 })
 test_that("dataset2: RI,ARI,WC,AWC,WH,AWH match the expected values", {
-  res <- getPartitionMetrics(dataset2$Reference_Partition, dataset2$Trial_Partition)
+  res <- getPartitionGlobalMetrics(dataset2$Reference_Partition, dataset2$Trial_Partition)
   expect_equal(round(as.numeric(res), 2), c(0.74,0.54,0.54,0.36,0.36,0.36))
 })
 test_that("dataset3: RI,ARI,WC,AWC,WH,AWH match the expected values", {
-  res <- getPartitionMetrics(dataset3$Reference_Partition, dataset3$Trial_Partition)
+  res <- getPartitionGlobalMetrics(dataset3$Reference_Partition, dataset3$Trial_Partition)
   expect_equal(round(as.numeric(res), 2), c(0.89,0.88,0.75,0.73,0.83,0.65))
 })

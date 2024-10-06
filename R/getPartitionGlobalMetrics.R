@@ -9,7 +9,7 @@
 #'  be a vector of characters, integers, numerics, or a factor, but not a list.
 #' @param metrics The metrics to compute. If omitted, main metrics will be 
 #'   computed. See below for more details.
-#' @return A list of metric results. Possible metrics are:
+#' @return A dataframe of metric results. Possible metrics are:
 #' \item{RI}{Rand Index} 
 #' \item{WC}{Wallace Completeness}
 #' \item{WH}{Wallace Homogeneity}
@@ -34,7 +34,6 @@
 #' @importFrom aricode sortPairs AMI
 #' @importFrom clevr mutual_info variation_info homogeneity completeness v_measure
 #' @importFrom mclustcomp mclustcomp
-#' @export
 #' @examples
 #' true <- rep(LETTERS[1:3], each=10)
 #' pred <- c(rep("A", 8), rep("B", 9), rep("C", 3), rep("D", 10))
@@ -42,7 +41,7 @@
 getPartitionGlobalMetrics <-function(true, pred, 
                                 metrics=c("RI","WC","WH","ARI","NCR","AWC",
                                           "AWH","MI","AMI","VI","EH","EC","VM",
-                                          "FM","VDM","Mirkin","MHM","MMM"),
+                                          "FM"),
                                 ...){
   if (anyNA(true) | anyNA(pred)) stop("NA are not supported.")
   if (is.character(true)) true <- as.factor(true)
@@ -84,19 +83,14 @@ getPartitionGlobalMetrics <-function(true, pred,
            MHM = mclustcomp(as.vector(true), as.vector(pred), types = "mhm")$scores,
            MMM = mclustcomp(as.vector(true), as.vector(pred), types = "mmm")$scores,
            FM = .FMeasure(.aux.conversion(true), 
-                         .aux.conversion(pred), silent = TRUE),
+                         .aux.conversion(pred)),
            NCR = .NCR(true, pred),
            stop("Unknown metric.")
     )
   })
-  return(unlist(res))
+  res <- unlist(res)
+  return(as.data.frame(t(res)))
 }
 
-.NCR <- function(true, pred){
-  co <- table(pred, true)
-  a <- mean(colSums(choose(co,2))/choose(table(true),2),na.rm=TRUE)
-  dmax <- tcrossprod(table(true))
-  d <- (dmax-crossprod(co))/dmax
-  d <- mean(d[lower.tri(d)])
-  (a+d)/2
-}
+attr(getPartitionGlobalMetrics, "allowed_metrics") <- c("RI","WC","WH","ARI","NCR","AWC",
+"AWH","MI","AMI","VI","EH","EC","VM","FM","VDM","Mirkin","MHM","MMM")

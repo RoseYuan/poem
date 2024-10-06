@@ -118,3 +118,89 @@
   # Display the modified list
   print(my_list)
 }
+
+# Check for unrecognized arguments and filter arguments for each function
+# example usage: function1(!!!.checkEllipsisArgs(fnList = list(function1, function2), a = 1, b = 2, c = 3)[[1]])
+.checkEllipsisArgs <- function(fnList=list(), ...) {
+  args <- list(...)
+  formal_args <- lapply(fnList, FUN=\(x) names(formals(x)))
+  
+  if(length(unknown <- setdiff(names(args), unlist(formal_args)))>0)
+    stop("Some unrecognized arguments were given: ", paste(unknown, collapse=", "))
+  
+  lapply(formal_args, FUN=\(x){
+    args[names(args) %in% x]
+  })
+}
+
+# Check the argument where multiple values can be inputed once
+# difference with match.arg: if the input arguments contain anything that is not
+# recognised, this will throw an error or warning (depend on the argument "warning").
+.checkInvalidArgs <- function(args, allowed_args, arg_name, warning=TRUE){
+  valid_args <- match.arg(args, allowed_args, several.ok = TRUE)
+  invalid_args <- setdiff(args, valid_args)
+  if (length(invalid_args) > 0) {
+    if (warning){
+      warning("Invalid ", arg_name, ": ", paste(invalid_args, collapse = ", "),
+           ". Allowed ", arg_name, " are: ", paste(allowed_args, collapse = ", "))
+    }else{
+      stop("Invalid ", arg_name, ": ", paste(invalid_args, collapse = ", "),
+           ". Allowed ", arg_name, " are: ", paste(allowed_args, collapse = ", "))
+    }
+  }
+}
+
+# for a function and an argument, get all the possibilities for this argument,
+# either by looking at the default, or looking at the attribute of the function.
+.get_allowed_args <- function(function_with_args, arg_name, use_default=TRUE, 
+                                 use_attribute=FALSE, attr_name=NULL){
+  if(use_default & (!use_attribute)){
+    # Get the allowed args from the default args settings
+    allowed_args <- eval(formals(function_with_args)[[arg_name]])
+  }else if((!use_default) & use_attribute){
+    # Get the allowed args from the function's attributes
+    allowed_args <- attr(function_with_args, attr_name)
+  }else{stop("Either use default, or use the function attribute.")}
+  if (is.null(allowed_args)) {
+    stop("The candidate args are not defined for the function.")
+  }
+  return(allowed_args)
+}
+
+# check if the "metrics" argument is valide for the specified "level" of calculation
+.checkMetricsLevel <- function(metrics, level, level_functions, ...) {
+  # Check if level is valid by looking it up in level_functions
+  if (!level %in% names(level_functions)) {
+    stop(paste("Invalid level:", level, ". Allowed levels are:", 
+               paste(names(level_functions), collapse = ", ")))
+  }
+  
+  # Retrieve the formal argument list of the function for the given level
+  function_for_level <- level_functions[[level]]
+  # Extract allowed metrics from function
+  allowed_metrics <- .get_allowed_args(function_for_level, "metrics",...)  
+  # Check that all provided metrics are valid for this level
+  .checkInvalidArgs(metrics, allowed_metrics, "metrics", warning=FALSE)
+}
+
+
+.class2global <- function(class_res, summarize_fun=base::mean){
+  stopifnot(is.data.frame(class_res))
+  class_res$class <- 1
+  res <- aggregate(. ~ class, data = class_res, FUN = summarize_fun)
+  subset(res, select = -class)
+}
+
+# row-bind two dataframes with no common columns
+.rbind_na <- function(df1, df2){
+  # Find the columns that are missing in each data frame
+  missing_cols_df1 <- setdiff(names(df2), names(df1))
+  missing_cols_df2 <- setdiff(names(df1), names(df2))
+  
+  # Add the missing columns with NA values to each data frame
+  df1[missing_cols_df1] <- NA
+  df2[missing_cols_df2] <- NA
+  
+  # Now bind the two data frames using rbind
+  return(rbind(df1, df2))
+}

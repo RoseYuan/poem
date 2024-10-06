@@ -11,8 +11,7 @@ fuzzyHardMetrics(
   nperms = NULL,
   returnElementPairAccuracy = FALSE,
   verbose = TRUE,
-  BPPARAM = BiocParallel::SerialParam(),
-  ...
+  BPPARAM = BiocParallel::SerialParam()
 )
 }
 \arguments{

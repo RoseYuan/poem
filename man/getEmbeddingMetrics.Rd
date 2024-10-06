@@ -4,7 +4,14 @@
 \alias{getEmbeddingMetrics}
 \title{getEmbeddingMetrics}
 \usage{
-getEmbeddingMetrics(x, labels, metrics = c("SW"), distance = "euclidean", ...)
+getEmbeddingMetrics(
+  x,
+  labels,
+  metrics = c("meanSW", "minSW", "pnSW", "dbcv"),
+  distance = "euclidean",
+  level = "class",
+  ...
+)
 }
 \arguments{
 \item{x}{A data.frame or matrix (with features as columns and items as rows)
@@ -13,21 +20,40 @@ from which the metrics will be computed.}
 \item{labels}{A vector containing the labels of the predicted clusters. Must
 be a vector of characters, integers, numerics, or a factor, but not a list.}
 
-\item{metrics}{The metrics to compute. Currently, only the silhouette width
-is supported at the node-level.}
+\item{metrics}{The metrics to compute. See details.}
 
 \item{distance}{The distance metric to use (default euclidean).}
+
+\item{level}{The level to calculate the metrics. Options include \code{"element"},
+\code{"class"} and \code{"global"}.}
+
+\item{...}{Optional arguments. See details.}
 }
 \value{
-A data.frame of metrics for each node/element of \code{x}.
+A data.frame of metrics.
 }
 \description{
-Computes element-level, embedding-based metrics.
+Computes embedding-based metrics for the specified level.
 }
 \details{
-Additional details...
+The allowed values for \code{metrics} depend on the value of \code{level}:
+\itemize{
+\item If \code{level = "element"}, the allowed \code{metrics} are: \code{"SW"}.
+\item If \code{level = "class"}, the allowed \code{metrics} are: \code{"meanSW"}, \code{"minSW"}, \code{"pnSW"}, \code{"dbcv"}.
+\item If \code{level = "global"}, the allowed \code{metrics} are: \code{"meanSW"},
+\code{"meanClassSW"}, \code{"pnSW"}, \code{"minClassSW"}, \code{"cdbw"}, \code{"cohesion"}, \code{"compactness"}, \code{"sep"}, \code{"dbcv"}.
+}
+
+The function(s) that the optional arguments \code{...} passed to depend on the
+value of \code{level}:
+\itemize{
+\item If \code{level = "element"}, optional arguments are passed to \code{\link[stats:dist]{stats::dist()}}.
+\item If \code{level = "class"}, optional arguments are passed to \code{\link[=dbcv]{dbcv()}}.
+\item If \code{level = "global"}, optional arguments are passed to \code{\link[=dbcv]{dbcv()}} or \code{\link[=CDbw]{CDbw()}}.
+}
 }
 \examples{
 d1 <- mockData()
-head(getEmbeddingMetrics(d1[,1:2], labels=d1$class))
+getEmbeddingMetrics(d1[,1:2], labels=d1$class, 
+metrics=c("meanSW", "minSW", "pnSW", "dbcv"), level="class")
 }

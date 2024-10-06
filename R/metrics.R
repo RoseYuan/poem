@@ -112,11 +112,11 @@
 #' @return  F measure score
 #' @examples
 #' # Generate some random data as an example
-#' true <- sample(1:5,100,replace = TRUE)
+#' true <- sample(1:5, 100,replace = TRUE)
 #' pred <- sample(1:6, 100, replace = TRUE)
 #' 
 #' # Calculate the FMeasure
-#' FMeasure(true,pred)
+#' .FMeasure(true,pred)
 #' @export
 .FMeasure <- function(true, pred, silent=TRUE){
   if (sum(pred)==0)
@@ -130,4 +130,13 @@
   f <- 2*r*p / (r+p)
   f[is.na(f)] <- 0
   sum(apply(f,1,max) * (rowSums(a)/sum(a)))
+}
+
+.NCR <- function(true, pred){
+  co <- table(pred, true)
+  a <- mean(colSums(choose(co,2))/choose(table(true),2),na.rm=TRUE)
+  dmax <- tcrossprod(table(true))
+  d <- (dmax-crossprod(co))/dmax
+  d <- mean(d[lower.tri(d)])
+  (a+d)/2
 }

@@ -71,7 +71,7 @@
 fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
                                   verbose=TRUE, returnElementPairAccuracy=FALSE,
                                   BPPARAM=BiocParallel::SerialParam(), 
-                                  tnorm=c("product","min","lukasiewicz"), ...){ 
+                                  tnorm=c("product","min","lukasiewicz")){ 
   
   tnorm <- match.arg(tnorm)
   if(is.data.frame(P)) P <- as.matrix(P)
@@ -280,7 +280,7 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
 #' fuzzyHardMetrics(hardPred, hardTrue, fuzzyTrue, nperms=3)
 fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL, 
                              returnElementPairAccuracy=FALSE, verbose=TRUE,
-                             BPPARAM=BiocParallel::SerialParam(), ...){ 
+                             BPPARAM=BiocParallel::SerialParam()){ 
   
   stopifnot(is.atomic(hardPred))
   hardPredVector <- hardPred <- as.integer(as.factor(hardPred))
