@@ -36,10 +36,6 @@ devtools::install_github("RoseYuan/ClusteringMetrics")
 
 ## Example data
 
-To showcase the main functions, we will use an example object which contains (a 
-subset of) RNAseq of mouse hippocampi after Forskolin-induced long-term 
-potentiation:
-
 ```{r}
 suppressPackageStartupMessages({
 
