@@ -1,5 +1,5 @@
 ---
-title: ClusteringMetrics
+title: Introduction to ClusteringMetrics
 package: ClusteringMetrics
 author: 
 - name: Siyuan Luo
@@ -18,14 +18,36 @@ knitr::opts_chunk$set(error=FALSE, message=FALSE, warning=FALSE)
 library(BiocStyle)
 ```
 
+
+# Introduction
+
+## What is this package for?
+
+A partition is a way of organizing the data points of a dataset into distinct, non-overlapping, and non-empty subsets. For example, a clustering is a partition. This package provides multiple approaches for comparing two partitions of the same dataset, and evaluating the alignment between a dataset’s embedding/graph representations and its partition. 
+
+Despite hard partitions where each data point belongs to one and only one subset, clustering can also generate fuzzy partitions. A fuzzy partition allows data points to belong to multiple subsets with varying degrees of membership. This package further offers methods for comparing two fuzzy partitions as well as for comparing a hard partition with a fuzzy partition. This allows the evaluation of fuzzy partition results by assessing its agreement to a fuzzy or a hard ground-truth partition.
+
+The above mentioned metrics are all external evaluation metrics. Spatial clustering can be evaluated using external evaluation metrics of hard or fuzzy partitions, or by using internal evaluation metrics. This package also provides functions for all these types of analysis.
+
+## Main functions
+
+The package `r Rpackage("ClusteringMetrics")` includes many metrics to perform different kinds of evaluations, and these metrics can be retrieved via 6 main wrapper functions. If no specified, "partition" means "hard" partition. They are:
+- `getEmbeddingMetrics()`: Metrics to compare an embedding of data points to a partition of these data points.
+- `getGraphMetrics()`: Metrics to compare a graph to a partition, where nodes in the graph are data points in the partition.
+- `getPartitionMetrics()`: Metrics to compare two partitions of the same dataset.
+- `getfuzzyPartitionMetrics()`: Metrics to compare two fuzzy partitions, or to compare between a fuzzy and a hard partition of the same dataset.
+- `getSpatialExternalMetrics()`: External metrics for evaluating spatial clustering results in a spatial-aware fashion. For non-spatial-aware evaluation, one can directly use `getPartitionMetrics()`.
+- `getSpatialInternalMetrics()`: Internal metrics for evaluating spatial clustering results in a spatial-aware fashion.
+
+There are 3 different levels where one can perform the above-mentioned evaluation: element-level, class-level, and global-level. Element-level evaluation reports metric values for each data point; Class-level evaluation reports metrics for each classes (groups in the ground-truth partition) or clusters (groups in the predicted partition); and global-level evaluation returns a single metric value for the whole dataset.
+
+The following table illustrates available metrics at different evaluation levels, and the main functions used to retrieve them.
+
+```{r}
+DT::datatable(metric_info)
+```
+
 # Getting started
-
-A partition is a way of organizing a dataset into distinct, non-overlapping, and non-empty subsets. For example, a clustering is a partition. This package provides multiple approaches for comparing two partitions of the same dataset, and evaluating the alignment between a dataset’s embedding/graph representations and its partition.
-
-Unlike a hard partition, a fuzzy partition allows data points to belong to multiple subsets with varying degrees of membership. This package further offers methods for comparing two fuzzy partitions as well as for comparing a hard partition with a fuzzy partition.
-
-Additionally, spatial clustering can be evaluated by evaluating the hard or fuzzy partitions, or by using internal metrics. This package provides functions for all these types of analysis.
-
 ## Installation
 
 ```{r, eval=FALSE}
@@ -34,43 +56,92 @@ if (!requireNamespace("devtools", quietly = TRUE))
 devtools::install_github("RoseYuan/ClusteringMetrics")
 ```
 
+```{r, echo=FALSE}
+library(ClusteringMetrics)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+```
+
 ## Example data
+To showcase the main functions, we will use some simulated datasets (See reference) as examples in this vignette. #TODO: add reference.
+
+The two datasets, `g1` and `g2`, both contain 80 data points with `x` and `y` coordinates and of 4 different classes.
 
 ```{r}
-suppressPackageStartupMessages({
-
-})
-
+data(toyExamples)
+g1 <- toyExamples[toyExamples$graph=="graph1",]
+g2 <- toyExamples[toyExamples$graph=="graph2",]
+head(d1)
 ```
 
-
+If we plot them out:
 
 ```{r}
+ggplot(rbind(g1,g2), aes(x,y,color=class, shape=class)) + 
+  geom_point() +
+  facet_wrap(~graph) +
+  theme_bw()
+```
 
+## Embedding level evaluation
+
+Let's assume `g1` and `g2` contain two different embeddings of the same set of objects. A "good" embedding should put objects of the same class together, and objects of different class apart. With the ground-truth class of each object already known, one can evaluation such "goodness" of an embedding by calculating embedding evaluation metrics.
+
+### Element-level evaluation
+For example, at the element level, one can calculate the Silhouette Width by specifying `level="element"` and `metrics=c("SW")`:
+
+```{r}
+sw <- getEmbeddingMetrics(x=g1[,c("x","y")], labels=g1$class, metrics=c("SW"), level="element")
+head(sw)
+```
+
+The output will be a `data.frame` containing the metric values for the specified level.
+
+```{r}
+g1$sw <- getEmbeddingMetrics(x=g1[,c("x","y")], labels=g1$class, metrics=c("SW"), level="element")$SW
+g2$sw <- getEmbeddingMetrics(x=g2[,c("x","y")], labels=g2$class, metrics=c("SW"), level="element")$SW
+ggplot(rbind(g1,g2), aes(x, y, color=sw, shape=class)) + 
+  geom_point() +
+  facet_wrap(~graph) +
+  theme_bw()
+```
+
+### Class-level evaluation
+
+One can also evaluate at each class level, by specifying `level="class"`. Check `?getEmbeddingMetrics` to see what are the allowed metrics at the class level. For example:
+
+```{r}
+cl <- getEmbeddingMetrics(x=g1[,c("x","y")], labels=g1$class, metrics=c("dbcv", "meanSW"), level="class")
+head(cl)
 ```
 
 ```{r}
+res1 <- getEmbeddingMetrics(x=g1[,c("x","y")], labels=g1$class, metrics=c("dbcv", "meanSW"), level="class")
+res2 <- getEmbeddingMetrics(x=g2[,c("x","y")], labels=g2$class, metrics=c("dbcv", "meanSW"), level="class")
+res1$graph <- "graph1"; res2$graph <- "graph2"
 
+rbind(res1,res2) %>% pivot_longer(cols=c("meanSW","dbcv"), names_to="metric",values_to="value") %>%
+ggplot(aes(class, value, fill=graph, group=graph)) + 
+  geom_bar(position = "dodge", stat = "identity") +
+  facet_wrap(~metric) +
+  theme_bw()
 ```
 
-```{r}
+### Global-level evaluation
 
+Similarly, one can evaluate at the global level by specifying `level="global"`. For example:
+
+```{r}
+getEmbeddingMetrics(x=g1[,c("x","y")], labels=g1$class, metrics=c("meanSW", "meanClassSW", "pnSW", "minClassSW", "cdbw", "cohesion", "compactness", "sep", "dbcv"), level="global")
 ```
 
-```{r}
+## Graph level evaluation
+Instead of directly using the distances or densities in the embedding space for evaluation, one may want to evaluate from a connectivity stand point by looking at the graph structure constructed from the above datasets. `getGraphMetrics()` can perform k nearest neighbor (KNN) graph or shared nearest neighbor graph (SNN) construction from an embedding and then apply graph-based evaluation metrics. Use `?getGraphMetrics()` to check optional arguments for KNN/SNN graph construction.
 
-```
-
-```{r}
-
-```
 
 ```{r}
-
-```
-
-```{r}
-
+getGraphMetrics(x=g1[,c("x","y")], labels=g1$class, metrics=c("PWC","ISI"), level="class", directed=FALSE, k=4, shared=FALSE)
 ```
 
 ```{r}

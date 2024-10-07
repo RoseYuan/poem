@@ -41,3 +41,11 @@
 #'   \item{class}{The class to which the element belongs.}
 #' }
 "toyExamples"
+
+
+#' @title Metrics Information
+#' @description A dataframe storing the information of all metrics
+
+#' @format ## `metric_info`
+#' A data frame.
+"metric_info"
