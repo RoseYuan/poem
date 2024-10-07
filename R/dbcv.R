@@ -183,6 +183,7 @@
 #' 
 #' @references Davoud Moulavi, et al. 2014; 10.1137/1.9781611973440.96.
 #' 
+#' @export
 #' @examples
 #' data <- noisy_moon
 #' dbcv(data[, c("x", "y")], data$kmeans_label)

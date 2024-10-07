@@ -34,7 +34,7 @@
       BNPARAM <- BiocNeighbors::ExhaustiveParam()
     }
   }
-  findKNN(x, k=k, BNPARAM=BNPARAM)
+  findKNN(as.matrix(x), k=k, BNPARAM=BNPARAM)
 }
 
 # computes shared nearest neighbors from embedding

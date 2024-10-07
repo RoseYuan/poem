@@ -1,14 +1,20 @@
 Package: ClusteringMetrics
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9010
-Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Title: Various evaluation metrics for segregating populations in clusterings, embeddings, graphs and space
+Version: 0.99.11
+Authors@R: c(
+    person("Siyuan", "Luo", email="siyuan.luo@hest.ethz.ch", role=c("cre","aut")),
+    person("Pierre-Luc", "Germain", email="pierre-luc.germain@hest.ethz.ch", role=c("aut","ctb"),
+           comment=c(ORCID="0000-0003-3418-4218")))
+Description: Implements a set of (mostly external) evaluation metrics for comparing partitions, 
+  fuzzy partitions, for evaluating the segregation of classes/clusters in embeddings or graphs, etc.
+  Also includes metrics for comparing spatial data to ground truth labels and spatially visualizing 
+  errors.
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
+Depends:
+    R (>= 4.0)
 Imports:
     aricode,
     BiocNeighbors,
@@ -30,9 +36,8 @@ Imports:
     reticulate
 Suggests: 
     testthat (>= 3.0.0),
+    BiocStyle,
     knitr
 VignetteBuilder: knitr
+biocViews: DimensionReduction, Clustering, GraphAndNetwork, Spatial
 Config/testthat/edition: 3
-Depends: 
-    R (>= 2.10)
-LazyData: true

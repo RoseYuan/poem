@@ -93,7 +93,8 @@ CHAOS <- function(labels, location, BNPARAM=NULL) {
       next
     }
     # Find the nearest neighbors within the cluster using BiocNeighbors::findKNN
-    knn_result <- BiocNeighbors::findKNN(location_cluster, k = 1, warn.ties=FALSE, get.index = FALSE, BNPARAM=BNPARAM)
+    knn_result <- BiocNeighbors::findKNN(as.matrix(location_cluster), k = 1,
+                                         warn.ties=FALSE, get.index = FALSE, BNPARAM=BNPARAM)
     # The distances to the nearest neighbors are stored in the knn_result$distance
     # We sum the distances to the nearest neighbor for each point in the cluster
     dist_val[count] <- sum(knn_result$distance[, 1])  # 2nd column for the nearest neighbor (not itself)
