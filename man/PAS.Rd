@@ -4,15 +4,17 @@
 \alias{PAS}
 \title{Calculate PAS score}
 \usage{
-PAS(label, location, k = 10, ...)
+PAS(labels, location, k = 10, ...)
 }
 \arguments{
-\item{label}{Cluster labels.}
+\item{labels}{Cluster labels.}
 
 \item{location}{A numerical matrix containing the location information, with
 rows as samples and columns as location dimensions.}
 
 \item{k}{Number of nearest neighbors.}
+
+\item{...}{Optional params for \code{\link[=findSpatialKNN]{findSpatialKNN()}}.}
 }
 \value{
 A numeric value for PAS score, and a boolean vector about the abnormal spots.

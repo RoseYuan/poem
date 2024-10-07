@@ -38,16 +38,18 @@
 #' @param use_scipy_mst Logical flag to use MST implementation 
 #' in scipy. If TRUE, python is required.
 #' @return A list containing the indices of internal nodes and their edge weights.
+#' @importFrom reticulate r_to_py import
+#' @importFrom Matrix Diagonal
 .get_internal_objects <- function(mutual_reach_dists, 
                                  use_scipy_mst=TRUE) {
   rownames(mutual_reach_dists) <- NULL
   colnames(mutual_reach_dists) <- NULL
   if (use_scipy_mst) {
     # Convert the R matrix to a Python object
-    mutual_reach_dists_py <- reticulate::r_to_py(mutual_reach_dists)
+    mutual_reach_dists_py <- r_to_py(mutual_reach_dists)
     # Run the Python code
-    scipy <- reticulate::import("scipy.sparse.csgraph")
-    np <- reticulate::import("numpy")
+    scipy <- import("scipy.sparse.csgraph")
+    np <- import("numpy")
     mst <- scipy$minimum_spanning_tree(mutual_reach_dists_py)
     mst <- as.matrix(mst %*% Diagonal(n = ncol(mst)))
     mst <- mst + t(mst)

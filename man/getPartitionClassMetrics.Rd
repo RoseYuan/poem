@@ -7,8 +7,7 @@
 getPartitionClassMetrics(
   true,
   pred,
-  metrics = c("WC", "WH", "AWC", "AWH", "FM"),
-  ...
+  metrics = c("WC", "WH", "AWC", "AWH", "FM")
 )
 }
 \arguments{
@@ -27,9 +26,6 @@ A dataframe of metrics.
 \description{
 Computes a selection of external evaluation metrics for partition. The
 metrics are reported per class.
-}
-\details{
-Additional details...
 }
 \examples{
 true <- rep(LETTERS[1:3], each=10)

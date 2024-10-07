@@ -9,6 +9,7 @@
 #' @param true True class labels (vector coercible to factor)
 #' @param pred Predicted labels (vector coercible to factor)
 #' @param k Number of nearest neighbors
+#' @param ... Optional params passed to [findSpatialKNN()].
 #' @export
 #' @return A scalar representing the weighted accuracy.
 nnWeightedAccuracy <- function(true, pred, location, k=5, ...){
@@ -41,8 +42,9 @@ nnWeightedAccuracy <- function(true, pred, location, k=5, ...){
 #' @description PAS score measures the clustering performance by calculating 
 #' the randomness of the spots that located outside of the spatial region where it was clustered to.
 #' Lower PAS score indicates better spatial domian clustering performance.
-#' @param label Cluster labels.
+#' @param labels Cluster labels.
 #' @param k Number of nearest neighbors.
+#' @param ... Optional params for [findSpatialKNN()].
 #' @inheritParams getSpatialGlobalInternalMetrics
 #' @return A numeric value for PAS score, and a boolean vector about the abnormal spots.
 #' @export
@@ -51,10 +53,10 @@ nnWeightedAccuracy <- function(true, pred, location, k=5, ...){
 #' PAS(data$label, data[,c("x", "y")], k=6)
 #' PAS(data$p1, data[,c("x", "y")], k=6)
 #' PAS(data$p2, data[,c("x", "y")], k=6)
-PAS <- function(label, location, k=10, ...){
-  stopifnot(!any(is.na(label)))
-  comp <- knnComposition(location, k=k, label, alpha=0, ...)
-  prop <- unlist(lapply(seq_len(dim(comp)[1]), function(i){comp[i,label[i]]}))
+PAS <- function(labels, location, k=10, ...){
+  stopifnot(!any(is.na(labels)))
+  comp <- knnComposition(location, k=k, labels, alpha=0, ...)
+  prop <- unlist(lapply(seq_len(dim(comp)[1]), function(i){comp[i,labels[i]]}))
   results <- prop < 0.5
   return(list(PAS=sum(results)/length(results), abnormalty=results))
 }
@@ -64,7 +66,7 @@ PAS <- function(label, location, k=10, ...){
 #' the mean length of the graph edges in the 1-nearest neighbor (1NN) graph 
 #' for each cluster, averaged across clusters.
 #' Lower CHAOS score indicates better spatial domain clustering performance.
-#' @param label Cluster labels.
+#' @param labels Cluster labels.
 #' @inheritParams findSpatialKNN
 #' @return A numeric value for CHAOS score.
 #' @examples 
@@ -73,19 +75,19 @@ PAS <- function(label, location, k=10, ...){
 #' CHAOS(data$p1, data[,c("x", "y")])
 #' CHAOS(data$p2, data[,c("x", "y")])
 #' @export
-CHAOS <- function(label, location, BNPARAM=NULL) {
+CHAOS <- function(labels, location, BNPARAM=NULL) {
   BNPARAM <- .decideBNPARAM(nrow(location), BNPARAM)
-  label <- as.vector(label)
+  labels <- as.vector(labels)
   location <- as.matrix(location)
   matched_location <- scale(location)
-  label_unique <- unique(label)
+  label_unique <- unique(labels)
   # Initialize a vector to hold the distance values
   dist_val <- numeric(length(label_unique))
   
-  count <- 1
-  for (k in label_unique) {
+  for (count in seq_along(label_unique)) {
+    k <- label_unique[count]
     # Get the locations belonging to the current cluster
-    location_cluster <- matched_location[label == k, ]
+    location_cluster <- matched_location[labels == k, ]
     # Skip clusters with fewer than or equal to 2 points
     if (nrow(location_cluster) <= 2) {
       next
@@ -95,9 +97,10 @@ CHAOS <- function(label, location, BNPARAM=NULL) {
     # The distances to the nearest neighbors are stored in the knn_result$distance
     # We sum the distances to the nearest neighbor for each point in the cluster
     dist_val[count] <- sum(knn_result$distance[, 1])  # 2nd column for the nearest neighbor (not itself)
-    count <- count + 1
-    return(sum(dist_val) / length(label))
   }
+  res_class <- dist_val/unlist(lapply(label_unique, function(x){sum(labels==x)}))
+  names(res_class) <- label_unique
+  return(list(CHAOS=sum(dist_val) / length(labels), CHAOS_class=res_class))
 }
   
 #' Calculate ELSA scores
@@ -117,8 +120,8 @@ CHAOS <- function(label, location, BNPARAM=NULL) {
 #' ELSA(data$p1, data[,c("x", "y")], k=6)
 #' ELSA(data$p2, data[,c("x", "y")], k=6)
 #' @export
-ELSA <- function(label, location, k=10){
-  spdf <- sp::SpatialPointsDataFrame(location, data=data.frame(label=label))
+ELSA <- function(labels, location, k=10){
+  spdf <- sp::SpatialPointsDataFrame(location, data=data.frame(label=labels))
   k1 <- spdep::knn2nb(spdep::knearneigh(location, k=k))
   all.linked <- max(unlist(spdep::nbdists(k1, location)))
   elc <- elsa::elsa(x=spdf, d=elsa::dneigh(spdf, d1=0, d2=all.linked, longlat=FALSE), 

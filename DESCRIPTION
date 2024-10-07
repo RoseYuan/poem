@@ -1,6 +1,6 @@
 Package: ClusteringMetrics
 Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9009
+Version: 0.0.0.9010
 Authors@R: 
     person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
@@ -23,13 +23,15 @@ Imports:
     Matrix,
     mclustcomp,
     methods,
-    parallel,
     sp,
     spdep,
     stats,
-    utils
+    utils,
+    reticulate
 Suggests: 
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    knitr
+VignetteBuilder: knitr
 Config/testthat/edition: 3
 Depends: 
     R (>= 2.10)

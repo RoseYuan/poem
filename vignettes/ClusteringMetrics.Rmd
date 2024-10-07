@@ -36,21 +36,13 @@ devtools::install_github("RoseYuan/ClusteringMetrics")
 
 ## Example data
 
-To showcase the main functions, we will use an example object which contains (a 
-subset of) RNAseq of mouse hippocampi after Forskolin-induced long-term 
-potentiation:
-
 ```{r}
 suppressPackageStartupMessages({
-  library(SummarizedExperiment)
-  library(sechm)
+
 })
-data("Chen2017", package="sechm")
-SE <- Chen2017
+
 ```
 
-This is taken from 
-[Chen et al., 2017](https://doi.org/10.3389/fnmol.2017.00039).
 
 
 ```{r}
@@ -108,4 +100,3 @@ This is taken from
 ```{r}
 
 ```
-
