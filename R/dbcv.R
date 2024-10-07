@@ -171,7 +171,7 @@
 #' this python implementation of DBCV at \url{https://github.com/FelSiq/DBCV}.
 #' If `FALSE`, use MST implementation in `igraph`.
 #' @param BPPARAM BiocParallel params for multithreading (default none)
-#' @param ... 
+#' @param ... Ignored
 #' 
 #' @importFrom BiocParallel SerialParam bplapply
 #' 

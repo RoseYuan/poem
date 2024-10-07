@@ -60,7 +60,7 @@ The allowed values for \code{metrics} depend on the value of \code{level}:
 \item \code{"NP"}: Neighborhood Purity
 \item \code{"AMSP"}: Adjusted Mean Shortest Path
 \item \code{"PWC"}: Proportion of Weakly Connected
-\item \code{"NCE"}:
+\item \code{"NCE"}: Neighborhood Class Enrichment
 \item \code{"adhesion"}: adhesion of a graph, is the minumum number of nodes that must be removed to split a graph.
 \item \code{"cohesion"}: cohesion of a graph, is the minumum number of edges that must be removed to split a graph.
 }

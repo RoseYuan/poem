@@ -34,7 +34,7 @@ If \code{FALSE}, use MST implementation in \code{igraph}.}
 
 \item{BPPARAM}{BiocParallel params for multithreading (default none)}
 
-\item{...}{}
+\item{...}{Ignored}
 }
 \value{
 A list:

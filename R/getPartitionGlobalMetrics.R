@@ -9,7 +9,9 @@
 #'  be a vector of characters, integers, numerics, or a factor, but not a list.
 #' @param metrics The metrics to compute. If omitted, main metrics will be 
 #'   computed. See below for more details.
-#' @return A dataframe of metric results. Possible metrics are:
+#' @return A dataframe of metric results.
+#' @details
+#' Possible metrics are:
 #' \item{RI}{Rand Index} 
 #' \item{WC}{Wallace Completeness}
 #' \item{WH}{Wallace Homogeneity}
@@ -28,8 +30,6 @@
 #' \item{MHM}{Meila-Heckerman Measure}
 #' \item{MMM}{Maximum-Match Measure}
 #' \item{Mirkin}{Mirkin Metric}
-#' @details
-#' Additional details...
 #' 
 #' @importFrom aricode sortPairs AMI
 #' @importFrom clevr mutual_info variation_info homogeneity completeness v_measure
