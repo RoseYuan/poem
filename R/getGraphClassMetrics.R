@@ -50,7 +50,7 @@ attr(getGraphClassMetrics, "allowed_metrics") <- c("SI", "ISI", "NP", "NCE", "AM
     # if the metrics are all to be computed in an undirected fashion, it's 
     # faster to start from an igraph:
     if(isFALSE(directed))
-      return(.getGraphClassMetricsFromGraph(x, labels, metrics,
+      return(.getGraphClassMetricsFromGraph(g, labels, metrics,
                                             directed=FALSE, ...))
     g <- set_vertex_attr(g, "class", value=labels)
   }
