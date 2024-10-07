@@ -26,7 +26,7 @@ findSpatialKNN <- function(location, k, keep_ties=TRUE, useMedianDist=FALSE,
                            BNPARAM=NULL){
   BNPARAM <- .decideBNPARAM(nrow(location), BNPARAM)
   if(keep_ties){
-    nn <- BiocNeighbors::findKNN(location, k=k*3, warn.ties=FALSE, BNPARAM=BNPARAM)
+    nn <- BiocNeighbors::findKNN(as.matrix(location), k=k*3, warn.ties=FALSE, BNPARAM=BNPARAM)
     mkd <- median(nn$distance[,k])
     nn <- lapply(seq_len(nrow(nn[[1]])), FUN=function(i){
       d <- nn$distance[i,]
@@ -34,7 +34,7 @@ findSpatialKNN <- function(location, k, keep_ties=TRUE, useMedianDist=FALSE,
       nn$index[i,sort(which(d<=mkd))]
     })
   }else{
-    nn <- BiocNeighbors::findKNN(location, k=k, warn.ties=FALSE, BNPARAM=BNPARAM)$index
+    nn <- BiocNeighbors::findKNN(as.matrix(location), k=k, warn.ties=FALSE, BNPARAM=BNPARAM)$index
     nn <- split(nn, seq_len(nrow(nn)))
   }
   return(nn)
