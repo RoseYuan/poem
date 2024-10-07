@@ -1,9 +1,17 @@
 ---
-title: Introduction to ClusteringMetrics
-package: ClusteringMetrics
+title: Introduction to `ClusteringMetrics`
+package: "`r BiocStyle::pkg_ver('ClusteringMetrics')`"
 author: 
 - name: Siyuan Luo
   email: roseluosy@gmail.com
+  affiliation:
+    - &IMLS Institute for Molecular Life Sciences, University of Zurich, Zurich, Switzerland
+    - &HEST Department of Health Sciences and Technology, ETH Zurich, Zurich, Switzerland
+- name: Pierre-Luc Germain
+  email: 
+  affiliation:
+    - *IMLS
+    - *HEST
 date: "`r Sys.Date()`"
 output:
   BiocStyle::html_document
@@ -12,12 +20,39 @@ vignette: |
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+<style type="text/css">
+.smaller {
+  font-size: 10px
+}
+</style>
 
-```{r, echo=FALSE, message=FALSE}
-knitr::opts_chunk$set(error=FALSE, message=FALSE, warning=FALSE)
+```{r, echo=FALSE, message=FALSE, warning = FALSE}
+knitr::opts_chunk$set(error=FALSE, message=FALSE, warning=FALSE, collapse = TRUE)
 library(BiocStyle)
 ```
 
+# Installation & loading {-}
+
+```{r, eval=FALSE}
+if (!requireNamespace("devtools", quietly = TRUE))
+    install.packages("devtools")
+devtools::install_github("RoseYuan/ClusteringMetrics")
+```
+
+```{r, include=FALSE}
+devtools::load_all("~/public/SiyuanLuo/projects/clustering_metrics/ClusteringMetrics")
+```
+
+
+```{r, message = FALSE,  warning = FALSE}
+library(ClusteringMetrics)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(ggnetwork)
+library(igraph)
+library(cowplot)
+```
 
 # Introduction
 
@@ -32,6 +67,7 @@ The above mentioned metrics are all external evaluation metrics. Spatial cluster
 ## Main functions
 
 The package `r Rpackage("ClusteringMetrics")` includes many metrics to perform different kinds of evaluations, and these metrics can be retrieved via 6 main wrapper functions. If no specified, "partition" means "hard" partition. They are:
+
 - `getEmbeddingMetrics()`: Metrics to compare an embedding of data points to a partition of these data points.
 - `getGraphMetrics()`: Metrics to compare a graph to a partition, where nodes in the graph are data points in the partition.
 - `getPartitionMetrics()`: Metrics to compare two partitions of the same dataset.
@@ -48,20 +84,6 @@ DT::datatable(metric_info)
 ```
 
 # Getting started
-## Installation
-
-```{r, eval=FALSE}
-if (!requireNamespace("devtools", quietly = TRUE))
-    install.packages("devtools")
-devtools::install_github("RoseYuan/ClusteringMetrics")
-```
-
-```{r, echo=FALSE}
-library(ClusteringMetrics)
-library(ggplot2)
-library(dplyr)
-library(tidyr)
-```
 
 ## Example data
 To showcase the main functions, we will use some simulated datasets (See reference) as examples in this vignette. #TODO: add reference.
@@ -72,23 +94,23 @@ The two datasets, `g1` and `g2`, both contain 80 data points with `x` and `y` co
 data(toyExamples)
 g1 <- toyExamples[toyExamples$graph=="graph1",]
 g2 <- toyExamples[toyExamples$graph=="graph2",]
-head(d1)
+head(g1)
 ```
 
 If we plot them out:
 
-```{r}
+```{r, fig.height = 3, fig.width = 7}
 ggplot(rbind(g1,g2), aes(x,y,color=class, shape=class)) + 
   geom_point() +
   facet_wrap(~graph) +
   theme_bw()
 ```
 
-## Embedding level evaluation
+# Embedding evaluation
 
 Let's assume `g1` and `g2` contain two different embeddings of the same set of objects. A "good" embedding should put objects of the same class together, and objects of different class apart. With the ground-truth class of each object already known, one can evaluation such "goodness" of an embedding by calculating embedding evaluation metrics.
 
-### Element-level evaluation
+## Element-level evaluation
 For example, at the element level, one can calculate the Silhouette Width by specifying `level="element"` and `metrics=c("SW")`:
 
 ```{r}
@@ -98,7 +120,7 @@ head(sw)
 
 The output will be a `data.frame` containing the metric values for the specified level.
 
-```{r}
+```{r, fig.height = 3, fig.width = 7}
 g1$sw <- getEmbeddingMetrics(x=g1[,c("x","y")], labels=g1$class, metrics=c("SW"), level="element")$SW
 g2$sw <- getEmbeddingMetrics(x=g2[,c("x","y")], labels=g2$class, metrics=c("SW"), level="element")$SW
 ggplot(rbind(g1,g2), aes(x, y, color=sw, shape=class)) + 
@@ -107,7 +129,7 @@ ggplot(rbind(g1,g2), aes(x, y, color=sw, shape=class)) +
   theme_bw()
 ```
 
-### Class-level evaluation
+## Class-level evaluation
 
 One can also evaluate at each class level, by specifying `level="class"`. Check `?getEmbeddingMetrics` to see what are the allowed metrics at the class level. For example:
 
@@ -116,19 +138,18 @@ cl <- getEmbeddingMetrics(x=g1[,c("x","y")], labels=g1$class, metrics=c("dbcv", 
 head(cl)
 ```
 
-```{r}
+```{r, fig.height = 3, fig.width = 7}
 res1 <- getEmbeddingMetrics(x=g1[,c("x","y")], labels=g1$class, metrics=c("dbcv", "meanSW"), level="class")
 res2 <- getEmbeddingMetrics(x=g2[,c("x","y")], labels=g2$class, metrics=c("dbcv", "meanSW"), level="class")
-res1$graph <- "graph1"; res2$graph <- "graph2"
 
-rbind(res1,res2) %>% pivot_longer(cols=c("meanSW","dbcv"), names_to="metric",values_to="value") %>%
+bind_rows(list(graph1=res1, graph2=res2), .id="graph") %>% pivot_longer(cols=c("meanSW","dbcv"), names_to="metric",values_to="value") %>%
 ggplot(aes(class, value, fill=graph, group=graph)) + 
   geom_bar(position = "dodge", stat = "identity") +
   facet_wrap(~metric) +
   theme_bw()
 ```
 
-### Global-level evaluation
+## Global-level evaluation
 
 Similarly, one can evaluate at the global level by specifying `level="global"`. For example:
 
@@ -136,38 +157,254 @@ Similarly, one can evaluate at the global level by specifying `level="global"`. 
 getEmbeddingMetrics(x=g1[,c("x","y")], labels=g1$class, metrics=c("meanSW", "meanClassSW", "pnSW", "minClassSW", "cdbw", "cohesion", "compactness", "sep", "dbcv"), level="global")
 ```
 
-## Graph level evaluation
-Instead of directly using the distances or densities in the embedding space for evaluation, one may want to evaluate from a connectivity stand point by looking at the graph structure constructed from the above datasets. `getGraphMetrics()` can perform k nearest neighbor (KNN) graph or shared nearest neighbor graph (SNN) construction from an embedding and then apply graph-based evaluation metrics. Use `?getGraphMetrics()` to check optional arguments for KNN/SNN graph construction.
+# Graph evaluation
+Instead of directly using the distances or densities in the embedding space for evaluation, one may want to evaluate from a connectivity stand point by looking at the graph structure constructed from the above datasets. `getGraphMetrics()` can perform k nearest neighbor (KNN) graph or shared nearest neighbor graph (SNN) construction from an embedding and then apply graph-based evaluation metrics. 
 
+```{r, fold=TRUE}
+# Some functions for plotting
+plotGraphs <- function(d, k=7){
+  gn <- dplyr::bind_rows(lapply(split(d[,-1],d$graph), FUN=function(d1){
+    g <- knn2graph(df2knn(d1, k=k))
+    ggnetwork(g, layout=as.matrix(d1[,1:2]), scale=FALSE)
+  }), .id="graph")
+  ggplot(gn, aes(x = x, y = y, xend = xend, yend = yend)) + theme_blank() + theme(legend.position = "right") +
+  geom_edges(alpha=0.5, colour="grey") + geom_nodes(aes(colour=class, shape=class), size=2) + facet_wrap(~graph, nrow=1)
+}
+df2knn <- function(d1, k=7, ...){
+  knn <- BiocNeighbors::findKNN(d1[,1:2], k=k, ...)
+  knn$class <- factor(d1$class)
+  knn
+}
+knn2graph <- function(knn, directed=FALSE){
+  g <- bluster::neighborsToKNNGraph(knn$index, directed=directed)
+  g <- set_vertex_attr(g, "class", value=factor(knn$class))
+  g <- set_vertex_attr(g, "id", value=seq_along(V(g)))
+  g
+}
+```
+
+For our examples `g1` and `g2`, the constucted graphs will look like:
+
+```{r, fig.height = 3, fig.width = 7}
+plotGraphs(bind_rows(list(g1,g2), .id="graph"))
+```
+
+Use `?getGraphMetrics()` to check optional arguments for KNN/SNN graph construction.
+
+Similarly, `level` can be `"element"`, `"class"` or `"global"`.
 
 ```{r}
-getGraphMetrics(x=g1[,c("x","y")], labels=g1$class, metrics=c("PWC","ISI"), level="class", directed=FALSE, k=4, shared=FALSE)
+getGraphMetrics(x=g1[,c("x","y")], labels=g1$class, metrics=c("PWC","ISI"), level="class", directed=FALSE, k=7, shared=FALSE)
+```
+
+```{r, fig.height = 3, fig.width = 7}
+res1 <- getGraphMetrics(x=g1[,c("x","y")], labels=g1$class, metrics=c("PWC","ISI"), level="class", directed=FALSE, k=7, shared=FALSE)
+res2 <- getGraphMetrics(x=g2[,c("x","y")], labels=g2$class, metrics=c("PWC","ISI"), level="class", directed=FALSE, k=7, shared=FALSE)
+
+bind_rows(list(graph1=res1, graph2=res2), .id="graph") %>% pivot_longer(cols=c("PWC","ISI"), names_to="metric",values_to="value") %>%
+ggplot(aes(class, value, fill=graph, group=graph)) + 
+  geom_bar(position = "dodge", stat = "identity") +
+  facet_wrap(~metric) +
+  theme_bw()
+```
+
+Alternatively, `getGraphMetrics()` can take an `r Rpackage("igraph")` object as `x`, which enables the application of the evaluation metrics to a general graph, or a list of nearest neighbors as `x`, to accelerate the computation for large datasets.
+
+# Partition evaluation
+
+We construct SNN graph from g1 and g2 embeddings, and then apply Louvain algorithm to get partitions out of them.
+
+```{r, fig.height = 3, fig.width = 7}
+k <- 7
+r <- 0.5
+snn1 <- ClusteringMetrics:::.emb2snn(as.matrix(g1[,c("x","y")]), k=k)
+snn2 <- ClusteringMetrics:::.emb2snn(as.matrix(g2[,c("x","y")]), k=k)
+g1$cluster <- factor(igraph::cluster_louvain(snn1, resolution = r)$membership)
+g2$cluster <- factor(igraph::cluster_louvain(snn2, resolution = r)$membership)
+
+ggplot(rbind(g1,g2), aes(x,y,color=cluster, shape=class)) + 
+  geom_point() +
+  facet_wrap(~graph) +
+  theme_bw()
+```
+
+We then compare the predictions with the known labels using the partition metrics:
+
+```{r}
+# for g1
+getPartitionMetrics(true=g1$class, pred=g1$cluster, level="global",
+                    metrics = c("RI", "WC", "WH", "ARI", "AWC", "AWH",
+                                "FM", "AMI"))
+
+# for g2
+getPartitionMetrics(true=g2$class, pred=g2$cluster, level="global",
+                    metrics = c("RI", "WC", "WH", "ARI", "AWC", "AWH",
+                                "FM", "AMI"))
+```
+
+Note that for class-level metrics, some are reported per class, while some (specifically, "WH", "AWH) are reported per cluster.
+
+```{r}
+getPartitionMetrics(true=g1$class, pred=g2$cluster, level="class")
+```
+
+# Fuzzy partition evaluation
+
+For comparing two fuzzy partitions or comparing a fuzzy partition to a hard patition, one can use `getFuzzyPartitionMetrics()`.
+
+The fuzzy reprensentation of a partion should look like the following, where each row is a data point, and the value is the class memberships to each class. Each row sums up to 1.
+
+```{r}
+fuzzyTrue <- matrix(c(
+  0.95, 0.025, 0.025, 
+  0.98, 0.01, 0.01, 
+  0.96, 0.02, 0.02, 
+  0.95, 0.04, 0.01, 
+  0.95, 0.01, 0.04, 
+  0.99, 0.005, 0.005, 
+  0.025, 0.95, 0.025, 
+  0.97, 0.02, 0.01, 
+  0.025, 0.025, 0.95), 
+  ncol = 3, byrow=TRUE)
+fuzzyTrue
 ```
 
 ```{r}
+# a hard truth:
+hardTrue <- apply(fuzzyTrue,1,FUN=which.max)
+# some predicted labels:
+hardPred <- c(1,1,1,1,1,1,2,2,2)
+getFuzzyPartitionMetrics(hardPred=hardPred, hardTrue=hardTrue, fuzzyTrue=fuzzyTrue, nperms=3, level="class", fuzzy_true = TRUE, fuzzy_pred = FALSE)
+```
+By specifying `fuzzy_true` and `fuzzy_pred`, one can control whether the fuzzy or hard version of the two partitions is used in comparison. This should be consistent with the input `hardPred`, `hardTrue`, `fuzzyPred`, `fuzzyTrue`, e.g. when `fuzzy_true=TRUE`, `fuzzyTrue` should not be `NULL`.
 
+
+# Spatial clustering evaluation
+
+## Example data
+We use another toy example dataset in the package, `sp_toys`, to illustrate spatial clustering evaluation.
+
+```{r, fig.height = 3, fig.width = 8.5}
+s <- 3
+st <- 1
+p1 <- ggplot(sp_toys, aes(x, y, 
+               color=label)) + 
+  geom_point(size=s, alpha=0.5) + scale_y_reverse() + theme_bw() +
+  geom_point(shape = 1, size = s, stroke = st, aes(color=p1)) + 
+  labs(x="",y="", title="P1") 
+
+p0 <- ggplot(sp_toys, aes(x, y, 
+               color=label)) + 
+  geom_point(size=s, alpha=0.5) + scale_y_reverse() + theme_bw() +
+  geom_point(shape = 1, size = s, stroke = st, aes(color=label)) + 
+  labs(x="",y="", title="C") 
+p2 <- ggplot(sp_toys, aes(x, y, 
+               color=label)) + 
+  geom_point(size=s, alpha=0.5) + scale_y_reverse() + theme_bw() +
+  geom_point(shape = 1, size = s, stroke = st, aes(color=p2)) + 
+  labs(x="",y="", title="P2") 
+
+plot_grid(p0 + theme(legend.position = "none",
+                     plot.title = element_text(hjust = 0.5)),
+          p1 + theme(legend.position = "none",
+                     plot.title = element_text(hjust = 0.5)),
+          p2 + theme(legend.position = "none",
+                     plot.title = element_text(hjust = 0.5)), ncol = 3)
+```
+
+Here in C, the spots are colored by the ground-truth class. In P1 and P2, the color inside each spot is according to the ground-truth class, while the color of the border is according to clustering predictions. P1 and P2 misclassified the same amount of red spots into the blue cluster.
+
+## External metrics
+Let's quantify this by calculating external spatial metrics:
+
+```{r}
+getSpatialExternalMetrics(true=sp_toys$label, pred=sp_toys$p1,
+                      location=sp_toys[,c("x","y")], level="global",
+                      metrics=c("SpatialARI","SpatialAccuracy"),
+                      fuzzy_true = TRUE, fuzzy_pred = FALSE)
+```
+
+By specifying `fuzzy_true` and `fuzzy_pred`, one can control whether the fuzzy or hard version of `true` and `pred` is used in comparison. If `fuzzy_true` or `fuzzy_pred` is `TRUE`, the spatial neighborhood information will be used to construct the fuzzy representation of the  class/cluster memberships. See xxx for more details.
+
+
+```{r}
+getSpatialExternalMetrics(true=sp_toys$label, pred=sp_toys$p1,
+                      location=sp_toys[,c("x","y")], level="class")
 ```
 
 ```{r}
-
+res1.1 <- getSpatialExternalMetrics(true=sp_toys$label, pred=sp_toys$p1,
+                      location=sp_toys[,c("x","y")], level="global",
+                      metrics=c("SpatialARI","SpatialAccuracy"),
+                      fuzzy_true = TRUE, fuzzy_pred = FALSE)
+res2.1 <- getSpatialExternalMetrics(true=sp_toys$label, pred=sp_toys$p2,
+                      location=sp_toys[,c("x","y")], level="global",
+                      metrics=c("SpatialARI","SpatialAccuracy"),
+                      fuzzy_true = TRUE, fuzzy_pred = FALSE)
+res1.2 <- getPartitionMetrics(true=sp_toys$label, pred=sp_toys$p1,
+                      level="global", metrics=c("ARI"))
+res2.2 <- getPartitionMetrics(true=sp_toys$label, pred=sp_toys$p2,
+                      level="global", metrics=c("ARI"))
 ```
+
+```{r, fig.height = 2, fig.width = 5}
+cbind(bind_rows(list(res1.1, res2.1), .id="P"),
+      bind_rows(list(res1.2, res2.2), .id="P")) %>% 
+  pivot_longer(cols=c("SpatialARI", "SpatialAccuracy", "ARI"), 
+               names_to="metric", values_to="value") %>%
+  ggplot(aes(x=P, y=value, group=metric)) +
+  geom_point(size=3, aes(color=P)) +
+  facet_wrap(~metric) +
+  theme_bw() + labs(x="Prediction")
+```
+
+When the evaluation is non-spatial-aware, P1 and P2 get the same ARI score. However, with spatial-aware metrics like SpatialARI and SpatialAccuracy, P2 gets a higher scores than P1.
+
+## Internal metrics
+Last but not least, there are internal metrics for spatial clustering evaluation:
 
 ```{r}
-
+sp_toys$c_elsa <- getSpatialInternalMetrics(label=sp_toys$label, 
+                      location=sp_toys[,c("x","y")], level="element",
+                      metrics=c("ELSA"))$ELSA
+sp_toys$p1_elsa <- getSpatialInternalMetrics(label=sp_toys$p1, 
+                      location=sp_toys[,c("x","y")], level="element",
+                      metrics=c("ELSA"))$ELSA
+sp_toys$p2_elsa <- getSpatialInternalMetrics(label=sp_toys$p2, 
+                      location=sp_toys[,c("x","y")], level="element",
+                      metrics=c("ELSA"))$ELSA
 ```
 
+
+```{r, fig.height = 3, fig.width = 14}
+s <- 3
+st <- 1
+p1 <- ggplot(sp_toys, aes(x, y, 
+               color=p1_elsa)) + 
+  geom_point(size=s, alpha=0.5) + scale_y_reverse() + theme_bw() +
+  labs(x="",y="", title="P1", color="ELSA") +
+  scico::scale_color_scico(palette = "roma", limits = c(0, 1), direction=-1)
+
+p0 <- ggplot(sp_toys, aes(x, y, 
+               color=c_elsa)) + 
+  geom_point(size=s, alpha=0.5) + scale_y_reverse() + theme_bw() +
+  labs(x="",y="", title="C", color="ELSA") +
+  scico::scale_color_scico(palette = "roma", limits = c(0, 1), direction=-1)
+p2 <- ggplot(sp_toys, aes(x, y, 
+               color=p2_elsa)) + 
+  geom_point(size=s, alpha=0.5) + scale_y_reverse() + theme_bw() +
+  labs(x="",y="", title="P2", color="ELSA") +
+  scico::scale_color_scico(palette = "roma", limits = c(0, 1), direction=-1)
+
+plot_grid(p0 + theme(plot.title = element_text(hjust = 0.5)),
+          p1 + theme(plot.title = element_text(hjust = 0.5)),
+          p2 + theme(plot.title = element_text(hjust = 0.5)), nrow=1, rel_width=c(1,1,1))
+```
+
+# Session info
 ```{r}
-
+sessionInfo()
 ```
 
-```{r}
 
-```
 
-```{r}
-
-```
-
-```{r}
-
-```

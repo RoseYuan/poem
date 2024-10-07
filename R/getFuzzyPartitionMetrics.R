@@ -182,6 +182,7 @@ getFuzzyPartitionGlobalMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
            fuzzyAWC = fuzzyAWC
     )
   })
+  res <- unlist(res)
   return(data.frame(t(res)))
 }
 
@@ -212,6 +213,7 @@ getFuzzyPartitionClassMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
            fuzzyAWC = fuzzyAWC
     )
   })[metrics %in% c("fuzzyWC", "fuzzyAWC")]
+  
   res_class <- as.data.frame(res_class)
   res_class$class <-seq_along(fuzzyWC)
   

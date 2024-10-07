@@ -116,5 +116,5 @@ tmp <- data.frame(metric=c("Adjusted Mutual Information",
 ))
 
 metric_info$Description <- tmp$metric                             
-                            
+metric_info <- data.frame(metric_info)                            
 usethis::use_data(metric_info, overwrite = TRUE)
