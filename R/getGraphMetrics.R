@@ -31,7 +31,7 @@
 #'      - `"NP"`: Neighborhood Purity
 #'      - `"AMSP"`: Adjusted Mean Shortest Path
 #'      - `"PWC"`: Proportion of Weakly Connected 
-#'      - `"NCE"`: 
+#'      - `"NCE"`: Neighborhood Class Enrichment
 #'      - `"adhesion"`: adhesion of a graph, is the minumum number of nodes that must be removed to split a graph.
 #'      - `"cohesion"`: cohesion of a graph, is the minumum number of edges that must be removed to split a graph.
 #'   - If `level = "global"`, the allowed `metrics` are: `"SI"`,`"ISI"`,`"NP"`,`"AMSP"`,`"PWC"`,`"NCE"`, `"adhesion"`,`"cohesion"`.
