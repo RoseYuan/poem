@@ -128,7 +128,7 @@ getSpatialClassExternalMetrics <- function(true, pred, location, k=6, alpha=0.5,
                                                         fuzzy_true=fuzzy_true, fuzzy_pred=fuzzy_pred,
                                                         metrics=c("fuzzyWH","fuzzyAWH", "fuzzyWC", "fuzzyAWC"))))
   colnames(res) <- sub("fuzzy", "Spatial",colnames(res))
-  return(res[,metrics])
+  return(res[,c(metrics, "class","cluster")])
 }
 
 #' getSpatialElementExternalMetrics

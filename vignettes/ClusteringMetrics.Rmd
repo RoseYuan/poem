@@ -58,11 +58,16 @@ library(cowplot)
 
 ## What is this package for?
 
-A partition is a way of organizing the data points of a dataset into distinct, non-overlapping, and non-empty subsets. For example, a clustering is a partition. This package provides multiple approaches for comparing two partitions of the same dataset, and evaluating the alignment between a dataset’s embedding/graph representations and its partition. 
+This package provides multiple approaches for comparing two partitions[^1] of the same dataset, and evaluating the alignment between a dataset’s embedding/graph representations and its partition. 
 
-Despite hard partitions where each data point belongs to one and only one subset, clustering can also generate fuzzy partitions. A fuzzy partition allows data points to belong to multiple subsets with varying degrees of membership. This package further offers methods for comparing two fuzzy partitions as well as for comparing a hard partition with a fuzzy partition. This allows the evaluation of fuzzy partition results by assessing its agreement to a fuzzy or a hard ground-truth partition.
+Besides, this package further offers methods for comparing two fuzzy partitions[^2] as well as for comparing a hard partition with a fuzzy partition. This allows the evaluation of fuzzy partition results by assessing its agreement to a fuzzy or a hard ground-truth partition.
 
 The above mentioned metrics are all external evaluation metrics. Spatial clustering can be evaluated using external evaluation metrics of hard or fuzzy partitions, or by using internal evaluation metrics. This package also provides functions for all these types of analysis.
+
+[^1]: A partition is a way of organizing the data points of a dataset into distinct, non-overlapping, and non-empty subsets. For example, a clustering is a partition. 
+
+[^2]: Despite hard partitions where each data point belongs to one and only one subset, clustering can also generate fuzzy partitions. A fuzzy partition allows data points to belong to multiple subsets with varying degrees of membership. 
+
 
 ## Main functions
 
@@ -75,7 +80,10 @@ The package `r Rpackage("ClusteringMetrics")` includes many metrics to perform d
 - `getSpatialExternalMetrics()`: External metrics for evaluating spatial clustering results in a spatial-aware fashion. For non-spatial-aware evaluation, one can directly use `getPartitionMetrics()`.
 - `getSpatialInternalMetrics()`: Internal metrics for evaluating spatial clustering results in a spatial-aware fashion.
 
-There are 3 different levels where one can perform the above-mentioned evaluation: element-level, class-level, and global-level. Element-level evaluation reports metric values for each data point; Class-level evaluation reports metrics for each classes (groups in the ground-truth partition) or clusters (groups in the predicted partition); and global-level evaluation returns a single metric value for the whole dataset.
+There are 3 different levels where one can perform the above-mentioned evaluation: element-level, class-level, and global-level. Element-level evaluation reports metric values for each data point; Class-level evaluation reports metrics for each classes[^3] or clusters[^4]; and global-level evaluation returns a single metric value for the whole dataset.
+
+[^3]: In this vignette, classes refer to groups in the **ground-truth** partition.
+[^4]: In this vignette, clusters refer to groups in the **predicted** partition.
 
 The following table illustrates available metrics at different evaluation levels, and the main functions used to retrieve them.
 
