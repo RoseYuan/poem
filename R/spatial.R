@@ -20,7 +20,7 @@
 #' @importFrom stats median
 #' @export
 #' @examples
-#' data <- sp_toy
+#' data <- sp_toys
 #' findSpatialKNN(data[,c("x", "y")], k=6)
 findSpatialKNN <- function(location, k, keep_ties=TRUE, useMedianDist=FALSE,
                            BNPARAM=NULL){

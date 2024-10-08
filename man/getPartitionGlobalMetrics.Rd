@@ -23,14 +23,7 @@ be a vector of characters, integers, numerics, or a factor, but not a list.}
 computed. See below for more details.}
 }
 \value{
-A dataframe of metric results.
-}
-\description{
-Computes a selection of external evaluation metrics for partition. The
-metrics are reported per dataset.
-}
-\details{
-Possible metrics are:
+A dataframe of metric results. Possible metrics are:
 \item{RI}{Rand Index}
 \item{WC}{Wallace Completeness}
 \item{WH}{Wallace Homogeneity}
@@ -49,6 +42,10 @@ Possible metrics are:
 \item{MHM}{Meila-Heckerman Measure}
 \item{MMM}{Maximum-Match Measure}
 \item{Mirkin}{Mirkin Metric}
+}
+\description{
+Computes a selection of external evaluation metrics for partition. The
+metrics are reported per dataset.
 }
 \examples{
 true <- rep(LETTERS[1:3], each=10)
