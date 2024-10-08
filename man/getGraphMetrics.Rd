@@ -37,7 +37,7 @@ instead of a nearest neighbor network. Ignored if \code{x} is not an embedding
 or dist object.}
 
 \item{level}{The level to calculate the metrics. Options include \code{"element"},
-\code{"class"} and \code{"global"}.}
+\code{"class"} and \code{"dataset"}.}
 
 \item{BNPARAM}{A BiocNeighbors parameter object to compute kNNs. Ignored
 unless the input is a matrix or data.frame. If omitted, the Annoy
@@ -64,7 +64,7 @@ The allowed values for \code{metrics} depend on the value of \code{level}:
 \item \code{"adhesion"}: adhesion of a graph, is the minumum number of nodes that must be removed to split a graph.
 \item \code{"cohesion"}: cohesion of a graph, is the minumum number of edges that must be removed to split a graph.
 }
-\item If \code{level = "global"}, the allowed \code{metrics} are: \code{"SI"},\code{"ISI"},\code{"NP"},\code{"AMSP"},\code{"PWC"},\code{"NCE"}, \code{"adhesion"},\code{"cohesion"}.
+\item If \code{level = "dataset"}, the allowed \code{metrics} are: \code{"SI"},\code{"ISI"},\code{"NP"},\code{"AMSP"},\code{"PWC"},\code{"NCE"}, \code{"adhesion"},\code{"cohesion"}.
 }
 }
 \examples{

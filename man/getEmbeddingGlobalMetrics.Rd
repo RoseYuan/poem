@@ -30,7 +30,7 @@ be a vector of characters, integers, numerics, or a factor, but not a list.}
 A data.frame (with 1 row) of metrics.
 }
 \description{
-Computes global, embedding-based metrics.
+Computes dataset-level, embedding-based metrics.
 }
 \examples{
 d1 <- mockData()

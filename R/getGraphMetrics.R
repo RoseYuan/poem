@@ -12,7 +12,7 @@
 #'   If left to NULL, conventional choices will be made per metric (adhesion, 
 #'   cohesion, PWC AMSP undirected, others directed).
 #' @param level The level to calculate the metrics. Options include `"element"`, 
-#' `"class"` and `"global"`.
+#' `"class"` and `"dataset"`.
 #' @param k The number of nearest neighbors to compute and/or use. Can be 
 #'   omitted if `x` is a graph or list of nearest neighbors.
 #' @param BNPARAM A BiocNeighbors parameter object to compute kNNs. Ignored 
@@ -34,7 +34,7 @@
 #'      - `"NCE"`: Neighborhood Class Enrichment
 #'      - `"adhesion"`: adhesion of a graph, is the minumum number of nodes that must be removed to split a graph.
 #'      - `"cohesion"`: cohesion of a graph, is the minumum number of edges that must be removed to split a graph.
-#'   - If `level = "global"`, the allowed `metrics` are: `"SI"`,`"ISI"`,`"NP"`,`"AMSP"`,`"PWC"`,`"NCE"`, `"adhesion"`,`"cohesion"`.
+#'   - If `level = "dataset"`, the allowed `metrics` are: `"SI"`,`"ISI"`,`"NP"`,`"AMSP"`,`"PWC"`,`"NCE"`, `"adhesion"`,`"cohesion"`.
 #' @export
 #' @examples
 #' d1 <- mockData()
@@ -45,7 +45,7 @@ getGraphMetrics <-function(x, labels, metrics=c("SI","NP","AMSP","PWC","NCE"),
   level_functions <- list(
     "element" = getGraphElementMetrics,
     "class" = getGraphClassMetrics,
-    "global" = getGraphGlobalMetrics
+    "dataset" = getGraphGlobalMetrics
   )
   .checkMetricsLevel(metrics, level, level_functions, use_default=FALSE, 
                      use_attribute=TRUE, attr_name="allowed_metrics")

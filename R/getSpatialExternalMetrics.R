@@ -5,14 +5,14 @@
 #' @inheritParams getSpatialElementExternalMetrics
 #' @param metrics The metrics to compute. See details.
 #' @param level The level to calculate the metrics. Options include `"element"`,
-#' `"class"` and `"global"`.
+#' `"class"` and `"dataset"`.
 #' @return A data.frame of metrics.
 #' @export
 #' @details
 #' The allowed values for `metrics` depend on the value of `level`:
 #'   - If `level = "element"`, the allowed `metrics` are: `"spotAgreement"`.
 #'   - If `level = "class"`, the allowed `metrics` are: `"SpatialWH"`,`"SpatialAWH"`, `"SpatialWC"`,`"SpatialAWC"`.
-#'   - If `level = "global"`, the allowed `metrics` are: `"SpatialRI"`,`"SpatialARI"`,`"SpatialWH"`,`"SpatialAWH"`, `"SpatialWC"`,`"SpatialAWC"`,`"SpatialAccuracy"`. 
+#'   - If `level = "dataset"`, the allowed `metrics` are: `"SpatialRI"`,`"SpatialARI"`,`"SpatialWH"`,`"SpatialAWH"`, `"SpatialWC"`,`"SpatialAWC"`,`"SpatialAccuracy"`. 
 #' @examples
 #' data <- sp_toys
 #' getSpatialExternalMetrics(data$label, data$p1, data[,c("x", "y")], k=6, level="class")
@@ -25,7 +25,7 @@ getSpatialExternalMetrics <- function(true, pred, location, k=6, alpha=0.5, leve
   level_functions <- list(
     "element" = getSpatialElementExternalMetrics,
     "class" = getSpatialClassExternalMetrics,
-    "global" = getSpatialGlobalExternalMetrics
+    "dataset" = getSpatialGlobalExternalMetrics
   )
   .checkMetricsLevel(metrics, level, level_functions, use_default=TRUE, 
                      use_attribute=FALSE)
@@ -39,10 +39,10 @@ getSpatialExternalMetrics <- function(true, pred, location, k=6, alpha=0.5, leve
 
 
 
-#' Compute global-level external evaluation metrics for spatially-resolved data
+#' Compute dataset-level external evaluation metrics for spatially-resolved data
 #' 
 #' Computes a selection of external clustering evaluation metrics for spatial 
-#' data at the global level. Options include a series of fuzzy pair-counting 
+#' data at the dataset level. Options include a series of fuzzy pair-counting 
 #' metrics and set matching-based accuracy.
 #' @inheritParams getFuzzyPartitionMetrics
 #' @inheritParams getFuzzyLabel

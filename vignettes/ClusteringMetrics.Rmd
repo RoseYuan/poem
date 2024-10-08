@@ -80,7 +80,7 @@ The package `r Rpackage("ClusteringMetrics")` includes many metrics to perform d
 - `getSpatialExternalMetrics()`: External metrics for evaluating spatial clustering results in a spatial-aware fashion. For non-spatial-aware evaluation, one can directly use `getPartitionMetrics()`.
 - `getSpatialInternalMetrics()`: Internal metrics for evaluating spatial clustering results in a spatial-aware fashion.
 
-There are 3 different levels where one can perform the above-mentioned evaluation: element-level, class-level, and global-level. Element-level evaluation reports metric values for each data point; Class-level evaluation reports metrics for each classes[^3] or clusters[^4]; and global-level evaluation returns a single metric value for the whole dataset.
+There are 3 different levels where one can perform the above-mentioned evaluation: element-level, class-level, and dataset-level. Element-level evaluation reports metric values for each data point; Class-level evaluation reports metrics for each classes[^3] or clusters[^4]; and dataset-level evaluation returns a single metric value for the whole dataset.
 
 [^3]: In this vignette, classes refer to groups in the **ground-truth** partition.
 [^4]: In this vignette, clusters refer to groups in the **predicted** partition.
@@ -157,12 +157,12 @@ ggplot(aes(class, value, fill=graph, group=graph)) +
   theme_bw()
 ```
 
-## Global-level evaluation
+## Dataset-level evaluation
 
-Similarly, one can evaluate at the global level by specifying `level="global"`. For example:
+Similarly, one can evaluate at the dataset level by specifying `level="dataset"`. For example:
 
 ```{r}
-getEmbeddingMetrics(x=g1[,c("x","y")], labels=g1$class, metrics=c("meanSW", "meanClassSW", "pnSW", "minClassSW", "cdbw", "cohesion", "compactness", "sep", "dbcv"), level="global")
+getEmbeddingMetrics(x=g1[,c("x","y")], labels=g1$class, metrics=c("meanSW", "meanClassSW", "pnSW", "minClassSW", "cdbw", "cohesion", "compactness", "sep", "dbcv"), level="dataset")
 ```
 
 # Graph evaluation
@@ -199,7 +199,7 @@ plotGraphs(bind_rows(list(g1,g2), .id="graph"))
 
 Use `?getGraphMetrics()` to check optional arguments for KNN/SNN graph construction.
 
-Similarly, `level` can be `"element"`, `"class"` or `"global"`.
+Similarly, `level` can be `"element"`, `"class"` or `"dataset"`.
 
 ```{r}
 getGraphMetrics(x=g1[,c("x","y")], labels=g1$class, metrics=c("PWC","ISI"), level="class", directed=FALSE, k=7, shared=FALSE)
@@ -240,12 +240,12 @@ We then compare the predictions with the known labels using the partition metric
 
 ```{r}
 # for g1
-getPartitionMetrics(true=g1$class, pred=g1$cluster, level="global",
+getPartitionMetrics(true=g1$class, pred=g1$cluster, level="dataset",
                     metrics = c("RI", "WC", "WH", "ARI", "AWC", "AWH",
                                 "FM", "AMI"))
 
 # for g2
-getPartitionMetrics(true=g2$class, pred=g2$cluster, level="global",
+getPartitionMetrics(true=g2$class, pred=g2$cluster, level="dataset",
                     metrics = c("RI", "WC", "WH", "ARI", "AWC", "AWH",
                                 "FM", "AMI"))
 ```
@@ -327,7 +327,7 @@ Let's quantify this by calculating external spatial metrics:
 
 ```{r}
 getSpatialExternalMetrics(true=sp_toys$label, pred=sp_toys$p1,
-                      location=sp_toys[,c("x","y")], level="global",
+                      location=sp_toys[,c("x","y")], level="dataset",
                       metrics=c("SpatialARI","SpatialAccuracy"),
                       fuzzy_true = TRUE, fuzzy_pred = FALSE)
 ```
@@ -342,17 +342,17 @@ getSpatialExternalMetrics(true=sp_toys$label, pred=sp_toys$p1,
 
 ```{r}
 res1.1 <- getSpatialExternalMetrics(true=sp_toys$label, pred=sp_toys$p1,
-                      location=sp_toys[,c("x","y")], level="global",
+                      location=sp_toys[,c("x","y")], level="dataset",
                       metrics=c("SpatialARI","SpatialAccuracy"),
                       fuzzy_true = TRUE, fuzzy_pred = FALSE)
 res2.1 <- getSpatialExternalMetrics(true=sp_toys$label, pred=sp_toys$p2,
-                      location=sp_toys[,c("x","y")], level="global",
+                      location=sp_toys[,c("x","y")], level="dataset",
                       metrics=c("SpatialARI","SpatialAccuracy"),
                       fuzzy_true = TRUE, fuzzy_pred = FALSE)
 res1.2 <- getPartitionMetrics(true=sp_toys$label, pred=sp_toys$p1,
-                      level="global", metrics=c("ARI"))
+                      level="dataset", metrics=c("ARI"))
 res2.2 <- getPartitionMetrics(true=sp_toys$label, pred=sp_toys$p2,
-                      level="global", metrics=c("ARI"))
+                      level="dataset", metrics=c("ARI"))
 ```
 
 ```{r, fig.height = 2, fig.width = 5}

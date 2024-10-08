@@ -2,7 +2,7 @@
 % Please edit documentation in R/getSpatialInternalMetrics.R
 \name{getSpatialGlobalInternalMetrics}
 \alias{getSpatialGlobalInternalMetrics}
-\title{Compute global-level internal evaluation metrics for spatially-resolved data}
+\title{Compute dataset-level internal evaluation metrics for spatially-resolved data}
 \usage{
 getSpatialGlobalInternalMetrics(
   labels,
@@ -36,7 +36,7 @@ A named vector containing metric values. Possible metrics are:
 }
 \description{
 Computes a selection of internal clustering evaluation metrics for spatial
-data at the global level. MPC, PC and PE are internal metrics for fuzzy
+data at the dataset level. MPC, PC and PE are internal metrics for fuzzy
 clustering, and their implementations in package \code{fclust} are used.
 }
 \examples{

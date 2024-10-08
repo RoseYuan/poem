@@ -23,7 +23,7 @@ be a vector of characters, integers, numerics, or a factor, but not a list.}
 computed. See details.}
 
 \item{level}{The level to calculate the metrics. Options include
-\code{"class"} and \code{"global"}.}
+\code{"class"} and \code{"dataset"}.}
 
 \item{...}{}
 }
@@ -37,7 +37,7 @@ Computes a selection of external evaluation metrics for partition.
 The allowed values for \code{metrics} depend on the value of \code{level}:
 \itemize{
 \item If \code{level = "class"}, the allowed \code{metrics} are: \code{"WC"},\code{"WH"},\code{"AWC"},\code{"AWH"},\code{"FM"} (see below for details).
-\item If \code{level = "global"}, the allowed \code{metrics} are:
+\item If \code{level = "dataset"}, the allowed \code{metrics} are:
 \itemize{
 \item \code{"RI"}: Rand Index
 \item \code{"WC"}: Wallace Completeness
@@ -64,5 +64,5 @@ The allowed values for \code{metrics} depend on the value of \code{level}:
 true <- rep(LETTERS[1:3], each=10)
 pred <- c(rep("A", 8), rep("B", 9), rep("C", 3), rep("D", 10))
 getPartitionMetrics(true, pred, level="class")
-getPartitionMetrics(true, pred, level="global")
+getPartitionMetrics(true, pred, level="dataset")
 }

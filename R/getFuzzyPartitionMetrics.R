@@ -13,7 +13,7 @@
 #' into fuzzy cluster membership representation.
 #' @param metrics The metrics to compute. See details.
 #' @param level The level to calculate the metrics. Options include `"element"`, 
-#' `"class"` and `"global"`.
+#' `"class"` and `"dataset"`.
 #' @inheritParams fuzzyPartitionMetrics
 #' @inheritParams fuzzyHardMetrics
 #' @inheritParams fuzzyHardSpotAgreement
@@ -24,7 +24,7 @@
 #' The allowed values for `metrics` depend on the value of `level`:
 #'   - If `level = "element"`, the allowed `metrics` are: `"spotAgreement"`.
 #'   - If `level = "class"`, the allowed `metrics` are: `"fuzzyWH"`, `"fuzzyAWH"`, `"fuzzyWC"`, `"fuzzyAWC"`.
-#'   - If `level = "global"`, the allowed `metrics` are: `"fuzzyRI"`, `"fuzzyARI"`, `"fuzzyWH"`, `"fuzzyAWH"`, `"fuzzyWC"`, `"fuzzyAWC"`.
+#'   - If `level = "dataset"`, the allowed `metrics` are: `"fuzzyRI"`, `"fuzzyARI"`, `"fuzzyWH"`, `"fuzzyAWH"`, `"fuzzyWC"`, `"fuzzyAWC"`.
 
 #' @return A dataframe of metric results.
 #' @export
@@ -84,7 +84,7 @@ getFuzzyPartitionMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
   level_functions <- list(
     "element" = getFuzzyPartitionElementMetrics,
     "class" = getFuzzyPartitionClassMetrics,
-    "global" = getFuzzyPartitionGlobalMetrics
+    "dataset" = getFuzzyPartitionGlobalMetrics
   )
   .checkMetricsLevel(metrics, level, level_functions, use_default=TRUE, 
                      use_attribute=FALSE)
@@ -103,7 +103,7 @@ getFuzzyPartitionMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
                    metrics=metrics, nperms=nperms, verbose=verbose, 
                    returnElementPairAccuracy=returnElementPairAccuracy,
                    BPPARAM=BPPARAM, ...),
-    "global" = list(hardTrue=hardTrue, fuzzyTrue=fuzzyTrue, 
+    "dataset" = list(hardTrue=hardTrue, fuzzyTrue=fuzzyTrue, 
                     hardPred=hardPred, fuzzyPred=fuzzyPred, 
                     fuzzy_true=fuzzy_true, fuzzy_pred=fuzzy_pred,
                     metrics=metrics, nperms=nperms, verbose=verbose, 

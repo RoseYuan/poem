@@ -36,7 +36,7 @@ standard error of the mean across permutations (giving an idea of the
 precision of the adjusted metrics).}
 
 \item{returnElementPairAccuracy}{Logical. If TRUE, returns the per-element
-pair accuracy instead of the various parition-level and global metrics.
+pair accuracy instead of the various parition-level and dataset-level metrics.
 Default FALSE.}
 
 \item{BPPARAM}{BiocParallel params for multithreading (default none)}

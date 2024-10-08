@@ -21,7 +21,7 @@
 #'   standard error of the mean across permutations (giving an idea of the 
 #'   precision of the adjusted metrics).
 #' @param returnElementPairAccuracy Logical. If TRUE, returns the per-element
-#'   pair accuracy instead of the various parition-level and global metrics.
+#'   pair accuracy instead of the various parition-level and dataset-level metrics.
 #'   Default FALSE.
 #' @param BPPARAM BiocParallel params for multithreading (default none)
 #' @param tnorm Which type of t-norm operation to use for class membership of
@@ -235,7 +235,7 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
 #'   whether the variation across permutations is above 0.0025, in which case 
 #'   more (max 1000) permutations will be run.
 #' @param returnElementPairAccuracy Logical. If TRUE, returns the per-element
-#'   pair accuracy instead of the various parition-level and global metrics.
+#'   pair accuracy instead of the various parition-level and dataset-level metrics.
 #'   Default FALSE.
 #' @param verbose Logical; whether to print info and warnings, including the 
 #'   standard error of the mean across permutations (giving an idea of the 

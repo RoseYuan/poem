@@ -9,7 +9,7 @@
 #' @param metrics The metrics to compute. See details. 
 #' @param distance The distance metric to use (default euclidean).
 #' @param level The level to calculate the metrics. Options include `"element"`, 
-#' `"class"` and `"global"`.
+#' `"class"` and `"dataset"`.
 #' @param ... Optional arguments. See details.
 #'   
 #' @return A data.frame of metrics.
@@ -17,14 +17,14 @@
 #' The allowed values for `metrics` depend on the value of `level`:
 #'   - If `level = "element"`, the allowed `metrics` are: `"SW"`.
 #'   - If `level = "class"`, the allowed `metrics` are: `"meanSW"`, `"minSW"`, `"pnSW"`, `"dbcv"`.
-#'   - If `level = "global"`, the allowed `metrics` are: `"meanSW"`, 
+#'   - If `level = "dataset"`, the allowed `metrics` are: `"meanSW"`, 
 #'   `"meanClassSW"`, `"pnSW"`, `"minClassSW"`, `"cdbw"`, `"cohesion"`, `"compactness"`, `"sep"`, `"dbcv"`.
 #'   
 #' The function(s) that the optional arguments `...` passed to depend on the 
 #' value of `level`:
 #'   - If `level = "element"`, optional arguments are passed to [stats::dist()].
 #'   - If `level = "class"`, optional arguments are passed to [dbcv()].
-#'   - If `level = "global"`, optional arguments are passed to [dbcv()] or [CDbw()].
+#'   - If `level = "dataset"`, optional arguments are passed to [dbcv()] or [CDbw()].
 #' @export
 #' @examples
 #' d1 <- mockData()
@@ -36,7 +36,7 @@ getEmbeddingMetrics <-function(x, labels, metrics=c("meanSW", "minSW", "pnSW", "
   level_functions <- list(
     "element" = getEmbeddingElementMetrics,
     "class" = getEmbeddingClassMetrics,
-    "global" = getEmbeddingGlobalMetrics
+    "dataset" = getEmbeddingGlobalMetrics
   )
   .checkMetricsLevel(metrics, level, level_functions, use_default=TRUE, 
                      use_attribute=FALSE)
@@ -117,7 +117,7 @@ getEmbeddingClassMetrics <-function(x, labels,
 
 #' getEmbeddingGlobalMetrics
 #' 
-#' Computes global, embedding-based metrics.
+#' Computes dataset-level, embedding-based metrics.
 #' 
 #' @param metrics The metrics to compute.
 #' @inheritParams getEmbeddingMetrics

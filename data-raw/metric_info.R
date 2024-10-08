@@ -19,26 +19,26 @@ metric_info <- data.frame(Name=c("SW",
                                  ), 
                           Levels=c("element",
                                    rep("class",4),
-                                   rep("global",9),
+                                   rep("dataset",9),
                     
                                    rep("elelemt",4),
                                    rep("class",8),
-                                   rep("global",8),
+                                   rep("dataset",8),
                                    
                                    rep("class",5),
-                                   rep("global",18),
+                                   rep("dataset",18),
                                    
                                    rep("elelemt",1),
                                    rep("class",4),
-                                   rep("global",6),
+                                   rep("dataset",6),
                                    
                                    rep("elelemt",1),
                                    rep("class",4),
-                                   rep("global",7),
+                                   rep("dataset",7),
                                    
                                    rep("elelemt",2),
                                    rep("class",3),
-                                   rep("global",6)
+                                   rep("dataset",6)
                                         ), 
                           MainFunction=c(
                             rep("getEmbeddingMetrics",14),

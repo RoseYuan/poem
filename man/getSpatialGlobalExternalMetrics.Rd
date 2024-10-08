@@ -2,7 +2,7 @@
 % Please edit documentation in R/getSpatialExternalMetrics.R
 \name{getSpatialGlobalExternalMetrics}
 \alias{getSpatialGlobalExternalMetrics}
-\title{Compute global-level external evaluation metrics for spatially-resolved data}
+\title{Compute dataset-level external evaluation metrics for spatially-resolved data}
 \usage{
 getSpatialGlobalExternalMetrics(
   true,
@@ -48,7 +48,7 @@ into fuzzy cluster membership representation.}
 }
 \description{
 Computes a selection of external clustering evaluation metrics for spatial
-data at the global level. Options include a series of fuzzy pair-counting
+data at the dataset level. Options include a series of fuzzy pair-counting
 metrics and set matching-based accuracy.
 }
 \examples{

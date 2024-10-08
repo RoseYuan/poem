@@ -37,7 +37,7 @@ frequency contribution for the spot itself, and the frequency contribution
 for its knn is then \code{1-alpha}. By default \code{0.5}.}
 
 \item{level}{The level to calculate the metrics. Options include \code{"element"},
-\code{"class"} and \code{"global"}.}
+\code{"class"} and \code{"dataset"}.}
 
 \item{metrics}{The metrics to compute. See details.}
 
@@ -61,7 +61,7 @@ The allowed values for \code{metrics} depend on the value of \code{level}:
 \itemize{
 \item If \code{level = "element"}, the allowed \code{metrics} are: \code{"spotAgreement"}.
 \item If \code{level = "class"}, the allowed \code{metrics} are: \code{"SpatialWH"},\code{"SpatialAWH"}, \code{"SpatialWC"},\code{"SpatialAWC"}.
-\item If \code{level = "global"}, the allowed \code{metrics} are: \code{"SpatialRI"},\code{"SpatialARI"},\code{"SpatialWH"},\code{"SpatialAWH"}, \code{"SpatialWC"},\code{"SpatialAWC"},\code{"SpatialAccuracy"}.
+\item If \code{level = "dataset"}, the allowed \code{metrics} are: \code{"SpatialRI"},\code{"SpatialARI"},\code{"SpatialWH"},\code{"SpatialAWH"}, \code{"SpatialWC"},\code{"SpatialAWC"},\code{"SpatialAccuracy"}.
 }
 }
 \examples{

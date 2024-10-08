@@ -6,14 +6,14 @@
 #' @inheritParams getSpatialElementInternalMetrics
 #' @param metrics The metrics to compute. See details.
 #' @param level The level to calculate the metrics. Options include `"element"`,
-#' `"class"` and `"global"`.
+#' `"class"` and `"dataset"`.
 #' @return A data.frame of metrics.
 #' @export
 #' @details
 #' The allowed values for `metrics` depend on the value of `level`:
 #'   - If `level = "element"`, the allowed `metrics` are: `"PAS"`, `"ELSA"`.
 #'   - If `level = "class"`, the allowed `metrics` are: `"CHAOS"`, `"PAS"`, `"ELSA"`.
-#'   - If `level = "global"`, the allowed `metrics` are:
+#'   - If `level = "dataset"`, the allowed `metrics` are:
 #'      - `"PAS"`: Proportion of abnormal spots (PAS score)
 #'      - `"ELSA"`: Entropy-based Local indicator of Spatial Association (ELSA score)
 #'      - `"CHAOS"`: Spatial Chaos Score.
@@ -29,7 +29,7 @@ getSpatialInternalMetrics <- function(labels, location, k=6, level="class",
   level_functions <- list(
     "element" = getSpatialElementInternalMetrics,
     "class" = getSpatialClassInternalMetrics,
-    "global" = getSpatialGlobalInternalMetrics
+    "dataset" = getSpatialGlobalInternalMetrics
   )
   .checkMetricsLevel(metrics, level, level_functions, use_default=FALSE, 
                      use_attribute=TRUE, attr_name="allowed_metrics")
@@ -39,10 +39,10 @@ getSpatialInternalMetrics <- function(labels, location, k=6, level="class",
 }
 
 
-#' Compute global-level internal evaluation metrics for spatially-resolved data
+#' Compute dataset-level internal evaluation metrics for spatially-resolved data
 #' 
 #' Computes a selection of internal clustering evaluation metrics for spatial 
-#' data at the global level. MPC, PC and PE are internal metrics for fuzzy 
+#' data at the dataset level. MPC, PC and PE are internal metrics for fuzzy 
 #' clustering, and their implementations in package `fclust` are used.
 #' 
 #' @param labels A vector containing the labels to be evaluated.

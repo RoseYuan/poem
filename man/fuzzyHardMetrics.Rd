@@ -31,7 +31,7 @@ whether the variation across permutations is above 0.0025, in which case
 more (max 1000) permutations will be run.}
 
 \item{returnElementPairAccuracy}{Logical. If TRUE, returns the per-element
-pair accuracy instead of the various parition-level and global metrics.
+pair accuracy instead of the various parition-level and dataset-level metrics.
 Default FALSE.}
 
 \item{verbose}{Logical; whether to print info and warnings, including the
