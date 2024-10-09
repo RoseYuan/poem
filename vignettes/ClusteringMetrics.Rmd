@@ -58,23 +58,24 @@ library(cowplot)
 
 ## What is this package for?
 
-This package provides multiple approaches for comparing two partitions[^1] of the same dataset, and evaluating the alignment between a dataset’s embedding/graph representations and its partition. 
+This package provides multiple approaches for comparing two partitions[^1] of the same dataset, and evaluating the alignment between a dataset’s embedding/graph representations and its partition.
 
 Besides, this package further offers methods for comparing two fuzzy partitions[^2] as well as for comparing a hard partition with a fuzzy partition. This allows the evaluation of fuzzy partition results by assessing its agreement to a fuzzy or a hard ground-truth partition.
 
-The above mentioned metrics are all external evaluation metrics. Spatial clustering can be evaluated using external evaluation metrics of hard or fuzzy partitions, or by using internal evaluation metrics. This package also provides functions for all these types of analysis.
+Finally, the package implements visualization and evaluation metrics tailored for domain detection in spatially-resolved -omics data.
+These include especially external evaluation metrics (i.e. based on a comparison to ground truth labels), but also internal metrics. 
 
 [^1]: A partition is a way of organizing the data points of a dataset into distinct, non-overlapping, and non-empty subsets. For example, a clustering is a partition. 
 
-[^2]: Despite hard partitions where each data point belongs to one and only one subset, clustering can also generate fuzzy partitions. A fuzzy partition allows data points to belong to multiple subsets with varying degrees of membership. 
+[^2]: In 'hard' partitions, each data point belongs to one and only one subset. However, clustering can also generate fuzzy partitions, in which data points can belong to multiple subsets with varying degrees (or probability) of membership. 
 
 
 ## Main functions
 
-The package `r Rpackage("ClusteringMetrics")` includes many metrics to perform different kinds of evaluations, and these metrics can be retrieved via 6 main wrapper functions. If no specified, "partition" means "hard" partition. They are:
+The package `r Rpackage("ClusteringMetrics")` includes many metrics to perform different kinds of evaluations, and these metrics can be retrieved via 6 main wrapper functions. Unless specified, "partition" means "hard" partition. They are:
 
 - `getEmbeddingMetrics()`: Metrics to compare an embedding of data points to a partition of these data points.
-- `getGraphMetrics()`: Metrics to compare a graph to a partition, where nodes in the graph are data points in the partition.
+- `getGraphMetrics()`: Metrics to compare a graph (e.g. kNN/sNN) to a partition, where nodes in the graph are data points in the partition.
 - `getPartitionMetrics()`: Metrics to compare two partitions of the same dataset.
 - `getfuzzyPartitionMetrics()`: Metrics to compare two fuzzy partitions, or to compare between a fuzzy and a hard partition of the same dataset.
 - `getSpatialExternalMetrics()`: External metrics for evaluating spatial clustering results in a spatial-aware fashion. For non-spatial-aware evaluation, one can directly use `getPartitionMetrics()`.
@@ -94,6 +95,7 @@ DT::datatable(metric_info)
 # Getting started
 
 ## Example data
+
 To showcase the main functions, we will use some simulated datasets (See reference) as examples in this vignette. #TODO: add reference.
 
 The two datasets, `g1` and `g2`, both contain 80 data points with `x` and `y` coordinates and of 4 different classes.
@@ -116,21 +118,27 @@ ggplot(rbind(g1,g2), aes(x,y,color=class, shape=class)) +
 
 # Embedding evaluation
 
-Let's assume `g1` and `g2` contain two different embeddings of the same set of objects. A "good" embedding should put objects of the same class together, and objects of different class apart. With the ground-truth class of each object already known, one can evaluation such "goodness" of an embedding by calculating embedding evaluation metrics.
+Let's assume `g1` and `g2` contain two different embeddings of the same set of objects. A "good" embedding should put objects of the same class together, and objects of different class apart.
+Since we know the ground-truth class of each object, one can evaluation such "goodness" of an embedding by calculating embedding evaluation metrics.
+One can calculate such metrics element-wise, for each class/cluster, or for the whole dataset.
 
 ## Element-level evaluation
+
 For example, at the element level, one can calculate the Silhouette Width by specifying `level="element"` and `metrics=c("SW")`:
 
 ```{r}
-sw <- getEmbeddingMetrics(x=g1[,c("x","y")], labels=g1$class, metrics=c("SW"), level="element")
+sw <- getEmbeddingMetrics(x=g1[,c("x","y")], labels=g1$class, metrics=c("SW"),
+                          level="element")
 head(sw)
 ```
 
 The output will be a `data.frame` containing the metric values for the specified level.
 
 ```{r, fig.height = 3, fig.width = 7}
-g1$sw <- getEmbeddingMetrics(x=g1[,c("x","y")], labels=g1$class, metrics=c("SW"), level="element")$SW
-g2$sw <- getEmbeddingMetrics(x=g2[,c("x","y")], labels=g2$class, metrics=c("SW"), level="element")$SW
+g1$sw <- getEmbeddingMetrics(x=g1[,c("x","y")], labels=g1$class,
+                             metrics=c("SW"), level="element")$SW
+g2$sw <- getEmbeddingMetrics(x=g2[,c("x","y")], labels=g2$class,
+                             metrics=c("SW"), level="element")$SW
 ggplot(rbind(g1,g2), aes(x, y, color=sw, shape=class)) + 
   geom_point() +
   facet_wrap(~graph) +
@@ -142,15 +150,19 @@ ggplot(rbind(g1,g2), aes(x, y, color=sw, shape=class)) +
 One can also evaluate at each class level, by specifying `level="class"`. Check `?getEmbeddingMetrics` to see what are the allowed metrics at the class level. For example:
 
 ```{r}
-cl <- getEmbeddingMetrics(x=g1[,c("x","y")], labels=g1$class, metrics=c("dbcv", "meanSW"), level="class")
+cl <- getEmbeddingMetrics(x=g1[,c("x","y")], labels=g1$class,
+                          metrics=c("dbcv", "meanSW"), level="class")
 head(cl)
 ```
 
 ```{r, fig.height = 3, fig.width = 7}
-res1 <- getEmbeddingMetrics(x=g1[,c("x","y")], labels=g1$class, metrics=c("dbcv", "meanSW"), level="class")
-res2 <- getEmbeddingMetrics(x=g2[,c("x","y")], labels=g2$class, metrics=c("dbcv", "meanSW"), level="class")
+res1 <- getEmbeddingMetrics(x=g1[,c("x","y")], labels=g1$class,
+                            metrics=c("dbcv", "meanSW"), level="class")
+res2 <- getEmbeddingMetrics(x=g2[,c("x","y")], labels=g2$class,
+                            metrics=c("dbcv", "meanSW"), level="class")
 
-bind_rows(list(graph1=res1, graph2=res2), .id="graph") %>% pivot_longer(cols=c("meanSW","dbcv"), names_to="metric",values_to="value") %>%
+bind_rows(list(graph1=res1, graph2=res2), .id="graph") %>% 
+  pivot_longer(cols=c("meanSW","dbcv"), names_to="metric",values_to="value") %>%
 ggplot(aes(class, value, fill=graph, group=graph)) + 
   geom_bar(position = "dodge", stat = "identity") +
   facet_wrap(~metric) +
@@ -162,7 +174,9 @@ ggplot(aes(class, value, fill=graph, group=graph)) +
 Similarly, one can evaluate at the dataset level by specifying `level="dataset"`. For example:
 
 ```{r}
-getEmbeddingMetrics(x=g1[,c("x","y")], labels=g1$class, metrics=c("meanSW", "meanClassSW", "pnSW", "minClassSW", "cdbw", "cohesion", "compactness", "sep", "dbcv"), level="dataset")
+getEmbeddingMetrics(x=g1[,c("x","y")], labels=g1$class, level="dataset",
+                    metrics=c("meanSW", "meanClassSW", "pnSW", "minClassSW",
+                              "cdbw", "cohesion", "compactness", "sep", "dbcv"))
 ```
 
 # Graph evaluation
@@ -172,26 +186,17 @@ Instead of directly using the distances or densities in the embedding space for 
 # Some functions for plotting
 plotGraphs <- function(d, k=7){
   gn <- dplyr::bind_rows(lapply(split(d[,-1],d$graph), FUN=function(d1){
-    g <- knn2graph(df2knn(d1, k=k))
+    nn <- ClusteringMetrics:::.emb2knn(as.matrix(d1[,c("x","y")]), k=k)
+    g <- ClusteringMetrics:::.nn2graph(nn, labels=d1$class)
     ggnetwork(g, layout=as.matrix(d1[,1:2]), scale=FALSE)
   }), .id="graph")
-  ggplot(gn, aes(x = x, y = y, xend = xend, yend = yend)) + theme_blank() + theme(legend.position = "right") +
-  geom_edges(alpha=0.5, colour="grey") + geom_nodes(aes(colour=class, shape=class), size=2) + facet_wrap(~graph, nrow=1)
-}
-df2knn <- function(d1, k=7, ...){
-  knn <- BiocNeighbors::findKNN(d1[,1:2], k=k, ...)
-  knn$class <- factor(d1$class)
-  knn
-}
-knn2graph <- function(knn, directed=FALSE){
-  g <- bluster::neighborsToKNNGraph(knn$index, directed=directed)
-  g <- set_vertex_attr(g, "class", value=factor(knn$class))
-  g <- set_vertex_attr(g, "id", value=seq_along(V(g)))
-  g
+  ggplot(gn, aes(x = x, y = y, xend = xend, yend = yend)) + theme_blank() + 
+    theme(legend.position = "right") + geom_edges(alpha=0.5, colour="grey") + 
+    geom_nodes(aes(colour=class, shape=class), size=2) + facet_wrap(~graph, nrow=1)
 }
 ```
 
-For our examples `g1` and `g2`, the constucted graphs will look like:
+For our examples `g1` and `g2`, the constructed graphs will look like:
 
 ```{r, fig.height = 3, fig.width = 7}
 plotGraphs(bind_rows(list(g1,g2), .id="graph"))
@@ -202,14 +207,16 @@ Use `?getGraphMetrics()` to check optional arguments for KNN/SNN graph construct
 Similarly, `level` can be `"element"`, `"class"` or `"dataset"`.
 
 ```{r}
-getGraphMetrics(x=g1[,c("x","y")], labels=g1$class, metrics=c("PWC","ISI"), level="class", directed=FALSE, k=7, shared=FALSE)
+getGraphMetrics(x=g1[,c("x","y")], labels=g1$class, metrics=c("PWC","ISI"),
+                level="class", directed=FALSE, k=7, shared=FALSE)
 ```
 
 ```{r, fig.height = 3, fig.width = 7}
-res1 <- getGraphMetrics(x=g1[,c("x","y")], labels=g1$class, metrics=c("PWC","ISI"), level="class", directed=FALSE, k=7, shared=FALSE)
+res1 <- getGraphMetrics(x=g1[,c("x","y")], labels=g1$class,metrics=c("PWC","ISI"), level="class", directed=FALSE, k=7, shared=FALSE)
 res2 <- getGraphMetrics(x=g2[,c("x","y")], labels=g2$class, metrics=c("PWC","ISI"), level="class", directed=FALSE, k=7, shared=FALSE)
 
-bind_rows(list(graph1=res1, graph2=res2), .id="graph") %>% pivot_longer(cols=c("PWC","ISI"), names_to="metric",values_to="value") %>%
+bind_rows(list(graph1=res1, graph2=res2), .id="graph") %>% 
+  pivot_longer(cols=c("PWC","ISI"), names_to="metric",values_to="value") %>%
 ggplot(aes(class, value, fill=graph, group=graph)) + 
   geom_bar(position = "dodge", stat = "identity") +
   facet_wrap(~metric) +
@@ -274,7 +281,6 @@ fuzzyTrue <- matrix(c(
   0.97, 0.02, 0.01, 
   0.025, 0.025, 0.95), 
   ncol = 3, byrow=TRUE)
-fuzzyTrue
 ```
 
 ```{r}
@@ -282,8 +288,11 @@ fuzzyTrue
 hardTrue <- apply(fuzzyTrue,1,FUN=which.max)
 # some predicted labels:
 hardPred <- c(1,1,1,1,1,1,2,2,2)
-getFuzzyPartitionMetrics(hardPred=hardPred, hardTrue=hardTrue, fuzzyTrue=fuzzyTrue, nperms=3, level="class", fuzzy_true = TRUE, fuzzy_pred = FALSE)
+getFuzzyPartitionMetrics(hardPred=hardPred, hardTrue=hardTrue, 
+                         fuzzyTrue=fuzzyTrue, nperms=3, level="class", 
+                         fuzzy_true = TRUE, fuzzy_pred = FALSE)
 ```
+
 By specifying `fuzzy_true` and `fuzzy_pred`, one can control whether the fuzzy or hard version of the two partitions is used in comparison. This should be consistent with the input `hardPred`, `hardTrue`, `fuzzyPred`, `fuzzyTrue`, e.g. when `fuzzy_true=TRUE`, `fuzzyTrue` should not be `NULL`.
 
 
