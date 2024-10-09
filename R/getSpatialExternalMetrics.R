@@ -93,7 +93,7 @@ getSpatialGlobalExternalMetrics <- function(true, pred, location, k=6, alpha=0.5
     res$setMatchingAccuracy<- .setMatchingAccuracy(true, pred)
   }
   colnames(res) <- sub("fuzzy", "Spatial",colnames(res))
-  return(res[,metrics])
+  return(res[,metrics, drop=FALSE])
 }
 
 #' Compute class-level external evaluation metrics for spatially-resolved data

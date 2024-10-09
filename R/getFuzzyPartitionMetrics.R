@@ -7,10 +7,6 @@
 #' probability of elements (rows) in clusters (columns). 
 #' @param fuzzyPred A object coercible to a numeric matrix with membership 
 #'   probability of elements (rows) in clusters (columns).
-#' @param fuzzy_true Logical. Indicating if the `true` label will be transformed 
-#' into fuzzy cluster membership representation.
-#' @param fuzzy_pred Logical. Indicating if the `pred` label will be transformed 
-#' into fuzzy cluster membership representation.
 #' @param metrics The metrics to compute. See details.
 #' @param level The level to calculate the metrics. Options include `"element"`, 
 #' `"class"` and `"dataset"`.
@@ -51,7 +47,7 @@
 #'                0.01, 0.01, 0.98), 
 #'                ncol = 3, byrow=TRUE)
 #' colnames(m1) <- colnames(m2) <- LETTERS[1:3]
-#' getFuzzyPartitionMetrics(fuzzyTrue=m1,fuzzyPred=m2, fuzzy_true=TRUE, fuzzy_pred=TRUE, level="class")
+#' getFuzzyPartitionMetrics(fuzzyTrue=m1,fuzzyPred=m2, level="class")
 #' 
 #' # generate a fuzzy truth:
 #' fuzzyTrue <- matrix(c(
@@ -73,7 +69,6 @@
 #' 
 getFuzzyPartitionMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL, 
                                      hardPred=NULL, fuzzyPred=NULL, 
-                                     fuzzy_true=TRUE, fuzzy_pred=FALSE,
                                      metrics=c("fuzzyWH", "fuzzyAWH",
                                                "fuzzyWC", "fuzzyAWC"),
                                      level="class",
@@ -81,6 +76,24 @@ getFuzzyPartitionMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
                                      returnElementPairAccuracy=FALSE,
                                      BPPARAM=BiocParallel::SerialParam(), 
                                      useNegatives=TRUE, usePairs=NULL, ...){
+  
+  if(verbose){
+    mc <- match.call()
+    mc <- mc[intersect(names(test), c("hardTrue","fuzzyTrue","hardPred","fuzzyPred"))]
+    paste0(names(mc),"=",unlist(mc), collapse=", ")
+  }
+  if(!is.null(fuzzyTrue)){
+    fuzzy_true=TRUE
+  }else{
+    stopifnot(!is.null(hardTrue))
+    fuzzy_true=FALSE
+  }
+  if(!is.null(fuzzyPred)){
+    fuzzy_pred=TRUE
+  }else{
+    stopifnot(!is.null(hardPred))
+    fuzzy_pred=FALSE
+  }
   level_functions <- list(
     "element" = getFuzzyPartitionElementMetrics,
     "class" = getFuzzyPartitionClassMetrics,
@@ -271,7 +284,7 @@ getFuzzyPartitionElementMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
                                             fuzzy_true=TRUE, fuzzy_pred=FALSE,
                                             metrics=c("spotAgreement"),
                                             useNegatives=TRUE, verbose=TRUE,
-                                            usePairs=NULL){
+                                            usePairs=TRUE){
   if(fuzzy_true & fuzzy_pred){
     stopifnot(!(is.null(fuzzyTrue)|is.null(fuzzyPred)))
     message("Comparing between a fuzzy truth and a fuzzy prediction...")
@@ -288,7 +301,7 @@ getFuzzyPartitionElementMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
                                   useNegatives=useNegatives, verbose=verbose)
   }else if((!fuzzy_true) & (!fuzzy_pred)){
     message("Comparing between a hard truth and a hard prediction...")
-    getAgreement(hardTrue, hardPred, usePairs=usePairs, useNegatives=useNegatives)
+    res <- getAgreement(hardTrue, hardPred, usePairs=usePairs, useNegatives=useNegatives)
   }
   res <- data.frame(res)
   colnames(res) <- "spotAgreement"

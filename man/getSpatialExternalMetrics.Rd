@@ -41,12 +41,6 @@ for its knn is then \code{1-alpha}. By default \code{0.5}.}
 
 \item{metrics}{The metrics to compute. See details.}
 
-\item{fuzzy_true}{Logical. Indicating if the \code{true} label will be transformed
-into fuzzy cluster membership representation.}
-
-\item{fuzzy_pred}{Logical. Indicating if the \code{pred} label will be transformed
-into fuzzy cluster membership representation.}
-
 \item{...}{Optional params for \code{\link[=getFuzzyPartitionElementMetrics]{getFuzzyPartitionElementMetrics()}} or \code{\link[=findSpatialKNN]{findSpatialKNN()}}.}
 }
 \value{

@@ -14,7 +14,7 @@ getFuzzyPartitionElementMetrics(
   metrics = c("spotAgreement"),
   useNegatives = TRUE,
   verbose = TRUE,
-  usePairs = NULL
+  usePairs = TRUE
 )
 }
 \arguments{
@@ -28,12 +28,6 @@ number of rows as the length of \code{hardTrue}.}
 
 \item{fuzzyPred}{A object coercible to a numeric matrix with membership
 probability of elements (rows) in clusters (columns).}
-
-\item{fuzzy_true}{Logical. Indicating if the \code{true} label will be transformed
-into fuzzy cluster membership representation.}
-
-\item{fuzzy_pred}{Logical. Indicating if the \code{pred} label will be transformed
-into fuzzy cluster membership representation.}
 
 \item{metrics}{The metrics to compute. Currently only \code{"spotAgreement"} is included at the element level.}
 

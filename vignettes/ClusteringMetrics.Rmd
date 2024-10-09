@@ -289,8 +289,7 @@ hardTrue <- apply(fuzzyTrue,1,FUN=which.max)
 # some predicted labels:
 hardPred <- c(1,1,1,1,1,1,2,2,2)
 getFuzzyPartitionMetrics(hardPred=hardPred, hardTrue=hardTrue, 
-                         fuzzyTrue=fuzzyTrue, nperms=3, level="class", 
-                         fuzzy_true = TRUE, fuzzy_pred = FALSE)
+                         fuzzyTrue=fuzzyTrue, nperms=3, level="class")
 ```
 
 By specifying `fuzzy_true` and `fuzzy_pred`, one can control whether the fuzzy or hard version of the two partitions is used in comparison. This should be consistent with the input `hardPred`, `hardTrue`, `fuzzyPred`, `fuzzyTrue`, e.g. when `fuzzy_true=TRUE`, `fuzzyTrue` should not be `NULL`.

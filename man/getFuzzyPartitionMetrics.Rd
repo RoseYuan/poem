@@ -9,8 +9,6 @@ getFuzzyPartitionMetrics(
   fuzzyTrue = NULL,
   hardPred = NULL,
   fuzzyPred = NULL,
-  fuzzy_true = TRUE,
-  fuzzy_pred = FALSE,
   metrics = c("fuzzyWH", "fuzzyAWH", "fuzzyWC", "fuzzyAWC"),
   level = "class",
   nperms = NULL,
@@ -34,12 +32,6 @@ containing the predicted hard labels.}
 
 \item{fuzzyPred}{A object coercible to a numeric matrix with membership
 probability of elements (rows) in clusters (columns).}
-
-\item{fuzzy_true}{Logical. Indicating if the \code{true} label will be transformed
-into fuzzy cluster membership representation.}
-
-\item{fuzzy_pred}{Logical. Indicating if the \code{pred} label will be transformed
-into fuzzy cluster membership representation.}
 
 \item{metrics}{The metrics to compute. See details.}
 
@@ -107,7 +99,7 @@ m2 <- matrix(c(0.95, 0.025, 0.025,
                0.01, 0.01, 0.98), 
                ncol = 3, byrow=TRUE)
 colnames(m1) <- colnames(m2) <- LETTERS[1:3]
-getFuzzyPartitionMetrics(fuzzyTrue=m1,fuzzyPred=m2, fuzzy_true=TRUE, fuzzy_pred=TRUE, level="class")
+getFuzzyPartitionMetrics(fuzzyTrue=m1,fuzzyPred=m2, level="class")
 
 # generate a fuzzy truth:
 fuzzyTrue <- matrix(c(

@@ -84,6 +84,7 @@ getSpatialGlobalInternalMetrics <- function(labels, location, k=6,
     )}
     )
   res <- unlist(res)
+  res <- data.frame(t(res), row.names = NULL)
   names(res)[names(res) == "ELSA.ELSA"] <- "ELSA"
   return(res)
 }
