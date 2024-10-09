@@ -292,7 +292,7 @@ getFuzzyPartitionMetrics(hardPred=hardPred, hardTrue=hardTrue,
                          fuzzyTrue=fuzzyTrue, nperms=3, level="class")
 ```
 
-By specifying `fuzzy_true` and `fuzzy_pred`, one can control whether the fuzzy or hard version of the two partitions is used in comparison. This should be consistent with the input `hardPred`, `hardTrue`, `fuzzyPred`, `fuzzyTrue`, e.g. when `fuzzy_true=TRUE`, `fuzzyTrue` should not be `NULL`.
+By using the input `hardPred`, `hardTrue`, `fuzzyPred`, `fuzzyTrue`, one can control whether the fuzzy or hard version of the two partitions is used in comparison. For example, when `fuzzyTrue` and `fuzzyPred` are not `NULL`, metrics for comparing two fuzzy partitions will be used.
 
 
 # Spatial clustering evaluation
