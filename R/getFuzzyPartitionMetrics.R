@@ -79,7 +79,7 @@ getFuzzyPartitionMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
   
   if(verbose){
     mc <- match.call()
-    mc <- mc[intersect(names(test), c("hardTrue","fuzzyTrue","hardPred","fuzzyPred"))]
+    mc <- mc[intersect(names(mc), c("hardTrue","fuzzyTrue","hardPred","fuzzyPred"))]
     paste0(names(mc),"=",unlist(mc), collapse=", ")
   }
   if(!is.null(fuzzyTrue)){
