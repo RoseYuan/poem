@@ -131,7 +131,7 @@ ELSA <- function(labels, location, k=10){
   return(df)
 }
 
-.decideBNPARAM <- function(ncells, BNPARAM){
+.decideBNPARAM <- function(ncells, BNPARAM=NULL){
   if(is.null(BNPARAM)){
     if(ncells>500){
       BNPARAM <- BiocNeighbors::AnnoyParam()
@@ -184,4 +184,56 @@ getAgreement <- function(true, pred, usePairs=TRUE, useNegatives=FALSE){
   # assign each spot its score:
   p <- setNames(as.numeric(p), paste(rep(row.names(p),ncol(p)),rep(colnames(p),each=nrow(p))))
   as.numeric(p[paste(true, pred)])
+}
+
+
+#' getNeihboringPairAgreement
+#' 
+#' Per-spot local agreement between a clustering and a ground truth
+#'
+#' @param location A matrix or data.frame with spatial dimensions as columns.
+#'   Alternatively, a nearest neighbor object as produced by 
+#'   \code{\link[BiocNeighbors]{findKNN}}.
+#' @param pred A vector of predicted clusters
+#' @param true A vector of true class labels
+#' @param k Approximate number of nearest neighbors to consider
+#' @param useNegatives Logical; whether to include the consistency of negative
+#'   pairs in the score (default FALSE).
+#' @param distWeights Logical; whether to weight agreement by distance (default
+#'   TRUE).
+#'
+#' @return A vector of agreement scores
+#'
+#' @export
+getNeihboringPairAgreement <- function(location, true, pred, k=20L,
+                                       useNegatives=FALSE, distWeights=TRUE,
+                                       BNPARAM=NULL){
+  if(.isKnn(location, checkNNcl=FALSE, triggerError=FALSE)){
+    stopifnot(ncol(location$index)>=k)
+    nn <- location
+  }else{
+    BNPARAM <- .decideBNPARAM(nrow(location), BNPARAM)
+    nn <- BiocNeighbors::findKNN(as.matrix(location), k=k*2, warn.ties=FALSE,
+                                 BNPARAM=BNPARAM)
+  }
+  mkd <- median(nn$distance[,k])
+  eg$ag <- vapply(seq_len(nrow(nn[[1]])), FUN.VALUE=numeric(1), FUN=function(i){
+    d <- nn$distance[i,]
+    w <- which(d<=mkd & d>0)
+    d <- d[w]
+    true_conc <- true[nn$index[i,w]]==true[i]
+    pred_conc <- pred[nn$index[i,w]]==pred[i]
+    if(!useNegatives){
+      w <- which(true_conc | pred_conc)
+      true_conc <- true_conc[w]
+      pred_conc <- pred_conc[w]
+      d <- d[w]
+    }
+    if(distWeights){
+      w <- (1/d)/sum(1/d)
+    }else{
+      w <- 1/length(d)
+    }
+    sum((1-abs(true_conc-pred_conc))*w)
+  })
 }

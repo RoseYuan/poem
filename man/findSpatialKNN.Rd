@@ -25,9 +25,9 @@ returning more than \code{k} neighbors.}
 \item{useMedianDist}{Use the median distance of the k nearest neighbor as
 maximum distance to be included. Ignored if \code{keep_ties=FALSE}.}
 
-\item{BNPARAM}{BNPARAM object passed to BiocNeighbors::findKNN specifying the
-kNN approximation method to use. Defaults to exact for small datasets, and
-Annoy for larger ones.}
+\item{BNPARAM}{BNPARAM object passed to \code{\link[BiocNeighbors]{findKNN}}
+specifying the kNN approximation method to use. Defaults to exact for small
+datasets, and Annoy for larger ones.}
 }
 \value{
 A list of indices.
