@@ -217,7 +217,7 @@ getNeihboringPairAgreement <- function(location, true, pred, k=20L,
                                  BNPARAM=BNPARAM)
   }
   mkd <- median(nn$distance[,k])
-  eg$ag <- vapply(seq_len(nrow(nn[[1]])), FUN.VALUE=numeric(1), FUN=function(i){
+  vapply(seq_len(nrow(nn[[1]])), FUN.VALUE=numeric(1), FUN=function(i){
     d <- nn$distance[i,]
     w <- which(d<=mkd & d>0)
     d <- d[w]
