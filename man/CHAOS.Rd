@@ -12,9 +12,9 @@ CHAOS(labels, location, BNPARAM = NULL)
 \item{location}{A numeric data matrix containing location information, where
 rows are points and columns are location dimensions.}
 
-\item{BNPARAM}{BNPARAM object passed to BiocNeighbors::findKNN specifying the
-kNN approximation method to use. Defaults to exact for small datasets, and
-Annoy for larger ones.}
+\item{BNPARAM}{BNPARAM object passed to \code{\link[BiocNeighbors]{findKNN}}
+specifying the kNN approximation method to use. Defaults to exact for small
+datasets, and Annoy for larger ones.}
 }
 \value{
 A numeric value for CHAOS score.
