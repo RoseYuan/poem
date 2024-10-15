@@ -197,6 +197,8 @@
 }
 # row-bind two dataframes with no common columns
 .rbind_na <- function(df1, df2){
+  if(nrow(df1)==0){return(df2)}
+  if(nrow(df2)==0){return(df1)}
   # Find the columns that are missing in each data frame
   missing_cols_df1 <- setdiff(names(df2), names(df1))
   missing_cols_df2 <- setdiff(names(df1), names(df2))
