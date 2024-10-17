@@ -210,3 +210,14 @@
   # Now bind the two data frames using rbind
   return(rbind(df1, df2))
 }
+
+.decideBNPARAM <- function(ncells, BNPARAM=NULL){
+  if(is.null(BNPARAM)){
+    if(ncells>500){
+      BNPARAM <- BiocNeighbors::AnnoyParam()
+    }else{
+      BNPARAM <- BiocNeighbors::ExhaustiveParam()
+    }
+  }
+  return(BNPARAM)
+}

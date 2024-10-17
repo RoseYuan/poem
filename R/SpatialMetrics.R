@@ -131,62 +131,6 @@ ELSA <- function(labels, location, k=10){
   return(df)
 }
 
-.decideBNPARAM <- function(ncells, BNPARAM=NULL){
-  if(is.null(BNPARAM)){
-    if(ncells>500){
-      BNPARAM <- BiocNeighbors::AnnoyParam()
-    }else{
-      BNPARAM <- BiocNeighbors::ExhaustiveParam()
-    }
-  }
-  return(BNPARAM)
-}
-
-#' getAgreement
-#' 
-#' Per-spot agreement between a clustering and a ground truth
-#'
-#' @param pred A vector of predicted clusters
-#' @param true A vector of true class labels
-#' @param usePairs Logical; whether to compute over pairs instead of elements
-#' @param useNegatives Logical; whether to include the consistency of negative
-#'   pairs in the score (default FALSE).
-#'
-#' @return A vector of agreement scores
-#'
-#' @examples
-#' true <- rep(1:3,each=3)
-#' pred <- rep(1:2, c(4,5))
-#' getAgreement(true, pred)
-getAgreement <- function(true, pred, usePairs=TRUE, useNegatives=FALSE){
-  co <- table(true, pred)
-  # number of spots in the union between any class and any cluster:
-  tot <- matrix(rep(rowSums(co),ncol(co)),nrow=nrow(co))+
-    matrix(rep(colSums(co),each=nrow(co)),nrow=nrow(co))-co
-  if(usePairs){
-    if(useNegatives){
-      return(sapply(seq_along(pred), FUN=function(i){
-        1-sum(abs( (pred==pred[[i]]) - (true==true[[i]]) ))/(length(pred)-1)
-      }))
-    }else{
-      pairs <- choose(co,2)
-      truePairsPerCluster <- matrix(rep(colSums(pairs),each=nrow(co)),nrow=nrow(co))
-      truePairs <- truePairsPerCluster + #per cluster
-        rowSums(pairs) - pairs # per class minus double-counting
-      p <- unclass(truePairs/choose(tot,2))
-    }
-  }else{
-    if(useNegatives) stop("useNegatives only implemented for usePairs=TRUE")
-    # intersection over union, i.e. proportion of spots in the class-or-cluster
-    # that agree:
-    p <- unclass(co/tot)
-  }
-  # assign each spot its score:
-  p <- setNames(as.numeric(p), paste(rep(row.names(p),ncol(p)),rep(colnames(p),each=nrow(p))))
-  as.numeric(p[paste(true, pred)])
-}
-
-
 #' getNeihboringPairAgreement
 #' 
 #' Per-spot local agreement between a clustering and a ground truth
