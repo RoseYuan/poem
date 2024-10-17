@@ -134,3 +134,90 @@
   d <- mean(d[lower.tri(d)])
   (a+d)/2
 }
+
+
+#' getAgreement
+#' 
+#' Per-element agreement between a clustering and a ground truth
+#'
+#' @param pred A vector of predicted clusters
+#' @param true A vector of true class labels
+#' @param usePairs Logical; whether to compute over pairs instead of elements 
+#'   Recommended and TRUE by default.
+#' @param useNegatives Logical; whether to include the consistency of negative
+#'   pairs in the score (default FALSE).
+#' @param adjust Logical; whether to adjust for chance. Only implemented for
+#'   `useNegatives=FALSE` (doesn't make sense on a element-level otherwise).
+#'
+#' @return A vector of agreement scores
+getAgreement <- function(true, pred, usePairs=TRUE, useNegatives=FALSE, adjust=FALSE){
+  if(useNegatives & adjust)
+    stop("Adjustment for chance is only implemented for useNegatives=FALSE")
+  # contingency table
+  co <- table(true, pred)
+  pairs <- choose(co,2)
+  # best possible contingency table
+  bco <- diag(table(true))
+  bpairs <- choose(bco,2)
+  
+  # number of spots in the union between any class and any cluster:
+  tot <- matrix(rep(rowSums(co),ncol(co)),nrow=nrow(co))+
+    matrix(rep(colSums(co),each=nrow(co)),nrow=nrow(co))-co
+  
+  if(adjust){
+  }
+  
+  if(usePairs){
+    if(useNegatives){
+      # if(adjust){
+      #   allp <- apply(matrix(runif(length(pred) * 20), nrow=length(pred)), 2, order)
+      #   return(sapply(seq_along(pred), FUN=function(i){
+      #     true.co <- (true==true[[i]])
+      #     pa <- 1-sum(abs( (pred==pred[[i]]) - true.co ))/(length(pred)-1)
+      #     rpa <- mean(apply(allp,2,FUN=function(x){
+      #       pred <- pred[x]
+      #       1-sum(abs( (pred==pred[[i]]) - true.co ))/(length(pred)-1)
+      #     }))
+      #     (pa - rpa)/(1 - rpa)
+      #   }))
+      # }
+      p <- sapply(seq_len(ncol(co)),FUN=function(j){
+        sapply(seq_len(nrow(co)), FUN=function(i){
+          if(co[i,j]==0) return(0)
+          pos <- choose(co[i,j],2)
+          neg <- co[i,j]*sum(co[-i,-j])/2
+          max <- pos+(co[i,j]*(nrow(co)-co[i,j]))/2
+          (pos+neg)/max
+        })
+      })
+      dimnames(p) <- dimnames(co)
+    }else{
+      truePairsPerCluster <- matrix(rep(colSums(pairs),each=nrow(co)),nrow=nrow(co))
+      truePairs <- truePairsPerCluster + #per cluster
+        rowSums(pairs) - pairs # per class minus double-counting
+      p <- unclass(truePairs/choose(tot,2))
+      if(adjust){
+        # expected random contingency table
+        rco <- as.numeric(table(true)/length(true)) %*% t(table(pred)/length(pred))
+        rco <- rco*length(true)
+        # number of spots in the expected union between any class and any cluster:
+        rtot <- matrix(rep(rowSums(rco),ncol(rco)),nrow=nrow(rco))+
+          matrix(rep(colSums(rco),each=nrow(rco)),nrow=nrow(rco))-rco
+        pairs <- choose(rco,2)
+        truePairsPerCluster <- matrix(rep(colSums(pairs),each=nrow(rco)),nrow=nrow(rco))
+        truePairs <- truePairsPerCluster + #per cluster
+          rowSums(pairs) - pairs # per class minus double-counting
+        rp <- unclass(truePairs/choose(rtot,2))
+        p <- (p - rp)/(1 - rp)
+      }
+    }
+  }else{
+    if(adjust || useNegatives) stop("Only implemented for usePairs=TRUE")
+    # intersection over union, i.e. proportion of spots in the class-or-cluster
+    # that agree:
+    p <- unclass(co/tot)
+  }
+  # assign each spot its score:
+  p <- setNames(as.numeric(p), paste(rep(row.names(p),ncol(p)),rep(colnames(p),each=nrow(p))))
+  as.numeric(p[paste(true, pred)])
+}
