@@ -20,14 +20,6 @@
 #' Additional details...
 #' 
 #' @rdname getGraphElementMetrics
-#' @export
-#' @examples
-#' # generate random data and labels:
-#' dat <- matrix(rnorm(300), nrow=30)
-#' dat[1:10,1:3] <- dat[1:10,1:3]+2
-#' labels <- rep(LETTERS[1:3], each=10)
-#' # compute graph metrics:
-#' head(getGraphElementMetrics(dat, labels, k=4))
 setGeneric("getGraphElementMetrics", signature="x",
            def=function(x, labels, metrics=c("SI","NP","NCE"), 
                         directed=NULL, ...)
@@ -61,7 +53,6 @@ attr(getGraphElementMetrics, "allowed_metrics") <- c("SI", "ISI", "NP","NCE")
 }
 
 #' @rdname getGraphElementMetrics
-#' @export
 setMethod("getGraphElementMetrics", signature="list",
           definition=function(x, labels, metrics, directed=NULL, k=NULL, ...){
             .checkInputs(x,labels,checkNNcl=FALSE)
@@ -98,12 +89,10 @@ setMethod("getGraphElementMetrics", signature="list",
 }
 
 #' @rdname getGraphElementMetrics
-#' @export
 setMethod("getGraphElementMetrics", signature="data.frame",
           definition=.getGraphElementMetricsFromEmbedding)
 
 #' @rdname getGraphElementMetrics
-#' @export
 setMethod("getGraphElementMetrics", signature="matrix",
           definition=.getGraphElementMetricsFromEmbedding)
 
@@ -130,7 +119,6 @@ setMethod("getGraphElementMetrics", signature="matrix",
 }
 
 #' @rdname getGraphElementMetrics
-#' @export
 setMethod("getGraphElementMetrics", signature="igraph",
           definition=function(x, labels, ...){
             stopifnot(is(x,"igraph"))
@@ -154,7 +142,6 @@ setMethod("getGraphElementMetrics", signature="igraph",
 }
 
 #' @rdname getGraphElementMetrics
-#' @export
 setMethod("getGraphElementMetrics", signature="dist",
           definition=function(x, labels, ...){
             stopifnot(is(x,"dist"))

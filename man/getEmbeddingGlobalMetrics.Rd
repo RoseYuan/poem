@@ -32,7 +32,3 @@ A data.frame (with 1 row) of metrics.
 \description{
 Computes dataset-level, embedding-based metrics.
 }
-\examples{
-d1 <- mockData()
-getEmbeddingGlobalMetrics(d1[,1:2], labels=d1$class)
-}

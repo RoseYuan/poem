@@ -46,8 +46,3 @@ for its knn is then \code{1-alpha}. By default \code{0.5}.}
 Computes a selection of external clustering evaluation metrics for spatial
 data at the class/cluster level.
 }
-\examples{
-data <- sp_toys
-getSpatialClassExternalMetrics(data$label, data$p1, data[,c("x", "y")], k=6)
-getSpatialClassExternalMetrics(data$label, data$p2, data[,c("x", "y")], k=6)
-}

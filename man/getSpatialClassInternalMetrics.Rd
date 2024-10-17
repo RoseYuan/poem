@@ -32,7 +32,3 @@ A dataframe of metric values.
 Computes a selection of internal clustering evaluation metrics for spatial
 data for each class.
 }
-\examples{
-data <- sp_toys
-getSpatialClassInternalMetrics(data$label, data[,c("x", "y")], k=6)
-}

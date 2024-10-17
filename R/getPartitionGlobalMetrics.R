@@ -32,10 +32,6 @@
 #' @importFrom aricode sortPairs AMI
 #' @importFrom clevr mutual_info variation_info homogeneity completeness v_measure
 #' @importFrom mclustcomp mclustcomp
-#' @examples
-#' true <- rep(LETTERS[1:3], each=10)
-#' pred <- c(rep("A", 8), rep("B", 9), rep("C", 3), rep("D", 10))
-#' getPartitionGlobalMetrics(true, pred)
 getPartitionGlobalMetrics <-function(true, pred, 
                                 metrics=c("RI","WC","WH","ARI","NCR","AWC",
                                           "AWH","MI","AMI","VI","EH","EC","VM",

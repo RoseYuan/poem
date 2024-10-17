@@ -22,11 +22,3 @@ F measure score
 Compute the F measure between two clustering results. This is directly copied
 from the package \code{FlowSOM}.
 }
-\examples{
-# Generate some random data as an example
-true <- sample(1:5, 100,replace = TRUE)
-pred <- sample(1:6, 100, replace = TRUE)
-
-# Calculate the FMeasure
-.FMeasure(true,pred)
-}

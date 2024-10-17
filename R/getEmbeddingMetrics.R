@@ -117,9 +117,6 @@ getEmbeddingClassMetrics <-function(x, labels,
 #' @inheritParams getEmbeddingMetrics
 #'   
 #' @return A data.frame (with 1 row) of metrics.
-#' @examples
-#' d1 <- mockData()
-#' getEmbeddingGlobalMetrics(d1[,1:2], labels=d1$class)
 getEmbeddingGlobalMetrics <-function(x, labels,
                                      metrics=c("meanSW", "meanClassSW", "pnSW",
                                                "minClassSW", "cdbw", "cohesion",

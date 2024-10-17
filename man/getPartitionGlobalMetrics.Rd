@@ -47,8 +47,3 @@ A dataframe of metric results. Possible metrics are:
 Computes a selection of external evaluation metrics for partition. The
 metrics are reported per dataset.
 }
-\examples{
-true <- rep(LETTERS[1:3], each=10)
-pred <- c(rep("A", 8), rep("B", 9), rep("C", 3), rep("D", 10))
-getPartitionGlobalMetrics(true, pred)
-}

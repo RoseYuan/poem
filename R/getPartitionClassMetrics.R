@@ -12,10 +12,6 @@
 #' @return A dataframe of metrics.
 #' 
 #' @importFrom aricode sortPairs
-#' @examples
-#' true <- rep(LETTERS[1:3], each=10)
-#' pred <- c(rep("A", 8), rep("B", 9), rep("C", 3), rep("D", 10))
-#' getPartitionClassMetrics(true, pred)
 getPartitionClassMetrics <-function(true, pred, metrics=c("WC","WH","AWC","AWH",
                                                           "FM")){
   if (anyNA(true) | anyNA(pred))

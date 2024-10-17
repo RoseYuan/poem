@@ -66,9 +66,6 @@ getSpatialInternalMetrics <- function(labels, location, k=6, level="class",
 #'   \item{PC}{Partition coefficient} 
 #'   \item{PE}{Partition entropy} 
 #' 
-#' @examples
-#' data <- sp_toys
-#' getSpatialGlobalInternalMetrics(data$label, data[,c("x", "y")], k=6)
 getSpatialGlobalInternalMetrics <- function(labels, location, k=6,
                                             metrics=c("PAS", "ELSA", "CHAOS"),
                                             ...){
@@ -101,9 +98,6 @@ attr(getSpatialGlobalInternalMetrics, "allowed_metrics") <- c("PAS","ELSA","CHAO
 #' @return A dataframe containing the metric values for all samples in the dataset.
 #' If PAS is calculated, the value is a Boolean about the abnormality of a spot.
 #' If ELSA is calculated, Ea, Ec and ELSA for all spots will be returned.
-#' @examples 
-#' data <- sp_toys
-#' getSpatialElementInternalMetrics(data$label, data[,c("x", "y")], k=6)
 getSpatialElementInternalMetrics <- function(labels, location, k=6, 
                                       metrics=c("PAS", "ELSA"), ...){
   res <- as.data.frame(lapply(setNames(metrics, metrics), FUN=function(m){
@@ -127,9 +121,6 @@ attr(getSpatialElementInternalMetrics, "allowed_metrics") <- c("PAS","ELSA")
 #' @param metrics Possible metrics: "CHAOS", "PAS" and "ELSA".
 #' @param ... Optional params for [PAS()].
 #' @return A dataframe of metric values.
-#' @examples 
-#' data <- sp_toys
-#' getSpatialClassInternalMetrics(data$label, data[,c("x", "y")], k=6)
 getSpatialClassInternalMetrics <- function(labels, location, k=6, 
                                       metrics=c("CHAOS", "PAS", "ELSA"), ...){
   res <- data.frame(class=sort(unique(labels)))
