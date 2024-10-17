@@ -153,7 +153,7 @@ ELSA <- function(labels, location, k=10){
 #'   pairs in the score (default FALSE).
 #'
 #' @return A vector of agreement scores
-#'
+#' @export 
 #' @examples
 #' true <- rep(1:3,each=3)
 #' pred <- rep(1:2, c(4,5))
@@ -201,7 +201,9 @@ getAgreement <- function(true, pred, usePairs=TRUE, useNegatives=FALSE){
 #'   pairs in the score (default FALSE).
 #' @param distWeights Logical; whether to weight agreement by distance (default
 #'   TRUE).
-#'
+#' @param BNPARAM A BiocNeighbors parameter object to compute kNNs. Ignored 
+#'   unless the input is a matrix or data.frame. If omitted, the Annoy 
+#'   approximation will be used if there are more than 500 elements.
 #' @return A vector of agreement scores
 #'
 #' @export

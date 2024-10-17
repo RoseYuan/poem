@@ -31,7 +31,3 @@ A data.frame of metrics for each node/element of \code{x}.
 \description{
 Computes class-level, embedding-based metrics.
 }
-\examples{
-d1 <- mockData()
-getEmbeddingClassMetrics(d1[,1:2], labels=d1$class)
-}

@@ -37,6 +37,10 @@ for its knn is then \code{1-alpha}. By default \code{0.5}.}
 
 \item{metrics}{a vector of metric names to compute.}
 
+\item{fuzzy_true}{Logical; whether to compute fuzzy class memberships for \code{true}.}
+
+\item{fuzzy_pred}{Logical; whether to compute fuzzy class memberships for \code{pred}.}
+
 \item{...}{Optional params for \code{\link[=getFuzzyPartitionElementMetrics]{getFuzzyPartitionElementMetrics()}} or \code{\link[=findSpatialKNN]{findSpatialKNN()}}.}
 }
 \description{

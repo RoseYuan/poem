@@ -279,7 +279,7 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
 #' hardTrue <- apply(fuzzyTrue,1,FUN=which.max)
 #' # some predicted labels:
 #' hardPred <- c(1,1,1,1,1,1,2,2,2)
-#' fuzzyHardMetrics(hardPred, hardTrue, fuzzyTrue, nperms=3)
+#' fuzzyHardMetrics(hardTrue, fuzzyTrue, hardPred, nperms=3)
 fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL, 
                              returnElementPairAccuracy=FALSE, verbose=TRUE,
                              BPPARAM=BiocParallel::SerialParam()){ 

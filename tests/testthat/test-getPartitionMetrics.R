@@ -63,14 +63,17 @@ dataset3 <- data.frame(
 
 # Check the results
 test_that("dataset1: RI,WC,WH,ARI,NCR,AWC,AWH,MI,AMI,VI,EH,EC,VM,FM match the expected values", {
-  res <- getPartitionGlobalMetrics(dataset1$Reference_Partition, dataset1$Trial_Partition)
+  res <- getPartitionMetrics(dataset1$Reference_Partition, dataset1$Trial_Partition, level="dataset", 
+                             metrics = c("RI","WC","WH","ARI","NCR","AWC","AWH","MI","AMI","VI","EH","EC","VM","FM"))
   expect_equal(round(as.numeric(res), 2), c(0.96,0.93,0.93,0.90,0.82,0.90,0.90,1.09,0.83,0.40,0.85,0.85,0.85,0.86))
 })
 test_that("dataset2: RI,WC,WH,ARI,NCR,AWC,AWH,MI,AMI,VI,EH,EC,VM,FM match the expected values", {
-  res <- getPartitionGlobalMetrics(dataset2$Reference_Partition, dataset2$Trial_Partition)
+  res <- getPartitionMetrics(dataset2$Reference_Partition, dataset2$Trial_Partition, level="dataset",
+                             metrics = c("RI","WC","WH","ARI","NCR","AWC","AWH","MI","AMI","VI","EH","EC","VM","FM"))
   expect_equal(round(as.numeric(res), 2), c(0.74, 0.54, 0.54, 0.36, 0.83, 0.36, 0.36, 0.80, 0.59, 0.99, 0.62, 0.62, 0.62, 0.64))
 })
 test_that("dataset3: RI,WC,WH,ARI,NCR,AWC,AWH,MI,AMI,VI,EH,EC,VM,FM match the expected values", {
-  res <- getPartitionGlobalMetrics(dataset3$Reference_Partition, dataset3$Trial_Partition)
+  res <- getPartitionMetrics(dataset3$Reference_Partition, dataset3$Trial_Partition, level="dataset",
+                             metrics = c("RI","WC","WH","ARI","NCR","AWC","AWH","MI","AMI","VI","EH","EC","VM","FM"))
   expect_equal(round(as.numeric(res), 2), c(0.89,0.88,0.75,0.73,0.72,0.83,0.65,0.95,0.62,0.86,0.62,0.77,0.69,0.81))
 })

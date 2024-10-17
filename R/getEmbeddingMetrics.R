@@ -56,9 +56,6 @@ getEmbeddingMetrics <-function(x, labels, metrics=c("meanSW", "minSW", "pnSW", "
 #' 
 #' @importFrom cluster silhouette
 #' @importFrom stats dist
-#' @examples
-#' d1 <- mockData()
-#' head(getEmbeddingElementMetrics(d1[,1:2], labels=d1$class))
 getEmbeddingElementMetrics <-function(x, labels, metrics=c("SW"), 
                                       distance="euclidean", ...){
   stopifnot(is.atomic(labels) && (is.factor(labels) | is.integer(labels)))
@@ -84,9 +81,6 @@ getEmbeddingElementMetrics <-function(x, labels, metrics=c("SW"),
 #' @return A data.frame of metrics for each node/element of `x`.
 #' 
 #' @importFrom stats aggregate
-#' @examples
-#' d1 <- mockData()
-#' getEmbeddingClassMetrics(d1[,1:2], labels=d1$class)
 getEmbeddingClassMetrics <-function(x, labels,
                                     metrics=c("meanSW", "minSW", "pnSW", "dbcv"),
                                     distance="euclidean", ...){

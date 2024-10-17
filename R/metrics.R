@@ -9,7 +9,7 @@
     stopifnot(is.factor(va) || is.character(va) || is.integer(va))
     names(cls) <- cls <- unique(va)
     return(sapply(cls, FUN=function(cl){
-      FUN(subgraph(g, v=which(va==cl)), ...)
+      FUN(subgraph(g, vids=which(va==cl)), ...)
     }))
   }
   FUN(g, ...)
@@ -27,12 +27,13 @@
 }
 
 #' @importFrom utils relist
+#' @importFrom igraph vertex_attr
 .simpsonIndex <- function(knn, labels=NULL, directed=TRUE){
   if(is.null(directed)) directed <- TRUE
   # for undirected, first transform directed nn to graph
   if(!is(knn,"igraph") && !directed) knn <- .nn2graph(knn, labels)
   if(is(knn,"igraph")){
-    if(is.null(labels)) labels <- get_vertex_attr(knn, "class")
+    if(is.null(labels)) labels <- vertex_attr(knn, "class")
     knn <- .igraph2nn(knn, labels, directed=directed)
   }
   stopifnot(!is.null(labels))
@@ -51,13 +52,13 @@
 }
 
 # neighborhood purity (i.e. proportion with same labels as target node)
-#' @importFrom igraph as_adj_list
+#' @importFrom igraph as_adj_list vertex_attr
 .nPurity <- function(knn, labels=NULL, directed=TRUE){
   if(is.null(directed)) directed <- TRUE
   # for undirected, first transform directed nn to graph
   if(!is(knn,"igraph") && !directed) knn <- .nn2graph(knn, labels)
   if(is(knn,"igraph")){
-    if(is.null(labels)) labels <- get_vertex_attr(knn, "class")
+    if(is.null(labels)) labels <- vertex_attr(knn, "class")
     knn <- .igraph2nn(knn, labels, directed=directed)
   }
   stopifnot(!is.null(labels))
@@ -71,13 +72,14 @@
   rowSums(knn$nncl==labels)/ncol(knn$index)
 }
 
+#' @importFrom igraph vertex_attr
 # neighborhood class over-representation
 .nlog2Enrichment <- function(knn, labels, directed=TRUE, pseudoCount=1){
   if(is.null(directed)) directed <- TRUE
   # for undirected, first transform directed nn to graph
   if(!is(knn,"igraph") && !directed) knn <- .nn2graph(knn, labels)
   if(is(knn,"igraph")){
-    if(is.null(labels)) labels <- get_vertex_attr(knn, "class")
+    if(is.null(labels)) labels <- vertex_attr(knn, "class")
     knn <- .igraph2nn(knn, labels, directed=directed)
   }
   stopifnot(!is.null(labels))

@@ -30,6 +30,10 @@ pairs in the score (default FALSE).}
 
 \item{distWeights}{Logical; whether to weight agreement by distance (default
 TRUE).}
+
+\item{BNPARAM}{A BiocNeighbors parameter object to compute kNNs. Ignored
+unless the input is a matrix or data.frame. If omitted, the Annoy
+approximation will be used if there are more than 500 elements.}
 }
 \value{
 A vector of agreement scores

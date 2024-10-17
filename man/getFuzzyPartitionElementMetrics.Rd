@@ -29,6 +29,10 @@ number of rows as the length of \code{hardTrue}.}
 \item{fuzzyPred}{A object coercible to a numeric matrix with membership
 probability of elements (rows) in clusters (columns).}
 
+\item{fuzzy_true}{Logical; whether the truth is fuzzy.}
+
+\item{fuzzy_pred}{Logical; whether the prediction is fuzzy.}
+
 \item{metrics}{The metrics to compute. Currently only \code{"spotAgreement"} is included at the element level.}
 
 \item{useNegatives}{Logical; whether to include negative pairs in the

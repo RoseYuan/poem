@@ -251,6 +251,8 @@ getFuzzyPartitionClassMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
 #' @inheritParams fuzzyHardSpotAgreement
 #' @inheritParams getAgreement
 #' @inheritParams getFuzzyPartitionMetrics
+#' @param fuzzy_true Logical; whether the truth is fuzzy.
+#' @param fuzzy_pred Logical; whether the prediction is fuzzy.
 #' @param usePairs Logical; whether to compute over pairs instead of elements. 
 #' Only useful when `fuzzy_true=TRUE` and `fuzzy_pred=FALSE`.
 #'

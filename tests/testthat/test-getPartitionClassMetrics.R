@@ -63,21 +63,21 @@ dataset3 <- data.frame(
 
 # Check the results
 test_that("dataset1: WCi,AWCi,WHj,AWHj match the expected values", {
-  res <- getPartitionClassMetrics(dataset1$Reference_Partition, dataset1$Trial_Partition)
+  res <- getPartitionMetrics(dataset1$Reference_Partition, dataset1$Trial_Partition, level="class")
   expect_equal(round(as.numeric(res$WC[!is.na(res$WC)]), 2), c(1.00,1.00,0.43,0.43))
   expect_equal(round(as.numeric(res$AWC[!is.na(res$AWC)]), 2), c(1.0,1.0,0.2,0.2))
   expect_equal(round(as.numeric(res$WH[!is.na(res$WH)]), 2), c(1.00,1.00,0.43,0.43))
   expect_equal(round(as.numeric(res$AWH[!is.na(res$AWH)]), 2), c(1.0,1.0,0.2,0.2))
 })
 test_that("dataset2: WCi,AWCi,WHj,AWHj match the expected values", {
-  res <- getPartitionClassMetrics(dataset2$Reference_Partition, dataset2$Trial_Partition)
+  res <- getPartitionMetrics(dataset2$Reference_Partition, dataset2$Trial_Partition, level="class")
   expect_equal(round(as.numeric(res$WC[!is.na(res$WC)]), 2), c(0.47,0.47,1.00,1.00))
   expect_equal(round(as.numeric(res$AWC[!is.na(res$AWC)]), 2), c(0.27,0.27,1.00,1.00))
   expect_equal(round(as.numeric(res$WH[!is.na(res$WH)]), 2), c(0.47,0.47,1.00,1.00))
   expect_equal(round(as.numeric(res$AWH[!is.na(res$AWH)]), 2), c(0.27,0.27,1.00,1.00))
 })
 test_that("dataset3: WCi,AWCi,WHj,AWHj match the expected values", {
-  res <- getPartitionClassMetrics(dataset3$Reference_Partition, dataset3$Trial_Partition)
+  res <- getPartitionMetrics(dataset3$Reference_Partition, dataset3$Trial_Partition, level="class")
   expect_equal(round(as.numeric(res$WC[!is.na(res$WC)]), 2), c(0.92,0.79,0.00,0.00,0.94,0.81,1.00,0.79))
   expect_equal(round(as.numeric(res$AWC[!is.na(res$AWC)]), 2), c(0.88,0.69,-0.47,-0.47,0.92,0.72,1.00,0.68))
   expect_equal(round(as.numeric(res$WH[!is.na(res$WH)]), 2), c(0.57,0.54,0.92,0.51))

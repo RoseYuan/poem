@@ -54,7 +54,9 @@ getSpatialExternalMetrics <- function(true, pred, location, k=6, alpha=0.5, leve
 #' class memberships for fuzzy metrics, or when calculating the weighted
 #' accuracy.
 #' @param metrics a vector of metric names to compute. 
-#' @param ... Optional params for [FuzzyPartitionMetrics()] or [findSpatialKNN()].
+#' @param fuzzy_true Logical; whether to compute fuzzy class memberships for `true`.
+#' @param fuzzy_pred Logical; whether to compute fuzzy class memberships for `pred`.
+#' @param ... Optional params for \code{\link{FuzzyPartitionMetrics}} or [findSpatialKNN()].
 #' @examples
 #' data <- sp_toys
 #' getSpatialGlobalExternalMetrics(data$label, data$p1, data[,c("x", "y")], k=6)
@@ -103,7 +105,7 @@ getSpatialGlobalExternalMetrics <- function(true, pred, location, k=6, alpha=0.5
 #' @inheritParams getSpatialGlobalExternalMetrics
 #' @param k The number of neighbors used when calculating the fuzzy 
 #' class memberships for fuzzy metrics.
-#' @param ... Optional params for [FuzzyPartitionMetrics()] or [findSpatialKNN()].
+#' @param ... Optional params for \code{\link{FuzzyPartitionMetrics}} or [findSpatialKNN()].
 #' @examples
 #' data <- sp_toys
 #' getSpatialClassExternalMetrics(data$label, data$p1, data[,c("x", "y")], k=6)
