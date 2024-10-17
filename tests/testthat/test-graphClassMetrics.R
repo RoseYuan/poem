@@ -15,13 +15,13 @@ test_that("Graph class metrics from data.frame works", {
 })
 
 test_that("Graph class metrics from knn works", {
-  k1 <- .emb2knn(as.matrix(d1[,1:2]), k=5)
+  k1 <- emb2knn(as.matrix(d1[,1:2]), k=5)
   m1b <- getGraphMetrics(k1, d1$class, level="class", k=5)
   expect_false(any(is.na(as.matrix(m1b)) | is.infinite(as.matrix(m1b))))
 })
 
 test_that("Graph class metrics from graph works", {
-  k1 <- .emb2knn(as.matrix(d1[,1:2]), k=5)
+  k1 <- emb2knn(as.matrix(d1[,1:2]), k=5)
   g <- bluster::neighborsToKNNGraph(k1$index)
   m1c <- getGraphMetrics(g, d1$class, level="class", k=5)
   expect_false(any(is.na(as.matrix(m1c)) | is.infinite(as.matrix(m1c))))

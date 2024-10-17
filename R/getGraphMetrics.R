@@ -15,12 +15,10 @@
 #' `"class"` and `"dataset"`.
 #' @param k The number of nearest neighbors to compute and/or use. Can be 
 #'   omitted if `x` is a graph or list of nearest neighbors.
-#' @param BNPARAM A BiocNeighbors parameter object to compute kNNs. Ignored 
-#'   unless the input is a matrix or data.frame. If omitted, the Annoy 
-#'   approximation will be used if there are more than 500 elements.
 #' @param shared Logical; whether to use a shared nearest neighbor network 
 #'   instead of a nearest neighbor network. Ignored if `x` is not an embedding 
 #'   or dist object.
+#' @param ... Optional arguments for [emb2knn()] or [emb2snn()].
 #' @return A data.frame of metrics.
 #' @details
 #' The allowed values for `metrics` depend on the value of `level`:

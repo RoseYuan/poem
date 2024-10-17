@@ -8,18 +8,12 @@ setOldClass("igraph")
 #' @inheritParams getGraphMetrics
 #' @param k The number of nearest neighbors to compute and/or use. Can be 
 #'   omitted if `x` is a graph or list of nearest neighbors.
-#' @param BNPARAM A BiocNeighbors parameter object to compute kNNs. Ignored 
-#'   unless the input is a matrix or data.frame. If omitted, the Annoy 
-#'   approximation will be used if there are more than 500 elements.
 #' @param shared Logical; whether to use a shared nearest neighbor network 
 #'   instead of a nearest neighbor network. Ignored if `x` is not an embedding 
 #'   or dist object.
-#' @param ... Passed to other methods
+#' @param ... Optional arguments for [emb2knn()] or [emb2snn()].
 #'
 #' @return A data.frame of metrics for each class.
-#' 
-#' @details
-#' Additional details...
 #' 
 #' 
 #' @rdname getGraphClassMetrics
@@ -91,11 +85,11 @@ setMethod("getGraphClassMetrics", signature="list",
     x <- as.matrix(x)
   }
   if(shared){
-    g <- .emb2snn(x, k=k, ...)
+    g <- emb2snn(x, k=k, ...)
     res <- .getGraphClassMetricsFromGraph(g, labels=labels, metrics=metrics,
                                           directed=directed)
   }else{
-    g <- .emb2knn(x, k=k, ...)
+    g <- emb2knn(x, k=k, ...)
     res <- .getGraphClassMetricsFromKnn(g, labels=labels, metrics=metrics,
                                         directed=directed)
   }

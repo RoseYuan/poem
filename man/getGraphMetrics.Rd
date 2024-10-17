@@ -39,9 +39,7 @@ or dist object.}
 \item{level}{The level to calculate the metrics. Options include \code{"element"},
 \code{"class"} and \code{"dataset"}.}
 
-\item{BNPARAM}{A BiocNeighbors parameter object to compute kNNs. Ignored
-unless the input is a matrix or data.frame. If omitted, the Annoy
-approximation will be used if there are more than 500 elements.}
+\item{...}{Optional arguments for \code{\link[=emb2knn]{emb2knn()}} or \code{\link[=emb2snn]{emb2snn()}}.}
 }
 \value{
 A data.frame of metrics.

@@ -22,9 +22,23 @@
   stopifnot(length(labels)==nrow(knn$index))
 }
 
-# computes nearest neighbors from embedding
+#' emb2knn
+#' 
+#' Computes k nearest neighbors from embedding.
+#' 
+#' @param x A numeric matrix (with features as columns and items as 
+#'   rows) from which nearest neighbors will be computed.
+#' @param k The number of nearest neighbors.
+#' @param BNPARAM A BiocNeighbors parameter object to compute kNNs. Ignored 
+#'   unless the input is a matrix or data.frame. If omitted, the Annoy 
+#'   approximation will be used if there are more than 500 elements.
+#' @return A knn list.
 #' @importFrom BiocNeighbors AnnoyParam ExhaustiveParam findKNN
-.emb2knn <- function(x, k, BNPARAM=NULL){
+#' @export
+#' @examples
+#' d1 <- mockData()
+#' emb2knn(as.matrix(d1[,1:2]),k=5)
+emb2knn <- function(x, k, BNPARAM=NULL){
   stopifnot(is.matrix(x) && is.numeric(x))
   stopifnot(is.numeric(k) && length(k)==1 && k>0 && (k %/% 1)==k)
   if(is.null(BNPARAM)){
@@ -37,10 +51,28 @@
   findKNN(as.matrix(x), k=k, BNPARAM=BNPARAM)
 }
 
-# computes shared nearest neighbors from embedding
+#' emb2snn
+#' 
+#' computes shared nearest neighbors from embedding.
+#' 
+#' @param x A numeric matrix (with features as columns and items as 
+#'   rows) from which nearest neighbors will be computed.
+#' @param k The number of nearest neighbors.
+#' @param type A string specifying the type of weighting scheme to use for shared neighbors.
+#' Possible choices include "rank", "number", and "jaccard". See `type` in 
+#' [bluster::neighborsToSNNGraph()] for details.
+#' @param BNPARAM A BiocNeighbors parameter object to compute kNNs. Ignored 
+#'   unless the input is a matrix or data.frame. If omitted, the Annoy 
+#'   approximation will be used if there are more than 500 elements.
+#' @return An igraph object.
+#' @importFrom BiocNeighbors AnnoyParam ExhaustiveParam findKNN
+#' @export
+#' @examples
+#' d1 <- mockData()
+#' emb2snn(as.matrix(d1[,1:2]),k=5)
 #' @importFrom bluster neighborsToSNNGraph
-.emb2snn <- function(x, k, type="rank", BNPARAM=NULL){
-  knn <- .emb2knn(x, k, BNPARAM=BNPARAM)
+emb2snn <- function(x, k, type="rank", BNPARAM=NULL){
+  knn <- emb2knn(x, k, BNPARAM=BNPARAM)
   bluster::neighborsToSNNGraph(knn$index, type = type)
 }
 

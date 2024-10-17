@@ -69,7 +69,7 @@ label of each element (i.e. row or vertex) of \code{x}.}
 If left to NULL, conventional choices will be made per metric (adhesion,
 cohesion, PWC AMSP undirected, others directed).}
 
-\item{...}{Passed to other methods}
+\item{...}{Optional arguments for \code{\link[=emb2knn]{emb2knn()}} or \code{\link[=emb2snn]{emb2snn()}}.}
 
 \item{k}{The number of nearest neighbors to compute and/or use. Can be
 omitted if \code{x} is a graph or list of nearest neighbors.}
@@ -77,10 +77,6 @@ omitted if \code{x} is a graph or list of nearest neighbors.}
 \item{shared}{Logical; whether to use a shared nearest neighbor network
 instead of a nearest neighbor network. Ignored if \code{x} is not an embedding
 or dist object.}
-
-\item{BNPARAM}{A BiocNeighbors parameter object to compute kNNs. Ignored
-unless the input is a matrix or data.frame. If omitted, the Annoy
-approximation will be used if there are more than 500 elements.}
 }
 \value{
 A data.frame of metrics for each node/element of \code{x}.
@@ -88,7 +84,4 @@ A data.frame of metrics for each node/element of \code{x}.
 \description{
 Computes a selection of supervised graph evaluation metrics using ground
 truth class labels. The metrics are reported (as average) per node/element.
-}
-\details{
-Additional details...
 }
