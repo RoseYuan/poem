@@ -31,6 +31,6 @@ For a given dataset with locations and labels, compute the label
 composition of the neighborhood for each sample.
 }
 \examples{
-data <- sp_toy
+data <- sp_toys
 knnComposition(data[,c("x", "y")], k=6, data$label)
 }

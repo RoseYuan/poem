@@ -55,7 +55,7 @@ findSpatialKNN <- function(location, k, keep_ties=TRUE, useMedianDist=FALSE,
 #' @return A numerical matrix indicating the composition, where rows correspond 
 #' to samples and columns correspond to the classes in `label`. 
 #' @examples
-#' data <- sp_toy
+#' data <- sp_toys
 #' knnComposition(data[,c("x", "y")], k=6, data$label)
 knnComposition <- function(location, k=6, labels, alpha=0.5, ...){
   label <- factor(labels)
@@ -86,7 +86,7 @@ knnComposition <- function(location, k=6, labels, alpha=0.5, ...){
 #' @return A matrix of fuzzy memberships.
 #' @export
 #' @examples
-#' data <- sp_toy
+#' data <- sp_toys
 #' getFuzzyLabel(data$label, data[,c("x", "y")], k=6)
 
 getFuzzyLabel <- function(labels, location, k=6, alpha=0.5, ...){
