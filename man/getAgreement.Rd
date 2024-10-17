@@ -26,8 +26,3 @@ A vector of agreement scores
 \description{
 Per-element agreement between a clustering and a ground truth
 }
-\examples{
-true <- rep(1:3,each=3)
-pred <- rep(1:2, c(4,5))
-getAgreement(true, pred)
-}

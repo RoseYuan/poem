@@ -10,7 +10,7 @@
 #'   computed. See details.
 #' @param level The level to calculate the metrics. Options include 
 #' `"class"` and `"dataset"`.
-#' @param ... 
+#' @inheritParams getPartitionGlobalMetrics
 #' @return A data.frame of metrics.
 #' @details
 #' The allowed values for `metrics` depend on the value of `level`:

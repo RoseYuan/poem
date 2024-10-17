@@ -57,7 +57,8 @@ Default FALSE.}
 agreement score (tends to result in a larger overall agreement and lower
 dynamic range of the score). Default TRUE.}
 
-\item{usePairs}{Logical; whether to compute over pairs instead of elements}
+\item{usePairs}{Logical; whether to compute over pairs instead of elements
+Recommended and TRUE by default.}
 
 \item{...}{Optional arguments for \code{\link[=fuzzyPartitionMetrics]{fuzzyPartitionMetrics()}}: \code{tnorm}. Only
 useful when \code{fuzzy_true=TRUE} and \code{fuzzy_pred=TRUE}.}

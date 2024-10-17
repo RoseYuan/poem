@@ -25,7 +25,8 @@ computed. See details.}
 \item{level}{The level to calculate the metrics. Options include
 \code{"class"} and \code{"dataset"}.}
 
-\item{...}{}
+\item{...}{Optional arguments for MI, VI, or VM. See \code{\link[clevr:mutual_info]{clevr::mutual_info()}}, \code{\link[clevr:variation_info]{clevr::variation_info()}}
+and \code{\link[clevr:v_measure]{clevr::v_measure()}} for more details.}
 }
 \value{
 A data.frame of metrics.
