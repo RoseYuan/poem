@@ -30,6 +30,7 @@
 #' \item{MHM}{Meila-Heckerman Measure}
 #' \item{MMM}{Maximum-Match Measure}
 #' \item{Mirkin}{Mirkin Metric}
+#' \item{Accuracy}{Set Matching Accuracy}
 #' 
 #' @importFrom aricode sortPairs AMI
 #' @importFrom clevr mutual_info variation_info homogeneity completeness v_measure
@@ -85,6 +86,7 @@ getPartitionGlobalMetrics <-function(true, pred,
            FM = .FMeasure(.aux.conversion(true), 
                          .aux.conversion(pred)),
            NCR = .NCR(true, pred),
+           Accuracy = setMatchingAccuracy(true, pred),
            stop("Unknown metric.")
     )
   })
@@ -93,4 +95,4 @@ getPartitionGlobalMetrics <-function(true, pred,
 }
 
 attr(getPartitionGlobalMetrics, "allowed_metrics") <- c("RI","WC","WH","ARI","NCR","AWC",
-"AWH","MI","AMI","VI","EH","EC","VM","FM","VDM","Mirkin","MHM","MMM")
+"AWH","MI","AMI","VI","EH","EC","VM","FM","VDM","Mirkin","MHM","MMM","Accuracy")

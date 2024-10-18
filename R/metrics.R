@@ -221,3 +221,17 @@ getAgreement <- function(true, pred, usePairs=TRUE, useNegatives=FALSE, adjust=F
   p <- setNames(as.numeric(p), paste(rep(row.names(p),ncol(p)),rep(colnames(p),each=nrow(p))))
   as.numeric(p[paste(true, pred)])
 }
+
+#' Just the non-spatially-weighted counterpart of nnWeightedAccuracy
+#' 
+#' @param true True class labels (vector coercible to factor)
+#' @param pred Predicted labels (vector coercible to factor)
+#'
+#' @return A scalar representing the weighted accuracy.
+.setMatchingAccuracy <- function(true, pred){
+  pred <- as.factor(pred)
+  matching <- matchSets(pred, true, returnIndices=TRUE)
+  pred <- matching[as.integer(pred)]
+  true <- as.integer(as.factor(true))
+  sum(pred==true,na.rm=TRUE)/length(pred)
+}

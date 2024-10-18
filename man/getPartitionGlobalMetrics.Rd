@@ -45,6 +45,7 @@ A dataframe of metric results. Possible metrics are:
 \item{MHM}{Meila-Heckerman Measure}
 \item{MMM}{Maximum-Match Measure}
 \item{Mirkin}{Mirkin Metric}
+\item{Accuracy}{Set Matching Accuracy}
 }
 \description{
 Computes a selection of external evaluation metrics for partition. The

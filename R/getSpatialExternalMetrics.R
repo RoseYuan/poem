@@ -10,7 +10,7 @@
 #' @export
 #' @details
 #' The allowed values for `metrics` depend on the value of `level`:
-#'   - If `level = "element"`, the allowed `metrics` are: `"spotAgreement"`.
+#'   - If `level = "element"`, the allowed `metrics` are: `"SpatialSPA"`.
 #'   - If `level = "class"`, the allowed `metrics` are: `"SpatialWH"`,`"SpatialAWH"`, `"SpatialWC"`,`"SpatialAWC"`.
 #'   - If `level = "dataset"`, the allowed `metrics` are: `"SpatialRI"`,`"SpatialARI"`,`"SpatialWH"`,`"SpatialAWH"`, `"SpatialWC"`,`"SpatialAWC"`,`"SpatialAccuracy"`. 
 #' @examples
@@ -132,7 +132,7 @@ getSpatialClassExternalMetrics <- function(true, pred, location, k=6, alpha=0.5,
 #' @inheritParams getSpatialGlobalExternalMetrics
 #' @param ... Optional params for [getFuzzyPartitionElementMetrics()] or [findSpatialKNN()].
 getSpatialElementExternalMetrics <- function(true, pred, location, k=6, alpha=0.5,
-                                             metrics=c("spotAgreement"),
+                                             metrics=c("SpatialSPA"),
                                              fuzzy_true=TRUE, fuzzy_pred=FALSE,
                                              ...){
   argfindSpatialKNN <- .checkEllipsisArgs(fnList=list(findSpatialKNN, getFuzzyPartitionElementMetrics), ...)[[1]] 
@@ -143,9 +143,11 @@ getSpatialElementExternalMetrics <- function(true, pred, location, k=6, alpha=0.
                                         list(labels=hardTrue, location=location, k=k, alpha=alpha)))
   fuzzyPred <- do.call(getFuzzyLabel, c(argfindSpatialKNN, 
                                         list(labels=hardPred, location=location, k=k, alpha=alpha)))
-  do.call(getFuzzyPartitionElementMetrics, c(list(hardTrue=hardTrue, fuzzyTrue=fuzzyTrue, 
+  res <- do.call(getFuzzyPartitionElementMetrics, c(list(hardTrue=hardTrue, fuzzyTrue=fuzzyTrue, 
                                                   hardPred=hardPred, fuzzyPred=fuzzyPred, 
                                                   fuzzy_true=fuzzy_true, fuzzy_pred=fuzzy_pred,
                                                   metrics=metrics), 
                                              arggetFuzzyPartitionElementMetrics))  
+  colnames(res) <- sub("fuzzy", "Spatial",colnames(res))
+  return(res[,metrics, drop=FALSE])
 }

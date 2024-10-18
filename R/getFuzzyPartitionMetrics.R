@@ -18,7 +18,7 @@
 #' useful when `fuzzy_true=TRUE` and `fuzzy_pred=TRUE`.
 #' @details
 #' The allowed values for `metrics` depend on the value of `level`:
-#'   - If `level = "element"`, the allowed `metrics` are: `"spotAgreement"`.
+#'   - If `level = "element"`, the allowed `metrics` are: `"fuzzySPA"`.
 #'   - If `level = "class"`, the allowed `metrics` are: `"fuzzyWH"`, `"fuzzyAWH"`, `"fuzzyWC"`, `"fuzzyAWC"`.
 #'   - If `level = "dataset"`, the allowed `metrics` are: `"fuzzyRI"`, `"fuzzyARI"`, `"fuzzyWH"`, `"fuzzyAWH"`, `"fuzzyWC"`, `"fuzzyAWC"`.
 
@@ -247,7 +247,7 @@ getFuzzyPartitionClassMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
 #' getFuzzyPartitionElementMetrics
 #'
 #' Computes a selection of external fuzzy clustering evaluation metrics at the element level.
-#' @param metrics The metrics to compute. Currently only `"spotAgreement"` is included at the element level.
+#' @param metrics The metrics to compute. Currently only `"fuzzySPA"` is included at the element level.
 #' @inheritParams fuzzyHardSpotAgreement
 #' @inheritParams getAgreement
 #' @inheritParams getFuzzyPartitionMetrics
@@ -260,7 +260,7 @@ getFuzzyPartitionClassMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
 getFuzzyPartitionElementMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL, 
                                             hardPred=NULL, fuzzyPred=NULL, 
                                             fuzzy_true=TRUE, fuzzy_pred=FALSE,
-                                            metrics=c("spotAgreement"),
+                                            metrics=c("fuzzySPA"),
                                             useNegatives=TRUE, verbose=TRUE,
                                             usePairs=TRUE){
   if(fuzzy_true & fuzzy_pred){
@@ -278,10 +278,10 @@ getFuzzyPartitionElementMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
     res <- fuzzyHardSpotAgreement(hardPred, fuzzyPred, hardTrue,
                                   useNegatives=useNegatives, verbose=verbose)
   }else if((!fuzzy_true) & (!fuzzy_pred)){
-    message("Comparing between a hard truth and a hard prediction...")
-    res <- getAgreement(hardTrue, hardPred, usePairs=usePairs, useNegatives=useNegatives)
+    stop("You are comparing between two hard clusterings! Use function
+              `getPartitionMetrics()` to do this.")
   }
   res <- data.frame(res)
-  colnames(res) <- "spotAgreement"
+  colnames(res) <- "fuzzySPA"
   return(res)
 }

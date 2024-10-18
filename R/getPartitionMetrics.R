@@ -8,12 +8,15 @@
 #'  be a vector of characters, integers, numerics, or a factor, but not a list.
 #' @param metrics The metrics to compute. If omitted, main metrics will be 
 #'   computed. See details.
-#' @param level The level to calculate the metrics. Options include 
+#' @param level The level to calculate the metrics. Options include "element",
 #' `"class"` and `"dataset"`.
 #' @inheritParams getPartitionGlobalMetrics
 #' @return A data.frame of metrics.
 #' @details
 #' The allowed values for `metrics` depend on the value of `level`:
+#'   - If `level = "element"`, the allowed `metrics` are: 
+#'      - `"SPA"`: Spot-wise Pair Agreement.
+#'      - `"ASPA"`: Adjusted Spot-wise Pair Agreement.
 #'   - If `level = "class"`, the allowed `metrics` are: `"WC"`,`"WH"`,`"AWC"`,`"AWH"`,`"FM"` (see below for details).
 #'   - If `level = "dataset"`, the allowed `metrics` are:
 #'      - `"RI"`: Rand Index 
@@ -34,6 +37,7 @@
 #'      - `"MHM"`: Meila-Heckerman Measure
 #'      - `"MMM"`: Maximum-Match Measure
 #'      - `"Mirkin"`: Mirkin Metric
+#'      - `"Accuracy"`: Set Matching Accuracy
 #' @export
 #' @examples
 #' true <- rep(LETTERS[1:3], each=10)
@@ -44,6 +48,7 @@ getPartitionMetrics <-function(true, pred, metrics=c("WC","WH","AWC","AWH","FM")
                            level="class", ...){
   # Map level to the corresponding function
   level_functions <- list(
+    "element" = getPartitionElementMetrics,
     "class" = getPartitionClassMetrics,
     "dataset" = getPartitionGlobalMetrics
   )
@@ -53,3 +58,34 @@ getPartitionMetrics <-function(true, pred, metrics=c("WC","WH","AWC","AWH","FM")
   args <- list(true = true, pred = pred, metrics = metrics, ...)
   do.call(level_functions[[level]], args)
 }
+
+#' getPartitionElementMetrics
+#'
+#' Computes a selection of external evaluation metrics for partition. The 
+#' metrics are reported per element.
+#' 
+#' @inheritParams getAgreement
+#'
+#' @return A dataframe of metrics.
+getPartitionElementMetrics <- function(true, pred, metrics=c("ASPA"), usePairs=TRUE, useNegatives=TRUE){
+  if (anyNA(true) | anyNA(pred))
+    stop("NA are not supported.")
+  if (is.character(true)) true <- as.factor(true)
+  if (is.character(pred)) pred <- as.factor(pred)
+  if (!is.atomic(true) || (!is.factor(true) && !is.integer(true)) ||
+      !is.atomic(pred) || (!is.factor(pred) && !is.integer(pred)) )
+    stop("true and pred must be vectors or factors but not lists.")
+  if(length(true) != length(pred)){
+    stop("The two input vectors should have the same length.")
+  }
+
+    res <- as.data.frame(lapply(setNames(metrics, metrics), FUN=function(m){
+    switch(m,
+           SPA = getAgreement(true, pred, usePairs=usePairs, useNegatives=useNegatives, adjust=FALSE),
+           ASPA = getAgreement(true, pred, usePairs=usePairs, useNegatives=useNegatives, adjust=TRUE),
+           stop("Unknown metric.")
+           )})
+    )
+  return(res)
+}
+attr(getPartitionElementMetrics, "allowed_metrics") <- c("SPA","ASPA")

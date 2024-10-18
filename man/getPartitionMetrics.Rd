@@ -22,7 +22,7 @@ be a vector of characters, integers, numerics, or a factor, but not a list.}
 \item{metrics}{The metrics to compute. If omitted, main metrics will be
 computed. See details.}
 
-\item{level}{The level to calculate the metrics. Options include
+\item{level}{The level to calculate the metrics. Options include "element",
 \code{"class"} and \code{"dataset"}.}
 
 \item{...}{Optional arguments for MI, VI, or VM. See \code{\link[clevr:mutual_info]{clevr::mutual_info()}}, \code{\link[clevr:variation_info]{clevr::variation_info()}}
@@ -37,6 +37,11 @@ Computes a selection of external evaluation metrics for partition.
 \details{
 The allowed values for \code{metrics} depend on the value of \code{level}:
 \itemize{
+\item If \code{level = "element"}, the allowed \code{metrics} are:
+\itemize{
+\item \code{"SPA"}: Spot-wise Pair Agreement.
+\item \code{"ASPA"}: Adjusted Spot-wise Pair Agreement.
+}
 \item If \code{level = "class"}, the allowed \code{metrics} are: \code{"WC"},\code{"WH"},\code{"AWC"},\code{"AWH"},\code{"FM"} (see below for details).
 \item If \code{level = "dataset"}, the allowed \code{metrics} are:
 \itemize{
@@ -58,6 +63,7 @@ The allowed values for \code{metrics} depend on the value of \code{level}:
 \item \code{"MHM"}: Meila-Heckerman Measure
 \item \code{"MMM"}: Maximum-Match Measure
 \item \code{"Mirkin"}: Mirkin Metric
+\item \code{"Accuracy"}: Set Matching Accuracy
 }
 }
 }
