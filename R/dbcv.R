@@ -35,30 +35,22 @@
 #' @title Get Internal Objects
 #' @description Computes the internal nodes and edges using Minimum Spanning Tree.
 #' @param mutual_reach_dists Numeric matrix representing mutual reachability distances.
-#' @param use_scipy_mst Logical flag to use MST implementation 
-#' in scipy. If TRUE, python is required.
+#' @param use_igraph_mst Logical flag to use MST implementation 
+#' in igraph. Currently only mst from igraph is implemented.
 #' @return A list containing the indices of internal nodes and their edge weights.
-#' @importFrom reticulate r_to_py import
 #' @importFrom Matrix Diagonal
 .get_internal_objects <- function(mutual_reach_dists, 
-                                 use_scipy_mst=TRUE) {
+                                 use_igraph_mst=TRUE) {
   rownames(mutual_reach_dists) <- NULL
   colnames(mutual_reach_dists) <- NULL
-  if (use_scipy_mst) {
-    # Convert the R matrix to a Python object
-    mutual_reach_dists_py <- r_to_py(mutual_reach_dists)
-    # Run the Python code
-    scipy <- import("scipy.sparse.csgraph")
-    np <- import("numpy")
-    mst <- scipy$minimum_spanning_tree(mutual_reach_dists_py)
-    mst <- as.matrix(mst %*% Diagonal(n = ncol(mst)))
-    mst <- mst + t(mst)
-  }else{
+  if (use_igraph_mst) {
     mst_g <- igraph::mst(igraph::graph_from_adjacency_matrix(
       mutual_reach_dists, mode = "undirected", weighted = TRUE), 
       algorithm = "prim")
     mst <- as.matrix(igraph::as_adjacency_matrix(mst_g, attr = "weight", 
                                                  sparse = FALSE))
+  }else{
+    stop("Currently only igraph's MST is implemented.")
   }
   is_mst_edges <- (mst > 0)
   internal_node_inds <- which(colSums(is_mst_edges) > 1)
@@ -97,14 +89,14 @@
 #' @param cls_inds Integer vector of cluster indices.
 #' @param dists Numeric matrix of distances.
 #' @param d Integer, the dimensionality.
-#' @param use_scipy_mst Logical flag to use MST implementation 
-#' in scipy. If TRUE, python is required.
+#' @param use_igraph_mst Logical flag to use MST implementation 
+#' in igraph. Currently only mst from igraph is implemented.
 #' @return A list containing the density sparseness, internal core distances, and internal node indices.
 .fn_density_sparseness <- function(cls_inds, dists, d, 
-                                  use_scipy_mst) {
+                                  use_igraph_mst) {
   mutual_reach <- .compute_mutual_reach_dists(dists = dists, d = d)
   internal_objects <- .get_internal_objects(mutual_reach$mutual_reach_dists, 
-                                           use_scipy_mst)
+                                           use_igraph_mst)
   dsc <- max(internal_objects$internal_edge_weights)
   internal_core_dists <- mutual_reach$core_dists[internal_objects$internal_node_inds]
   internal_node_inds <- cls_inds[internal_objects$internal_node_inds]
@@ -166,10 +158,8 @@
 #' possible `method` in `stats::dist()`. By default `"euclidean"`.
 #' @param noise_id Integer, the cluster ID in `y` for noise (default `-1`). 
 #' @param check_duplicates Logical flag to check for duplicate samples.
-#' @param use_scipy_mst Logical flag to use `scipy`'s Kruskal's MST 
-#' implementation. If `TRUE`, python is required, and this will reproduce the same results as
-#' this python implementation of DBCV at \url{https://github.com/FelSiq/DBCV}.
-#' If `FALSE`, use MST implementation in `igraph`.
+#' @param use_igraph_mst Logical flag to use `igraph`'s MST 
+#' implementation. Currently only `mst` from `igraph` is implemented.
 #' @param BPPARAM BiocParallel params for multithreading (default none)
 #' @param ... Ignored
 #' 
@@ -183,13 +173,16 @@
 #' 
 #' @references Davoud Moulavi, et al. 2014; 10.1137/1.9781611973440.96.
 #' 
+#' @details This implementation will not fully reproduce the results of other existing 
+#' implementations (e.g. \url{https://github.com/FelSiq/DBCV}) due to the different 
+#' algorithms used for computing the Minimum Spanning Tree.
 #' @export
 #' @examples
 #' data <- noisy_moon
 #' dbcv(data[, c("x", "y")], data$kmeans_label)
 #' dbcv(data[, c("x", "y")], data$hdbscan_label)
 dbcv <- function(X, labels, distance = "euclidean", noise_id = -1, check_duplicates = FALSE,
-                 use_scipy_mst = FALSE, BPPARAM=BiocParallel::SerialParam(), ...) {
+                 use_igraph_mst = TRUE, BPPARAM=BiocParallel::SerialParam(), ...) {
   X <- as.matrix(X)
   labels <- as.integer(labels)
   n <- dim(X)[1]
@@ -225,7 +218,7 @@ dbcv <- function(X, labels, distance = "euclidean", noise_id = -1, check_duplica
   
   density_sparseness_results <- bplapply(seq_along(cls_inds), function(cls_id) {
     .fn_density_sparseness(cls_inds[[cls_id]], .get_submatrix(dists, inds_a = cls_inds[[cls_id]]), 
-                          d = ncol(X), use_scipy_mst = use_scipy_mst)
+                          d = ncol(X), use_igraph_mst = use_igraph_mst)
   }, BPPARAM=BPPARAM)
   
   for (cls_id in seq_along(density_sparseness_results)) {

@@ -4,7 +4,7 @@
 \alias{.fn_density_sparseness}
 \title{Density Sparseness of a Cluster}
 \usage{
-.fn_density_sparseness(cls_inds, dists, d, use_scipy_mst)
+.fn_density_sparseness(cls_inds, dists, d, use_igraph_mst)
 }
 \arguments{
 \item{cls_inds}{Integer vector of cluster indices.}
@@ -13,8 +13,8 @@
 
 \item{d}{Integer, the dimensionality.}
 
-\item{use_scipy_mst}{Logical flag to use MST implementation
-in scipy. If TRUE, python is required.}
+\item{use_igraph_mst}{Logical flag to use MST implementation
+in igraph. Currently only mst from igraph is implemented.}
 }
 \value{
 A list containing the density sparseness, internal core distances, and internal node indices.

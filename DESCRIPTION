@@ -32,8 +32,7 @@ Imports:
     sp,
     spdep,
     stats,
-    utils,
-    reticulate
+    utils
 Suggests: 
     testthat (>= 3.0.0),
     BiocStyle,
