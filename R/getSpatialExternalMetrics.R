@@ -10,7 +10,7 @@
 #' @export
 #' @details
 #' The allowed values for `metrics` depend on the value of `level`:
-#'   - If `level = "element"`, the allowed `metrics` are: `"SpatialSPA"`.
+#'   - If `level = "element"`, the allowed `metrics` are: `"SpatialSPA"`, `"SpatialNPA"`.
 #'   - If `level = "class"`, the allowed `metrics` are: `"SpatialWH"`,`"SpatialAWH"`, `"SpatialWC"`,`"SpatialAWC"`.
 #'   - If `level = "dataset"`, the allowed `metrics` are: `"SpatialRI"`,`"SpatialARI"`,`"SpatialWH"`,`"SpatialAWH"`, `"SpatialWC"`,`"SpatialAWC"`,`"SpatialAccuracy"`. 
 #' @examples
@@ -132,22 +132,36 @@ getSpatialClassExternalMetrics <- function(true, pred, location, k=6, alpha=0.5,
 #' @inheritParams getSpatialGlobalExternalMetrics
 #' @param ... Optional params for [getFuzzyPartitionElementMetrics()] or [findSpatialKNN()].
 getSpatialElementExternalMetrics <- function(true, pred, location, k=6, alpha=0.5,
-                                             metrics=c("SpatialSPA"),
+                                             metrics=c("SpatialSPA", "SpatialNPA"),
                                              fuzzy_true=TRUE, fuzzy_pred=FALSE,
                                              ...){
-  argfindSpatialKNN <- .checkEllipsisArgs(fnList=list(findSpatialKNN, getFuzzyPartitionElementMetrics), ...)[[1]] 
-  arggetFuzzyPartitionElementMetrics <- .checkEllipsisArgs(fnList=list(findSpatialKNN, getFuzzyPartitionElementMetrics), ...)[[2]]
+  argfindSpatialKNN <- .checkEllipsisArgs(fnList=list(findSpatialKNN, getFuzzyPartitionElementMetrics, getNeihboringPairAgreement), ...)[[1]] 
+  arggetFuzzyPartitionElementMetrics <- .checkEllipsisArgs(fnList=list(findSpatialKNN, getFuzzyPartitionElementMetrics, getNeihboringPairAgreement), ...)[[2]]
+  arggetNeihboringPairAgreement <- .checkEllipsisArgs(fnList=list(findSpatialKNN, getFuzzyPartitionElementMetrics, getNeihboringPairAgreement), ...)[[3]]
+  
+  if("SpatialSPA" %in% metrics){
   hardTrue <- true
   hardPred <- pred
   fuzzyTrue <- do.call(getFuzzyLabel, c(argfindSpatialKNN, 
                                         list(labels=hardTrue, location=location, k=k, alpha=alpha)))
   fuzzyPred <- do.call(getFuzzyLabel, c(argfindSpatialKNN, 
                                         list(labels=hardPred, location=location, k=k, alpha=alpha)))
-  res <- do.call(getFuzzyPartitionElementMetrics, c(list(hardTrue=hardTrue, fuzzyTrue=fuzzyTrue, 
+  SpatialSPA <- do.call(getFuzzyPartitionElementMetrics, c(list(hardTrue=hardTrue, fuzzyTrue=fuzzyTrue, 
                                                   hardPred=hardPred, fuzzyPred=fuzzyPred, 
                                                   fuzzy_true=fuzzy_true, fuzzy_pred=fuzzy_pred,
-                                                  metrics=metrics), 
-                                             arggetFuzzyPartitionElementMetrics))  
-  colnames(res) <- sub("fuzzy", "Spatial",colnames(res))
-  return(res[,metrics, drop=FALSE])
+                                                  metrics=c("SpatialSPA")), 
+                                             arggetFuzzyPartitionElementMetrics))$fuzzySPA  
+  }
+
+  if("SpatialNPA" %in% metrics){
+    SpatialNPA <- do.call(getNeihboringPairAgreement, c(list(true=true, pred=pred, location=location, k=k), arggetNeihboringPairAgreement))
+  }
+  res <- as.data.frame(lapply(setNames(metrics, metrics), FUN=function(m){
+    switch(m,
+           SpatialSPA = SpatialSPA,
+           SpatialNPA = SpatialNPA,
+           stop("Unknown metric.")
+           )})
+    )
+  return(res)
 }

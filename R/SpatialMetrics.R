@@ -137,7 +137,7 @@ ELSA <- function(labels, location, k=10){
 #' @return A vector of agreement scores
 #'
 #' @export
-getNeihboringPairAgreement <- function(location, true, pred, k=20L,
+getNeihboringPairAgreement <- function(true, pred, location, k=20L,
                                        useNegatives=FALSE, distWeights=TRUE,
                                        BNPARAM=NULL){
   if(.isKnn(location, checkNNcl=FALSE, triggerError=FALSE)){

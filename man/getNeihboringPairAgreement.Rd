@@ -5,9 +5,9 @@
 \title{getNeihboringPairAgreement}
 \usage{
 getNeihboringPairAgreement(
-  location,
   true,
   pred,
+  location,
   k = 20L,
   useNegatives = FALSE,
   distWeights = TRUE,
@@ -15,13 +15,13 @@ getNeihboringPairAgreement(
 )
 }
 \arguments{
-\item{location}{A matrix or data.frame with spatial dimensions as columns.
-Alternatively, a nearest neighbor object as produced by
-\code{\link[BiocNeighbors]{findKNN}}.}
-
 \item{true}{A vector of true class labels}
 
 \item{pred}{A vector of predicted clusters}
+
+\item{location}{A matrix or data.frame with spatial dimensions as columns.
+Alternatively, a nearest neighbor object as produced by
+\code{\link[BiocNeighbors]{findKNN}}.}
 
 \item{k}{Approximate number of nearest neighbors to consider}
 
