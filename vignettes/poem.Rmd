@@ -91,7 +91,7 @@ DT::datatable(metric_info)
 
 ## Example data
 
-To showcase the main functions, we will use some simulated datasets (See reference) as examples in this vignette. #TODO: add reference.
+To showcase the main functions, we will use some simulated datasets as examples in this vignette.
 
 The two datasets, `g1` and `g2`, both contain 80 data points with `x` and `y` coordinates and of 4 different classes.
 
