@@ -1,4 +1,4 @@
-# ClusteringMetrics
+# poem: POpulation-based Evaluation Metrics
 
 See the vignette for some introduction.
 

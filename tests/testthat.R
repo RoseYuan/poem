@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/reference/test_package.html#special-files
 
 library(testthat)
-library(ClusteringMetrics)
+library(poem)
 
-test_check("ClusteringMetrics")
+test_check("poem")
