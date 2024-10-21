@@ -41,3 +41,8 @@ A vector of agreement scores
 \description{
 Per-spot local agreement between a clustering and a ground truth
 }
+\examples{
+data(sp_toys)
+data <- sp_toys
+getNeihboringPairAgreement(data$label, data$p1, data[,c("x", "y")], k=6)
+}

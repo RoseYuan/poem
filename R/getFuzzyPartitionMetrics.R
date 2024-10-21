@@ -14,7 +14,7 @@
 #' @inheritParams fuzzyHardMetrics
 #' @inheritParams fuzzyHardSpotAgreement
 #' @inheritParams getAgreement
-#' @param ... Optional arguments for [fuzzyPartitionMetrics()]: `tnorm`. Only 
+#' @param ... Optional arguments for \link[FuzzyPartitionMetrics()]{poem::FuzzyPartitionMetrics()}: `tnorm`. Only 
 #' useful when `fuzzy_true=TRUE` and `fuzzy_pred=TRUE`.
 #' @details
 #' The allowed values for `metrics` depend on the value of `level`:

@@ -146,9 +146,6 @@ emb2snn <- function(x, k, type="rank", BNPARAM=NULL){
   temp <- my_list[[name1]]
   my_list[[name1]] <- my_list[[name2]]
   my_list[[name2]] <- temp
-  
-  # Display the modified list
-  print(my_list)
 }
 
 # Check for unrecognized arguments and filter arguments for each function

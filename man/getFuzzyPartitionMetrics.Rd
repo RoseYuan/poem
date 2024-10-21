@@ -60,7 +60,7 @@ dynamic range of the score). Default TRUE.}
 \item{usePairs}{Logical; whether to compute over pairs instead of elements
 Recommended and TRUE by default.}
 
-\item{...}{Optional arguments for \code{\link[=fuzzyPartitionMetrics]{fuzzyPartitionMetrics()}}: \code{tnorm}. Only
+\item{...}{Optional arguments for \link[FuzzyPartitionMetrics()]{poem::FuzzyPartitionMetrics()}: \code{tnorm}. Only
 useful when \code{fuzzy_true=TRUE} and \code{fuzzy_pred=TRUE}.}
 }
 \value{

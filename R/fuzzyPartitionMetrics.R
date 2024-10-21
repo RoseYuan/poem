@@ -423,6 +423,30 @@ fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL,
 #'
 #' @return A numeric vector of agreement scores for each row of `P`.
 #' @export
+#' @examples
+#' # generate fuzzy partitions:
+#' m1 <- matrix(c(0.95, 0.025, 0.025, 
+#'                0.98, 0.01, 0.01, 
+#'                0.96, 0.02, 0.02, 
+#'                0.95, 0.04, 0.01, 
+#'                0.95, 0.01, 0.04, 
+#'                0.99, 0.005, 0.005, 
+#'                0.025, 0.95, 0.025, 
+#'                0.97, 0.02, 0.01, 
+#'                0.025, 0.025, 0.95), 
+#'                ncol = 3, byrow=TRUE)
+#' m2 <- matrix(c(0.95, 0.025, 0.025,  
+#'                0.98, 0.01, 0.01, 
+#'                0.96, 0.02, 0.02, 
+#'                0.025, 0.95, 0.025, 
+#'                0.02, 0.96, 0.02, 
+#'                0.01, 0.98, 0.01, 
+#'                0.05, 0.05, 0.95, 
+#'                0.02, 0.02, 0.96, 
+#'                0.01, 0.01, 0.98), 
+#'                ncol = 3, byrow=TRUE)
+#' colnames(m1) <- colnames(m2) <- LETTERS[1:3]
+#' fuzzySpotAgreement(m1,m2)
 fuzzySpotAgreement <- function(P, Q){
   if(is.data.frame(P)) P <- as.matrix(P)
   if(is.data.frame(Q)) Q <- as.matrix(Q)
@@ -453,6 +477,24 @@ fuzzySpotAgreement <- function(P, Q){
 #'
 #' @return A numeric vector of agreement scores for each element of `hardPred`
 #' @export
+#' @examples
+#' # generate a fuzzy truth:
+#' fuzzyTrue <- matrix(c(
+#'   0.95, 0.025, 0.025, 
+#'   0.98, 0.01, 0.01, 
+#'   0.96, 0.02, 0.02, 
+#'   0.95, 0.04, 0.01, 
+#'   0.95, 0.01, 0.04, 
+#'   0.99, 0.005, 0.005, 
+#'   0.025, 0.95, 0.025, 
+#'   0.97, 0.02, 0.01, 
+#'   0.025, 0.025, 0.95), 
+#'   ncol = 3, byrow=TRUE)
+#' # a hard truth:
+#' hardTrue <- apply(fuzzyTrue,1,FUN=which.max)
+#' # some predicted labels:
+#' hardPred <- c(1,1,1,1,1,1,2,2,2)
+#' fuzzyHardSpotAgreement(hardTrue, fuzzyTrue, hardPred)
 fuzzyHardSpotAgreement <- function(hardTrue, fuzzyTrue, hardPred, 
                                    useNegatives=TRUE, verbose=TRUE){
   stopifnot(is.atomic(hardPred))

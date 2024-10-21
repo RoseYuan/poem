@@ -11,6 +11,10 @@
 #' @param k Number of nearest neighbors
 #' @param ... Optional params passed to [findSpatialKNN()].
 #' @export
+#' @examples
+#' data(sp_toys)
+#' data <- sp_toys
+#' nnWeightedAccuracy(data$label, data$p1, data[,c("x", "y")], k=6)
 #' @return A scalar representing the weighted accuracy.
 nnWeightedAccuracy <- function(true, pred, location, k=5, ...){
   pred <- as.factor(pred)
@@ -138,7 +142,10 @@ ELSA <- function(labels, location, k=10){
 #'   unless the input is a matrix or data.frame. If omitted, the Annoy 
 #'   approximation will be used if there are more than 500 elements.
 #' @return A vector of agreement scores
-#'
+#' @examples
+#' data(sp_toys)
+#' data <- sp_toys
+#' getNeihboringPairAgreement(data$label, data$p1, data[,c("x", "y")], k=6)
 #' @export
 getNeihboringPairAgreement <- function(true, pred, location, k=20L,
                                        useNegatives=FALSE, distWeights=TRUE,

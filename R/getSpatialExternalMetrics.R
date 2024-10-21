@@ -90,7 +90,7 @@ getSpatialGlobalExternalMetrics <- function(true, pred, location, k=6, alpha=0.5
                                      argfindSpatialKNN))
   }
   if("setMatchingAccuracy" %in% metrics){
-    res$setMatchingAccuracy<- .setMatchingAccuracy(true, pred)
+    res$setMatchingAccuracy<- setMatchingAccuracy(true, pred)
   }
   colnames(res) <- sub("fuzzy", "Spatial",colnames(res))
   return(res[,metrics, drop=FALSE])

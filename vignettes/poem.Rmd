@@ -411,7 +411,8 @@ p2 <- ggplot(sp_toys, aes(x, y,
 
 plot_grid(p0 + theme(plot.title = element_text(hjust = 0.5)),
           p1 + theme(plot.title = element_text(hjust = 0.5)),
-          p2 + theme(plot.title = element_text(hjust = 0.5)), nrow=1, rel_width=c(1,1,1))
+          p2 + theme(plot.title = element_text(hjust = 0.5)), 
+          nrow=1, rel_width=c(1,1,1))
 ```
 
 # Session info

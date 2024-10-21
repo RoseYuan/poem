@@ -26,3 +26,8 @@ by the proportion of their (spatial) neighborhood that is not of the
 element/spot's predicted class. This reduces the weight of misclassifications
 happening at the boundary between domains.
 }
+\examples{
+data(sp_toys)
+data <- sp_toys
+nnWeightedAccuracy(data$label, data$p1, data[,c("x", "y")], k=6)
+}
