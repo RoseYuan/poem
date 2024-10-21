@@ -48,6 +48,7 @@ implementations (e.g. \url{https://github.com/FelSiq/DBCV}) due to the different
 algorithms used for computing the Minimum Spanning Tree.
 }
 \examples{
+data(noisy_moon)
 data <- noisy_moon
 dbcv(data[, c("x", "y")], data$kmeans_label)
 dbcv(data[, c("x", "y")], data$hdbscan_label)

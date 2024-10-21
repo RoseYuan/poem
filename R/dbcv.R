@@ -178,6 +178,7 @@
 #' algorithms used for computing the Minimum Spanning Tree.
 #' @export
 #' @examples
+#' data(noisy_moon)
 #' data <- noisy_moon
 #' dbcv(data[, c("x", "y")], data$kmeans_label)
 #' dbcv(data[, c("x", "y")], data$hdbscan_label)
