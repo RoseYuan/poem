@@ -48,4 +48,3 @@ Suggests:
 VignetteBuilder: knitr
 biocViews: DimensionReduction, Clustering, GraphAndNetwork, Spatial
 Config/testthat/edition: 3
-LazyData: true

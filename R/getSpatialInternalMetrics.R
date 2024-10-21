@@ -21,6 +21,7 @@
 #'      - `"PC"`: Partition coefficient
 #'      - `"PE"`: Partition entropy
 #' @examples
+#' data(sp_toys)
 #' data <- sp_toys
 #' getSpatialInternalMetrics(data$label, data[,c("x", "y")], k=6, level="class")
 getSpatialInternalMetrics <- function(labels, location, k=6, level="class",

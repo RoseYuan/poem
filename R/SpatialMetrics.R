@@ -35,6 +35,7 @@ nnWeightedAccuracy <- function(true, pred, location, k=5, ...){
 #' @return A numeric value for PAS score, and a boolean vector about the abnormal spots.
 #' @export
 #' @examples 
+#' data(sp_toys)
 #' data <- sp_toys
 #' PAS(data$label, data[,c("x", "y")], k=6)
 #' PAS(data$p1, data[,c("x", "y")], k=6)
@@ -56,6 +57,7 @@ PAS <- function(labels, location, k=10, ...){
 #' @inheritParams findSpatialKNN
 #' @return A numeric value for CHAOS score.
 #' @examples 
+#' data(sp_toys)
 #' data <- sp_toys
 #' CHAOS(data$label, data[,c("x", "y")])
 #' CHAOS(data$p1, data[,c("x", "y")])
@@ -102,6 +104,7 @@ CHAOS <- function(labels, location, BNPARAM=NULL) {
 #' @references Naimi, Babak, et al., 2019; 10.1016/j.spasta.2018.10.001
 #' @return A dataframe containing the Ea, Ec and ELSA for all samples in the dataset.
 #' @examples
+#' data(sp_toys)
 #' data <- sp_toys
 #' ELSA(data$label, data[,c("x", "y")], k=6)
 #' ELSA(data$p1, data[,c("x", "y")], k=6)
