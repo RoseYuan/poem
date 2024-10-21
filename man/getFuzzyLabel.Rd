@@ -32,6 +32,7 @@ Get fuzzy representation of labels according to the spatial neighborhood
 label composition.
 }
 \examples{
+data(sp_toys)
 data <- sp_toys
 getFuzzyLabel(data$label, data[,c("x", "y")], k=6)
 }

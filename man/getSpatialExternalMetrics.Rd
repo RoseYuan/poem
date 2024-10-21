@@ -63,6 +63,7 @@ The allowed values for \code{metrics} depend on the value of \code{level}:
 }
 }
 \examples{
+data(sp_toys)
 data <- sp_toys
 getSpatialExternalMetrics(data$label, data$p1, data[,c("x", "y")], k=6, level="class")
 }

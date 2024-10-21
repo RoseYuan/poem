@@ -37,6 +37,7 @@ For a given dataset, find the \code{k} nearest neighbors for each
 object based on their spatial locations, with the option of handling ties.
 }
 \examples{
+data(sp_toys)
 data <- sp_toys
 findSpatialKNN(data[,c("x", "y")], k=6)
 }

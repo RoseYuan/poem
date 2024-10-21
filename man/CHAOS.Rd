@@ -26,6 +26,7 @@ for each cluster, averaged across clusters.
 Lower CHAOS score indicates better spatial domain clustering performance.
 }
 \examples{
+data(sp_toys)
 data <- sp_toys
 CHAOS(data$label, data[,c("x", "y")])
 CHAOS(data$p1, data[,c("x", "y")])

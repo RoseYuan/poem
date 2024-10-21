@@ -25,6 +25,7 @@ the randomness of the spots that located outside of the spatial region where it 
 Lower PAS score indicates better spatial domian clustering performance.
 }
 \examples{
+data(sp_toys)
 data <- sp_toys
 PAS(data$label, data[,c("x", "y")], k=6)
 PAS(data$p1, data[,c("x", "y")], k=6)
