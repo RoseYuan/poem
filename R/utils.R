@@ -131,11 +131,11 @@ emb2snn <- function(x, k, type="rank", BNPARAM=NULL){
 # Adapted from https://github.com/cran/mclustcomp/blob/master/R/auxiliary.R
 .aux.conversion <- function(x){
   if (is.character(x)){
-    x = as.numeric(as.factor(unlist(strsplit(x,split=""))))
+    x <- as.numeric(as.factor(unlist(strsplit(x,split=""))))
   } else if (is.factor(x)){
-    x = as.numeric(x)
+    x <- as.numeric(x)
   } else {
-    x = as.numeric(as.factor(x))
+    x <- as.numeric(as.factor(x))
   }
   return(round(x))
 }

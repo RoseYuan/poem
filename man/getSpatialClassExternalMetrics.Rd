@@ -42,6 +42,9 @@ for its knn is then \code{1-alpha}. By default \code{0.5}.}
 
 \item{...}{Optional params for \link[FuzzyPartitionMetrics()]{poem::FuzzyPartitionMetrics()} or \code{\link[=findSpatialKNN]{findSpatialKNN()}}.}
 }
+\value{
+A data.frame of metrics.
+}
 \description{
 Computes a selection of external clustering evaluation metrics for spatial
 data at the class/cluster level.

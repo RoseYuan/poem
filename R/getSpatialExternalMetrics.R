@@ -58,6 +58,7 @@ getSpatialExternalMetrics <- function(true, pred, location, k=6, alpha=0.5, leve
 #' @param fuzzy_true Logical; whether to compute fuzzy class memberships for `true`.
 #' @param fuzzy_pred Logical; whether to compute fuzzy class memberships for `pred`.
 #' @param ... Optional params for \link[FuzzyPartitionMetrics()]{poem::FuzzyPartitionMetrics()} or [findSpatialKNN()].
+#' @return A data.frame of metrics.
 getSpatialGlobalExternalMetrics <- function(true, pred, location, k=6, alpha=0.5,
                                             metrics=c("SpatialRI","SpatialARI",
                                                       "SpatialWH","SpatialAWH", 
@@ -103,6 +104,7 @@ getSpatialGlobalExternalMetrics <- function(true, pred, location, k=6, alpha=0.5
 #' @param k The number of neighbors used when calculating the fuzzy 
 #' class memberships for fuzzy metrics.
 #' @param ... Optional params for \link[FuzzyPartitionMetrics()]{poem::FuzzyPartitionMetrics()} or [findSpatialKNN()].
+#' @return A data.frame of metrics.
 getSpatialClassExternalMetrics <- function(true, pred, location, k=6, alpha=0.5,
                                            metrics=c("SpatialWH","SpatialAWH", 
                                                      "SpatialWC","SpatialAWC"), 
@@ -132,6 +134,7 @@ getSpatialClassExternalMetrics <- function(true, pred, location, k=6, alpha=0.5,
 #' data at the element level.
 #' @inheritParams getSpatialGlobalExternalMetrics
 #' @param ... Optional params for [getFuzzyPartitionElementMetrics()] or [findSpatialKNN()].
+#' @return A data.frame of metrics.
 getSpatialElementExternalMetrics <- function(true, pred, location, k=6, alpha=0.5,
                                              metrics=c("SpatialSPA", "SpatialNPA"),
                                              fuzzy_true=TRUE, fuzzy_pred=FALSE,
