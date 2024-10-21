@@ -297,6 +297,7 @@ By using the input `hardPred`, `hardTrue`, `fuzzyPred`, `fuzzyTrue`, one can con
 We use another toy example dataset in the package, `sp_toys`, to illustrate spatial clustering evaluation.
 
 ```{r, fig.height = 3, fig.width = 8.5}
+data(sp_toys)
 s <- 3
 st <- 1
 p1 <- ggplot(sp_toys, aes(x, y, 
