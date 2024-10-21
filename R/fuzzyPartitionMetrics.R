@@ -167,7 +167,7 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
     # generate more permutations
     allp <- apply(matrix( runif(m*nperms), nrow=m ), 2, order)
   
-    res <- bplapply(1:nperms, BPPARAM=BPPARAM, onePerm)
+    res <- bplapply(seq_len(nperms), BPPARAM=BPPARAM, onePerm)
     if(!is.null(res1)) res <- c(res1,res)
     NDCs <- sapply(res, \(x) x[[1]])
     SE <- sd(NDCs)/sqrt(nperms)

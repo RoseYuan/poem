@@ -90,7 +90,7 @@ emb2snn <- function(x, k, type="rank", BNPARAM=NULL){
     # Exclude the distance to itself
     distances[i] <- Inf
     # Get the indices of the k-nearest neighbors
-    neighbors <- order(distances)[1:k]
+    neighbors <- order(distances)[seq_len(k)]
     # Store the indices and distances of the k-nearest neighbors
     knn_index[i, ] <- neighbors
     knn_distance[i, ] <- distances[neighbors]
