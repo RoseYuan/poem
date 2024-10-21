@@ -84,6 +84,7 @@ There are 3 different levels where one can perform the above-mentioned evaluatio
 The following table illustrates available metrics at different evaluation levels, and the main functions used to retrieve them.
 
 ```{r}
+data(metric_info)
 DT::datatable(metric_info)
 ```
 

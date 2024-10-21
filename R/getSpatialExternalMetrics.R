@@ -14,6 +14,7 @@
 #'   - If `level = "class"`, the allowed `metrics` are: `"SpatialWH"`,`"SpatialAWH"`, `"SpatialWC"`,`"SpatialAWC"`.
 #'   - If `level = "dataset"`, the allowed `metrics` are: `"SpatialRI"`,`"SpatialARI"`,`"SpatialWH"`,`"SpatialAWH"`, `"SpatialWC"`,`"SpatialAWC"`,`"SpatialAccuracy"`. 
 #' @examples
+#' data(sp_toys)
 #' data <- sp_toys
 #' getSpatialExternalMetrics(data$label, data$p1, data[,c("x", "y")], k=6, level="class")
 getSpatialExternalMetrics <- function(true, pred, location, k=6, alpha=0.5, level="class",
