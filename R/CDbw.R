@@ -54,7 +54,7 @@ CDbw <- function(x, labels, r=10, s=seq(0.1,0.8,by=0.1),
   repx <- list()
   if (trace)
     print("Find representatives")
-  for (i in 1:cn){
+  for (i in seq_len(cn)){
     nc[i] <- sum(labels==i)
     xcc[i,] <- colMeans(x[labels==i,,drop=FALSE])
     rrx <- findrep(x,xcc[i,],labels,i,r,p,n,nc[i])
@@ -75,26 +75,26 @@ CDbw <- function(x, labels, r=10, s=seq(0.1,0.8,by=0.1),
   dv <- as.matrix(dist(x[vrepc,]))
   dijmin <- list()
   rcr <- list()
-  for (i in 1:cn){
+  for (i in seq_len(cn)){
     dijmin[[i]] <- list()
     rcr[[i]] <- list()
   }
 #  browser()
-  for (i in 1:(cn-1)){
-    for (j in (i+1):cn){
+  for (i in seq_len(cn-1)){
+    for (j in seq(from=i+1L,to=cn)){
       dij <- dv[minrepr[i]:mrepr[i],minrepr[j]:mrepr[j],drop=FALSE]
       ii <- ij <- numeric(0)
       dijmin[[i]][[j]] <- dijmin[[j]][[i]] <- numeric(0)
-      for (k in 1:repr[i]){
+      for (k in seq_len(repr[i])){
         ii[k] <- which.min(dij[k,])
         dijmin[[i]][[j]][k] <- repc[[j]][ii[k]]
       }
-      for (k in 1:repr[j]){
+      for (k in seq_len(repr[j])){
         ij[k] <- which.min(dij[,k])
         dijmin[[j]][[i]][k] <- repc[[i]][ij[k]]
       }
       rcr[[i]][[j]] <- numeric(0)
-      for (k in 1:repr[i]){
+      for (k in seq_len(repr[i])){
         if (k==ij[ii[k]])
           rcr[[i]][[j]] <- rbind(rcr[[i]][[j]],
                                  c(dijmin[[i]][[j]][k],dijmin[[j]][[i]][ii[k]]))
@@ -111,11 +111,11 @@ CDbw <- function(x, labels, r=10, s=seq(0.1,0.8,by=0.1),
   }
 # Find dens(C_i,C_j), dist
   dens <- dk <- matrix(0,ncol=cn,nrow=cn)
-  for (i in 1:(cn-1)){
-    for (j in (i+1):cn){      
+  for (i in seq_len(cn-1)){
+    for (j in seq(from=i+1L,to=cn)){      
       nrcr <- nrow(rcr[[i]][[j]])
       wsdij <- mean(sqrt(wvar[i]),sqrt(wvar[j])) 
-      for (k in 1:nrcr){
+      for (k in seq_len(nrcr)){
         u <- (x[rcr[[i]][[j]][k,1],]+x[rcr[[i]][[j]][k,2],])/2
 #        browser()
         ud <- sqrt(mahalanobis(x[labels==i | labels==j,,drop=FALSE],
@@ -134,7 +134,7 @@ CDbw <- function(x, labels, r=10, s=seq(0.1,0.8,by=0.1),
   }
 # Interdens and Sep
   maxd <- mind <- numeric(0)
-  for (i in 1:cn){
+  for (i in seq_len(cn)){
     maxd[i] <- max(dens[i,])
     mind[i] <- min(dk[i,-i])
   }
@@ -146,8 +146,8 @@ CDbw <- function(x, labels, r=10, s=seq(0.1,0.8,by=0.1),
   ns <- length(s)
   intradens <- numeric(0)
   denscl <- matrix(0,nrow=cn,ncol=ns) 
-  for (i in 1:ns){
-    for (j in 1:cn){
+  for (i in seq_len(ns)){
+    for (j in seq_len(cn)){
 #     browser()
       xcj <- x[labels==j,,drop=FALSE]
       if (clusterstdev)
@@ -155,7 +155,7 @@ CDbw <- function(x, labels, r=10, s=seq(0.1,0.8,by=0.1),
       else
         stdevj <- stdev
 #      dxj <- as.matrix(dist(x))[labels==j,labels==j]
-      for (k in 1:repr[j]){
+      for (k in seq_len(repr[j])){
         srep <- (1-s[i])*xcj[repx[[j]][k],]+s[i]*xcc[j,]
         dsjk <- mahalanobis(xcj,srep,diag(p))
         denscl[j,i] <- denscl[j,i]+sum(dsjk<stdevj)/nc[j]
@@ -172,7 +172,7 @@ CDbw <- function(x, labels, r=10, s=seq(0.1,0.8,by=0.1),
     cat("compactness= ",compactness,"\n")
   }
 # Intrachange and Cohesion
-  ic <- intradens[2:ns]-intradens[1:(ns-1)]
+  ic <- intradens[2:ns]-intradens[seq_len(ns-1)]
   intrachange <- sum(ic)/(ns-1)
   cohesion <- compactness/(1+intrachange)
   sc <- sep*compactness
@@ -204,7 +204,7 @@ findrep <- function(x,xcen,labels,cluster,r,p=ncol(x),n=nrow(x),
     for (ri in 2:r){
       drx[ri,] <- mahalanobis(xc,repxx[ri-1,],diag(p))
       di <- numeric(0)
-      for (i in 1:nc)
+      for (i in seq_len(nc))
         di[i] <- min(drx[2:ri,i])
       if (max(di)>0){
         repxi[ri] <- which.max(di)
@@ -216,6 +216,6 @@ findrep <- function(x,xcen,labels,cluster,r,p=ncol(x),n=nrow(x),
       }
     }
   }
-  list(repc=(1:n)[labels==cluster][repxi],repx=repxi,
+  list(repc=(seq_len(n))[labels==cluster][repxi],repx=repxi,
        maxr=maxr,wvar=wvar)
 }
