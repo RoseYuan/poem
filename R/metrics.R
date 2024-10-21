@@ -228,7 +228,7 @@ getAgreement <- function(true, pred, usePairs=TRUE, useNegatives=FALSE, adjust=F
 #' @param pred Predicted labels (vector coercible to factor)
 #'
 #' @return A scalar representing the weighted accuracy.
-.setMatchingAccuracy <- function(true, pred){
+setMatchingAccuracy <- function(true, pred){
   pred <- as.factor(pred)
   matching <- matchSets(pred, true, returnIndices=TRUE)
   pred <- matching[as.integer(pred)]

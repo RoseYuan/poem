@@ -65,6 +65,7 @@ getPartitionMetrics <-function(true, pred, metrics=c("WC","WH","AWC","AWH","FM")
 #' metrics are reported per element.
 #' 
 #' @inheritParams getAgreement
+#' @param metrics The metrics to compute.
 #'
 #' @return A dataframe of metrics.
 getPartitionElementMetrics <- function(true, pred, metrics=c("ASPA"), usePairs=TRUE, useNegatives=TRUE){

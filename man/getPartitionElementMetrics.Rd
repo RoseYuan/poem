@@ -17,6 +17,8 @@ getPartitionElementMetrics(
 
 \item{pred}{A vector of predicted clusters}
 
+\item{metrics}{The metrics to compute.}
+
 \item{usePairs}{Logical; whether to compute over pairs instead of elements
 Recommended and TRUE by default.}
 

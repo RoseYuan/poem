@@ -1,6 +1,6 @@
 Package: poem
 Title: POpulation-based Evaluation Metrics. Various evaluation metrics for assessing population segregation in clusterings, embeddings, graphs and space.
-Version: 0.99.0
+Version: 0.99.1
 Authors@R: c(
     person("Siyuan", "Luo", email="siyuan.luo@hest.ethz.ch", role=c("cre","aut"), comment=c(ORCID="0009-0007-6404-3244")),
     person("Pierre-Luc", "Germain", email="pierre-luc.germain@hest.ethz.ch", role=c("aut","ctb"),
