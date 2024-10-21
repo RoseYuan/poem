@@ -15,6 +15,10 @@ These include especially external evaluation metrics (i.e. based on a comparison
 
 [^2]: In 'hard' partitions, each data point belongs to one and only one subset. However, clustering can also generate fuzzy partitions, in which data points can belong to multiple subsets with varying degrees (or probability) of membership. 
 
+For a detailed introduction of the package, see the vignette.
+
+
+
 ## Installation
 
 You can install the development version of poem from
@@ -24,8 +28,6 @@ You can install the development version of poem from
 # install.packages("devtools")
 devtools::install_github("RoseYuan/poem")
 ```
-
-For a detailed introduction of the package, see the vignette.
 
 ## Contact
 
