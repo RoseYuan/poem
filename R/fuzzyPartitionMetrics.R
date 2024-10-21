@@ -92,7 +92,7 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
       os <- 8*((3+nSim)*m^2)
       if(computeWallace) os <- os + 8*ncomp*(1+max(ncol(Q),ncol(P)))
     }
-    class(os) = "object_size"
+    class(os) <- "object_size"
     message("Projected memory usage: ", format(os, units = "auto"))
   }
   
