@@ -1,6 +1,6 @@
 # poem: POpulation-based Evaluation Metrics
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/RoseYuan/poem/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/RoseYuan/poem/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/RoseYuan/poem/actions/workflows/check.yaml/badge.svg)](https://github.com/RoseYuan/poem/actions/workflows/check.yaml)
 <!-- badges: end -->
 
 
