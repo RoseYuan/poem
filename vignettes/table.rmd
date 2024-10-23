@@ -1,0 +1,171 @@
+---
+title: Details about each evaluation metrics
+package: "`r BiocStyle::pkg_ver('poem')`"
+author: 
+- name: Siyuan Luo
+  email: roseluosy@gmail.com
+  affiliation:
+    - &IMLS Institute for Molecular Life Sciences, University of Zurich, Zurich, Switzerland
+    - &HEST Department of Health Sciences and Technology, ETH Zurich, Zurich, Switzerland
+- name: Pierre-Luc Germain
+  email: 
+  affiliation:
+    - *IMLS
+    - *HEST
+date: "`r Sys.Date()`"
+output:
+  BiocStyle::html_document
+vignette: |
+  %\VignetteIndexEntry{2_metric_details}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+<style type="text/css">
+.smaller {
+  font-size: 10px
+}
+</style>
+
+# Partition-based metrics
+
+```{r, include=FALSE, eval=TRUE}
+# Create a dataframe
+partition_metrics <- data.frame(
+  Min_level = c("dataset", "class/cluster", "class/cluster",
+                "dataset", "dataset", "dataset",
+                "class/cluster", "dataset", "dataset",
+                "class/cluster", "class/cluster"),
+  Metric = c("Rand Index (RI)", "Wallace Homogeneity (WH)", "Wallace Completeness (WC)", 
+             "Adjusted Rand Index (ARI)", "Normalized Class Size Rand Index (NCR)", 
+             "Mutual Information (MI)", 
+             "Adjusted Wallace Homogeneity (AWH), Adjusted Wallace Completeness (AWC), and Adjusted Mutual Information (AMI)", 
+             "(Entropy-based) Homogeneity (EH)", "(Entropy-based) Completeness (EC)", 
+             "V Measure (VM)", "(weighted average) F Measure (wFM)"),
+  Calculation = c(
+    "$\\frac{a+d}{n(n-1)/2}$; the ratio of the sum of true positive and true negative pairs to the total number of object pairs.",
+    "$\\frac{a}{a+c}$; the ratio of the true positive pairs to the total number of object pairs that are in the same cluster in $P$.",
+    "$\\frac{a}{a+b}$; the ratio of the true positive pairs to the total number of object pairs that are in the same classes in $G$.",
+    "$\\frac{\\text{RI}-\\mathrm{E}(\\text{RI})}{1-\\mathrm{E}(\\text{RI})} = \\frac{2(ad-bc)}{(a+b)(b+d)+(a+c)(c+d)}$; adjusting RI by accounting for the expected similarity of all pairings due to chance using the Permutation Model for clusterings. ARI is the harmonic mean of AWH and AWC.",
+    "A normalized version of RI, where each agreement quantities are divided by the maximum possible agreement values for their respective class.",
+    "$H(G) - H(G|P)$; the difference between the shannon entropy of $G$ and the conditional entropy of $G$ given $P$.",
+    "Chance adjusted version of WH, WC and MI, respectively. For a metric M, the chance adjusted version of it is $\\frac{\\text{M}-\\mathrm{E}(\\text{M})}{1-\\mathrm{E}(\\text{M})}$.",
+    "$1-\\frac{H(G|P)}{H(G)}$ if $H(G,P)\\neq0$, $1$ otherwise; the ratio of MI to the individual entropy of $G$.",
+    "$1-\\frac{H(P|G)}{H(P)}$ if $H(P,G)\\neq0$, $1$ otherwise; the ratio of MI to the individual entropy of $P$.",
+    "$\\frac{(1+\\beta)\\times\\text{EH}\\times\\text{EC}}{\\beta\\times\\text{EH}+\\text{EC}}$; the harmonic mean between EH and EC. It is identical to normalized mutual information (NMI) when arithmetic mean is used for averaging in NMI calculation.",
+    "Here we calculate weighted F1-score, where the weights are based on the sizes of classes."
+  ),
+  stringsAsFactors = FALSE
+)
+```
+
+
+```{r, results='asis', echo=FALSE}
+kable_table <- knitr::kable(partition_metrics, format = "html", 
+                            escape = FALSE, caption = "Partition-based metrics. The notation used is common throughout the table: consider comparing the predicted partition $P$ to the ground-truth partition $G$; $a$ is the number of pairs that are in the same group both in $P$ and $G$; $b$ is the number of pairs that are in the same class in $G$ but in different clusters in $P$; $c$ is the number of pairs that are in different classes in $G$ but in the same cluster in $P$; $d$ is the number of pairs that are in different groups both in $P$ and $G$; $n$ is the total number of objects; $E$ is the expectation operator; $H(⋅)$ is the Shannon entropy; $\beta$ is the ratio of weight attributed to homogeneity vs completeness; the expactation value of RI, WH, and WC is calculated when assuming a generalized hypergeometric model.")
+styled_kable_table <- kableExtra::kable_styling(kable_table, bootstrap_options = c("striped", "hover"))
+styled_kable_table
+```
+
+
+# Embedding-based metrics
+```{r, include=FALSE, eval=TRUE}
+# Create a dataframe
+embedding_metrics <- data.frame(
+  Min_level = c("dataset", "dataset", "dataset"),
+  Metric = c("Silhouette score", 
+             "Composed Density between and within Clusters (CDbw)", 
+             "Density Based Clustering Validation index (DBCV)"),
+  Calculation = c(
+    "$\\frac{n-m}{\\text{max}(m, n)}$, where $n$ is the mean distance between a sample and the nearest class that the sample is not a part of, and $m$ is the mean intra-class distance.",
+    "The CDbw index consists of three main components: cohesion, compactness, and separation between clusters. It uses multiple representative points selected from each cluster to calculate intra-cluster density and between-cluster distances, reflecting the geometry of the clusters and capturing changes in intra-cluster density.",
+    "A density-based index that computes the least dense region inside a cluster and the most dense region between the clusters, to measure the within and between cluster density connectedness of clusters."
+  ),
+  stringsAsFactors = FALSE
+)
+```
+
+```{r, results='asis', echo=FALSE}
+kable_table <- knitr::kable(embedding_metrics, format = "html", 
+                            escape = FALSE, caption = "Embedding-based metrics.",
+                            full_width = TRUE)
+styled_kable_table <- kableExtra::kable_styling(kable_table, bootstrap_options = c("striped", "hover"))
+styled_kable_table
+```
+
+# Graph-based metrics
+
+```{r, include=FALSE, eval=TRUE}
+# Create a modified dataframe
+graph_metrics <- data.frame(
+  Min_level = c("dataset", "element", "element", "element", "element", 
+                "class/cluster", "class/cluster", "class/cluster"),
+  Metric = c("Modularity", 
+             "Local Inverse Simpson’s Index (LISI)", 
+             "Neighborhood Purity (NP)", 
+             "Proportion of Weakly Connected (PWC)", 
+             "Cohesion", 
+             "Adhesion", 
+             "Adjusted Mean Shortest Path (AMSP)", 
+             "Neighborhood Class Enrichment (NCE)"),
+  Calculation = c(
+    "For a given graph partition, it quantifies the number of edges within communities relative to what would be expected by random chance. $Q = \\frac{1}{2m} \\sum_{ij} \\left( A_{ij} - \\gamma \\frac{k_i k_j}{2m} \\right) \\delta(c_i, c_j)$, where $m$ is the number of edges, $A$ is the adjacency matrix of the graph, $k_i$ is the (weighted) degree of $i$, $\\gamma$ is the resolution parameter, and $\\delta(c_i, c_j)$ is $1$ if $i$ and $j$ are in the same community else $0$.",
+    "For a given node in a weighted kNN graph, the expected number of nodes needed to be sampled before two nodes are drawn from the same classes within its neighborhood.",
+    "For each node in a graph, the proportion of its neighborhood that is of the same class as it.",
+    "For a given community in a graph, the proportion of nodes that have more connections to the outside of the community than the inside of the community.",
+    "The minimum number of nodes that must be removed to split a graph.",
+    "The minimum number of edges that must be removed to split a graph.",
+    "A measure of the disconnectness and spread of the subgraph connecting elements of a given class. If the graph subclass is disconnected, the mean shortest path of each connected subgraph $m$ are summed. $\\frac{\\sum_{i} (1+m_i)}{\\sqrt{N}}$, where $m$ is the mean shortest path and $N$ is the number of nodes of the given class. Note that the normalization for size is only approximative, and only applicable for kNN graphs.",
+    "The log2 fold-enrichment (i.e. over-representation) of the node's class among its nearest neighbors, over the expected given its relative abundance."
+  ),
+  stringsAsFactors = FALSE
+)
+```
+
+```{r, results='asis', echo=FALSE}
+kable_table <- knitr::kable(graph_metrics, format = "html", 
+                            escape = FALSE, caption = "Graph-based metrics.",
+                            full_width = TRUE)
+styled_kable_table <- kableExtra::kable_styling(kable_table, bootstrap_options = c("striped", "hover"))
+styled_kable_table
+```
+
+# Metrics for spatial clusterings
+
+```{r, include=FALSE, eval=TRUE}
+# Create a modified dataframe
+spatial_metrics <- data.frame(
+  Min_level = c("class/cluster", 
+                "class/cluster", 
+                "element", 
+                "dataset", 
+                "element", 
+                "element", 
+                "dataset"),
+  Metric = c("Percentage of Abnormal Spots (PAS)", 
+             "Spatial Chaos Score (CHAOS)", 
+             "Entropy-based Local indicator of Spatial Association (ELSA)", 
+             "Spatial RI, ARI, WH, WC, AWH, and AWC", 
+             "Spot-wise Pair Agreement (SPA)", 
+             "Spatial SPA", 
+             "Spatial Set Matching Accuracy"),
+  Calculation = c(
+    "PAS measures the percentage of abnormal spots, which is defined as spots with a spatial domain label differing from more than half of its nearest neighbors.",
+    "CHAOS is the mean length of the graph edges in the 1-nearest neighbor (1NN) graph for each domain averaged across domains.",
+    "For a site $i$, $E_i = E_{ai} \\times E_{ci}$, where $E_{ai}$ summarizes the dissimilarity between site $i$ and the neighbouring sites, and $E_{ci}$ quantifies the diversity of the categories within the neighbourhood of site $i$.",
+    "Spatial versions of the pair-sorting indices, based on fuzzy versions of the metrics. Specifically, we use the Normalized Degree of Concordance (NDC, see Hullermeier et al., 2012) and the Adjusted Concordance Index (ACI, see D'Errico et al., 2021) as fuzzy versions of RI and ARI respectively, and developed fuzzy versions of the other metrics using the same logic. In the spatial context, we first make a fuzzy version of the true labels based on the spatial neighborhood, and then track the maximum pair agreement between the predicted labels and either the hard or fuzzy ground truth.",
+    "The proportion, for each spot, of its concordance with all other spots that is the same (i.e. concordant or not) across the clustering and ground truth. This value will be the same for all spots that share the same combination of cluster and class, and is especially useful for visualization. A variant of this can be computed that ignores negative pairs (i.e. that are discordant in both the clustering and ground truth). When negative pairs are included, the average of SPA equals to the Rand Index.",
+    "Like the non-spatial Spot-wise Pair Agreement, with the difference that the clustering is evaluated against both a 'hard' and 'fuzzy' version of the ground truth, as for the computation of the Spatial versions of the pair-sorting indices.",
+    "An accuracy that downweights misclassifications based on the spatial neighborhood. Instead of counting as zero in the accuracy computation, the misclassified node counts as the proportion of its spatial neighborhood that is of node's predicted class."
+  ),
+  stringsAsFactors = FALSE
+)
+```
+
+```{r, results='asis', echo=FALSE}
+kable_table <- knitr::kable(spatial_metrics, format = "html", 
+                            escape = FALSE, caption = "Metrics for spatial clusterings.",
+                            full_width = TRUE)
+styled_kable_table <- kableExtra::kable_styling(kable_table, bootstrap_options = c("striped", "hover"))
+styled_kable_table
+```
+
