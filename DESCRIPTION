@@ -40,6 +40,7 @@ Suggests:
     knitr,
     DT,
     dplyr,
+    kableExtra,
     scico,
     cowplot,
     ggnetwork,
