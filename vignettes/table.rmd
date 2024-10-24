@@ -169,3 +169,7 @@ styled_kable_table <- kableExtra::kable_styling(kable_table, bootstrap_options =
 styled_kable_table
 ```
 
+# Session info
+```{r}
+sessionInfo()
+```
