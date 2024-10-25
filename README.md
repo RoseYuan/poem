@@ -10,7 +10,7 @@ The `poem` package provides multiple metrics for evaluating subpopulation struct
 
 * Metrics for comparing two fuzzy partitions[^2], or for comparing a hard partition with a fuzzy partition. This allows the evaluation of fuzzy partition results by assessing its agreement to a fuzzy or a hard ground-truth partition.
 
-* Metrics tailored for domain detection in spatially-resolved -omics data. These include especially external evaluation metrics (i.e. based on a comparison to ground truth labels), but also internal metrics. 
+* Metrics tailored for domain detection in spatially-resolved omics data. These include especially external evaluation metrics (i.e. based on a comparison to ground truth labels), but also internal metrics. 
 
 [^1]: A partition is a way of organizing the data points of a dataset into distinct, non-overlapping, and non-empty subsets. For example, a clustering is a partition. 
 
