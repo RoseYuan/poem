@@ -3,6 +3,7 @@
 #' @param X Numeric matrix.
 #' @param distance String specifying the metric to compute the distances.
 #' @return Numeric matrix of pairwise distances with self-distances set to `Inf`.
+#' @keywords internal
 .compute_pair_to_pair_dists <- function(X, distance="euclidean") {
   if(distance == "sqeuclidean"){
     dists <- as.matrix(dist(X, method = "euclidean"))
@@ -22,6 +23,7 @@
 #' @param inds_a Optional integer vector for row indices.
 #' @param inds_b Optional integer vector for column indices.
 #' @return Numeric matrix representing the sub matrix.
+#' @keywords internal
 .get_submatrix <- function(arr, inds_a = NULL, inds_b = NULL) {
   if (is.null(inds_a)) {
     return(arr)
@@ -39,6 +41,7 @@
 #' in igraph. Currently only mst from igraph is implemented.
 #' @return A list containing the indices of internal nodes and their edge weights.
 #' @importFrom Matrix Diagonal
+#' @keywords internal
 .get_internal_objects <- function(mutual_reach_dists, 
                                  use_igraph_mst=TRUE) {
   rownames(mutual_reach_dists) <- NULL
@@ -64,6 +67,7 @@
 #' @param dists Numeric matrix of distances.
 #' @param d Integer, the dimensionality.
 #' @return Numeric vector of core distances for each point.
+#' @keywords internal
 .compute_cluster_core_distance <- function(dists, d) {
   n <- nrow(dists)
   core_dists <- rowSums(dists^(-d)) / (n - 1)
@@ -76,6 +80,7 @@
 #' @param dists Numeric matrix of distances.
 #' @param d Float, the dimensionality.
 #' @return A list containing core distances and mutual reachability distances.
+#' @keywords internal
 .compute_mutual_reach_dists <- function(dists, d) {
   core_dists <- .compute_cluster_core_distance(dists = dists, d = d)
   bc_core_dists <- matrix(rep(core_dists, dim(dists)[2]), nrow = dim(dists)[1], ncol = dim(dists)[2], byrow=TRUE)
@@ -91,6 +96,7 @@
 #' @param d Integer, the dimensionality.
 #' @param use_igraph_mst Logical flag to use MST implementation 
 #' in igraph. Currently only mst from igraph is implemented.
+#' @keywords internal
 #' @return A list containing the density sparseness, internal core distances, and internal node indices.
 .fn_density_sparseness <- function(cls_inds, dists, d, 
                                   use_igraph_mst) {
@@ -110,6 +116,7 @@
 #' @param dists Numeric matrix of distances.
 #' @param internal_core_dists_i Numeric vector of core distances for cluster i.
 #' @param internal_core_dists_j Numeric vector of core distances for cluster j.
+#' @keywords internal
 #' @return A list containing the cluster indices and their density separation.
 .fn_density_separation <- function(cls_i, cls_j, dists, internal_core_dists_i, internal_core_dists_j) {
   bc_internal_core_dists_i <- matrix(rep(internal_core_dists_i, dim(dists)[2]), nrow = dim(dists)[1], ncol = dim(dists)[2], byrow=FALSE)
@@ -124,6 +131,7 @@
 #' @description Checks for duplicated samples in matrix `X`.
 #' @param X Numeric matrix of samples.
 #' @param threshold Numeric, the distance threshold to consider samples as duplicates.
+#' @keywords internal
 #' @return None
 .check_duplicated_samples <- function(X, threshold = 1e-9) {
   if (nrow(X) <= 1) {
@@ -139,6 +147,7 @@
 #' @description Converts clusters containing a single instance to noise.
 #' @param labels Integer vector of cluster IDs.
 #' @param noise_id Integer, the ID for noise.
+#' @keywords internal
 #' @return Integer vector with singleton clusters converted to noise.
 .convert_singleton_clusters_to_noise <- function(labels, noise_id) {
   cluster_sizes <- table(labels)
@@ -149,7 +158,7 @@
   return(ifelse(labels %in% singleton_clusters, noise_id, labels))
 }
 
-#' @title DBCV Metric Calculation
+#' @title Calculate DBCV Metric 
 #' @description Compute the DBCV (Density-Based Clustering Validation) metric.
 #' 
 #' @param X Numeric matrix of samples.

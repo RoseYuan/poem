@@ -32,3 +32,4 @@ A data.frame of metrics for each node/element of \code{x}.
 \description{
 Computes element-level, embedding-based metrics.
 }
+\keyword{internal}

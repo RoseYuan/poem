@@ -1,4 +1,4 @@
-#' getGraphMetrics
+#' Compute graph-based metrics
 #' 
 #' Computes a selection of graph evaluation metrics using class labels.
 #'

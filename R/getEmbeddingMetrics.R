@@ -1,4 +1,4 @@
-#' getEmbeddingMetrics
+#' Compute embedding-based metrics
 #' 
 #' Computes embedding-based metrics for the specified level.
 #'
@@ -53,7 +53,7 @@ getEmbeddingMetrics <-function(x, labels, metrics=c("meanSW", "minSW", "pnSW", "
 #' @inheritParams getEmbeddingMetrics
 #'   
 #' @return A data.frame of metrics for each node/element of `x`.
-#' 
+#' @keywords internal
 #' @importFrom cluster silhouette
 #' @importFrom stats dist
 getEmbeddingElementMetrics <-function(x, labels, metrics=c("SW"), 
@@ -79,7 +79,7 @@ getEmbeddingElementMetrics <-function(x, labels, metrics=c("SW"),
 #' @param metrics The metrics to compute.
 #'   
 #' @return A data.frame of metrics for each node/element of `x`.
-#' 
+#' @keywords internal
 #' @importFrom stats aggregate
 getEmbeddingClassMetrics <-function(x, labels,
                                     metrics=c("meanSW", "minSW", "pnSW", "dbcv"),
@@ -115,7 +115,7 @@ getEmbeddingClassMetrics <-function(x, labels,
 #' 
 #' @param metrics The metrics to compute.
 #' @inheritParams getEmbeddingMetrics
-#'   
+#' @keywords internal
 #' @return A data.frame (with 1 row) of metrics.
 getEmbeddingGlobalMetrics <-function(x, labels,
                                      metrics=c("meanSW", "meanClassSW", "pnSW",

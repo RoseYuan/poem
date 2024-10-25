@@ -2,9 +2,7 @@
 % Please edit documentation in R/spatial.R
 \name{getFuzzyLabel}
 \alias{getFuzzyLabel}
-\title{Get fuzzy representation of labels
-Get fuzzy representation of labels according to the spatial neighborhood
-label composition.}
+\title{Get fuzzy representation of labels}
 \usage{
 getFuzzyLabel(labels, location, k = 6, alpha = 0.5, ...)
 }
@@ -27,7 +25,6 @@ for its knn is then \code{1-alpha}. By default \code{0.5}.}
 A matrix of fuzzy memberships.
 }
 \description{
-Get fuzzy representation of labels
 Get fuzzy representation of labels according to the spatial neighborhood
 label composition.
 }

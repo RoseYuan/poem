@@ -31,3 +31,4 @@ data(sp_toys)
 data <- sp_toys
 nnWeightedAccuracy(data$label, data$p1, data[,c("x", "y")], k=6)
 }
+\keyword{internal}

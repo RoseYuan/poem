@@ -1,4 +1,4 @@
-#' getSpatialExternalMetrics
+#' Compute external metrics for spatial data
 #' 
 #' Computes a selection of external clustering evaluation metrics for spatial 
 #' data.
@@ -47,6 +47,7 @@ getSpatialExternalMetrics <- function(true, pred, location, k=6, alpha=0.5, leve
 #' metrics and set matching-based accuracy.
 #' @inheritParams getFuzzyPartitionMetrics
 #' @inheritParams getFuzzyLabel
+#' @keywords internal
 #' @param true A vector containing the labels of the true classes. Must be a 
 #'  vector of characters, integers, numerics, or a factor, but not a list.
 #' @param pred A vector containing the labels of the predicted clusters. Must 
@@ -101,6 +102,7 @@ getSpatialGlobalExternalMetrics <- function(true, pred, location, k=6, alpha=0.5
 #' Computes a selection of external clustering evaluation metrics for spatial 
 #' data at the class/cluster level. 
 #' @inheritParams getSpatialGlobalExternalMetrics
+#' @keywords internal
 #' @param k The number of neighbors used when calculating the fuzzy 
 #' class memberships for fuzzy metrics.
 #' @param ... Optional params for \link[FuzzyPartitionMetrics()]{poem::FuzzyPartitionMetrics()} or [findSpatialKNN()].
@@ -134,14 +136,15 @@ getSpatialClassExternalMetrics <- function(true, pred, location, k=6, alpha=0.5,
 #' data at the element level.
 #' @inheritParams getSpatialGlobalExternalMetrics
 #' @param ... Optional params for [getFuzzyPartitionElementMetrics()] or [findSpatialKNN()].
+#' @keywords internal
 #' @return A data.frame of metrics.
 getSpatialElementExternalMetrics <- function(true, pred, location, k=6, alpha=0.5,
                                              metrics=c("SpatialSPA", "SpatialNPA"),
                                              fuzzy_true=TRUE, fuzzy_pred=FALSE,
                                              ...){
-  argfindSpatialKNN <- .checkEllipsisArgs(fnList=list(findSpatialKNN, getFuzzyPartitionElementMetrics, getNeihboringPairAgreement), ...)[[1]] 
-  arggetFuzzyPartitionElementMetrics <- .checkEllipsisArgs(fnList=list(findSpatialKNN, getFuzzyPartitionElementMetrics, getNeihboringPairAgreement), ...)[[2]]
-  arggetNeihboringPairAgreement <- .checkEllipsisArgs(fnList=list(findSpatialKNN, getFuzzyPartitionElementMetrics, getNeihboringPairAgreement), ...)[[3]]
+  argfindSpatialKNN <- .checkEllipsisArgs(fnList=list(findSpatialKNN, getFuzzyPartitionElementMetrics, getNeighboringPairAgreement), ...)[[1]] 
+  arggetFuzzyPartitionElementMetrics <- .checkEllipsisArgs(fnList=list(findSpatialKNN, getFuzzyPartitionElementMetrics, getNeighboringPairAgreement), ...)[[2]]
+  arggetNeighboringPairAgreement <- .checkEllipsisArgs(fnList=list(findSpatialKNN, getFuzzyPartitionElementMetrics, getNeighboringPairAgreement), ...)[[3]]
   
   if("SpatialSPA" %in% metrics){
   hardTrue <- true
@@ -158,7 +161,7 @@ getSpatialElementExternalMetrics <- function(true, pred, location, k=6, alpha=0.
   }
 
   if("SpatialNPA" %in% metrics){
-    SpatialNPA <- do.call(getNeihboringPairAgreement, c(list(true=true, pred=pred, location=location, k=k), arggetNeihboringPairAgreement))
+    SpatialNPA <- do.call(getNeighboringPairAgreement, c(list(true=true, pred=pred, location=location, k=k), arggetNeighboringPairAgreement))
   }
   res <- as.data.frame(lapply(setNames(metrics, metrics), FUN=function(m){
     switch(m,

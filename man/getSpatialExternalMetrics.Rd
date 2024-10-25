@@ -2,7 +2,7 @@
 % Please edit documentation in R/getSpatialExternalMetrics.R
 \name{getSpatialExternalMetrics}
 \alias{getSpatialExternalMetrics}
-\title{getSpatialExternalMetrics}
+\title{Compute external metrics for spatial data}
 \usage{
 getSpatialExternalMetrics(
   true,

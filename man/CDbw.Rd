@@ -2,7 +2,7 @@
 % Please edit documentation in R/CDbw.R
 \name{CDbw}
 \alias{CDbw}
-\title{CDbw}
+\title{Calculate CDbw index}
 \usage{
 CDbw(
   x,

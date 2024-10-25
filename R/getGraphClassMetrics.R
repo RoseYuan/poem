@@ -15,7 +15,7 @@ setOldClass("igraph")
 #'
 #' @return A data.frame of metrics for each class.
 #' 
-#' 
+#' @keywords internal
 #' @rdname getGraphClassMetrics
 setGeneric("getGraphClassMetrics", signature="x",
            def=function(x, labels, metrics=c("SI","NP","AMSP","PWC","NCE"), 

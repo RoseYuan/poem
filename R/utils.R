@@ -22,7 +22,7 @@
   stopifnot(length(labels)==nrow(knn$index))
 }
 
-#' emb2knn
+#' Computes k nearest neighbors from embedding
 #' 
 #' Computes k nearest neighbors from embedding.
 #' 
@@ -51,7 +51,7 @@ emb2knn <- function(x, k, BNPARAM=NULL){
   findKNN(as.matrix(x), k=k, BNPARAM=BNPARAM)
 }
 
-#' emb2snn
+#' Computes shared nearest neighbors from embedding
 #' 
 #' computes shared nearest neighbors from embedding.
 #' 

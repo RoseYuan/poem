@@ -2,7 +2,7 @@
 % Please edit documentation in R/getSpatialInternalMetrics.R
 \name{getSpatialInternalMetrics}
 \alias{getSpatialInternalMetrics}
-\title{getSpatialInternalMetrics}
+\title{Compute internal metrics for spatial data}
 \usage{
 getSpatialInternalMetrics(
   labels,

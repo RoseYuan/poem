@@ -2,7 +2,7 @@
 % Please edit documentation in R/spatial.R
 \name{matchSets}
 \alias{matchSets}
-\title{matchSets}
+\title{Match two partitions using Hungarian algorithm}
 \usage{
 matchSets(pred, true, forceMatch = TRUE, returnIndices = is.integer(true))
 }

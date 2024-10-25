@@ -85,3 +85,4 @@ A data.frame of metrics for each node/element of \code{x}.
 Computes a selection of supervised graph evaluation metrics using ground
 truth class labels. The metrics are reported (as average) per node/element.
 }
+\keyword{internal}

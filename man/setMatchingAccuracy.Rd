@@ -2,7 +2,7 @@
 % Please edit documentation in R/metrics.R
 \name{setMatchingAccuracy}
 \alias{setMatchingAccuracy}
-\title{Just the non-spatially-weighted counterpart of nnWeightedAccuracy}
+\title{The non-spatially-weighted counterpart of nnWeightedAccuracy}
 \usage{
 setMatchingAccuracy(true, pred)
 }
@@ -15,5 +15,6 @@ setMatchingAccuracy(true, pred)
 A scalar representing the weighted accuracy.
 }
 \description{
-Just the non-spatially-weighted counterpart of nnWeightedAccuracy
+The non-spatially-weighted counterpart of nnWeightedAccuracy
 }
+\keyword{internal}

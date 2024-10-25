@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{emb2knn}
 \alias{emb2knn}
-\title{emb2knn}
+\title{Computes k nearest neighbors from embedding}
 \usage{
 emb2knn(x, k, BNPARAM = NULL)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/metrics.R
 \name{getAgreement}
 \alias{getAgreement}
-\title{getAgreement}
+\title{Per-element agreement score}
 \usage{
 getAgreement(true, pred, usePairs = TRUE, useNegatives = FALSE, adjust = FALSE)
 }

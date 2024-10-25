@@ -2,7 +2,7 @@
 % Please edit documentation in R/getEmbeddingMetrics.R
 \name{getEmbeddingMetrics}
 \alias{getEmbeddingMetrics}
-\title{getEmbeddingMetrics}
+\title{Compute embedding-based metrics}
 \usage{
 getEmbeddingMetrics(
   x,

@@ -85,3 +85,4 @@ A data.frame of metrics for each class.
 Computes a selection of supervised graph evaluation metrics using ground
 truth class labels. The metrics are reported (as average) per class.
 }
+\keyword{internal}

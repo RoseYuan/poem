@@ -1,4 +1,4 @@
-#' getFuzzyPartitionMetrics
+#' Compute external metrics for fuzzy clusterings
 #' 
 #' Computes a selection of external fuzzy clustering evaluation metrics.
 #' @param hardTrue An atomic vector coercible to a factor or integer vector 
@@ -255,7 +255,7 @@ getFuzzyPartitionClassMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
 #' @param fuzzy_pred Logical; whether the prediction is fuzzy.
 #' @param usePairs Logical; whether to compute over pairs instead of elements. 
 #' Only useful when `fuzzy_true=TRUE` and `fuzzy_pred=FALSE`.
-#'
+#' @keywords internal
 #' @return A dataframe of metric values.
 getFuzzyPartitionElementMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL, 
                                             hardPred=NULL, fuzzyPred=NULL, 

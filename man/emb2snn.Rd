@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{emb2snn}
 \alias{emb2snn}
-\title{emb2snn}
+\title{Computes shared nearest neighbors from embedding}
 \usage{
 emb2snn(x, k, type = "rank", BNPARAM = NULL)
 }

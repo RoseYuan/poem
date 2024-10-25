@@ -1,4 +1,5 @@
 #' @title The noisy moon dataset
+#' @description
 #' A simple toy dataset consists of two interleaving half circles.
 #'
 #' @format ## `noisy_moon`

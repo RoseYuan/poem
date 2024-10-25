@@ -17,3 +17,4 @@ Numeric matrix of pairwise distances with self-distances set to \code{Inf}.
 \description{
 Compute the pairwise distances between points in matrix \code{X}.
 }
+\keyword{internal}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/fuzzyPartitionMetrics.R
 \name{fuzzyPartitionMetrics}
 \alias{fuzzyPartitionMetrics}
-\title{fuzzyPartitionMetrics}
+\title{Compute fuzzy-fuzzy versions of pair-sorting partition metrics}
 \usage{
 fuzzyPartitionMetrics(
   P,

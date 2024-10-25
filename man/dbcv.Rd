@@ -2,7 +2,7 @@
 % Please edit documentation in R/dbcv.R
 \name{dbcv}
 \alias{dbcv}
-\title{DBCV Metric Calculation}
+\title{Calculate DBCV Metric}
 \usage{
 dbcv(
   X,

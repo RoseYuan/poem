@@ -17,3 +17,4 @@ None
 \description{
 Checks for duplicated samples in matrix \code{X}.
 }
+\keyword{internal}

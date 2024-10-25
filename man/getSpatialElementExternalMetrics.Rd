@@ -50,3 +50,4 @@ A data.frame of metrics.
 Computes a selection of external clustering evaluation metrics for spatial
 data at the element level.
 }
+\keyword{internal}

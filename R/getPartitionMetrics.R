@@ -1,4 +1,4 @@
-#' getPartitionMetrics
+#' Compute partition-based metrics
 #' 
 #' Computes a selection of external evaluation metrics for partition.
 #'
@@ -66,7 +66,7 @@ getPartitionMetrics <-function(true, pred, metrics=c("WC","WH","AWC","AWH","FM")
 #' 
 #' @inheritParams getAgreement
 #' @param metrics The metrics to compute.
-#'
+#' @keywords internal
 #' @return A dataframe of metrics.
 getPartitionElementMetrics <- function(true, pred, metrics=c("ASPA"), usePairs=TRUE, useNegatives=TRUE){
   if (anyNA(true) | anyNA(pred))

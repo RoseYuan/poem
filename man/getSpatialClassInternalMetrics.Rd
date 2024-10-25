@@ -32,3 +32,4 @@ A dataframe of metric values.
 Computes a selection of internal clustering evaluation metrics for spatial
 data for each class.
 }
+\keyword{internal}

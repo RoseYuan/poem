@@ -10,7 +10,7 @@
 #' @param metrics The metrics to compute. If omitted, main metrics will be 
 #'   computed.
 #' @return A dataframe of metrics.
-#' 
+#' @keywords internal
 #' @importFrom aricode sortPairs
 getPartitionClassMetrics <-function(true, pred, metrics=c("WC","WH","AWC","AWH",
                                                           "FM")){

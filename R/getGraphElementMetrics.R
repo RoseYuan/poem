@@ -10,7 +10,7 @@
 #'   instead of a nearest neighbor network. Ignored if `x` is not an embedding 
 #'   or dist object.
 #' @param ... Optional arguments for [emb2knn()] or [emb2snn()].
-#'
+#' @keywords internal
 #' @return A data.frame of metrics for each node/element of `x`.
 #' 
 #' @rdname getGraphElementMetrics

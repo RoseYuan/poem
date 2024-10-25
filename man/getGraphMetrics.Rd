@@ -2,7 +2,7 @@
 % Please edit documentation in R/getGraphMetrics.R
 \name{getGraphMetrics}
 \alias{getGraphMetrics}
-\title{getGraphMetrics}
+\title{Compute graph-based metrics}
 \usage{
 getGraphMetrics(
   x,

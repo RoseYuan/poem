@@ -19,3 +19,4 @@ Numeric matrix representing the sub matrix.
 \description{
 Extract a sub matrix from a matrix based on optional row and column indices.
 }
+\keyword{internal}

@@ -11,6 +11,7 @@
 #'   computed. See below for more details.
 #' @param ... Optional arguments for MI, VI, or VM. See [clevr::mutual_info()], [clevr::variation_info()]
 #'  and [clevr::v_measure()] for more details.
+#' @keywords internal
 #' @return A dataframe of metric results. Possible metrics are:
 #' \item{RI}{Rand Index} 
 #' \item{WC}{Wallace Completeness}
@@ -83,7 +84,7 @@ getPartitionGlobalMetrics <-function(true, pred,
            Mirkin = mclustcomp(as.vector(true), as.vector(pred), types = "mirkin")$scores,
            MHM = mclustcomp(as.vector(true), as.vector(pred), types = "mhm")$scores,
            MMM = mclustcomp(as.vector(true), as.vector(pred), types = "mmm")$scores,
-           FM = .FMeasure(.aux.conversion(true), 
+           FM = FMeasure(.aux.conversion(true), 
                          .aux.conversion(pred)),
            NCR = .NCR(true, pred),
            Accuracy = setMatchingAccuracy(true, pred),

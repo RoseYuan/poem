@@ -27,3 +27,4 @@ A dataframe of metrics.
 Computes a selection of external evaluation metrics for partition. The
 metrics are reported per class.
 }
+\keyword{internal}

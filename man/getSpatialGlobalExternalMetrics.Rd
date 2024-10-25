@@ -52,3 +52,4 @@ Computes a selection of external clustering evaluation metrics for spatial
 data at the dataset level. Options include a series of fuzzy pair-counting
 metrics and set matching-based accuracy.
 }
+\keyword{internal}

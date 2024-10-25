@@ -17,3 +17,4 @@ Numeric vector of core distances for each point.
 \description{
 Computes the core distance for each point in a cluster.
 }
+\keyword{internal}

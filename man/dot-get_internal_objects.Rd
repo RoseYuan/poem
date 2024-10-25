@@ -18,3 +18,4 @@ A list containing the indices of internal nodes and their edge weights.
 \description{
 Computes the internal nodes and edges using Minimum Spanning Tree.
 }
+\keyword{internal}

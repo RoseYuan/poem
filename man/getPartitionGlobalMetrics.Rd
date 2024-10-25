@@ -51,3 +51,4 @@ A dataframe of metric results. Possible metrics are:
 Computes a selection of external evaluation metrics for partition. The
 metrics are reported per dataset.
 }
+\keyword{internal}

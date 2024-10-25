@@ -10,7 +10,7 @@
 #' @param pred Predicted labels (vector coercible to factor)
 #' @param k Number of nearest neighbors
 #' @param ... Optional params passed to [findSpatialKNN()].
-#' @export
+#' @keywords internal
 #' @examples
 #' data(sp_toys)
 #' data <- sp_toys
@@ -124,9 +124,9 @@ ELSA <- function(labels, location, k=10){
   return(df)
 }
 
-#' getNeihboringPairAgreement
+#' Per-element local agreement between a clustering and a ground truth
 #' 
-#' Per-spot local agreement between a clustering and a ground truth
+#' Per-element local agreement between a clustering and a ground truth
 #'
 #' @param location A matrix or data.frame with spatial dimensions as columns.
 #'   Alternatively, a nearest neighbor object as produced by 
@@ -145,9 +145,9 @@ ELSA <- function(labels, location, k=10){
 #' @examples
 #' data(sp_toys)
 #' data <- sp_toys
-#' getNeihboringPairAgreement(data$label, data$p1, data[,c("x", "y")], k=6)
+#' getNeighboringPairAgreement(data$label, data$p1, data[,c("x", "y")], k=6)
 #' @export
-getNeihboringPairAgreement <- function(true, pred, location, k=20L,
+getNeighboringPairAgreement <- function(true, pred, location, k=20L,
                                        useNegatives=FALSE, distWeights=TRUE,
                                        BNPARAM=NULL){
   if(.isKnn(location, checkNNcl=FALSE, triggerError=FALSE)){

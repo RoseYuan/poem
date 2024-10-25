@@ -22,3 +22,4 @@ A list containing the density sparseness, internal core distances, and internal 
 \description{
 Computes the density sparseness for a given cluster.
 }
+\keyword{internal}

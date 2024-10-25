@@ -2,7 +2,7 @@
 % Please edit documentation in R/fuzzyPartitionMetrics.R
 \name{fuzzyHardSpotAgreement}
 \alias{fuzzyHardSpotAgreement}
-\title{fuzzyHardSpotAgreement}
+\title{Per-element maximal agreement between a hard and a fuzzy partition}
 \usage{
 fuzzyHardSpotAgreement(
   hardTrue,
@@ -32,7 +32,7 @@ datasets.}
 A numeric vector of agreement scores for each element of \code{hardPred}
 }
 \description{
-Per-spot maximal agreement between a hard clustering and hard and fuzzy
+Per-element maximal agreement between a hard clustering and hard and fuzzy
 ground truth labels.
 }
 \examples{

@@ -51,3 +51,4 @@ A dataframe of metric values.
 \description{
 Computes a selection of external fuzzy clustering evaluation metrics at the element level.
 }
+\keyword{internal}

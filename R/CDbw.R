@@ -1,4 +1,4 @@
-#' CDbw
+#' Calculate CDbw index
 #'
 #' Computes the CDbw-index (Halkidi and Vazirgiannis 2008; Halkidi, 
 #' Vazirgiannis and Hennig, 2015). This function is directly copied from the 

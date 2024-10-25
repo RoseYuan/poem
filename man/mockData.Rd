@@ -2,7 +2,7 @@
 % Please edit documentation in R/simulation.R
 \name{mockData}
 \alias{mockData}
-\title{mockData}
+\title{Generate mock multidimensional data}
 \usage{
 mockData(
   Ns = c(25, 15),

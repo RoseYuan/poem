@@ -77,7 +77,7 @@ knnComposition <- function(location, k=6, labels, alpha=0.5, ...){
 }
 
 #' Get fuzzy representation of labels
-#' Get fuzzy representation of labels according to the spatial neighborhood 
+#' @description Get fuzzy representation of labels according to the spatial neighborhood 
 #' label composition.
 #' @param labels An anomic vector of cluster labels
 #' @param location A matrix or data.frame of coordinates
@@ -99,7 +99,7 @@ getFuzzyLabel <- function(labels, location, k=6, alpha=0.5, ...){
   return(res)
 }
 
-#' matchSets
+#' Match two partitions using Hungarian algorithm
 #' 
 #' Match sets from a partitions to a reference partition using the Hungarian
 #' algorithm to optimize F1 scores.

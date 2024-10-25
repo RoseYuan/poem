@@ -1,4 +1,4 @@
-#' mockData
+#' Generate mock multidimensional data
 #' 
 #' Generates mock multidimensional data of a given number of classes of points,
 #' for testing.

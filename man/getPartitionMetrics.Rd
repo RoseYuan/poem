@@ -2,7 +2,7 @@
 % Please edit documentation in R/getPartitionMetrics.R
 \name{getPartitionMetrics}
 \alias{getPartitionMetrics}
-\title{getPartitionMetrics}
+\title{Compute partition-based metrics}
 \usage{
 getPartitionMetrics(
   true,

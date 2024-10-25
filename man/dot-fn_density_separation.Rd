@@ -29,3 +29,4 @@ A list containing the cluster indices and their density separation.
 \description{
 Computes the density separation between two clusters.
 }
+\keyword{internal}

@@ -17,3 +17,4 @@ Integer vector with singleton clusters converted to noise.
 \description{
 Converts clusters containing a single instance to noise.
 }
+\keyword{internal}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/getFuzzyPartitionMetrics.R
 \name{getFuzzyPartitionMetrics}
 \alias{getFuzzyPartitionMetrics}
-\title{getFuzzyPartitionMetrics}
+\title{Compute external metrics for fuzzy clusterings}
 \usage{
 getFuzzyPartitionMetrics(
   hardTrue = NULL,

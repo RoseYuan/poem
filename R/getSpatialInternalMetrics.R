@@ -1,5 +1,5 @@
 
-#' getSpatialInternalMetrics
+#' Compute internal metrics for spatial data
 #' 
 #' Computes a selection of internal clustering evaluation metrics for spatial 
 #' data.
@@ -53,6 +53,7 @@ getSpatialInternalMetrics <- function(labels, location, k=6, level="class",
 #' This is used for calculating PAS and ELSA scores.
 #' @param metrics The metrics to compute. See below for more details.
 #' @param ... Optional arguments for [PAS()].
+#' @keywords internal
 #' @importFrom fclust MPC PC PE
 #' 
 #' @references Yuan, Zhiyuan, et al., 2024; 10.1038/s41592-024-02215-8
@@ -96,6 +97,7 @@ attr(getSpatialGlobalInternalMetrics, "allowed_metrics") <- c("PAS","ELSA","CHAO
 #' @inheritParams getSpatialGlobalInternalMetrics
 #' @param metrics Possible metrics: "PAS" and "ELSA".
 #' @param ... Optional params for [PAS()].
+#' @keywords internal
 #' @return A dataframe containing the metric values for all samples in the dataset.
 #' If PAS is calculated, the value is a Boolean about the abnormality of a spot.
 #' If ELSA is calculated, Ea, Ec and ELSA for all spots will be returned.
@@ -121,6 +123,7 @@ attr(getSpatialElementInternalMetrics, "allowed_metrics") <- c("PAS","ELSA")
 #' @inheritParams getSpatialElementInternalMetrics
 #' @param metrics Possible metrics: "CHAOS", "PAS" and "ELSA".
 #' @param ... Optional params for [PAS()].
+#' @keywords internal
 #' @return A dataframe of metric values.
 getSpatialClassInternalMetrics <- function(labels, location, k=6, 
                                       metrics=c("CHAOS", "PAS", "ELSA"), ...){

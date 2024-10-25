@@ -32,3 +32,4 @@ A data.frame (with 1 row) of metrics.
 \description{
 Computes dataset-level, embedding-based metrics.
 }
+\keyword{internal}

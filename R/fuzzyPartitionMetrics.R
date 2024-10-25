@@ -1,4 +1,4 @@
-#' fuzzyPartitionMetrics
+#' Compute fuzzy-fuzzy versions of pair-sorting partition metrics
 #' 
 #' Computes fuzzy versions of pair-sorting partition metrics. This is largely 
 #' based on the permutation-based implementation by Antonio D'Ambrosio from the 
@@ -213,7 +213,7 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
 }
 
 
-#' fuzzyHardMetrics
+#' Compute fuzzy-hard versions of pair-sorting partition metrics
 #' 
 #' Computes fuzzy-hard versions of pair-sorting partition metrics to compare a 
 #' hard clustering with both a fuzzy and hard truth. This was especially 
@@ -411,9 +411,9 @@ fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL,
 }
 
 
-#' fuzzySpotAgreement
+#' Per-element agreement between two fuzzy partitions
 #'
-#' Per-spot agreement between two fuzzy partitionings
+#' Per-element agreement between two fuzzy partitionings
 #' 
 #' @param P A object coercible to a numeric matrix with membership probability 
 #'   of elements (rows) in clusters (columns)
@@ -459,9 +459,9 @@ fuzzySpotAgreement <- function(P, Q){
 }
 
 
-#' fuzzyHardSpotAgreement
+#' Per-element maximal agreement between a hard and a fuzzy partition
 #'
-#' Per-spot maximal agreement between a hard clustering and hard and fuzzy 
+#' Per-element maximal agreement between a hard clustering and hard and fuzzy 
 #'   ground truth labels.
 #' 
 #' @param hardPred A vector of predicted cluster labels

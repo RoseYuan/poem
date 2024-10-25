@@ -17,3 +17,4 @@ A list containing core distances and mutual reachability distances.
 \description{
 Computes the mutual reachability distances between points.
 }
+\keyword{internal}

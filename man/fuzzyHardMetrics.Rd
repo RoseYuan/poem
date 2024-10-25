@@ -2,7 +2,7 @@
 % Please edit documentation in R/fuzzyPartitionMetrics.R
 \name{fuzzyHardMetrics}
 \alias{fuzzyHardMetrics}
-\title{fuzzyHardMetrics}
+\title{Compute fuzzy-hard versions of pair-sorting partition metrics}
 \usage{
 fuzzyHardMetrics(
   hardTrue,

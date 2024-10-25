@@ -100,7 +100,7 @@
          (pseudoCount+expected[as.integer(labels)]))
 }
 
-#' F measure
+#' Calculate F measure
 #' 
 #' Compute the F measure between two clustering results. This is directly copied
 #' from the package `FlowSOM`.
@@ -110,9 +110,9 @@
 #'                          sample
 #' @param silent    Logical, if FALSE, print some information about 
 #'                  precision and recall
-#' 
+#' @keywords internal
 #' @return  F measure score
-.FMeasure <- function(true, pred, silent=TRUE){
+FMeasure <- function(true, pred, silent=TRUE){
   if (sum(pred)==0)
     return(0);
   a <- table(true, pred);
@@ -136,7 +136,7 @@
 }
 
 
-#' getAgreement
+#' Per-element agreement score
 #' 
 #' Per-element agreement between a clustering and a ground truth
 #'
@@ -222,11 +222,11 @@ getAgreement <- function(true, pred, usePairs=TRUE, useNegatives=FALSE, adjust=F
   as.numeric(p[paste(true, pred)])
 }
 
-#' Just the non-spatially-weighted counterpart of nnWeightedAccuracy
+#' The non-spatially-weighted counterpart of nnWeightedAccuracy
 #' 
 #' @param true True class labels (vector coercible to factor)
 #' @param pred Predicted labels (vector coercible to factor)
-#'
+#' @keywords internal
 #' @return A scalar representing the weighted accuracy.
 setMatchingAccuracy <- function(true, pred){
   pred <- as.factor(pred)

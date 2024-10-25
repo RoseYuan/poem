@@ -2,7 +2,7 @@
 % Please edit documentation in R/fuzzyPartitionMetrics.R
 \name{fuzzySpotAgreement}
 \alias{fuzzySpotAgreement}
-\title{fuzzySpotAgreement}
+\title{Per-element agreement between two fuzzy partitions}
 \usage{
 fuzzySpotAgreement(P, Q)
 }
@@ -18,7 +18,7 @@ as \code{P}}
 A numeric vector of agreement scores for each row of \code{P}.
 }
 \description{
-Per-spot agreement between two fuzzy partitionings
+Per-element agreement between two fuzzy partitionings
 }
 \examples{
 # generate fuzzy partitions:
