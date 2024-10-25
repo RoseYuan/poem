@@ -11,10 +11,6 @@
 #' @param k Number of nearest neighbors
 #' @param ... Optional params passed to [findSpatialKNN()].
 #' @keywords internal
-#' @examples
-#' data(sp_toys)
-#' data <- sp_toys
-#' nnWeightedAccuracy(data$label, data$p1, data[,c("x", "y")], k=6)
 #' @return A scalar representing the weighted accuracy.
 nnWeightedAccuracy <- function(true, pred, location, k=5, ...){
   pred <- as.factor(pred)
