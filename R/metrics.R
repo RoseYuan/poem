@@ -164,9 +164,6 @@ getAgreement <- function(true, pred, usePairs=TRUE, useNegatives=FALSE, adjust=F
   tot <- matrix(rep(rowSums(co),ncol(co)),nrow=nrow(co))+
     matrix(rep(colSums(co),each=nrow(co)),nrow=nrow(co))-co
   
-  if(adjust){
-  }
-  
   if(usePairs){
     if(useNegatives){
       # if(adjust){
@@ -181,16 +178,22 @@ getAgreement <- function(true, pred, usePairs=TRUE, useNegatives=FALSE, adjust=F
       #     (pa - rpa)/(1 - rpa)
       #   }))
       # }
-      p <- sapply(seq_len(ncol(co)),FUN=function(j){
-        sapply(seq_len(nrow(co)), FUN=function(i){
-          if(co[i,j]==0) return(0)
-          pos <- choose(co[i,j],2)
-          neg <- co[i,j]*sum(co[-i,-j])/2
-          max <- pos+(co[i,j]*(nrow(co)-co[i,j]))/2
-          (pos+neg)/max
-        })
-      })
-      dimnames(p) <- dimnames(co)
+
+      return(sapply(seq_along(pred), FUN=function(i){
+        1-sum(abs( (pred==pred[[i]]) - (true==true[[i]]) ))/(length(pred)-1)
+      }))
+      
+      # # faster version on CM, but wrong at the moment:
+      # p <- sapply(seq_len(ncol(co)),FUN=function(j){
+      #   sapply(seq_len(nrow(co)), FUN=function(i){
+      #     if(co[i,j]==0) return(0)
+      #     pos <- choose(co[i,j],2)
+      #     neg <- co[i,j]*sum(co[-i,-j])/2
+      #     max <- pos+(co[i,j]*(nrow(co)-co[i,j]))/2
+      #     (pos+neg)/max
+      #   })
+      # })
+      # dimnames(p) <- dimnames(co)
     }else{
       truePairsPerCluster <- matrix(rep(colSums(pairs),each=nrow(co)),nrow=nrow(co))
       truePairs <- truePairsPerCluster + #per cluster
