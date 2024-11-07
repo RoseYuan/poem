@@ -19,6 +19,9 @@ nnWeightedAccuracy <- function(true, pred, location, k=5, ...){
   true <- as.integer(as.factor(true))
   nn <- findSpatialKNN(location, k, ...)
   w <- which(pred!=true)
+  if(length(which(pred!=true))==0){
+    return(0)
+  }
   nn <- nn[w]
   nn_dis <- relist(true[unlist(nn)]!=rep(pred[w],lengths(nn)),nn)
   1-sum(sapply(nn_dis, mean))/nrow(location)
