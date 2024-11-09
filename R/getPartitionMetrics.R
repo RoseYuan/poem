@@ -15,8 +15,8 @@
 #' @details
 #' The allowed values for `metrics` depend on the value of `level`:
 #'   - If `level = "element"`, the allowed `metrics` are: 
-#'      - `"SPA"`: Spot-wise Pair Agreement.
-#'      - `"ASPA"`: Adjusted Spot-wise Pair Agreement.
+#'      - `"SPC"`: Spot-wise Pair Concordance.
+#'      - `"ASPC"`: Adjusted Spot-wise Pair Concordance.
 #'   - If `level = "class"`, the allowed `metrics` are: `"WC"`,`"WH"`,`"AWC"`,`"AWH"`,`"FM"` (see below for details).
 #'   - If `level = "dataset"`, the allowed `metrics` are:
 #'      - `"RI"`: Rand Index 
@@ -64,11 +64,11 @@ getPartitionMetrics <-function(true, pred, metrics=c("WC","WH","AWC","AWH","FM")
 #' Computes a selection of external evaluation metrics for partition. The 
 #' metrics are reported per element.
 #' 
-#' @inheritParams getAgreement
+#' @inheritParams getPairConcordance
 #' @param metrics The metrics to compute.
 #' @keywords internal
 #' @return A dataframe of metrics.
-getPartitionElementMetrics <- function(true, pred, metrics=c("ASPA"), usePairs=TRUE, useNegatives=TRUE){
+getPartitionElementMetrics <- function(true, pred, metrics=c("ASPC"), usePairs=TRUE, useNegatives=TRUE){
   if (anyNA(true) | anyNA(pred))
     stop("NA are not supported.")
   if (is.character(true)) true <- as.factor(true)
@@ -82,11 +82,13 @@ getPartitionElementMetrics <- function(true, pred, metrics=c("ASPA"), usePairs=T
 
     res <- as.data.frame(lapply(setNames(metrics, metrics), FUN=function(m){
     switch(m,
-           SPA = getAgreement(true, pred, usePairs=usePairs, useNegatives=useNegatives, adjust=FALSE),
-           ASPA = getAgreement(true, pred, usePairs=usePairs, useNegatives=useNegatives, adjust=TRUE),
+           SPC = getPairConcordance(true, pred, usePairs=usePairs,
+                                    useNegatives=useNegatives, adjust=FALSE),
+           ASPC = getPairConcordance(true, pred, usePairs=usePairs,
+                                     useNegatives=useNegatives, adjust=TRUE),
            stop("Unknown metric.")
            )})
     )
   return(res)
 }
-attr(getPartitionElementMetrics, "allowed_metrics") <- c("SPA","ASPA")
+attr(getPartitionElementMetrics, "allowed_metrics") <- c("SPC","ASPC")

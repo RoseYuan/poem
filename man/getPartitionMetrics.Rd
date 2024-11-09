@@ -39,8 +39,8 @@ The allowed values for \code{metrics} depend on the value of \code{level}:
 \itemize{
 \item If \code{level = "element"}, the allowed \code{metrics} are:
 \itemize{
-\item \code{"SPA"}: Spot-wise Pair Agreement.
-\item \code{"ASPA"}: Adjusted Spot-wise Pair Agreement.
+\item \code{"SPC"}: Spot-wise Pair Concordance.
+\item \code{"ASPC"}: Adjusted Spot-wise Pair Concordance.
 }
 \item If \code{level = "class"}, the allowed \code{metrics} are: \code{"WC"},\code{"WH"},\code{"AWC"},\code{"AWH"},\code{"FM"} (see below for details).
 \item If \code{level = "dataset"}, the allowed \code{metrics} are:

@@ -123,9 +123,9 @@ ELSA <- function(labels, location, k=10){
   return(df)
 }
 
-#' Per-element local agreement between a clustering and a ground truth
+#' Per-element local concordance between a clustering and a ground truth
 #' 
-#' Per-element local agreement between a clustering and a ground truth
+#' Per-element local concordance between a clustering and a ground truth
 #'
 #' @param location A matrix or data.frame with spatial dimensions as columns.
 #'   Alternatively, a nearest neighbor object as produced by 
@@ -133,10 +133,10 @@ ELSA <- function(labels, location, k=10){
 #' @param pred A vector of predicted clusters
 #' @param true A vector of true class labels
 #' @param k Approximate number of nearest neighbors to consider
-#' @param useNegatives Logical; whether to include the consistency of negative
+#' @param useNegatives Logical; whether to include the concordance of negative
 #'   pairs in the score (default FALSE).
-#' @param distWeights Logical; whether to weight agreement by distance (default
-#'   TRUE).
+#' @param distWeights Logical; whether to weight concordance by distance 
+#'   (default TRUE).
 #' @param BNPARAM A BiocNeighbors parameter object to compute kNNs. Ignored 
 #'   unless the input is a matrix or data.frame. If omitted, the Annoy 
 #'   approximation will be used if there are more than 500 elements.
@@ -144,9 +144,9 @@ ELSA <- function(labels, location, k=10){
 #' @examples
 #' data(sp_toys)
 #' data <- sp_toys
-#' getNeighboringPairAgreement(data$label, data$p1, data[,c("x", "y")], k=6)
+#' getNeighboringPairConcordance(data$label, data$p1, data[,c("x", "y")], k=6)
 #' @export
-getNeighboringPairAgreement <- function(true, pred, location, k=20L,
+getNeighboringPairConcordance <- function(true, pred, location, k=20L,
                                        useNegatives=FALSE, distWeights=TRUE,
                                        BNPARAM=NULL){
   if(.isKnn(location, checkNNcl=FALSE, triggerError=FALSE)){

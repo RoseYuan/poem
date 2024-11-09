@@ -45,7 +45,8 @@ for its knn is then \code{1-alpha}. By default \code{0.5}.}
 
 \item{fuzzy_pred}{Logical; whether to compute fuzzy class memberships for \code{pred}.}
 
-\item{...}{Optional params for \code{\link[=getFuzzyPartitionElementMetrics]{getFuzzyPartitionElementMetrics()}} or \code{\link[=findSpatialKNN]{findSpatialKNN()}}.}
+\item{...}{Optional params for \code{\link[=getFuzzyPartitionElementMetrics]{getFuzzyPartitionElementMetrics()}} or
+\code{\link[=findSpatialKNN]{findSpatialKNN()}}.}
 }
 \value{
 A data.frame of metrics.
@@ -57,7 +58,7 @@ data.
 \details{
 The allowed values for \code{metrics} depend on the value of \code{level}:
 \itemize{
-\item If \code{level = "element"}, the allowed \code{metrics} are: \code{"SpatialSPA"}, \code{"SpatialNPA"}.
+\item If \code{level = "element"}, the allowed \code{metrics} are: \code{"SpatialSPC"}, \code{"SpatialNPC"}.
 \item If \code{level = "class"}, the allowed \code{metrics} are: \code{"SpatialWH"},\code{"SpatialAWH"}, \code{"SpatialWC"},\code{"SpatialAWC"}.
 \item If \code{level = "dataset"}, the allowed \code{metrics} are: \code{"SpatialRI"},\code{"SpatialARI"},\code{"SpatialWH"},\code{"SpatialAWH"}, \code{"SpatialWC"},\code{"SpatialAWC"},\code{"SpatialAccuracy"}.
 }

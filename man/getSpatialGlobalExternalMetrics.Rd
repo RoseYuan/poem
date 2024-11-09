@@ -42,7 +42,9 @@ for its knn is then \code{1-alpha}. By default \code{0.5}.}
 
 \item{fuzzy_pred}{Logical; whether to compute fuzzy class memberships for \code{pred}.}
 
-\item{...}{Optional params for \link[FuzzyPartitionMetrics()]{poem::FuzzyPartitionMetrics()} or \code{\link[=findSpatialKNN]{findSpatialKNN()}}.}
+\item{...}{Optional params for
+\link[FuzzyPartitionMetrics()]{poem::FuzzyPartitionMetrics()} or
+\code{\link[=findSpatialKNN]{findSpatialKNN()}}.}
 }
 \value{
 A data.frame of metrics.

@@ -136,9 +136,9 @@ FMeasure <- function(true, pred, silent=TRUE){
 }
 
 
-#' Per-element agreement score
+#' Per-element pair concordance score
 #' 
-#' Per-element agreement between a clustering and a ground truth
+#' Per-element pair concordance between a clustering and a ground truth
 #'
 #' @param pred A vector of predicted clusters
 #' @param true A vector of true class labels
@@ -150,7 +150,8 @@ FMeasure <- function(true, pred, silent=TRUE){
 #'   `useNegatives=FALSE` (doesn't make sense on a element-level otherwise).
 #'
 #' @return A vector of agreement scores
-getAgreement <- function(true, pred, usePairs=TRUE, useNegatives=FALSE, adjust=FALSE){
+getPairConcordance <- function(true, pred, usePairs=TRUE, useNegatives=FALSE,
+                               adjust=FALSE){
   if(useNegatives & adjust)
     stop("Adjustment for chance is only implemented for useNegatives=FALSE")
   # contingency table

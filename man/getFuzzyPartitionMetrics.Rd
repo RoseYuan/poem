@@ -72,7 +72,7 @@ Computes a selection of external fuzzy clustering evaluation metrics.
 \details{
 The allowed values for \code{metrics} depend on the value of \code{level}:
 \itemize{
-\item If \code{level = "element"}, the allowed \code{metrics} are: \code{"fuzzySPA"}.
+\item If \code{level = "element"}, the allowed \code{metrics} are: \code{"fuzzySPC"}.
 \item If \code{level = "class"}, the allowed \code{metrics} are: \code{"fuzzyWH"}, \code{"fuzzyAWH"}, \code{"fuzzyWC"}, \code{"fuzzyAWC"}.
 \item If \code{level = "dataset"}, the allowed \code{metrics} are: \code{"fuzzyRI"}, \code{"fuzzyARI"}, \code{"fuzzyWH"}, \code{"fuzzyAWH"}, \code{"fuzzyWC"}, \code{"fuzzyAWC"}.
 }

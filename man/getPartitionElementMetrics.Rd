@@ -7,7 +7,7 @@
 getPartitionElementMetrics(
   true,
   pred,
-  metrics = c("ASPA"),
+  metrics = c("ASPC"),
   usePairs = TRUE,
   useNegatives = TRUE
 )

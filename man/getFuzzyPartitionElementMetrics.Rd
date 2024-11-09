@@ -11,7 +11,7 @@ getFuzzyPartitionElementMetrics(
   fuzzyPred = NULL,
   fuzzy_true = TRUE,
   fuzzy_pred = FALSE,
-  metrics = c("fuzzySPA"),
+  metrics = c("fuzzySPC"),
   useNegatives = TRUE,
   verbose = TRUE,
   usePairs = TRUE
@@ -33,7 +33,7 @@ probability of elements (rows) in clusters (columns).}
 
 \item{fuzzy_pred}{Logical; whether the prediction is fuzzy.}
 
-\item{metrics}{The metrics to compute. Currently only \code{"fuzzySPA"} is included at the element level.}
+\item{metrics}{The metrics to compute. Currently only \code{"fuzzySPC"} is included at the element level.}
 
 \item{useNegatives}{Logical; whether to include negative pairs in the
 agreement score (tends to result in a larger overall agreement and lower
