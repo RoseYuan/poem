@@ -27,8 +27,10 @@
 <url><loc>https://roseyuan.github.io/poem/reference/findSpatialKNN.html</loc></url>
 <url><loc>https://roseyuan.github.io/poem/reference/fuzzyHardMetrics.html</loc></url>
 <url><loc>https://roseyuan.github.io/poem/reference/fuzzyHardSpotAgreement.html</loc></url>
+<url><loc>https://roseyuan.github.io/poem/reference/fuzzyHardSpotConcordance.html</loc></url>
 <url><loc>https://roseyuan.github.io/poem/reference/fuzzyPartitionMetrics.html</loc></url>
 <url><loc>https://roseyuan.github.io/poem/reference/fuzzySpotAgreement.html</loc></url>
+<url><loc>https://roseyuan.github.io/poem/reference/fuzzySpotConcordance.html</loc></url>
 <url><loc>https://roseyuan.github.io/poem/reference/getAgreement.html</loc></url>
 <url><loc>https://roseyuan.github.io/poem/reference/getEmbeddingClassMetrics.html</loc></url>
 <url><loc>https://roseyuan.github.io/poem/reference/getEmbeddingElementMetrics.html</loc></url>
@@ -41,7 +43,9 @@
 <url><loc>https://roseyuan.github.io/poem/reference/getGraphElementMetrics.html</loc></url>
 <url><loc>https://roseyuan.github.io/poem/reference/getGraphMetrics.html</loc></url>
 <url><loc>https://roseyuan.github.io/poem/reference/getNeighboringPairAgreement.html</loc></url>
+<url><loc>https://roseyuan.github.io/poem/reference/getNeighboringPairConcordance.html</loc></url>
 <url><loc>https://roseyuan.github.io/poem/reference/getNeihboringPairAgreement.html</loc></url>
+<url><loc>https://roseyuan.github.io/poem/reference/getPairConcordance.html</loc></url>
 <url><loc>https://roseyuan.github.io/poem/reference/getPartitionClassMetrics.html</loc></url>
 <url><loc>https://roseyuan.github.io/poem/reference/getPartitionElementMetrics.html</loc></url>
 <url><loc>https://roseyuan.github.io/poem/reference/getPartitionGlobalMetrics.html</loc></url>
