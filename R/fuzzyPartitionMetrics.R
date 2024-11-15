@@ -229,7 +229,9 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
 #'  containing the true hard labels. Must have the same length as `hardPred`.
 #' @param fuzzyTrue A object coercible to a numeric matrix with membership 
 #'   probability of elements (rows) in clusters (columns). Must have the same 
-#'   number of rows as the length of `hardTrue`.
+#'   number of rows as the length of `hardTrue`. Also note that the columns of
+#'   `fuzzyTrue` should be in the order of the levels (or integer values) of
+#'   `hardTrue`.
 #' @param nperms The number of permutations (for correction for chance). If 
 #'   NULL (default), a first set of 10 permutations will be run to estimate 
 #'   whether the variation across permutations is above 0.0025, in which case 
@@ -422,7 +424,9 @@ fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL,
 #'  containing the true hard labels. Must have the same length as `hardPred`.
 #' @param fuzzyTrue A object coercible to a numeric matrix with membership 
 #'   probability of elements (rows) in clusters (columns). Must have the same 
-#'   number of rows as the length of `hardTrue`.
+#'   number of rows as the length of `hardTrue`. Also note that the columns of
+#'   `fuzzyTrue` should be in the order of the levels (or integer values) of
+#'   `hardTrue`.
 #' @param nperms The number of permutations (for correction for chance). If 
 #'   NULL (default), a first set of 10 permutations will be run to estimate 
 #'   whether the variation across permutations is above 0.0025, in which case 
@@ -683,6 +687,9 @@ fuzzySpotConcordance <- function(P, Q){
 #' fuzzyHardSpotConcordance(hardTrue, fuzzyTrue, hardPred)
 fuzzyHardSpotConcordance <- function(hardTrue, fuzzyTrue, hardPred, 
                                    useNegatives=TRUE, verbose=TRUE){
+  if(useNegatives) return(fuzzyHardMetrics2(hardTrue, fuzzyTrue, hardPred,
+                                            returnElementPairAccuracy=TRUE,
+                                            verbose=verbose))
   stopifnot(is.atomic(hardPred))
   hardPredVector <- hardPred <- as.integer(as.factor(hardPred))
   if(is.atomic(hardTrue)){
@@ -721,9 +728,9 @@ fuzzyHardSpotConcordance <- function(hardTrue, fuzzyTrue, hardPred,
                 abs(as.matrix(ep2) - eq) )
   rm(eq, ep, ep2)
   
-  if(useNegatives){
-    return(1-rowSums(diff)/(ncol(diff)-1))
-  }
+  # if(useNegatives){
+  #   return(1-rowSums(diff)/(ncol(diff)-1))
+  # }
   
   # blend out the negative pairs
   1-vapply(seq_len(nrow(diff)), FUN.VALUE=numeric(1), FUN=function(i){

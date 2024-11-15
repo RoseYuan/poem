@@ -20,7 +20,9 @@ containing the true hard labels. Must have the same length as \code{hardPred}.}
 
 \item{fuzzyTrue}{A object coercible to a numeric matrix with membership
 probability of elements (rows) in clusters (columns). Must have the same
-number of rows as the length of \code{hardTrue}.}
+number of rows as the length of \code{hardTrue}. Also note that the columns of
+\code{fuzzyTrue} should be in the order of the levels (or integer values) of
+\code{hardTrue}.}
 
 \item{hardPred}{An atomic vector coercible to a factor or integer vector
 containing the predicted hard labels.}
