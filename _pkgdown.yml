@@ -42,8 +42,8 @@ reference:
   contents:
   - fuzzyHardSpotAgreement
   - fuzzySpotAgreement
-  - getAgreement
-  - getNeighboringPairAgreement
+  - getPairConcordance
+  - getNeighboringPairConcordance
 - title: Datasets
   desc: >
     The package provides several datasets for demonstration purposes.

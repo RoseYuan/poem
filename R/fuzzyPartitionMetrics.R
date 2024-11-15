@@ -446,8 +446,8 @@ fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL,
 #'                0.01, 0.01, 0.98), 
 #'                ncol = 3, byrow=TRUE)
 #' colnames(m1) <- colnames(m2) <- LETTERS[1:3]
-#' fuzzySpotAgreement(m1,m2)
-fuzzySpotAgreement <- function(P, Q){
+#' fuzzySpotConcordance(m1,m2)
+fuzzySpotConcordance <- function(P, Q){
   if(is.data.frame(P)) P <- as.matrix(P)
   if(is.data.frame(Q)) Q <- as.matrix(Q)
   stopifnot(is.matrix(P) && (is.numeric(P) | is.integer(P)))
@@ -494,8 +494,8 @@ fuzzySpotAgreement <- function(P, Q){
 #' hardTrue <- apply(fuzzyTrue,1,FUN=which.max)
 #' # some predicted labels:
 #' hardPred <- c(1,1,1,1,1,1,2,2,2)
-#' fuzzyHardSpotAgreement(hardTrue, fuzzyTrue, hardPred)
-fuzzyHardSpotAgreement <- function(hardTrue, fuzzyTrue, hardPred, 
+#' fuzzyHardSpotConcordance(hardTrue, fuzzyTrue, hardPred)
+fuzzyHardSpotConcordance <- function(hardTrue, fuzzyTrue, hardPred, 
                                    useNegatives=TRUE, verbose=TRUE){
   stopifnot(is.atomic(hardPred))
   hardPredVector <- hardPred <- as.integer(as.factor(hardPred))
