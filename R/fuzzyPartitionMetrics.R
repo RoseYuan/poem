@@ -411,6 +411,194 @@ fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL,
 }
 
 
+#' Compute fuzzy-hard metrics with lower memory requirement
+#' 
+#' This is a slightly slower, but low-memory version of 
+#' \code{\link{fuzzyHardMetrics}}.
+#'
+#' @param hardPred An atomic vector coercible to a factor or integer vector 
+#'  containing the predicted hard labels.
+#' @param hardTrue An atomic vector coercible to a factor or integer vector 
+#'  containing the true hard labels. Must have the same length as `hardPred`.
+#' @param fuzzyTrue A object coercible to a numeric matrix with membership 
+#'   probability of elements (rows) in clusters (columns). Must have the same 
+#'   number of rows as the length of `hardTrue`.
+#' @param nperms The number of permutations (for correction for chance). If 
+#'   NULL (default), a first set of 10 permutations will be run to estimate 
+#'   whether the variation across permutations is above 0.0025, in which case 
+#'   more (max 1000) permutations will be run.
+#' @param returnElementPairAccuracy Logical. If TRUE, returns the per-element
+#'   pair accuracy instead of the various parition-level and dataset-level metrics.
+#'   Default FALSE.
+#' @param verbose Logical; whether to print info and warnings, including the 
+#'   standard error of the mean across permutations (giving an idea of the 
+#'   precision of the adjusted metrics).
+#' @param BPPARAM BiocParallel params for multithreading (default none)
+#' 
+#' @references Hullermeier et al. 2012; 10.1109/TFUZZ.2011.2179303;
+#' @references D'Ambrosio et al. 2021; 10.1007/s00357-020-09367-0
+#' 
+#' @seealso \link[fuzzyHardMetrics()]{poem::fuzzyHardMetrics()}.
+#' 
+#' @author Pierre-Luc Germain
+#'
+#' @return A list of metrics:
+#'   \item{NDC}{Hullermeier's NDC (fuzzy rand index)}
+#'   \item{ACI}{Ambrosio's Adjusted Concordance Index (ACI), i.e. a 
+#'     permutation-based fuzzy version of the adjusted Rand index.}
+#'   \item{fuzzyWH}{Fuzzy Wallace Homogeneity index}
+#'   \item{fuzzyWC}{Fuzzy Wallace Completeness index}
+#'   \item{fuzzyAWH}{Adjusted fuzzy Wallace Homogeneity index}
+#'   \item{fuzzyAWC}{Adjusted fuzzy Wallace Completeness index}
+#'   
+#' @importFrom BiocParallel SerialParam bplapply bpnworkers
+#' @importFrom stats dist setNames runif
+#' @importFrom Matrix sparseMatrix
+#' @importFrom stats sd
+#' @export
+#' @examples
+#' # generate a fuzzy truth:
+#' fuzzyTrue <- matrix(c(
+#'   0.95, 0.025, 0.025, 
+#'   0.98, 0.01, 0.01, 
+#'   0.96, 0.02, 0.02, 
+#'   0.95, 0.04, 0.01, 
+#'   0.95, 0.01, 0.04, 
+#'   0.99, 0.005, 0.005, 
+#'   0.025, 0.95, 0.025, 
+#'   0.97, 0.02, 0.01, 
+#'   0.025, 0.025, 0.95), 
+#'   ncol = 3, byrow=TRUE)
+#' # a hard truth:
+#' hardTrue <- apply(fuzzyTrue,1,FUN=which.max)
+#' # some predicted labels:
+#' hardPred <- c(1,1,1,1,1,1,2,2,2)
+#' fuzzyHardMetrics2(hardTrue, fuzzyTrue, hardPred, nperms=3)
+fuzzyHardMetrics2 <- function(hardTrue, fuzzyTrue, hardPred, nperms=10, 
+                             returnElementPairAccuracy=FALSE, verbose=TRUE,
+                             BPPARAM=BiocParallel::SerialParam()){ 
+  
+  stopifnot(is.atomic(hardPred))
+  stopifnot(is.atomic(hardTrue))
+  hardPred <- as.factor(hardPred)
+  hardTrue <- as.factor(hardTrue)
+  if(is.data.frame(fuzzyTrue)) fuzzyTrue <- as.matrix(fuzzyTrue)
+  
+  stopifnot(is.matrix(fuzzyTrue) && 
+              (is.numeric(fuzzyTrue) | is.integer(fuzzyTrue)))
+  stopifnot(length(hardTrue)==nrow(fuzzyTrue))
+  stopifnot(length(hardPred)==nrow(hardTrue))
+  stopifnot(length(levels(hardTrue))==ncol(fuzzyTrue))
+  
+  m <- nrow(fuzzyTrue)
+  fuzzyTrue <- t(fuzzyTrue)
+  allp <- apply(matrix( runif(m*10), nrow=m ), 2, order)
+  
+  if(returnElementPairAccuracy){
+    return(sapply(seq_len(m), FUN=function(i){
+      # compute pair agreement for all the three labelings
+      eq <- as.integer(hardPred[-i]==hardPred[i])
+      ep <- 1-colSums(abs(fuzzyTrue[,-i]-fuzzyTrue[,i]))/2
+      ep2 <- as.integer(hardTrue[-i]==hardTrue[i])
+      diff <- pmin( abs(eq-ep), abs(eq-ep2) )
+      1-mean(diff)
+    }))
+  }
+  
+  doCalcs <- function(hardPred){
+    a <- lapply(seq_len(m), FUN=function(i){
+      # compute pair agreement for all the three labelings
+      eq <- as.integer(hardPred[-i]==hardPred[i])
+      ep <- 1-colSums(abs(fuzzyTrue[,-i]-fuzzyTrue[,i]))/2
+      ep2 <- as.integer(hardTrue[-i]==hardTrue[i])
+      diff <- pmin( abs(eq-ep), abs(eq-ep2) )
+      # completeness
+      ac <- sapply(split(seq_along(hardTrue[-i]), hardTrue[-i]), FUN=function(x){
+        c(diff=sum(diff[x]), n=length(x))
+      })
+      ac[2,which(ac[2,]==0)] <- 1  # avoid NaNs for singletons
+      
+      # homogeneity
+      a <- sapply(split(seq_along(hardPred[-i]), hardPred[-i]), FUN=function(x){
+        c(diff=sum(diff[x]), n=length(x))
+      })
+
+      list( NDC=1-mean(diff), aH=a, aC=ac )
+    })
+    Cdiff <- rowSums(sapply(a, FUN=function(x) x$aC[1,]))
+    Cn <- rowSums(sapply(a, FUN=function(x) x$aC[2,]))
+    Hdiff <- rowSums(sapply(a, FUN=function(x) x$aH[1,]))
+    Hn <- rowSums(sapply(a, FUN=function(x) x$aH[2,]))
+    # avoid NaNs for singletons
+    Hn[which(Hn==0)] <- 1L
+    Cn[which(Cn==0)] <- 1L
+    
+    NDC <- mean(sapply(a, FUN=function(x) x$NDC))
+    HO <- list( global=1-sum(Hdiff)/sum(Hn),
+                perPartition=1-Hdiff/Hn)
+    CO <- list( global=1-sum(Cdiff)/sum(Cn),
+                perPartition=1-Cdiff/Cn)
+    list(NDC=NDC, HO=HO, CO=CO)
+  }
+  
+  val <- doCalcs(hardPred)
+
+  onePerm <- function(col){
+    doCalcs(hardPred[allp[,col]])
+  }
+    
+  res1 <- NULL
+  if(is.null(nperms)){
+    # try few permutations to estimate if more are needed
+    allp <- apply(matrix( runif(m*10), nrow=m ), 2, order)
+    res1 <- bplapply(1:10, BPPARAM=BPPARAM, onePerm)
+    NDCs <- sapply(res1, \(x) x[[1]])
+    SE <- sd(NDCs)/sqrt(length(res1))
+    if(SE>0.0025) nperms <- 100
+    if(SE>0.01) nperms <- 1000
+    if(verbose && !is.null(nperms))
+      message("Running ", nperms, " extra permutations.")
+  }
+  
+  if(!is.null(nperms)){
+    # generate more permutations
+    allp <- apply(matrix( runif(m*nperms), nrow=m ), 2, order)
+    
+    res <- bplapply(1:nperms, BPPARAM=BPPARAM, onePerm)
+    if(!is.null(res1)) res <- c(res1,res)
+    NDCs <- sapply(res, \(x) x[[1]])
+    SE <- sd(NDCs)/sqrt(nperms)
+  }else{
+    res <- res1
+  }
+  
+  if(verbose){
+    message("Standard error of the mean NDC across permutations:", 
+            format(SE, digits=3))
+    if(!isFALSE(SE>0.0025))
+      message("You might want to increase the number of permutations to ",
+              "increase the robustness of the adjusted metrics.")
+  }
+  
+  adj <- function(x, m) (x-m)/(1-m)
+  
+  ACI <- adj(val[[1]],mean(NDCs))
+  
+  W1m <- mean(sapply(res, \(x) x[[2]][[1]]))
+  W2m <- mean(sapply(res, \(x) x[[3]][[1]]))
+  W1pm <- rowMeans(sapply(res, \(x) x[[2]][[2]]))
+  W2pm <- rowMeans(sapply(res, \(x) x[[3]][[2]]))
+  AW1 <- list( global=adj(val[[2]]$global,W1m),
+               perPartition=mapply(x=val[[2]]$perPartition, m=W1pm, FUN=adj) )
+  AW2 <- list( global=adj(val[[3]]$global,W2m),
+               perPartition=mapply(x=val[[3]]$perPartition, m=W2pm, FUN=adj) )
+  
+  return(list(NDC=val[[1]], ACI=ACI, fuzzyWH=val[[2]], fuzzyWC=val[[3]],
+              fuzzyAWH=AW1, fuzzyAWC=AW2))
+}
+
+
+
 #' Per-element agreement between two fuzzy partitions
 #'
 #' Per-element agreement between two fuzzy partitionings
