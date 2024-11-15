@@ -36,7 +36,7 @@ probability of elements (rows) in clusters (columns).}
 \item{metrics}{The metrics to compute. Currently only \code{"fuzzySPC"} is included at the element level.}
 
 \item{useNegatives}{Logical; whether to include negative pairs in the
-agreement score (tends to result in a larger overall agreement and lower
+concordance score (tends to result in a larger overall concordance and lower
 dynamic range of the score). Default TRUE.}
 
 \item{verbose}{Logical; whether to print expected memory usage for large

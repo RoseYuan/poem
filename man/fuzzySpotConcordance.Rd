@@ -2,7 +2,7 @@
 % Please edit documentation in R/fuzzyPartitionMetrics.R
 \name{fuzzySpotConcordance}
 \alias{fuzzySpotConcordance}
-\title{Per-element agreement between two fuzzy partitions}
+\title{Per-element concordance between two fuzzy partitions}
 \usage{
 fuzzySpotConcordance(P, Q)
 }
@@ -15,10 +15,10 @@ of elements (rows) in clusters (columns). Must have the same number of rows
 as \code{P}}
 }
 \value{
-A numeric vector of agreement scores for each row of \code{P}.
+A numeric vector of concordance scores for each row of \code{P}.
 }
 \description{
-Per-element agreement between two fuzzy partitionings
+Per-element concordance between two fuzzy partitionings
 }
 \examples{
 # generate fuzzy partitions:

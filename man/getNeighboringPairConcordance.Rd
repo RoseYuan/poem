@@ -36,7 +36,7 @@ unless the input is a matrix or data.frame. If omitted, the Annoy
 approximation will be used if there are more than 500 elements.}
 }
 \value{
-A vector of agreement scores
+A vector of concordance scores
 }
 \description{
 Per-element local concordance between a clustering and a ground truth

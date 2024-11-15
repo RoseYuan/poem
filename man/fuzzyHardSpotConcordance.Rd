@@ -2,7 +2,7 @@
 % Please edit documentation in R/fuzzyPartitionMetrics.R
 \name{fuzzyHardSpotConcordance}
 \alias{fuzzyHardSpotConcordance}
-\title{Per-element maximal agreement between a hard and a fuzzy partition}
+\title{Per-element maximal concordance between a hard and a fuzzy partition}
 \usage{
 fuzzyHardSpotConcordance(
   hardTrue,
@@ -22,17 +22,17 @@ number of rows as the length of \code{hardTrue}.}
 \item{hardPred}{A vector of predicted cluster labels}
 
 \item{useNegatives}{Logical; whether to include negative pairs in the
-agreement score (tends to result in a larger overall agreement and lower
+concordance score (tends to result in a larger overall concordance and lower
 dynamic range of the score). Default TRUE.}
 
 \item{verbose}{Logical; whether to print expected memory usage for large
 datasets.}
 }
 \value{
-A numeric vector of agreement scores for each element of \code{hardPred}
+A numeric vector of concordance scores for each element of \code{hardPred}
 }
 \description{
-Per-element maximal agreement between a hard clustering and hard and fuzzy
+Per-element maximal concordance between a hard clustering and hard and fuzzy
 ground truth labels.
 }
 \examples{

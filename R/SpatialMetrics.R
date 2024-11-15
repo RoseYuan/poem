@@ -140,7 +140,7 @@ ELSA <- function(labels, location, k=10){
 #' @param BNPARAM A BiocNeighbors parameter object to compute kNNs. Ignored 
 #'   unless the input is a matrix or data.frame. If omitted, the Annoy 
 #'   approximation will be used if there are more than 500 elements.
-#' @return A vector of agreement scores
+#' @return A vector of concordance scores
 #' @examples
 #' data(sp_toys)
 #' data <- sp_toys

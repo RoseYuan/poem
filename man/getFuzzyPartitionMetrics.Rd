@@ -54,7 +54,7 @@ Default FALSE.}
 \item{BPPARAM}{BiocParallel params for multithreading (default none)}
 
 \item{useNegatives}{Logical; whether to include negative pairs in the
-agreement score (tends to result in a larger overall agreement and lower
+concordance score (tends to result in a larger overall concordance and lower
 dynamic range of the score). Default TRUE.}
 
 \item{usePairs}{Logical; whether to compute over pairs instead of elements

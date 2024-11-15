@@ -122,7 +122,7 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
       }else{
         Bpair <- Bpairs[,i]
       }
-      # compute 1 - the distance between pair agreements weighted by their being 
+      # compute 1 - the distance between pair concordances weighted by their being 
       # of the same class in B
       c(c=sum((1-diff)*Bpair), n=sum(Bpair))
     })
@@ -315,7 +315,7 @@ fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL,
     message("Projected memory usage: ", format(os, units = "auto"))
   }
   
-  # compute pair agreement for all the three labelings
+  # compute pair concordance for all the three labelings
   eq <- as.matrix(1-(0.5*dist(hardPred, method="manhattan")))
   ep <- 1-(0.5*dist(fuzzyTrue, method="manhattan"))
   ep2 <- 1-(0.5*dist(hardTrue, method="manhattan"))
@@ -411,9 +411,9 @@ fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL,
 }
 
 
-#' Per-element agreement between two fuzzy partitions
+#' Per-element concordance between two fuzzy partitions
 #'
-#' Per-element agreement between two fuzzy partitionings
+#' Per-element concordance between two fuzzy partitionings
 #' 
 #' @param P A object coercible to a numeric matrix with membership probability 
 #'   of elements (rows) in clusters (columns)
@@ -421,7 +421,7 @@ fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL,
 #'   of elements (rows) in clusters (columns). Must have the same number of rows
 #'   as `P`
 #'
-#' @return A numeric vector of agreement scores for each row of `P`.
+#' @return A numeric vector of concordance scores for each row of `P`.
 #' @export
 #' @examples
 #' # generate fuzzy partitions:
@@ -459,9 +459,9 @@ fuzzySpotConcordance <- function(P, Q){
 }
 
 
-#' Per-element maximal agreement between a hard and a fuzzy partition
+#' Per-element maximal concordance between a hard and a fuzzy partition
 #'
-#' Per-element maximal agreement between a hard clustering and hard and fuzzy 
+#' Per-element maximal concordance between a hard clustering and hard and fuzzy 
 #'   ground truth labels.
 #' 
 #' @param hardPred A vector of predicted cluster labels
@@ -470,12 +470,12 @@ fuzzySpotConcordance <- function(P, Q){
 #'   probability of elements (rows) in clusters (columns). Must have the same 
 #'   number of rows as the length of `hardTrue`.
 #' @param useNegatives Logical; whether to include negative pairs in the 
-#'   agreement score (tends to result in a larger overall agreement and lower
+#'   concordance score (tends to result in a larger overall concordance and lower
 #'   dynamic range of the score). Default TRUE.
 #' @param verbose Logical; whether to print expected memory usage for large 
 #'   datasets.
 #'
-#' @return A numeric vector of agreement scores for each element of `hardPred`
+#' @return A numeric vector of concordance scores for each element of `hardPred`
 #' @export
 #' @examples
 #' # generate a fuzzy truth:
@@ -525,7 +525,7 @@ fuzzyHardSpotConcordance <- function(hardTrue, fuzzyTrue, hardPred,
     message("Projected memory usage: ", format(os, units = "auto"))
   }
   
-  # compute pair agreement for all the three labelings
+  # compute pair concordance for all the three labelings
   eq <- as.matrix(1-(0.5*dist(hardPred, method="manhattan")))
   ep <- 1-(0.5*dist(fuzzyTrue, method="manhattan"))
   ep2 <- 1-(0.5*dist(hardTrue, method="manhattan"))

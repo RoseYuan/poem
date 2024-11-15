@@ -27,7 +27,7 @@ pairs in the score (default FALSE).}
 \code{useNegatives=FALSE} (doesn't make sense on a element-level otherwise).}
 }
 \value{
-A vector of agreement scores
+A vector of concordance scores
 }
 \description{
 Per-element pair concordance between a clustering and a ground truth

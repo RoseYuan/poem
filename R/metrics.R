@@ -149,7 +149,7 @@ FMeasure <- function(true, pred, silent=TRUE){
 #' @param adjust Logical; whether to adjust for chance. Only implemented for
 #'   `useNegatives=FALSE` (doesn't make sense on a element-level otherwise).
 #'
-#' @return A vector of agreement scores
+#' @return A vector of concordance scores
 getPairConcordance <- function(true, pred, usePairs=TRUE, useNegatives=FALSE,
                                adjust=FALSE){
   if(useNegatives & adjust)
