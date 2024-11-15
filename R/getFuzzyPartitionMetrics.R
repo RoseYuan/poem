@@ -12,7 +12,7 @@
 #' `"class"` and `"dataset"`.
 #' @inheritParams fuzzyPartitionMetrics
 #' @inheritParams fuzzyHardMetrics
-#' @inheritParams fuzzyHardSpotAgreement
+#' @inheritParams fuzzyHardSpotConcordance
 #' @inheritParams getPairConcordance
 #' @param ... Optional arguments for \link[FuzzyPartitionMetrics()]{poem::FuzzyPartitionMetrics()}: `tnorm`. Only 
 #' useful when `fuzzy_true=TRUE` and `fuzzy_pred=TRUE`.
@@ -248,7 +248,7 @@ getFuzzyPartitionClassMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
 #'
 #' Computes a selection of external fuzzy clustering evaluation metrics at the element level.
 #' @param metrics The metrics to compute. Currently only `"fuzzySPC"` is included at the element level.
-#' @inheritParams fuzzyHardSpotAgreement
+#' @inheritParams fuzzyHardSpotConcordance
 #' @inheritParams getPairConcordance
 #' @inheritParams getFuzzyPartitionMetrics
 #' @param fuzzy_true Logical; whether the truth is fuzzy.
@@ -266,16 +266,16 @@ getFuzzyPartitionElementMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
   if(fuzzy_true & fuzzy_pred){
     stopifnot(!(is.null(fuzzyTrue)|is.null(fuzzyPred)))
     message("Comparing between a fuzzy truth and a fuzzy prediction...")
-    res <- fuzzySpotAgreement(fuzzyTrue, fuzzyPred)
+    res <- fuzzySpotConcordance(fuzzyTrue, fuzzyPred)
   }else if(fuzzy_true & (!fuzzy_pred)){
     stopifnot(!(is.null(hardTrue)|is.null(fuzzyTrue)|is.null(hardPred)))
     message("Comparing between a fuzzy truth and a hard prediction...")
-    res <- fuzzyHardSpotAgreement(hardTrue, fuzzyTrue, hardPred, 
+    res <- fuzzyHardSpotConcordance(hardTrue, fuzzyTrue, hardPred, 
                                   useNegatives=useNegatives, verbose=verbose)
   }else if((!fuzzy_true) & fuzzy_pred){
     stopifnot(!(is.null(hardTrue)|is.null(fuzzyPred)|is.null(hardPred)))
     message("Comparing between a hard truth and a fuzzy prediction...")
-    res <- fuzzyHardSpotAgreement(hardPred, fuzzyPred, hardTrue,
+    res <- fuzzyHardSpotConcordance(hardPred, fuzzyPred, hardTrue,
                                   useNegatives=useNegatives, verbose=verbose)
   }else if((!fuzzy_true) & (!fuzzy_pred)){
     stop("You are comparing between two hard clusterings! Use function

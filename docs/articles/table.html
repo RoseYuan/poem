@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">poem</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,7 +77,7 @@ Germain</h4>
             <address class="author_afil">
       Institute for Molecular Life Sciences, University of Zurich,
 Zurich, SwitzerlandDepartment of Health Sciences and Technology, ETH
-Zurich, Zurich, Switzerland<br><h4 data-toc-skip class="date">2024-10-25</h4>
+Zurich, Zurich, Switzerland<br><h4 data-toc-skip class="date">2024-11-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/RoseYuan/poem/blob/HEAD/vignettes/table.rmd" class="external-link"><code>vignettes/table.rmd</code></a></small>
       <div class="d-none name"><code>table.rmd</code></div>
@@ -206,8 +206,9 @@ dataset
 Normalized Class Size Rand Index (NCR)
 </td>
 <td style="text-align:left;">
-A normalized version of RI, where each agreement quantities are divided
-by the maximum possible agreement values for their respective class.
+A normalized version of RI, where each concordance quantities are
+divided by the maximum possible concordance values for their respective
+class.
 </td>
 </tr>
 <tr>
@@ -599,8 +600,8 @@ the metrics. Specifically, we use the Normalized Degree of Concordance
 respectively, and developed fuzzy versions of the other metrics using
 the same logic. In the spatial context, we first make a fuzzy version of
 the true labels based on the spatial neighborhood, and then track the
-maximum pair agreement between the predicted labels and either the hard
-or fuzzy ground truth.
+maximum pair concordance between the predicted labels and either the
+hard or fuzzy ground truth.
 </td>
 </tr>
 <tr>
@@ -608,17 +609,17 @@ or fuzzy ground truth.
 element
 </td>
 <td style="text-align:left;">
-Spot-wise Pair Agreement (SPA)
+Spot-wise Pair Concordance (SPC)
 </td>
 <td style="text-align:left;">
-The proportion, for each spot, of its concordance with all other spots
-that is the same (i.e. concordant or not) across the clustering and
-ground truth. This value will be the same for all spots that share the
-same combination of cluster and class, and is especially useful for
-visualization. A variant of this can be computed that ignores negative
-pairs (i.e. that are discordant in both the clustering and ground
-truth). When negative pairs are included, the average of SPA equals to
-the Rand Index.
+The proportion, for each spot, of the pairs it forms with all other
+spots that are concordant (i.e. in the same partition or not in both)
+across the clustering and ground truth. This value will be the same for
+all spots that share the same combination of cluster and class, and is
+especially useful for visualization. A variant of this can be computed
+that ignores negative pairs (i.e. that are discordant in both the
+clustering and ground truth). When negative pairs are included, the
+average of SPC equals to the Rand Index.
 </td>
 </tr>
 <tr>
@@ -626,13 +627,13 @@ the Rand Index.
 element
 </td>
 <td style="text-align:left;">
-Spatial SPA
+Spatial SPC
 </td>
 <td style="text-align:left;">
-Like the non-spatial Spot-wise Pair Agreement, with the difference that
-the clustering is evaluated against both a ‘hard’ and ‘fuzzy’ version of
-the ground truth, as for the computation of the Spatial versions of the
-pair-sorting indices.
+Like the non-spatial Spot-wise Pair Concordance, with the difference
+that the clustering is evaluated against both a ‘hard’ and ‘fuzzy’
+version of the ground truth, as for the computation of the Spatial
+versions of the pair-sorting indices.
 </td>
 </tr>
 <tr>

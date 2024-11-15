@@ -46,7 +46,7 @@ partition_metrics <- data.frame(
     "$\\frac{a}{a+c}$; the ratio of the true positive pairs to the total number of object pairs that are in the same cluster in $P$.",
     "$\\frac{a}{a+b}$; the ratio of the true positive pairs to the total number of object pairs that are in the same classes in $G$.",
     "$\\frac{\\text{RI}-\\mathrm{E}(\\text{RI})}{1-\\mathrm{E}(\\text{RI})} = \\frac{2(ad-bc)}{(a+b)(b+d)+(a+c)(c+d)}$; adjusting RI by accounting for the expected similarity of all pairings due to chance using the Permutation Model for clusterings. ARI is the harmonic mean of AWH and AWC.",
-    "A normalized version of RI, where each agreement quantities are divided by the maximum possible agreement values for their respective class.",
+    "A normalized version of RI, where each concordance quantities are divided by the maximum possible concordance values for their respective class.",
     "$H(G) - H(G|P)$; the difference between the shannon entropy of $G$ and the conditional entropy of $G$ given $P$.",
     "Chance adjusted version of WH, WC and MI, respectively. For a metric M, the chance adjusted version of it is $\\frac{\\text{M}-\\mathrm{E}(\\text{M})}{1-\\mathrm{E}(\\text{M})}$.",
     "$1-\\frac{H(G|P)}{H(G)}$ if $H(G,P)\\neq0$, $1$ otherwise; the ratio of MI to the individual entropy of $G$.",
