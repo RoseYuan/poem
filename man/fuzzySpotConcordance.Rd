@@ -18,7 +18,7 @@ as \code{P}}
 A numeric vector of concordance scores for each row of \code{P}.
 }
 \description{
-Per-element concordance between two fuzzy partitionings
+Per-element concordance between two fuzzy partitions
 }
 \examples{
 # generate fuzzy partitions:
