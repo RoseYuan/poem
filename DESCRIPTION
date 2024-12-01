@@ -46,7 +46,10 @@ Suggests:
     cowplot,
     ggnetwork,
     ggplot2,
-    tidyr
+    tidyr,
+    ComplexHeatmap,
+    SpatialExperiment,
+    STexampleData
 VignetteBuilder: knitr
 biocViews: DimensionReduction, Clustering, GraphAndNetwork, Spatial
 Config/testthat/edition: 3
