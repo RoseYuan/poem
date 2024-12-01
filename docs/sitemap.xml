@@ -1,6 +1,8 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://roseyuan.github.io/poem/404.html</loc></url>
 <url><loc>https://roseyuan.github.io/poem/LICENSE.html</loc></url>
+<url><loc>https://roseyuan.github.io/poem/articles/SpatialExperiment.html</loc></url>
+<url><loc>https://roseyuan.github.io/poem/articles/fuzzy_metrics.html</loc></url>
 <url><loc>https://roseyuan.github.io/poem/articles/index.html</loc></url>
 <url><loc>https://roseyuan.github.io/poem/articles/poem.html</loc></url>
 <url><loc>https://roseyuan.github.io/poem/articles/table.html</loc></url>
@@ -26,6 +28,7 @@
 <url><loc>https://roseyuan.github.io/poem/reference/emb2snn.html</loc></url>
 <url><loc>https://roseyuan.github.io/poem/reference/findSpatialKNN.html</loc></url>
 <url><loc>https://roseyuan.github.io/poem/reference/fuzzyHardMetrics.html</loc></url>
+<url><loc>https://roseyuan.github.io/poem/reference/fuzzyHardMetrics2.html</loc></url>
 <url><loc>https://roseyuan.github.io/poem/reference/fuzzyHardSpotAgreement.html</loc></url>
 <url><loc>https://roseyuan.github.io/poem/reference/fuzzyHardSpotConcordance.html</loc></url>
 <url><loc>https://roseyuan.github.io/poem/reference/fuzzyPartitionMetrics.html</loc></url>

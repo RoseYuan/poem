@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">poem</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,6 +19,7 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/table.html">Details about each evaluation metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/SpatialExperiment.html">Working with SpatialExperiment</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -176,14 +177,14 @@ useful when <code>fuzzy_true=TRUE</code> and <code>fuzzy_pred=TRUE</code>.</p></
 <span class="r-in"><span><span class="fu">getFuzzyPartitionMetrics</span><span class="op">(</span>fuzzyTrue<span class="op">=</span><span class="va">m1</span>,fuzzyPred<span class="op">=</span><span class="va">m2</span>, level<span class="op">=</span><span class="st">"class"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Comparing between a fuzzy truth and a fuzzy prediction...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Running 100 extra permutations.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Standard error of the mean NDC across permutations:0.00234</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Standard error of the mean NDC across permutations:0.00239</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     fuzzyWC    fuzzyAWC class   fuzzyWH   fuzzyAWH cluster</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.3445840  0.04752717     1        NA         NA      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.7242508 -0.08734288     2        NA         NA      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 0.7520319  0.03868490     3        NA         NA      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        NA          NA    NA 0.9359492  0.8097549       1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5        NA          NA    NA 0.9214151  0.8187337       2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6        NA          NA    NA 0.1588990 -0.9221584       3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.3445840  0.04564740     1        NA         NA      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.7242508 -0.08932182     2        NA         NA      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 0.7520319  0.03572075     3        NA         NA      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        NA          NA    NA 0.9359492  0.8194385       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        NA          NA    NA 0.9214151  0.7916720       2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6        NA          NA    NA 0.1588990 -0.7970378       3</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># generate a fuzzy truth:</span></span></span>
 <span class="r-in"><span><span class="va">fuzzyTrue</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
@@ -203,14 +204,13 @@ useful when <code>fuzzy_true=TRUE</code> and <code>fuzzy_pred=TRUE</code>.</p></
 <span class="r-in"><span><span class="va">hardPred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">getFuzzyPartitionMetrics</span><span class="op">(</span>hardPred<span class="op">=</span><span class="va">hardPred</span>, hardTrue<span class="op">=</span><span class="va">hardTrue</span>, fuzzyTrue<span class="op">=</span><span class="va">fuzzyTrue</span>, nperms<span class="op">=</span><span class="fl">3</span>, level<span class="op">=</span><span class="st">"class"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Comparing between a fuzzy truth and a hard prediction...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Standard error of the mean NDC across permutations:0.0357</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> You might want to increase the number of permutations to increase the robustness of the adjusted metrics.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     fuzzyWC  fuzzyAWC class    fuzzyWH  fuzzyAWH cluster</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.7195238 0.4677711     1         NA        NA      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 1.0000000       NaN     2         NA        NA      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 1.0000000       NaN     3         NA        NA      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        NA        NA    NA 1.00000000  1.000000       1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5        NA        NA    NA 0.06166667 -3.421466       2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Standard error of the mean NDC across permutations:0.000424</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     fuzzyWC  fuzzyAWC class    fuzzyWH fuzzyAWH cluster</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.7195238 0.4977974     1         NA       NA      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 1.0000000       NaN     2         NA       NA      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 1.0000000       NaN     3         NA       NA      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        NA        NA    NA 1.00000000        1       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        NA        NA    NA 0.06166667     -Inf       2</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

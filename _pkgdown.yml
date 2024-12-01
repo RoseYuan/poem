@@ -11,6 +11,13 @@ authors:
   Siyuan Luo:
     href: https://roseyuan.github.io/
 
+articles:
+- title: Articles
+  navbar: ~
+  contents:
+  - table
+  - SpatialExperiment
+  
 reference:
 - title: Main functions
   desc: >
@@ -32,6 +39,7 @@ reference:
 - subtitle: Fuzzy metrics
   contents:
   - fuzzyHardMetrics
+  - fuzzyHardMetrics2
   - fuzzyPartitionMetrics
 - subtitle: Internal metrics for spatial domain detection
   contents:

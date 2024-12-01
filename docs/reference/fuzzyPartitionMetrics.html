@@ -15,7 +15,7 @@ permutations according to their variability."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">poem</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,6 +27,7 @@ permutations according to their variability."></head><body>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/table.html">Details about each evaluation metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/SpatialExperiment.html">Working with SpatialExperiment</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -181,12 +182,12 @@ permutation-based fuzzy version of the adjusted Rand index.</p></dd>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">m1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">m2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="fu">fuzzyPartitionMetrics</span><span class="op">(</span><span class="va">m1</span>,<span class="va">m2</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Running 100 extra permutations.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Standard error of the mean NDC across permutations:0.00212</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Standard error of the mean NDC across permutations:0.00216</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $NDC</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5338889</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ACI</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.08344258</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.08249493</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fuzzyWH</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fuzzyWH$global</span>
@@ -208,20 +209,20 @@ permutation-based fuzzy version of the adjusted Rand index.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fuzzyAWH</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fuzzyAWH$global</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2114734</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2110446</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fuzzyAWH$perPartition</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          A          B          C </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.8554001  0.8021785 -1.1479958 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.8450279  0.8102834 -1.0825844 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fuzzyAWC</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fuzzyAWC$global</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.04973933</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.04921198</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fuzzyAWC$perPartition</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           A           B           C </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.05005958 -0.03133296  0.02342049 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.04951609 -0.05389235  0.05126432 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>

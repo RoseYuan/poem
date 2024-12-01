@@ -45,14 +45,14 @@ my_cols <-c("#D55E00", "#CC79A7","#E69F00","#0072B2","#009E73","#F0E442","#56B4E
 names(my_cols) <- as.character(seq(my_cols))
 ```
 
-Here we use the `Visium_humanDLPFC` dataset from package `STexampleData` for illustration. Load it:
+Our package `poem` can be easily integrated into a workflow with `SpatialExperiment` objects. Here we use the `Visium_humanDLPFC` dataset from package `STexampleData` for illustration. Load it:
 
 ```{r}
 spe <- Visium_humanDLPFC()
 spe
 ```
 
-From this `SpatialExperiment` object, we take the location information (accessible via `spatialCoords()`) and the manual annotation in `colData` and store them as a dataframe:
+From this `SpatialExperiment` object, we take the location information (accessible via `spatialCoords`) and the manual annotation in `colData` and store them as a dataframe:
 
 ```{r}
 data <- data.frame(spatialCoords(spe))
@@ -64,7 +64,8 @@ data$reference <- factor(data$reference, levels=c("WM", "Layer6", "Layer5",
 ```
 
 The manual annotation looks like this:
-```{r, fig.height = 4, fig.width = 4}
+
+```{r, fig.height = 4, fig.width = 4, fig.small = TRUE}
 p1 <- ggplot(data) +
   geom_point(aes(x = pxl_col_in_fullres, y = -pxl_row_in_fullres, color = reference), size=0.3) +
   labs(x = "", y = "", color="", title="Manual annotation") +
@@ -88,6 +89,7 @@ p1 <- ggplot(data) +
 
 p1
 ```
+
 We then generate some hypothetical domain detection predictions by randomly permuting the manual annotation.
 
 ```{r}
@@ -118,7 +120,7 @@ simulate_clustering_variation <- function(clusters, split_cluster = NULL, merge_
 }
 ```
 
-Simulate some prediction results with random noise as well as merging or splitting of domains:
+Below we simulate some prediction results with random noise as well as merging or splitting of domains:
 
 ```{r}
 # P1: add random noise
@@ -298,7 +300,7 @@ p5 <- grid.grabExpr({
 })
 ```
 
-```{r, fig.height = 2.5, fig.width = 6}
+```{r, fig.height = 3, fig.width = 8}
 plot_grid(p4, p5, rel_widths=c(1,1), scale=c(1, 1))
 ```
 
@@ -385,7 +387,7 @@ The lower the scores, the smoother the predictions. As expected, the smoothness 
 
 The internal metrics can also be calculated at the element level. For example we can calculate the element-wise ELSA score, which is a score for local diversity and can be regarded as edge detector:
 
-```{r}
+```{r, fig.height = 4, fig.width = 8}
 internal <-lapply(setNames(c("reference","P1","P2","P3","P4","P5"), c("reference","P1","P2","P3","P4","P5")),
                   function(x){cbind(
                     getSpatialInternalMetrics(data[[x]],
