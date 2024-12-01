@@ -114,6 +114,7 @@ CHAOS <- function(labels, location, BNPARAM=NULL) {
 #' ELSA(data$p2, data[,c("x", "y")], k=6)
 #' @export
 ELSA <- function(labels, location, k=10){
+  labels <- as.numeric(labels)
   spdf <- sp::SpatialPointsDataFrame(location, data=data.frame(label=labels))
   k1 <- spdep::knn2nb(spdep::knearneigh(location, k=k))
   all.linked <- max(unlist(spdep::nbdists(k1, location)))
