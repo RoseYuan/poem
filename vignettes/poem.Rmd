@@ -337,7 +337,7 @@ getSpatialExternalMetrics(true=sp_toys$label, pred=sp_toys$p1,
                       fuzzy_true = TRUE, fuzzy_pred = FALSE)
 ```
 
-By specifying `fuzzy_true` and `fuzzy_pred`, one can control whether the fuzzy or hard version of `true` and `pred` is used in comparison. If `fuzzy_true` or `fuzzy_pred` is `TRUE`, the spatial neighborhood information will be used to construct the fuzzy representation of the  class/cluster memberships. See xxx for more details.
+By specifying `fuzzy_true` and `fuzzy_pred`, one can control whether the fuzzy or hard version of `true` and `pred` is used in comparison. If `fuzzy_true` or `fuzzy_pred` is `TRUE`, the spatial neighborhood information will be used to construct the fuzzy representation of the  class/cluster memberships. 
 
 
 ```{r}
