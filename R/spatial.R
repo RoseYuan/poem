@@ -60,7 +60,7 @@ findSpatialKNN <- function(location, k, keep_ties=TRUE, useMedianDist=FALSE,
 #' data <- sp_toys
 #' knnComposition(data[,c("x", "y")], k=6, data$label)
 knnComposition <- function(location, k=6, labels, alpha=0.5, ...){
-  label <- factor(labels)
+  labels <- factor(labels)
   ind <- findSpatialKNN(location, k, ...)
   knnLabels <- lapply(ind, function(x){labels[x]})
   if(alpha=="equal"){ 
