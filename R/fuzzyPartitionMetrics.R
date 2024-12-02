@@ -239,6 +239,9 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
 #' @param returnElementPairAccuracy Logical. If TRUE, returns the per-element
 #'   pair accuracy instead of the various parition-level and dataset-level metrics.
 #'   Default FALSE.
+#' @param lowMemory Logical; whether to use the slower, low-memory algorithm.
+#'   By default this is enabled if the projected memory usage is higher than 
+#'   ~2GB.
 #' @param verbose Logical; whether to print info and warnings, including the 
 #'   standard error of the mean across permutations (giving an idea of the 
 #'   precision of the adjusted metrics).
@@ -283,7 +286,8 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
 #' hardPred <- c(1,1,1,1,1,1,2,2,2)
 #' fuzzyHardMetrics(hardTrue, fuzzyTrue, hardPred, nperms=3)
 fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL, 
-                             returnElementPairAccuracy=FALSE, verbose=TRUE,
+                             returnElementPairAccuracy=FALSE,
+                             lowMemory=NULL, verbose=TRUE,
                              BPPARAM=BiocParallel::SerialParam()){ 
   
   stopifnot(is.atomic(hardPred))
@@ -309,11 +313,19 @@ fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL,
   
   m <- nrow(fuzzyTrue)
   ncomp <- m*((m-1)/2)
-  if(verbose && m>=2000){
+  if(isTRUE(lowMemory) || (verbose && m>=2000) ){
     nSim <- min(BiocParallel::bpnworkers(BPPARAM),
                 ifelse(is.null(nperms),10,nperms))
     os <- 8*((3+nSim)*m^2)
     class(os) = "object_size"
+    if(isTRUE(lowMemory) || os > 2*10^9){
+      if(verbose) message("Using the low-memory algorithm...")
+      return(
+        fuzzyHardMetrics2(hardTrue=hardTrueVector, fuzzyTrue=fuzzyTrue,
+                          hardPred=hardPredVector, nperms=nperms, 
+                          returnElementPairAccuracy=returnElementPairAccuracy,
+                          verbose=verbose, BPPARAM=BPPARAM))
+    }
     message("Projected memory usage: ", format(os, units = "auto"))
   }
   
@@ -459,7 +471,6 @@ fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL,
 #' @importFrom stats dist setNames runif
 #' @importFrom Matrix sparseMatrix
 #' @importFrom stats sd
-#' @export
 #' @examples
 #' # generate a fuzzy truth:
 #' fuzzyTrue <- matrix(c(
@@ -600,7 +611,6 @@ fuzzyHardMetrics2 <- function(hardTrue, fuzzyTrue, hardPred, nperms=10,
   return(list(NDC=val[[1]], ACI=ACI, fuzzyWH=val[[2]], fuzzyWC=val[[3]],
               fuzzyAWH=AW1, fuzzyAWC=AW2))
 }
-
 
 
 #' Per-element concordance between two fuzzy partitions

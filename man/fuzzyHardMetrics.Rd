@@ -10,6 +10,7 @@ fuzzyHardMetrics(
   hardPred,
   nperms = NULL,
   returnElementPairAccuracy = FALSE,
+  lowMemory = NULL,
   verbose = TRUE,
   BPPARAM = BiocParallel::SerialParam()
 )
@@ -35,6 +36,10 @@ more (max 1000) permutations will be run.}
 \item{returnElementPairAccuracy}{Logical. If TRUE, returns the per-element
 pair accuracy instead of the various parition-level and dataset-level metrics.
 Default FALSE.}
+
+\item{lowMemory}{Logical; whether to use the slower, low-memory algorithm.
+By default this is enabled if the projected memory usage is higher than
+~2GB.}
 
 \item{verbose}{Logical; whether to print info and warnings, including the
 standard error of the mean across permutations (giving an idea of the
