@@ -39,7 +39,6 @@ reference:
 - subtitle: Fuzzy metrics
   contents:
   - fuzzyHardMetrics
-  - fuzzyHardMetrics2
   - fuzzyPartitionMetrics
 - subtitle: Internal metrics for spatial domain detection
   contents:

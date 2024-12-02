@@ -47,7 +47,6 @@ Suggests:
     ggnetwork,
     ggplot2,
     tidyr,
-    ComplexHeatmap,
     SpatialExperiment,
     STexampleData
 VignetteBuilder: knitr

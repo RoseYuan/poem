@@ -31,7 +31,6 @@ knitr::opts_chunk$set(error=FALSE, message=FALSE, warning=FALSE, collapse = TRUE
 library(poem)
 library(ggplot2)
 library(cowplot)
-library(ComplexHeatmap)
 library(SpatialExperiment)
 library(STexampleData)
 library(dplyr)
@@ -248,24 +247,18 @@ awh <- as.matrix(awh)
 rownames(awh) <- c("P1", "P2", "P3")
 awh <- awh[,c("1", "2", "3", "4", "5", "6", "7", "8")]
 
-column_ha = HeatmapAnnotation(class=c("1", "2", "3", "4", "5", "6", "7", "8"),
-                              col = list(class = my_cols),  
-                              show_annotation_name = FALSE,
-                              show_legend = FALSE)
+awh <- data.frame(awh)
+colnames(awh) <- 1:8
+awh$prediction <- rownames(awh)
 
-p4 <- awh %>%
-  Heatmap(
-    name = "AWH",
-    cluster_columns = FALSE, 
-    cluster_rows = FALSE, 
-    column_order = c("1","2","3","4","5","6","7","8"),
-    bottom_annotation = column_ha,
-    width = ncol(awh)*unit(6, "mm"), 
-    height = nrow(awh)*unit(7, "mm"))
 
-p4 <- grid.grabExpr({
- draw(p4, merge_legend = TRUE, padding = unit(c(12, 2, 2, 2), "mm"))
-})
+p4 <- awh %>% pivot_longer(cols=-c("prediction"), names_to="cluster", values_to = "AWH") %>%
+  mutate(prediction = factor(prediction), cluster=factor(cluster)) %>%
+  ggplot(aes(cluster, prediction, fill=AWH)) +
+  geom_tile() +
+  scale_fill_distiller(palette = "RdPu") +
+  labs(x="Predicted domain", y="")
+
 ```
 
 ```{r}
@@ -279,28 +272,21 @@ awc <- cbind(bind_rows(list(awc1, awc2, awc3), .id="P")) %>%
 awc <- as.matrix(awc)
 rownames(awc) <- c("P1", "P2", "P3")
 
-col_ls <- my_cols[1:7]
-names(col_ls) <- c("WM", "Layer6", "Layer5", "Layer4", "Layer3", "Layer2", "Layer1")
-column_ha = HeatmapAnnotation(class=c("WM", "Layer6", "Layer5", "Layer4", "Layer3", "Layer2", "Layer1"),
-                              col = list(class = col_ls),  
-                              show_annotation_name = FALSE,
-                              show_legend = FALSE)
-p5 <- awc %>%
-  Heatmap(
-    name = "AWC",
-    cluster_columns = FALSE, 
-    cluster_rows = FALSE, 
-    column_order = c("WM", "Layer6", "Layer5", "Layer4", "Layer3", "Layer2", "Layer1"),
-    bottom_annotation = column_ha,
-    width = ncol(awc)*unit(6, "mm"), 
-    height = nrow(awc)*unit(7, "mm"))
 
-p5 <- grid.grabExpr({
- draw(p5, merge_legend = TRUE)
-})
+awc <- data.frame(awc)
+awc$prediction <- rownames(awc)
+
+
+p5 <- awc %>% pivot_longer(cols=-c("prediction"), names_to="class", values_to = "AWC") %>%
+  mutate(prediction = factor(prediction), class=factor(class)) %>%
+  ggplot(aes(class, prediction, fill=AWC)) +
+  geom_tile() +
+  scale_fill_distiller(palette = "RdPu") +
+  labs(x="Annotated domain", y="")
+
 ```
 
-```{r, fig.height = 3, fig.width = 8}
+```{r, fig.height = 2, fig.width = 9.5}
 plot_grid(p4, p5, rel_widths=c(1,1), scale=c(1, 1))
 ```
 

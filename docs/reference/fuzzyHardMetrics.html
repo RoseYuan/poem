@@ -74,6 +74,7 @@ the more standard implementation of the metrics.</p>
 <span>  <span class="va">hardPred</span>,</span>
 <span>  nperms <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  returnElementPairAccuracy <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  lowMemory <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  BPPARAM <span class="op">=</span> <span class="fu">BiocParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SerialParam-class.html" class="external-link">SerialParam</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -112,6 +113,12 @@ more (max 1000) permutations will be run.</p></dd>
 <dd><p>Logical. If TRUE, returns the per-element
 pair accuracy instead of the various parition-level and dataset-level metrics.
 Default FALSE.</p></dd>
+
+
+<dt id="arg-lowmemory">lowMemory<a class="anchor" aria-label="anchor" href="#arg-lowmemory"></a></dt>
+<dd><p>Logical; whether to use the slower, low-memory algorithm.
+By default this is enabled if the projected memory usage is higher than
+~2GB.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>

@@ -457,7 +457,7 @@ fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL,
 #' @seealso \link[fuzzyHardMetrics()]{poem::fuzzyHardMetrics()}.
 #' 
 #' @author Pierre-Luc Germain
-#'
+#' @keywords internal
 #' @return A list of metrics:
 #'   \item{NDC}{Hullermeier's NDC (fuzzy rand index)}
 #'   \item{ACI}{Ambrosio's Adjusted Concordance Index (ACI), i.e. a 

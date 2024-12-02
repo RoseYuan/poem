@@ -78,7 +78,7 @@ Germain</h4>
             <address class="author_afil">
       Institute for Molecular Life Sciences, University of Zurich,
 Zurich, SwitzerlandDepartment of Health Sciences and Technology, ETH
-Zurich, Zurich, Switzerland<br><h4 data-toc-skip class="date">2024-12-01</h4>
+Zurich, Zurich, Switzerland<br><h4 data-toc-skip class="date">2024-12-02</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/RoseYuan/poem/blob/HEAD/vignettes/SpatialExperiment.Rmd" class="external-link"><code>vignettes/SpatialExperiment.Rmd</code></a></small>
       <div class="d-none name"><code>SpatialExperiment.Rmd</code></div>
@@ -329,24 +329,17 @@ then plot them in heatmap:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">awh</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P1"</span>, <span class="st">"P2"</span>, <span class="st">"P3"</span><span class="op">)</span></span>
 <span><span class="va">awh</span> <span class="op">&lt;-</span> <span class="va">awh</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"3"</span>, <span class="st">"4"</span>, <span class="st">"5"</span>, <span class="st">"6"</span>, <span class="st">"7"</span>, <span class="st">"8"</span><span class="op">)</span><span class="op">]</span></span>
 <span></span>
-<span><span class="va">column_ha</span> <span class="op">=</span> <span class="fu">HeatmapAnnotation</span><span class="op">(</span>class<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"3"</span>, <span class="st">"4"</span>, <span class="st">"5"</span>, <span class="st">"6"</span>, <span class="st">"7"</span>, <span class="st">"8"</span><span class="op">)</span>,</span>
-<span>                              col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>class <span class="op">=</span> <span class="va">my_cols</span><span class="op">)</span>,  </span>
-<span>                              show_annotation_name <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>                              show_legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">awh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">awh</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">awh</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">8</span></span>
+<span><span class="va">awh</span><span class="op">$</span><span class="va">prediction</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">awh</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="va">awh</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">Heatmap</span><span class="op">(</span></span>
-<span>    name <span class="op">=</span> <span class="st">"AWH"</span>,</span>
-<span>    cluster_columns <span class="op">=</span> <span class="cn">FALSE</span>, </span>
-<span>    cluster_rows <span class="op">=</span> <span class="cn">FALSE</span>, </span>
-<span>    column_order <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>,<span class="st">"2"</span>,<span class="st">"3"</span>,<span class="st">"4"</span>,<span class="st">"5"</span>,<span class="st">"6"</span>,<span class="st">"7"</span>,<span class="st">"8"</span><span class="op">)</span>,</span>
-<span>    bottom_annotation <span class="op">=</span> <span class="va">column_ha</span>,</span>
-<span>    width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">awh</span><span class="op">)</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">6</span>, <span class="st">"mm"</span><span class="op">)</span>, </span>
-<span>    height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">awh</span><span class="op">)</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">7</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu">grid.grabExpr</span><span class="op">(</span><span class="op">{</span></span>
-<span> <span class="fu">draw</span><span class="op">(</span><span class="va">p4</span>, merge_legend <span class="op">=</span> <span class="cn">TRUE</span>, padding <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="va">awh</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span>cols<span class="op">=</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"prediction"</span><span class="op">)</span>, names_to<span class="op">=</span><span class="st">"cluster"</span>, values_to <span class="op">=</span> <span class="st">"AWH"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>prediction <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">prediction</span><span class="op">)</span>, cluster<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cluster</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">cluster</span>, <span class="va">prediction</span>, fill<span class="op">=</span><span class="va">AWH</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_tile</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_distiller</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"RdPu"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"Predicted domain"</span>, y<span class="op">=</span><span class="st">""</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">awc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">res1</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SpatialAWC"</span>, <span class="st">"class"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">reference</span><span class="op">)</span><span class="op">[</span><span class="va">class</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="va">awc2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">res2</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SpatialAWC"</span>, <span class="st">"class"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">reference</span><span class="op">)</span><span class="op">[</span><span class="va">class</span><span class="op">]</span><span class="op">)</span></span>
@@ -358,28 +351,20 @@ then plot them in heatmap:</p>
 <span><span class="va">awc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">awc</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">awc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P1"</span>, <span class="st">"P2"</span>, <span class="st">"P3"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">col_ls</span> <span class="op">&lt;-</span> <span class="va">my_cols</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">col_ls</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WM"</span>, <span class="st">"Layer6"</span>, <span class="st">"Layer5"</span>, <span class="st">"Layer4"</span>, <span class="st">"Layer3"</span>, <span class="st">"Layer2"</span>, <span class="st">"Layer1"</span><span class="op">)</span></span>
-<span><span class="va">column_ha</span> <span class="op">=</span> <span class="fu">HeatmapAnnotation</span><span class="op">(</span>class<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WM"</span>, <span class="st">"Layer6"</span>, <span class="st">"Layer5"</span>, <span class="st">"Layer4"</span>, <span class="st">"Layer3"</span>, <span class="st">"Layer2"</span>, <span class="st">"Layer1"</span><span class="op">)</span>,</span>
-<span>                              col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>class <span class="op">=</span> <span class="va">col_ls</span><span class="op">)</span>,  </span>
-<span>                              show_annotation_name <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>                              show_legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">p5</span> <span class="op">&lt;-</span> <span class="va">awc</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">Heatmap</span><span class="op">(</span></span>
-<span>    name <span class="op">=</span> <span class="st">"AWC"</span>,</span>
-<span>    cluster_columns <span class="op">=</span> <span class="cn">FALSE</span>, </span>
-<span>    cluster_rows <span class="op">=</span> <span class="cn">FALSE</span>, </span>
-<span>    column_order <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WM"</span>, <span class="st">"Layer6"</span>, <span class="st">"Layer5"</span>, <span class="st">"Layer4"</span>, <span class="st">"Layer3"</span>, <span class="st">"Layer2"</span>, <span class="st">"Layer1"</span><span class="op">)</span>,</span>
-<span>    bottom_annotation <span class="op">=</span> <span class="va">column_ha</span>,</span>
-<span>    width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">awc</span><span class="op">)</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">6</span>, <span class="st">"mm"</span><span class="op">)</span>, </span>
-<span>    height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">awc</span><span class="op">)</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">7</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">p5</span> <span class="op">&lt;-</span> <span class="fu">grid.grabExpr</span><span class="op">(</span><span class="op">{</span></span>
-<span> <span class="fu">draw</span><span class="op">(</span><span class="va">p5</span>, merge_legend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">awc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">awc</span><span class="op">)</span></span>
+<span><span class="va">awc</span><span class="op">$</span><span class="va">prediction</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">awc</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="va">p5</span> <span class="op">&lt;-</span> <span class="va">awc</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span>cols<span class="op">=</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"prediction"</span><span class="op">)</span>, names_to<span class="op">=</span><span class="st">"class"</span>, values_to <span class="op">=</span> <span class="st">"AWC"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>prediction <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">prediction</span><span class="op">)</span>, class<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">class</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">class</span>, <span class="va">prediction</span>, fill<span class="op">=</span><span class="va">AWC</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_tile</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_distiller</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"RdPu"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"Annotated domain"</span>, y<span class="op">=</span><span class="st">""</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">plot_grid</a></span><span class="op">(</span><span class="va">p4</span>, <span class="va">p5</span>, rel_widths<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, scale<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="SpatialExperiment_files/figure-html/unnamed-chunk-13-1.png" width="768"></p>
+<p><img src="SpatialExperiment_files/figure-html/unnamed-chunk-13-1.png" width="912"></p>
 <p>The class-level AWC highlights that in P2, Layer3 has low
 completeness. This align with our simulation that Layer3 is splitted
 into 3 clusters in P2. Similarly, the cluster-level AWH highlights that
@@ -521,8 +506,8 @@ for local diversity and can be regarded as edge detector:</p>
 <span><span class="co">## tzcode source: system (glibc)</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## attached base packages:</span></span>
-<span><span class="co">## [1] stats4    grid      stats     graphics  grDevices utils     datasets </span></span>
-<span><span class="co">## [8] methods   base     </span></span>
+<span><span class="co">## [1] stats4    stats     graphics  grDevices utils     datasets  methods  </span></span>
+<span><span class="co">## [8] base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
 <span><span class="co">##  [1] tidyr_1.3.1                 dplyr_1.1.4                </span></span>
@@ -534,51 +519,48 @@ for local diversity and can be regarded as edge detector:</p>
 <span><span class="co">## [13] GenomeInfoDb_1.40.1         IRanges_2.38.1             </span></span>
 <span><span class="co">## [15] S4Vectors_0.42.1            BiocGenerics_0.50.0        </span></span>
 <span><span class="co">## [17] MatrixGenerics_1.16.0       matrixStats_1.3.0          </span></span>
-<span><span class="co">## [19] ComplexHeatmap_2.20.0       cowplot_1.1.3              </span></span>
-<span><span class="co">## [21] ggplot2_3.5.1               poem_0.99.2                </span></span>
-<span><span class="co">## [23] BiocStyle_2.32.1           </span></span>
+<span><span class="co">## [19] cowplot_1.1.3               ggplot2_3.5.1              </span></span>
+<span><span class="co">## [21] poem_0.99.2                 BiocStyle_2.32.1           </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
 <span><span class="co">##   [1] RColorBrewer_1.1-3      rstudioapi_0.16.0       jsonlite_1.8.8         </span></span>
-<span><span class="co">##   [4] shape_1.4.6.1           wk_0.9.4                magrittr_2.0.3         </span></span>
-<span><span class="co">##   [7] magick_2.8.4            farver_2.1.2            rmarkdown_2.27         </span></span>
-<span><span class="co">##  [10] GlobalOptions_0.1.2     fs_1.6.4                zlibbioc_1.50.0        </span></span>
-<span><span class="co">##  [13] ragg_1.3.2              vctrs_0.6.5             spdep_1.3-6            </span></span>
-<span><span class="co">##  [16] Cairo_1.6-2             memoise_2.0.1           elsa_1.1-28            </span></span>
-<span><span class="co">##  [19] terra_1.5-21            htmltools_0.5.8.1       S4Arrays_1.4.1         </span></span>
-<span><span class="co">##  [22] curl_5.2.1              BiocNeighbors_1.22.0    raster_3.5-15          </span></span>
-<span><span class="co">##  [25] s2_1.1.7                SparseArray_1.4.8       sass_0.4.9             </span></span>
-<span><span class="co">##  [28] spData_2.3.3            KernSmooth_2.23-24      bslib_0.8.0            </span></span>
-<span><span class="co">##  [31] htmlwidgets_1.6.4       desc_1.4.3              cachem_1.1.0           </span></span>
-<span><span class="co">##  [34] igraph_2.1.1            mime_0.12               lifecycle_1.0.4        </span></span>
-<span><span class="co">##  [37] iterators_1.0.14        pkgconfig_2.0.3         Matrix_1.7-0           </span></span>
-<span><span class="co">##  [40] R6_2.5.1                fastmap_1.2.0           GenomeInfoDbData_1.2.12</span></span>
-<span><span class="co">##  [43] rbibutils_2.3           aricode_1.0.3           clue_0.3-65            </span></span>
-<span><span class="co">##  [46] digest_0.6.36           colorspace_2.1-1        AnnotationDbi_1.66.0   </span></span>
-<span><span class="co">##  [49] textshaping_0.3.6       RSQLite_2.3.7           labeling_0.4.3         </span></span>
-<span><span class="co">##  [52] filelock_1.0.3          fansi_1.0.6             httr_1.4.7             </span></span>
-<span><span class="co">##  [55] abind_1.4-5             compiler_4.4.2          proxy_0.4-27           </span></span>
-<span><span class="co">##  [58] bit64_4.0.5             withr_3.0.1             doParallel_1.0.17      </span></span>
-<span><span class="co">##  [61] BiocParallel_1.38.0     DBI_1.2.3               highr_0.11             </span></span>
-<span><span class="co">##  [64] MASS_7.3-61             rappdirs_0.3.3          DelayedArray_0.30.1    </span></span>
-<span><span class="co">##  [67] rjson_0.2.21            classInt_0.4-10         bluster_1.14.0         </span></span>
-<span><span class="co">##  [70] tools_4.4.2             units_0.8-0             glue_1.8.0             </span></span>
-<span><span class="co">##  [73] dbscan_1.2-0            sf_1.0-6                cluster_2.1.6          </span></span>
-<span><span class="co">##  [76] generics_0.1.3          gtable_0.3.5            clevr_0.1.2            </span></span>
-<span><span class="co">##  [79] class_7.3-22            fclust_2.1.1.1          sp_2.1-4               </span></span>
-<span><span class="co">##  [82] utf8_1.2.4              XVector_0.44.0          BiocVersion_3.19.1     </span></span>
-<span><span class="co">##  [85] foreach_1.5.2           pillar_1.9.0            circlize_0.4.16        </span></span>
-<span><span class="co">##  [88] lattice_0.22-6          bit_4.0.5               deldir_2.0-4           </span></span>
-<span><span class="co">##  [91] tidyselect_1.2.1        Biostrings_2.72.1       knitr_1.48             </span></span>
-<span><span class="co">##  [94] bookdown_0.40           xfun_0.46               UCSC.utils_1.0.0       </span></span>
-<span><span class="co">##  [97] yaml_2.3.10             boot_1.3-30             evaluate_0.24.0        </span></span>
-<span><span class="co">## [100] codetools_0.2-20        tibble_3.2.1            mclustcomp_0.3.3       </span></span>
-<span><span class="co">## [103] BiocManager_1.30.23     cli_3.6.3               systemfonts_1.1.0      </span></span>
-<span><span class="co">## [106] Rdpack_2.6.1            munsell_0.5.1           jquerylib_0.1.4        </span></span>
-<span><span class="co">## [109] Rcpp_1.0.13             png_0.1-8               parallel_4.4.2         </span></span>
-<span><span class="co">## [112] pkgdown_2.1.1           blob_1.2.4              scales_1.3.0           </span></span>
-<span><span class="co">## [115] e1071_1.7-9             purrr_1.0.2             crayon_1.5.3           </span></span>
-<span><span class="co">## [118] GetoptLong_1.0.5        rlang_1.1.4             KEGGREST_1.44.1</span></span></code></pre></div>
+<span><span class="co">##   [4] wk_0.9.4                magrittr_2.0.3          magick_2.8.4           </span></span>
+<span><span class="co">##   [7] farver_2.1.2            rmarkdown_2.27          fs_1.6.4               </span></span>
+<span><span class="co">##  [10] zlibbioc_1.50.0         ragg_1.3.2              vctrs_0.6.5            </span></span>
+<span><span class="co">##  [13] spdep_1.3-6             memoise_2.0.1           elsa_1.1-28            </span></span>
+<span><span class="co">##  [16] terra_1.5-21            htmltools_0.5.8.1       S4Arrays_1.4.1         </span></span>
+<span><span class="co">##  [19] curl_5.2.1              BiocNeighbors_1.22.0    raster_3.5-15          </span></span>
+<span><span class="co">##  [22] s2_1.1.7                SparseArray_1.4.8       sass_0.4.9             </span></span>
+<span><span class="co">##  [25] spData_2.3.3            KernSmooth_2.23-24      bslib_0.8.0            </span></span>
+<span><span class="co">##  [28] htmlwidgets_1.6.4       desc_1.4.3              cachem_1.1.0           </span></span>
+<span><span class="co">##  [31] igraph_2.1.1            mime_0.12               lifecycle_1.0.4        </span></span>
+<span><span class="co">##  [34] pkgconfig_2.0.3         Matrix_1.7-0            R6_2.5.1               </span></span>
+<span><span class="co">##  [37] fastmap_1.2.0           GenomeInfoDbData_1.2.12 rbibutils_2.3          </span></span>
+<span><span class="co">##  [40] aricode_1.0.3           clue_0.3-65             digest_0.6.36          </span></span>
+<span><span class="co">##  [43] colorspace_2.1-1        AnnotationDbi_1.66.0    textshaping_0.3.6      </span></span>
+<span><span class="co">##  [46] RSQLite_2.3.7           labeling_0.4.3          filelock_1.0.3         </span></span>
+<span><span class="co">##  [49] fansi_1.0.6             httr_1.4.7              abind_1.4-5            </span></span>
+<span><span class="co">##  [52] compiler_4.4.2          proxy_0.4-27            bit64_4.0.5            </span></span>
+<span><span class="co">##  [55] withr_3.0.1             BiocParallel_1.38.0     DBI_1.2.3              </span></span>
+<span><span class="co">##  [58] highr_0.11              MASS_7.3-61             rappdirs_0.3.3         </span></span>
+<span><span class="co">##  [61] DelayedArray_0.30.1     rjson_0.2.21            classInt_0.4-10        </span></span>
+<span><span class="co">##  [64] bluster_1.14.0          tools_4.4.2             units_0.8-0            </span></span>
+<span><span class="co">##  [67] glue_1.8.0              dbscan_1.2-0            grid_4.4.2             </span></span>
+<span><span class="co">##  [70] sf_1.0-6                cluster_2.1.6           generics_0.1.3         </span></span>
+<span><span class="co">##  [73] gtable_0.3.5            clevr_0.1.2             class_7.3-22           </span></span>
+<span><span class="co">##  [76] fclust_2.1.1.1          sp_2.1-4                utf8_1.2.4             </span></span>
+<span><span class="co">##  [79] XVector_0.44.0          BiocVersion_3.19.1      pillar_1.9.0           </span></span>
+<span><span class="co">##  [82] lattice_0.22-6          bit_4.0.5               deldir_2.0-4           </span></span>
+<span><span class="co">##  [85] tidyselect_1.2.1        Biostrings_2.72.1       knitr_1.48             </span></span>
+<span><span class="co">##  [88] bookdown_0.40           xfun_0.46               UCSC.utils_1.0.0       </span></span>
+<span><span class="co">##  [91] yaml_2.3.10             boot_1.3-30             evaluate_0.24.0        </span></span>
+<span><span class="co">##  [94] codetools_0.2-20        tibble_3.2.1            mclustcomp_0.3.3       </span></span>
+<span><span class="co">##  [97] BiocManager_1.30.23     cli_3.6.3               systemfonts_1.1.0      </span></span>
+<span><span class="co">## [100] Rdpack_2.6.1            munsell_0.5.1           jquerylib_0.1.4        </span></span>
+<span><span class="co">## [103] Rcpp_1.0.13             png_0.1-8               parallel_4.4.2         </span></span>
+<span><span class="co">## [106] pkgdown_2.1.1           blob_1.2.4              scales_1.3.0           </span></span>
+<span><span class="co">## [109] e1071_1.7-9             purrr_1.0.2             crayon_1.5.3           </span></span>
+<span><span class="co">## [112] rlang_1.1.4             KEGGREST_1.44.1</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
