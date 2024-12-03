@@ -488,7 +488,7 @@ fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL,
 #' hardTrue <- apply(fuzzyTrue,1,FUN=which.max)
 #' # some predicted labels:
 #' hardPred <- c(1,1,1,1,1,1,2,2,2)
-#' fuzzyHardMetrics2(hardTrue, fuzzyTrue, hardPred, nperms=3)
+#' poem:::fuzzyHardMetrics2(hardTrue, fuzzyTrue, hardPred, nperms=3)
 fuzzyHardMetrics2 <- function(hardTrue, fuzzyTrue, hardPred, nperms=10, 
                              returnElementPairAccuracy=FALSE, verbose=TRUE,
                              BPPARAM=BiocParallel::SerialParam()){ 

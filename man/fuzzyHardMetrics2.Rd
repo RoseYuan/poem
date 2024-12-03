@@ -73,7 +73,7 @@ fuzzyTrue <- matrix(c(
 hardTrue <- apply(fuzzyTrue,1,FUN=which.max)
 # some predicted labels:
 hardPred <- c(1,1,1,1,1,1,2,2,2)
-fuzzyHardMetrics2(hardTrue, fuzzyTrue, hardPred, nperms=3)
+poem:::fuzzyHardMetrics2(hardTrue, fuzzyTrue, hardPred, nperms=3)
 }
 \references{
 Hullermeier et al. 2012; 10.1109/TFUZZ.2011.2179303;
