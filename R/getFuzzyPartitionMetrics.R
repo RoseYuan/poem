@@ -14,8 +14,8 @@
 #' @inheritParams fuzzyHardMetrics
 #' @inheritParams fuzzyHardSpotConcordance
 #' @inheritParams getPairConcordance
-#' @param ... Optional arguments for \link[FuzzyPartitionMetrics()]{poem::FuzzyPartitionMetrics()}: `tnorm`. Only 
-#' useful when `fuzzy_true=TRUE` and `fuzzy_pred=TRUE`.
+#' @param ... Optional arguments for \code{\link{fuzzyPartitionMetrics}}: `tnorm`.
+#'  Only useful when `fuzzy_true=TRUE` and `fuzzy_pred=TRUE`.
 #' @details
 #' The allowed values for `metrics` depend on the value of `level`:
 #'   - If `level = "element"`, the allowed `metrics` are: `"fuzzySPC"`.
@@ -83,16 +83,16 @@ getFuzzyPartitionMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
     paste0(names(mc),"=",unlist(mc), collapse=", ")
   }
   if(!is.null(fuzzyTrue)){
-    fuzzy_true=TRUE
+    fuzzy_true <- TRUE
   }else{
     stopifnot(!is.null(hardTrue))
-    fuzzy_true=FALSE
+    fuzzy_true <- FALSE
   }
   if(!is.null(fuzzyPred)){
-    fuzzy_pred=TRUE
+    fuzzy_pred <- TRUE
   }else{
     stopifnot(!is.null(hardPred))
-    fuzzy_pred=FALSE
+    fuzzy_pred <- FALSE
   }
   level_functions <- list(
     "element" = getFuzzyPartitionElementMetrics,
