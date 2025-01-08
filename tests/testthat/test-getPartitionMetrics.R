@@ -77,3 +77,15 @@ test_that("dataset3: RI,WC,WH,ARI,NCR,AWC,AWH,MI,AMI,VI,EH,EC,VM,FM match the ex
                              metrics = c("RI","WC","WH","ARI","NCR","AWC","AWH","MI","AMI","VI","EH","EC","VM","FM"))
   expect_equal(round(as.numeric(res), 2), c(0.89,0.88,0.75,0.73,0.72,0.83,0.65,0.95,0.62,0.86,0.62,0.77,0.69,0.81))
 })
+
+test_that("Element-level spot concordance works", {
+  res <- getPartitionMetrics(dataset1$Reference_Partition, dataset1$Trial_Partition,
+                             level="element", metrics=c("SPC"))
+  w <- which(dataset1$Reference_Partition %in% c("U1","U2"))
+  expect_true(all(res$SPC[w]==1))
+  expect_true(all(res$SPC[-w] < 1 & res$SPC[-w]>0.5))
+  res2 <- getPartitionMetrics(dataset1$Reference_Partition, dataset1$Trial_Partition,
+                              level="element", metrics=c("ASPC"), useNegatives=FALSE)
+  expect_true(all(res2$SPC[w]==1))
+  expect_true(all(res2$SPC[-w] < 0.25))
+})
