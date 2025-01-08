@@ -141,7 +141,7 @@ CDbw <- function(x, labels, r=10, s=seq(0.1,0.8,by=0.1),
   interdens <- mean(maxd)
   sep <- mean(mind/(1+interdens))
   if (trace)
-    cat("sep= ",sep," interdens=",interdens," mind=",mind,"\n")
+    message("sep= ",sep," interdens=",interdens," mind=",mind,"\n")
 # Intradens and compactness
   ns <- length(s)
   intradens <- numeric(0)
@@ -162,14 +162,14 @@ CDbw <- function(x, labels, r=10, s=seq(0.1,0.8,by=0.1),
       }
       denscl[j,i] <- denscl[j,i]/repr[j]
       if (trace)
-        cat("denscl cluster ",j," s ",i,": ",denscl[j,i],"\n")
+        message("denscl cluster ",j," s ",i,": ",denscl[j,i],"\n")
     }
     intradens[i] <- sum(denscl[,i])/(cn*stdev)
   }
   compactness <- mean(intradens)
   if (trace){
-    print(intradens)
-    cat("compactness= ",compactness,"\n")
+    #print(intradens)
+    message("compactness= ",compactness,"\n")
   }
 # Intrachange and Cohesion
   ic <- intradens[2:ns]-intradens[seq_len(ns-1)]
@@ -178,8 +178,8 @@ CDbw <- function(x, labels, r=10, s=seq(0.1,0.8,by=0.1),
   sc <- sep*compactness
   cdbw <- cohesion*sc
   if (trace){
-    print(intrachange)
-    cat("cohesion= ",cohesion," sc=",sc," cdbw=",cdbw,"\n")
+    #print(intrachange)
+    message("cohesion= ",cohesion," sc=",sc," cdbw=",cdbw,"\n")
   }
   c(cdbw=cdbw,cohesion=cohesion,compactness=compactness,sep=sep)
 }
