@@ -94,4 +94,6 @@ test_that("Set-matching works", {
   m <- matchSets(dataset1$Trial_Partition, dataset1$Reference_Partition)
   expected <- c(Z1 = "U1", Z2 = "U2", Z3 = "U3", Z4 = "U4")
   expect_identical(m, expected)
+  m <- setMatchingAccuracy(dataset1$Reference_Partition, dataset1$Trial_Partition)
+  expect_equal(round(100*m),86)
 })
