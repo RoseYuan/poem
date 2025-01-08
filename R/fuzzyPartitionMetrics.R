@@ -550,10 +550,15 @@ fuzzyHardMetrics2 <- function(hardTrue, fuzzyTrue, hardPred, nperms=10,
 
       list( NDC=1-mean(diff), aH=a, aC=ac )
     })
-    Cdiff <- rowSums(sapply(a, FUN=function(x) x$aC[1,]))
-    Cn <- rowSums(sapply(a, FUN=function(x) x$aC[2,]))
-    Hdiff <- rowSums(sapply(a, FUN=function(x) x$aH[1,]))
-    Hn <- rowSums(sapply(a, FUN=function(x) x$aH[2,]))
+    
+    Cdiff <- rowSums(vapply(a, FUN=\(x) x$aC[1,],
+                            FUN.VALUE=numeric(nrow(fuzzyTrue))))
+    Cn <- rowSums(vapply(a, FUN=function(x) x$aC[2,],
+                         FUN.VALUE=numeric(nrow(fuzzyTrue))))
+    Hdiff <- rowSums(vapply(a, FUN=function(x) x$aH[1,],
+                            FUN.VALUE=numeric(length(levels(hardPred)))))
+    Hn <- rowSums(vapply(a, FUN=function(x) x$aH[2,],
+                         FUN.VALUE=numeric(length(levels(hardPred)))))
     # avoid NaNs for singletons
     Hn[which(Hn==0)] <- 1L
     Cn[which(Cn==0)] <- 1L
