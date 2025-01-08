@@ -15,8 +15,7 @@
 #' 
 #' @rdname getGraphElementMetrics
 setGeneric("getGraphElementMetrics", signature="x",
-           def=function(x, labels, metrics=c("SI","NP","NCE"), 
-                        directed=NULL, ...)
+           def=function(x, labels, directed=NULL, ...)
              standardGeneric("getGraphElementMetrics"))
 
 attr(getGraphElementMetrics, "allowed_metrics") <- c("SI", "ISI", "NP","NCE")
@@ -93,7 +92,7 @@ setMethod("getGraphElementMetrics", signature="matrix",
 
 #' @importFrom igraph gorder set_vertex_attr
 .getGraphElementMetricsFromGraph <- function(x, labels, 
-                                           metrics=c("AMSP","PWC"),
+                                           metrics=c("SI","NP"),
                                            directed=NULL, ...){
   stopifnot(is.character(labels) || is.factor(labels))
   stopifnot(length(labels)==gorder(x))
