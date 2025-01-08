@@ -8,7 +8,7 @@
     va <- vertex_attr(g,classAttr)
     stopifnot(is.factor(va) || is.character(va) || is.integer(va))
     names(cls) <- cls <- unique(va)
-    return(sapply(cls, FUN=function(cl){
+    return(vapply(cls, FUN.VALUE=numeric(1L), FUN=function(cl){
       FUN(subgraph(g, vids=which(va==cl)), ...)
     }))
   }
@@ -20,7 +20,7 @@
   stopifnot(is(g,"igraph"))
   if(is.null(directed)) directed <- FALSE
   gc <- decompose.graph(g)
-  msp <- sapply(gc, directed=directed, FUN=mean_distance)
+  msp <- vapply(gc, directed=directed, FUN.VALUE=numeric(1L), FUN=mean_distance)
   amsp <- length(gc)+sum(pmax(1L,msp,na.rm=TRUE))
   if(normalize) amsp <- amsp/length(V(g))
   return(amsp)
@@ -39,13 +39,14 @@
   stopifnot(!is.null(labels))
   if(.isNNlist(knn)){ # list of varying number of neighbor indices
     knn <- relist(labels[unlist(knn)],knn)
-    return(sapply(knn, FUN=function(nn){
-        sum((sapply(unique(labels), FUN=function(x) sum(nn==x))/length(nn))^2)
+    return(vapply(knn, FUN.VALUE=numeric(1L), FUN=function(nn){
+        sum((vapply(unique(labels), FUN.VALUE=numeric(1L),
+                    FUN=function(x) sum(nn==x))/length(nn))^2)
       }))
   }
   .checkInputs(knn, labels)
   k <- ncol(knn$index)
-  p <- sapply(unique(labels), FUN=function(x){
+  p <- vapply(unique(labels), FUN.VALUE=numeric(nrow(knn$nncl)), FUN=\(x){
     rowSums(knn$nncl==x)/k
   })
   rowSums(p^2)
@@ -180,7 +181,7 @@ getPairConcordance <- function(true, pred, usePairs=TRUE, useNegatives=FALSE,
       #   }))
       # }
 
-      return(sapply(seq_along(pred), FUN=function(i){
+      return(vapply(seq_along(pred), FUN.VALUE=numeric(1L), FUN=function(i){
         1-sum(abs( (pred==pred[[i]]) - (true==true[[i]]) ))/(length(pred)-1)
       }))
       

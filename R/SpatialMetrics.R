@@ -24,7 +24,7 @@ nnWeightedAccuracy <- function(true, pred, location, k=5, ...){
   }
   nn <- nn[w]
   nn_dis <- relist(true[unlist(nn)]!=rep(pred[w],lengths(nn)),nn)
-  1-sum(sapply(nn_dis, mean))/nrow(location)
+  1-sum(vapply(nn_dis, mean, FUN.VALUE=numeric(1L)))/nrow(location)
 }
 
 #' @title Calculate PAS score

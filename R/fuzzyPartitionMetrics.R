@@ -47,28 +47,28 @@
 #' @export
 #' @examples
 #' # generate fuzzy partitions:
-#' m1 <- matrix(c(0.95, 0.025, 0.025, 
-#'                0.98, 0.01, 0.01, 
-#'                0.96, 0.02, 0.02, 
-#'                0.95, 0.04, 0.01, 
-#'                0.95, 0.01, 0.04, 
-#'                0.99, 0.005, 0.005, 
-#'                0.025, 0.95, 0.025, 
-#'                0.97, 0.02, 0.01, 
-#'                0.025, 0.025, 0.95), 
-#'                ncol = 3, byrow=TRUE)
-#' m2 <- matrix(c(0.95, 0.025, 0.025,  
-#'                0.98, 0.01, 0.01, 
-#'                0.96, 0.02, 0.02, 
-#'                0.025, 0.95, 0.025, 
-#'                0.02, 0.96, 0.02, 
-#'                0.01, 0.98, 0.01, 
-#'                0.05, 0.05, 0.95, 
-#'                0.02, 0.02, 0.96, 
-#'                0.01, 0.01, 0.98), 
-#'                ncol = 3, byrow=TRUE)
-#' colnames(m1) <- colnames(m2) <- LETTERS[1:3]
-#' fuzzyPartitionMetrics(m1,m2)
+# m1 <- matrix(c(0.95, 0.025, 0.025,
+#                0.98, 0.01, 0.01,
+#                0.96, 0.02, 0.02,
+#                0.95, 0.04, 0.01,
+#                0.95, 0.01, 0.04,
+#                0.99, 0.005, 0.005,
+#                0.025, 0.95, 0.025,
+#                0.97, 0.02, 0.01,
+#                0.025, 0.025, 0.95),
+#                ncol = 3, byrow=TRUE)
+# m2 <- matrix(c(0.95, 0.025, 0.025,
+#                0.98, 0.01, 0.01,
+#                0.96, 0.02, 0.02,
+#                0.025, 0.95, 0.025,
+#                0.02, 0.96, 0.02,
+#                0.01, 0.98, 0.01,
+#                0.05, 0.05, 0.95,
+#                0.02, 0.02, 0.96,
+#                0.01, 0.01, 0.98),
+#                ncol = 3, byrow=TRUE)
+# colnames(m1) <- colnames(m2) <- LETTERS[1:3]
+# fuzzyPartitionMetrics(m1,m2)
 fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
                                   verbose=TRUE, returnElementPairAccuracy=FALSE,
                                   BPPARAM=BiocParallel::SerialParam(), 
@@ -113,8 +113,8 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
   
   getFWallace <- function(emA, emB, fuzzyClB, Bpairs=NULL, diff=NULL){
     if(is.null(diff)) diff <- abs(emA[lower.tri(emA)]-emB[lower.tri(emB)])
-    a <- sapply(setNames(seq_len(ncol(fuzzyClB)),colnames(fuzzyClB)),
-                FUN=function(i){
+    a <- vapply(setNames(seq_len(ncol(fuzzyClB)),colnames(fuzzyClB)),
+                FUN.VALUE=numeric(2L), FUN=function(i){
       # get the degree to which the members of each pair are of the given 
       # class in B
       if(is.null(Bpairs)){
@@ -155,7 +155,7 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
     # try few permutations to estimate if more are needed
     allp <- apply(matrix( runif(m*10), nrow=m ), 2, order)
     res1 <- bplapply(1:10, BPPARAM=BPPARAM, onePerm)
-    NDCs <- sapply(res1, \(x) x[[1]])
+    NDCs <- vapply(res1, FUN.VALUE=numeric(1L), FUN=\(x) x[[1]])
     SE <- sd(NDCs)/sqrt(length(res1))
     if(SE>0.0025) nperms <- 100
     if(SE>0.01) nperms <- 1000
@@ -169,11 +169,12 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
   
     res <- bplapply(seq_len(nperms), BPPARAM=BPPARAM, onePerm)
     if(!is.null(res1)) res <- c(res1,res)
-    NDCs <- sapply(res, \(x) x[[1]])
-    SE <- sd(NDCs)/sqrt(nperms)
   }else{
     res <- res1
   }
+  
+  NDCs <- vapply(res, FUN.VALUE=numeric(1L), FUN=\(x) x[[1]])
+  SE <- sd(NDCs)/sqrt(nperms)
   
   if(verbose){
     message("Standard error of the mean NDC across permutations:", 
@@ -184,14 +185,15 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
   }
   
   adj <- function(x, m) (x-m)/(1-m)
-  
   ACI <- adj(NDC,mean(NDCs))
   if(!computeWallace) return(list(NDC=NDC, ACI=ACI))
   
-  W1m <- mean(sapply(res, \(x) x[[2]][[1]]))
-  W2m <- mean(sapply(res, \(x) x[[3]][[1]]))
-  W1pm <- rowMeans(sapply(res, \(x) x[[2]][[2]]))
-  W2pm <- rowMeans(sapply(res, \(x) x[[3]][[2]]))
+  W1m <- mean(vapply(res, \(x) x[[2]][[1]], numeric(1L)))
+  W2m <- mean(vapply(res, \(x) x[[3]][[1]], numeric(1L)))
+  W1pm <- rowMeans(vapply(res, \(x) x[[2]][[2]], numeric(ncol(Q))))
+  W2pm <- rowMeans(vapply(res, \(x) x[[3]][[2]], numeric(ncol(P))))
+  names(W1pm) <- colnames(Q)
+  names(W2pm) <- colnames(P)
   AW1 <- list( global=adj(W1$global,W1m),
                perPartition=mapply(x=W1$perPartition, m=W1pm, FUN=adj) )
   AW2 <- list( global=adj(W2$global,W2m),
@@ -206,8 +208,12 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
   tnorm <- match.arg(tnorm)
   switch(tnorm,
      product=tcrossprod,
-     lukasiewicz=function(p){ sapply(seq_along(p), FUN=function(i) pmax(0,p+p[i]-1)) },
-     min=function(p){ sapply(seq_along(p), FUN=function(i) pmin(p,p[i])) },
+     lukasiewicz=function(p){
+       vapply(seq_along(p), FUN=function(i) pmax(0,p+p[i]-1), numeric(length(p)))
+     },
+     min=function(p){
+       vapply(seq_along(p), FUN=function(i) pmin(p,p[i]), numeric(length(p)))
+     },
      stop("Undefined t-norm")
   )
 }
@@ -345,8 +351,8 @@ fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL,
   NDC <- 1 - ( sum( diff )/(2*ncomp) )
   
   getFWallace <- function(membership, diff){
-    a <- sapply(split(seq_along(membership),membership),
-                FUN=function(i){
+    a <- vapply(split(seq_along(membership),membership),
+                FUN.VALUE=numeric(2L), FUN=function(i){
       c(c=sum(diff[i,i]), n=(length(i)^2-length(i)))
     })
     a[2,which(a[2,]==0)] <- 1  # avoid NaNs for singletons
@@ -379,7 +385,7 @@ fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL,
     # try few permutations to estimate if more are needed
     allp <- apply(matrix( runif(m*10), nrow=m ), 2, order)
     res1 <- bplapply(1:10, BPPARAM=BPPARAM, onePerm)
-    NDCs <- sapply(res1, \(x) x[[1]])
+    NDCs <- vapply(res1, FUN.VALUE=numeric(1L), FUN=\(x) x[[1]])
     SE <- sd(NDCs)/sqrt(length(res1))
     if(SE>0.0025) nperms <- 100
     if(SE>0.01) nperms <- 1000
@@ -393,7 +399,7 @@ fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL,
     
     res <- bplapply(1:nperms, BPPARAM=BPPARAM, onePerm)
     if(!is.null(res1)) res <- c(res1,res)
-    NDCs <- sapply(res, \(x) x[[1]])
+    NDCs <- vapply(res, FUN.VALUE=numeric(1L), FUN=\(x) x[[1]])
     SE <- sd(NDCs)/sqrt(nperms)
   }else{
     res <- res1
@@ -411,10 +417,12 @@ fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL,
   
   ACI <- adj(NDC,mean(NDCs))
   
-  W1m <- mean(sapply(res, \(x) x[[2]][[1]]))
-  W2m <- mean(sapply(res, \(x) x[[3]][[1]]))
-  W1pm <- rowMeans(sapply(res, \(x) x[[2]][[2]]))
-  W2pm <- rowMeans(sapply(res, \(x) x[[3]][[2]]))
+  W1m <- mean(vapply(res, \(x) x[[2]][[1]], numeric(1L)))
+  W2m <- mean(vapply(res, \(x) x[[3]][[1]], numeric(1L)))
+  W1pm <- rowMeans(vapply(res, \(x) x[[2]][[2]],
+                          FUN.VALUE=numeric(length(unique(hardPredVector)))))
+  W2pm <- rowMeans(vapply(res, \(x) x[[3]][[2]], numeric(ncol(fuzzyTrue))))
+
   AW1 <- list( global=adj(W1$global,W1m),
                perPartition=mapply(x=W1$perPartition, m=W1pm, FUN=adj) )
   AW2 <- list( global=adj(W2$global,W2m),
@@ -472,23 +480,23 @@ fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL,
 #' @importFrom Matrix sparseMatrix
 #' @importFrom stats sd
 #' @examples
-#' # generate a fuzzy truth:
-#' fuzzyTrue <- matrix(c(
-#'   0.95, 0.025, 0.025, 
-#'   0.98, 0.01, 0.01, 
-#'   0.96, 0.02, 0.02, 
-#'   0.95, 0.04, 0.01, 
-#'   0.95, 0.01, 0.04, 
-#'   0.99, 0.005, 0.005, 
-#'   0.025, 0.95, 0.025, 
-#'   0.97, 0.02, 0.01, 
-#'   0.025, 0.025, 0.95), 
-#'   ncol = 3, byrow=TRUE)
-#' # a hard truth:
-#' hardTrue <- apply(fuzzyTrue,1,FUN=which.max)
-#' # some predicted labels:
-#' hardPred <- c(1,1,1,1,1,1,2,2,2)
-#' poem:::fuzzyHardMetrics2(hardTrue, fuzzyTrue, hardPred, nperms=3)
+# # generate a fuzzy truth:
+# fuzzyTrue <- matrix(c(
+#   0.95, 0.025, 0.025,
+#   0.98, 0.01, 0.01,
+#   0.96, 0.02, 0.02,
+#   0.95, 0.04, 0.01,
+#   0.95, 0.01, 0.04,
+#   0.99, 0.005, 0.005,
+#   0.025, 0.95, 0.025,
+#   0.97, 0.02, 0.01,
+#   0.025, 0.025, 0.95),
+#   ncol = 3, byrow=TRUE)
+# # a hard truth:
+# hardTrue <- apply(fuzzyTrue,1,FUN=which.max)
+# # some predicted labels:
+# hardPred <- c(1,1,1,1,1,1,2,2,2)
+# poem:::fuzzyHardMetrics2(hardTrue, fuzzyTrue, hardPred, nperms=3)
 fuzzyHardMetrics2 <- function(hardTrue, fuzzyTrue, hardPred, nperms=10, 
                              returnElementPairAccuracy=FALSE, verbose=TRUE,
                              BPPARAM=BiocParallel::SerialParam()){ 
@@ -510,7 +518,7 @@ fuzzyHardMetrics2 <- function(hardTrue, fuzzyTrue, hardPred, nperms=10,
   allp <- apply(matrix( runif(m*10), nrow=m ), 2, order)
   
   if(returnElementPairAccuracy){
-    return(sapply(seq_len(m), FUN=function(i){
+    return(vapply(seq_len(m), FUN.VALUE=numeric(1L), FUN=function(i){
       # compute pair agreement for all the three labelings
       eq <- as.integer(hardPred[-i]==hardPred[i])
       ep <- 1-colSums(abs(fuzzyTrue[,-i]-fuzzyTrue[,i]))/2
@@ -528,13 +536,15 @@ fuzzyHardMetrics2 <- function(hardTrue, fuzzyTrue, hardPred, nperms=10,
       ep2 <- as.integer(hardTrue[-i]==hardTrue[i])
       diff <- pmin( abs(eq-ep), abs(eq-ep2) )
       # completeness
-      ac <- sapply(split(seq_along(hardTrue[-i]), hardTrue[-i]), FUN=function(x){
+      ac <- vapply(split(seq_along(hardTrue[-i]), hardTrue[-i]), 
+                   FUN.VALUE=numeric(2L), FUN=function(x){
         c(diff=sum(diff[x]), n=length(x))
       })
       ac[2,which(ac[2,]==0)] <- 1  # avoid NaNs for singletons
       
       # homogeneity
-      a <- sapply(split(seq_along(hardPred[-i]), hardPred[-i]), FUN=function(x){
+      a <- vapply(split(seq_along(hardPred[-i]), hardPred[-i]),
+                  FUN.VALUE=numeric(2L), FUN=function(x){
         c(diff=sum(diff[x]), n=length(x))
       })
 
@@ -548,7 +558,7 @@ fuzzyHardMetrics2 <- function(hardTrue, fuzzyTrue, hardPred, nperms=10,
     Hn[which(Hn==0)] <- 1L
     Cn[which(Cn==0)] <- 1L
     
-    NDC <- mean(sapply(a, FUN=function(x) x$NDC))
+    NDC <- mean(unlist(lapply(a, FUN=function(x) x$NDC)))
     HO <- list( global=1-sum(Hdiff)/sum(Hn),
                 perPartition=1-Hdiff/Hn)
     CO <- list( global=1-sum(Cdiff)/sum(Cn),
@@ -567,7 +577,7 @@ fuzzyHardMetrics2 <- function(hardTrue, fuzzyTrue, hardPred, nperms=10,
     # try few permutations to estimate if more are needed
     allp <- apply(matrix( runif(m*10), nrow=m ), 2, order)
     res1 <- bplapply(1:10, BPPARAM=BPPARAM, onePerm)
-    NDCs <- sapply(res1, \(x) x[[1]])
+    NDCs <- vapply(res1, FUN.VALUE=numeric(1L), FUN=\(x) x[[1]])
     SE <- sd(NDCs)/sqrt(length(res1))
     if(SE>0.0025) nperms <- 100
     if(SE>0.01) nperms <- 1000
@@ -578,10 +588,9 @@ fuzzyHardMetrics2 <- function(hardTrue, fuzzyTrue, hardPred, nperms=10,
   if(!is.null(nperms)){
     # generate more permutations
     allp <- apply(matrix( runif(m*nperms), nrow=m ), 2, order)
-    
     res <- bplapply(1:nperms, BPPARAM=BPPARAM, onePerm)
     if(!is.null(res1)) res <- c(res1,res)
-    NDCs <- sapply(res, \(x) x[[1]])
+    NDCs <- vapply(res, FUN.VALUE=numeric(1L), FUN=\(x) x[[1]])
     SE <- sd(NDCs)/sqrt(nperms)
   }else{
     res <- res1
@@ -599,10 +608,13 @@ fuzzyHardMetrics2 <- function(hardTrue, fuzzyTrue, hardPred, nperms=10,
   
   ACI <- adj(val[[1]],mean(NDCs))
   
-  W1m <- mean(sapply(res, \(x) x[[2]][[1]]))
-  W2m <- mean(sapply(res, \(x) x[[3]][[1]]))
-  W1pm <- rowMeans(sapply(res, \(x) x[[2]][[2]]))
-  W2pm <- rowMeans(sapply(res, \(x) x[[3]][[2]]))
+  W1m <- mean(vapply(res, \(x) x[[2]][[1]], numeric(1L)))
+  W2m <- mean(vapply(res, \(x) x[[3]][[1]], numeric(1L)))
+  W1pm <- rowMeans(vapply(res, \(x) x[[2]][[2]],
+                          FUN.VALUE=numeric(length(unique(hardPred)))))
+  W2pm <- rowMeans(vapply(res, \(x) x[[3]][[2]], numeric(nrow(fuzzyTrue))))
+                          
+  
   AW1 <- list( global=adj(val[[2]]$global,W1m),
                perPartition=mapply(x=val[[2]]$perPartition, m=W1pm, FUN=adj) )
   AW2 <- list( global=adj(val[[3]]$global,W2m),
