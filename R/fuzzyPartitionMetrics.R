@@ -317,7 +317,7 @@ fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL,
     nSim <- min(BiocParallel::bpnworkers(BPPARAM),
                 ifelse(is.null(nperms),10,nperms))
     os <- 8*((3+nSim)*m^2)
-    class(os) = "object_size"
+    class(os) <- "object_size"
     if(isTRUE(lowMemory) || os > 2*10^9){
       if(verbose) message("Using the low-memory algorithm...")
       return(
