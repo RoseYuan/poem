@@ -68,7 +68,7 @@ getPartitionMetrics <-function(true, pred, metrics=c("WC","WH","AWC","AWH","FM")
 #' @param metrics The metrics to compute.
 #' @keywords internal
 #' @return A dataframe of metrics.
-getPartitionElementMetrics <- function(true, pred, metrics=c("ASPC"), usePairs=TRUE, useNegatives=TRUE){
+getPartitionElementMetrics <- function(true, pred, metrics=c("SPC"), usePairs=TRUE, useNegatives=TRUE){
   if (anyNA(true) | anyNA(pred))
     stop("NA are not supported.")
   if (is.character(true)) true <- as.factor(true)
