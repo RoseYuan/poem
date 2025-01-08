@@ -89,3 +89,9 @@ test_that("Element-level spot concordance works", {
   expect_true(all(res2$SPC[w]==1))
   expect_true(all(res2$SPC[-w] < 0.25))
 })
+
+test_that("Set-matching works", {
+  m <- matchSets(dataset1$Trial_Partition, dataset1$Reference_Partition)
+  expected <- c(Z1 = "U1", Z2 = "U2", Z3 = "U3", Z4 = "U4")
+  expect_identical(m, expected)
+})
