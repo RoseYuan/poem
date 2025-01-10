@@ -22,12 +22,11 @@ For a detailed introduction of the package, see the [online docs](https://roseyu
 
 ## Installation
 
-You can install the development version of poem from
-[GitHub](https://github.com/RoseYuan/poem) with:
-
-``` r
-# install.packages("devtools")
-devtools::install_github("RoseYuan/poem")
+`poem` is available through Bioconductor, and can be installed using the following commands:
+```r
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("poem")
 ```
 
 ## Contact
