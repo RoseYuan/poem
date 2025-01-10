@@ -34,9 +34,9 @@ library(BiocStyle)
 # Installation & loading {-}
 
 ```{r, eval=FALSE}
-if (!requireNamespace("devtools", quietly = TRUE))
-    install.packages("devtools")
-devtools::install_github("RoseYuan/poem")
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("poem")
 ```
 
 ```{r, message = FALSE,  warning = FALSE}
