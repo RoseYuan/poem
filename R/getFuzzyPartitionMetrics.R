@@ -65,7 +65,8 @@
 #' hardTrue <- apply(fuzzyTrue,1,FUN=which.max)
 #' # some predicted labels:
 #' hardPred <- c(1,1,1,1,1,1,2,2,2)
-#' getFuzzyPartitionMetrics(hardPred=hardPred, hardTrue=hardTrue, fuzzyTrue=fuzzyTrue, nperms=3, level="class")
+#' getFuzzyPartitionMetrics(hardPred=hardPred, hardTrue=hardTrue, 
+#' fuzzyTrue=fuzzyTrue, nperms=3, level="class")
 #' 
 getFuzzyPartitionMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL, 
                                      hardPred=NULL, fuzzyPred=NULL, 
