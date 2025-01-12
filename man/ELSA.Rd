@@ -15,7 +15,8 @@ rows as samples and columns as location dimensions.}
 \item{k}{Number of nearest neighbors.}
 }
 \value{
-A dataframe containing the Ea, Ec and ELSA for all samples in the dataset.
+A dataframe containing the Ea, Ec and ELSA for all samples in the
+dataset.
 }
 \description{
 Calculating the Entropy-based Local indicator of Spatial Association (ELSA)

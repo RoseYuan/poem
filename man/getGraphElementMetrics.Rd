@@ -45,9 +45,9 @@ rows) from which nearest neighbors will be computed.}
 \item{labels}{Either a factor or a character vector indicating the true class
 label of each element (i.e. row or vertex) of \code{x}.}
 
-\item{directed}{Logical; whether to compute the metrics in a directed fashion.
-If left to NULL, conventional choices will be made per metric (adhesion,
-cohesion, PWC AMSP undirected, others directed).}
+\item{directed}{Logical; whether to compute the metrics in a directed
+fashion. If left to NULL, conventional choices will be made per metric
+(adhesion, cohesion, PWC AMSP undirected, others directed).}
 
 \item{...}{Optional arguments for \code{\link[=emb2knn]{emb2knn()}} or \code{\link[=emb2snn]{emb2snn()}}.}
 

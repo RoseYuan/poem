@@ -9,7 +9,8 @@
 \arguments{
 \item{X}{Numeric matrix of samples.}
 
-\item{threshold}{Numeric, the distance threshold to consider samples as duplicates.}
+\item{threshold}{Numeric, the distance threshold to consider samples as
+duplicates.}
 }
 \value{
 None

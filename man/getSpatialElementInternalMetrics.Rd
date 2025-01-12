@@ -26,7 +26,8 @@ This is used for calculating PAS and ELSA scores.}
 \item{...}{Optional params for \code{\link[=PAS]{PAS()}}.}
 }
 \value{
-A dataframe containing the metric values for all samples in the dataset.
+A dataframe containing the metric values for all samples in the
+dataset.
 If PAS is calculated, the value is a Boolean about the abnormality of a spot.
 If ELSA is calculated, Ea, Ec and ELSA for all spots will be returned.
 }

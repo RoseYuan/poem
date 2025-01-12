@@ -24,8 +24,8 @@ be a vector of characters, integers, numerics, or a factor, but not a list.}
 
 \item{distance}{The distance metric to use (default euclidean).}
 
-\item{level}{The level to calculate the metrics. Options include \code{"element"},
-\code{"class"} and \code{"dataset"}.}
+\item{level}{The level to calculate the metrics. Options include
+\code{"element"}, \code{"class"} and \code{"dataset"}.}
 
 \item{...}{Optional arguments. See details.}
 }
@@ -39,9 +39,11 @@ Computes embedding-based metrics for the specified level.
 The allowed values for \code{metrics} depend on the value of \code{level}:
 \itemize{
 \item If \code{level = "element"}, the allowed \code{metrics} are: \code{"SW"}.
-\item If \code{level = "class"}, the allowed \code{metrics} are: \code{"meanSW"}, \code{"minSW"}, \code{"pnSW"}, \code{"dbcv"}.
+\item If \code{level = "class"}, the allowed \code{metrics} are: \code{"meanSW"}, \code{"minSW"},
+\code{"pnSW"}, \code{"dbcv"}.
 \item If \code{level = "dataset"}, the allowed \code{metrics} are: \code{"meanSW"},
-\code{"meanClassSW"}, \code{"pnSW"}, \code{"minClassSW"}, \code{"cdbw"}, \code{"cohesion"}, \code{"compactness"}, \code{"sep"}, \code{"dbcv"}.
+\code{"meanClassSW"}, \code{"pnSW"}, \code{"minClassSW"}, \code{"cdbw"}, \code{"cohesion"},
+\code{"compactness"}, \code{"sep"}, \code{"dbcv"}.
 }
 
 The function(s) that the optional arguments \code{...} passed to depend on the
@@ -49,7 +51,8 @@ value of \code{level}:
 \itemize{
 \item If \code{level = "element"}, optional arguments are passed to \code{\link[stats:dist]{stats::dist()}}.
 \item If \code{level = "class"}, optional arguments are passed to \code{\link[=dbcv]{dbcv()}}.
-\item If \code{level = "dataset"}, optional arguments are passed to \code{\link[=dbcv]{dbcv()}} or \code{\link[=CDbw]{CDbw()}}.
+\item If \code{level = "dataset"}, optional arguments are passed to \code{\link[=dbcv]{dbcv()}} or
+\code{\link[=CDbw]{CDbw()}}.
 }
 }
 \examples{

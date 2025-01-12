@@ -65,9 +65,9 @@ label of each element (i.e. row or vertex) of \code{x}.}
 
 \item{metrics}{The metrics to compute. See details.}
 
-\item{directed}{Logical; whether to compute the metrics in a directed fashion.
-If left to NULL, conventional choices will be made per metric (adhesion,
-cohesion, PWC AMSP undirected, others directed).}
+\item{directed}{Logical; whether to compute the metrics in a directed
+fashion. If left to NULL, conventional choices will be made per metric
+(adhesion, cohesion, PWC AMSP undirected, others directed).}
 
 \item{...}{Optional arguments for \code{\link[=emb2knn]{emb2knn()}} or \code{\link[=emb2snn]{emb2snn()}}.}
 

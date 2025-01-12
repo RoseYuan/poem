@@ -18,9 +18,9 @@ mockData(
 of elements of each class.}
 
 \item{classDiff}{The distances between the classes. If there are more than 2
-classes, this can be a \code{dist} object or a symmetric matrix of \code{length(Ns)-1}
-columns/rows where the lower triangle indicates the desired distances
-between classes.}
+classes, this can be a \code{dist} object or a symmetric matrix of
+\code{length(Ns)-1}columns/rows where the lower triangle indicates the desired
+distances between classes.}
 
 \item{Sds}{The standard deviation. Can either be a fixed value, a value per
 class, or a matrix of values for each class (rows) and dimension (column).}

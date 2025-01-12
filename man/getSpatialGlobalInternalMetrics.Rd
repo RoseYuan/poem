@@ -28,7 +28,8 @@ This is used for calculating PAS and ELSA scores.}
 \value{
 A named vector containing metric values. Possible metrics are:
 \item{PAS}{Proportion of abnormal spots (PAS score).}
-\item{ELSA}{Entropy-based Local indicator of Spatial Association (ELSA score).}
+\item{ELSA}{Entropy-based Local indicator of Spatial Association
+(ELSA score).}
 \item{CHAOS}{Spatial Chaos Score.}
 \item{MPC}{Modified partition coefficient}
 \item{PC}{Partition coefficient}

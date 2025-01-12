@@ -13,11 +13,11 @@ getFuzzyLabel(labels, location, k = 6, alpha = 0.5, ...)
 
 \item{k}{The wished number of nearest neighbors}
 
-\item{alpha}{The parameter to control to what extend the spot itself contribute
-to the class composition calculation. \code{"equal"} means it is weighted the
-same as other neighbors. A numeric value between \code{0} and \code{1} means the weight of the
-frequency contribution for the spot itself, and the frequency contribution
-for its knn is then \code{1-alpha}. By default \code{0.5}.}
+\item{alpha}{The parameter to control to what extend the spot itself
+contribute to the class composition calculation. \code{"equal"} means it is
+weighted the same as other neighbors. A numeric value between \code{0} and \code{1}
+means the weight of the frequency contribution for the spot itself, and the
+frequency contribution for its knn is then \code{1-alpha}. By default \code{0.5}.}
 
 \item{...}{Passed to \code{\link[=findSpatialKNN]{findSpatialKNN()}}.}
 }
@@ -25,8 +25,8 @@ for its knn is then \code{1-alpha}. By default \code{0.5}.}
 A matrix of fuzzy memberships.
 }
 \description{
-Get fuzzy representation of labels according to the spatial neighborhood
-label composition.
+Get fuzzy representation of labels according to the spatial
+neighborhood label composition.
 }
 \examples{
 data(sp_toys)
