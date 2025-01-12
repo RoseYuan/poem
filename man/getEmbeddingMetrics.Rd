@@ -54,6 +54,6 @@ value of \code{level}:
 }
 \examples{
 d1 <- mockData()
-getEmbeddingMetrics(d1[,1:2], labels=d1$class, 
+getEmbeddingMetrics(d1[,seq_len(2)], labels=d1$class, 
 metrics=c("meanSW", "minSW", "pnSW", "dbcv"), level="class")
 }

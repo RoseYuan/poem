@@ -24,5 +24,5 @@ Computes k nearest neighbors from embedding.
 }
 \examples{
 d1 <- mockData()
-emb2knn(as.matrix(d1[,1:2]),k=5)
+emb2knn(as.matrix(d1[,seq_len(2)]),k=5)
 }
