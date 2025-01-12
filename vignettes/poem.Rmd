@@ -184,7 +184,7 @@ plotGraphs <- function(d, k=7){
   gn <- dplyr::bind_rows(lapply(split(d[,-1],d$graph), FUN=function(d1){
     nn <- emb2knn(as.matrix(d1[,c("x","y")]), k=k)
     g <- poem:::.nn2graph(nn, labels=d1$class)
-    ggnetwork(g, layout=as.matrix(d1[,1:2]), scale=FALSE)
+    ggnetwork(g, layout=as.matrix(d1[,seq_len(2)]), scale=FALSE)
   }), .id="graph")
   ggplot(gn, aes(x = x, y = y, xend = xend, yend = yend)) + theme_blank() + 
     theme(legend.position = "right") + geom_edges(alpha=0.5, colour="grey") + 

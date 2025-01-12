@@ -67,5 +67,5 @@ The allowed values for \code{metrics} depend on the value of \code{level}:
 }
 \examples{
 d1 <- mockData()
-getGraphMetrics(d1[,1:2], labels=d1$class, level="class")
+getGraphMetrics(d1[,seq_len(2)], labels=d1$class, level="class")
 }

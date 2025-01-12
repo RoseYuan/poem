@@ -20,6 +20,7 @@ A data frame with 240 rows and 11 columns, representing a 16 x 15 array of spots
 sp_toys
 }
 \description{
-Toy examples of spatial data.
+Toy examples of spatial data. The code to generate the dataset is at
+system.file('inst/scripts/', 'sp_toys.R', package='poem').
 }
 \keyword{datasets}

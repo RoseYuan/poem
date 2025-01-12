@@ -4,7 +4,7 @@ moon_maker <- function(n = 50, noise = 0.1,
                        x_center = 0, y_center = 0, radius = 1, seed=42) {
   set.seed(seed)
   moon <- tibble(
-    i = 1:n,
+    i = seq_len(n),
     x = x_center + radius * cos(pi * i/n) + rnorm(n, 0, sd = noise * radius),
     y = y_center + radius * sin(pi * i/n) + rnorm(n, 0, sd = noise * radius),
   )

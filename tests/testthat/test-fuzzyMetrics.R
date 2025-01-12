@@ -35,7 +35,7 @@ m2 <- matrix(c(0.95, 0.025, 0.025,
                0.02, 0.02, 0.96,
                0.01, 0.01, 0.98),
                ncol = 3, byrow=TRUE)
-colnames(m1) <- colnames(m2) <- LETTERS[1:3]
+colnames(m1) <- colnames(m2) <- LETTERS[seq_len(3)]
 # a hard truth:
 hardTrue <- apply(m1,1,FUN=which.max)
 # some predicted labels:
@@ -46,7 +46,7 @@ hardPred <- c(1,1,1,1,1,1,2,2,2)
 test_that("getFuzzyPartitionMetrics works on a fuzzy-fuzzy setting", {
   fm <- getFuzzyPartitionMetrics(fuzzyTrue=m1,fuzzyPred=m2, level="dataset")
   fm <- getFuzzyPartitionMetrics(fuzzyTrue=m1,fuzzyPred=m2, level="class")
-  expect_true(!any(is.na(fm[1:3,1])))
+  expect_true(!any(is.na(fm[seq_len(3),1])))
   fm2 <- getFuzzyPartitionMetrics(fuzzyTrue=m1,fuzzyPred=m2, level="element",
                                   metrics="fuzzySPC")
   expect_equal(which(fm2$fuzzySPC<0.5), 8)

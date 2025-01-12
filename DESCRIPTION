@@ -5,10 +5,10 @@ Authors@R: c(
     person("Siyuan", "Luo", email="roseluosy@gmail.com", role=c("cre","aut"), comment=c(ORCID="0009-0007-6404-3244")),
     person("Pierre-Luc", "Germain", email="pierre-luc.germain@hest.ethz.ch", role=c("aut","ctb"),
            comment=c(ORCID="0000-0003-3418-4218")))
-Description: Implements a set of (mostly external) evaluation metrics for comparing partitions, 
-  fuzzy partitions, for evaluating the segregation of classes/clusters in embeddings or graphs, etc.
-  Also includes metrics for comparing spatial data to ground truth labels and spatially visualizing 
-  errors.
+Description: This package provides a comprehensive set of external and internal evaluation metrics. It includes 
+    metrics for assessing partitions or fuzzy partitions derived from clustering results, as well as for evaluating 
+    subpopulation identification results within embeddings or graph representations. Additionally, it provides metrics for 
+    comparing spatial domain detection results against ground truth labels, and tools for visualizing spatial errors.
 BugReports: https://github.com/RoseYuan/poem/issues
 License: GPL (>= 3)
 URL: https://roseyuan.github.io/poem/
@@ -50,5 +50,6 @@ Suggests:
     SpatialExperiment,
     STexampleData
 VignetteBuilder: knitr
-biocViews: DimensionReduction, Clustering, GraphAndNetwork, Spatial
+biocViews: DimensionReduction, Clustering, GraphAndNetwork, Spatial, ATACSeq, SingleCell, 
+    RNASeq, Software, Visualization
 Config/testthat/edition: 3

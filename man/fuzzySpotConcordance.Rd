@@ -42,6 +42,6 @@ m2 <- matrix(c(0.95, 0.025, 0.025,
                0.02, 0.02, 0.96, 
                0.01, 0.01, 0.98), 
                ncol = 3, byrow=TRUE)
-colnames(m1) <- colnames(m2) <- LETTERS[1:3]
+colnames(m1) <- colnames(m2) <- LETTERS[seq_len(3)]
 fuzzySpotConcordance(m1,m2)
 }

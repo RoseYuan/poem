@@ -252,7 +252,7 @@ rownames(awh) <- c("P1", "P2", "P3")
 awh <- awh[,c("1", "2", "3", "4", "5", "6", "7", "8")]
 
 awh <- data.frame(awh)
-colnames(awh) <- 1:8
+colnames(awh) <- seq_len(8)
 awh$prediction <- rownames(awh)
 
 

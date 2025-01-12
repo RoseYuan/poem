@@ -47,7 +47,7 @@ dependencies that aren't required here).
 }
 \examples{
 d1 <- mockData()
-CDbw(d1[,1:2], d1[,3])
+CDbw(d1[,seq_len(2)], d1[,3])
 }
 \references{
 Halkidi, M. and Vazirgiannis, M. (2008) A density-based cluster validity

@@ -37,7 +37,7 @@
 #' @export
 #' @examples
 #' d1 <- mockData()
-#' emb2knn(as.matrix(d1[,1:2]),k=5)
+#' emb2knn(as.matrix(d1[,seq_len(2)]),k=5)
 emb2knn <- function(x, k, BNPARAM=NULL){
   stopifnot(is.matrix(x) && is.numeric(x))
   stopifnot(is.numeric(k) && length(k)==1 && k>0 && (k %/% 1)==k)
@@ -69,7 +69,7 @@ emb2knn <- function(x, k, BNPARAM=NULL){
 #' @export
 #' @examples
 #' d1 <- mockData()
-#' emb2snn(as.matrix(d1[,1:2]),k=5)
+#' emb2snn(as.matrix(d1[,seq_len(2)]),k=5)
 #' @importFrom bluster neighborsToSNNGraph
 emb2snn <- function(x, k, type="rank", BNPARAM=NULL){
   knn <- emb2knn(x, k, BNPARAM=BNPARAM)

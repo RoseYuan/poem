@@ -36,7 +36,7 @@
 #' @author Christian Hennig
 #' @examples
 #' d1 <- mockData()
-#' CDbw(d1[,1:2], d1[,3])
+#' CDbw(d1[,seq_len(2)], d1[,3])
 CDbw <- function(x, labels, r=10, s=seq(0.1,0.8,by=0.1),
                  clusterstdev=TRUE, trace=FALSE){
   labels <- as.integer(as.factor(labels))

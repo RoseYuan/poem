@@ -68,7 +68,7 @@ The allowed values for \code{metrics} depend on the value of \code{level}:
 }
 }
 \examples{
-true <- rep(LETTERS[1:3], each=10)
+true <- rep(LETTERS[seq_len(3)], each=10)
 pred <- c(rep("A", 8), rep("B", 9), rep("C", 3), rep("D", 10))
 getPartitionMetrics(true, pred, level="class")
 getPartitionMetrics(true, pred, level="dataset")

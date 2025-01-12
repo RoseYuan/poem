@@ -7,7 +7,7 @@ total_instances <- 56
 reference_partition <- c(rep("U1", 20), rep("U2", 20), rep("U3", 8), rep("U4", 8))
 trial_partition <- c(rep("Z1", 20), rep("Z2", 20), rep("Z3", 4), rep("Z4", 4), rep("Z3", 4), rep("Z4", 4))
 dataset1 <- data.frame(
-  Instance = 1:total_instances,
+  Instance = seq_len(total_instances),
   Reference_Partition = reference_partition,
   Trial_Partition = trial_partition
 )
@@ -26,7 +26,7 @@ trial_partition <- c(
   rep("Z4", 8)                   # U4 goes to Z4
 )
 dataset2 <- data.frame(
-  Instance = 1:total_instances,
+  Instance = seq_len(total_instances),
   Reference_Partition = reference_partition,
   Trial_Partition = trial_partition
 )
@@ -50,7 +50,7 @@ trial_partition <- c(
   rep("Z4", 106)
 )
 dataset3 <- data.frame(
-  Instance = 1:total_instances,
+  Instance = seq_len(total_instances),
   Reference_Partition = as.factor(reference_partition),
   Trial_Partition = as.factor(trial_partition)
 )

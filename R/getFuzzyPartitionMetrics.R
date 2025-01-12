@@ -46,7 +46,7 @@
 #'                0.02, 0.02, 0.96, 
 #'                0.01, 0.01, 0.98), 
 #'                ncol = 3, byrow=TRUE)
-#' colnames(m1) <- colnames(m2) <- LETTERS[1:3]
+#' colnames(m1) <- colnames(m2) <- LETTERS[seq_len(3)]
 #' getFuzzyPartitionMetrics(fuzzyTrue=m1,fuzzyPred=m2, level="class")
 #' 
 #' # generate a fuzzy truth:
@@ -65,7 +65,8 @@
 #' hardTrue <- apply(fuzzyTrue,1,FUN=which.max)
 #' # some predicted labels:
 #' hardPred <- c(1,1,1,1,1,1,2,2,2)
-#' getFuzzyPartitionMetrics(hardPred=hardPred, hardTrue=hardTrue, fuzzyTrue=fuzzyTrue, nperms=3, level="class")
+#' getFuzzyPartitionMetrics(hardPred=hardPred, hardTrue=hardTrue, 
+#' fuzzyTrue=fuzzyTrue, nperms=3, level="class")
 #' 
 getFuzzyPartitionMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL, 
                                      hardPred=NULL, fuzzyPred=NULL, 

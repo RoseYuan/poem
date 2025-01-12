@@ -36,7 +36,7 @@
 #' @export
 #' @examples
 #' d1 <- mockData()
-#' getGraphMetrics(d1[,1:2], labels=d1$class, level="class")
+#' getGraphMetrics(d1[,seq_len(2)], labels=d1$class, level="class")
 getGraphMetrics <-function(x, labels, metrics=c("SI","NP","AMSP","PWC","NCE"), 
                            directed=NULL, k=10, shared=FALSE, level="class", ...){
   # Map level to the corresponding function

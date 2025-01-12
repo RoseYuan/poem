@@ -59,16 +59,16 @@ This is a slightly slower, but low-memory version of
 \examples{
 # generate a fuzzy truth:
 fuzzyTrue <- matrix(c(
-  0.95, 0.025, 0.025, 
-  0.98, 0.01, 0.01, 
-  0.96, 0.02, 0.02, 
-  0.95, 0.04, 0.01, 
-  0.95, 0.01, 0.04, 
-  0.99, 0.005, 0.005, 
-  0.025, 0.95, 0.025, 
-  0.97, 0.02, 0.01, 
-  0.025, 0.025, 0.95), 
-  ncol = 3, byrow=TRUE)
+0.95, 0.025, 0.025,
+0.98, 0.01, 0.01,
+0.96, 0.02, 0.02,
+0.95, 0.04, 0.01,
+0.95, 0.01, 0.04,
+0.99, 0.005, 0.005,
+0.025, 0.95, 0.025,
+0.97, 0.02, 0.01,
+0.025, 0.025, 0.95),
+ncol = 3, byrow=TRUE)
 # a hard truth:
 hardTrue <- apply(fuzzyTrue,1,FUN=which.max)
 # some predicted labels:
