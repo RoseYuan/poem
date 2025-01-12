@@ -7,7 +7,8 @@
 \format{
 \subsection{\code{sp_toys}}{
 
-A data frame with 240 rows and 11 columns, representing a 16 x 15 array of spots:
+A data frame with 240 rows and 11 columns, representing a 16 x 15 array of
+spots:
 \describe{
 \item{x, y}{Coordinates of each spots.}
 \item{row, col}{The row and column index of each spots.}

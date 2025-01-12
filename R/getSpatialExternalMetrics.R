@@ -10,14 +10,20 @@
 #' @export
 #' @details
 #' The allowed values for `metrics` depend on the value of `level`:
-#'   - If `level = "element"`, the allowed `metrics` are: `"SpatialSPC"`, `"SpatialNPC"`.
-#'   - If `level = "class"`, the allowed `metrics` are: `"SpatialWH"`,`"SpatialAWH"`, `"SpatialWC"`,`"SpatialAWC"`.
-#'   - If `level = "dataset"`, the allowed `metrics` are: `"SpatialRI"`,`"SpatialARI"`,`"SpatialWH"`,`"SpatialAWH"`, `"SpatialWC"`,`"SpatialAWC"`,`"SpatialAccuracy"`. 
+#'   - If `level = "element"`, the allowed `metrics` are: `"SpatialSPC"`, 
+#'   `"SpatialNPC"`.
+#'   - If `level = "class"`, the allowed `metrics` are: `"SpatialWH"`,
+#'   `"SpatialAWH"`, `"SpatialWC"`,`"SpatialAWC"`.
+#'   - If `level = "dataset"`, the allowed `metrics` are: `"SpatialRI"`,
+#'   `"SpatialARI"`,`"SpatialWH"`,`"SpatialAWH"`, `"SpatialWC"`,`"SpatialAWC"`,
+#'   `"SpatialAccuracy"`. 
 #' @examples
 #' data(sp_toys)
 #' data <- sp_toys
-#' getSpatialExternalMetrics(data$label, data$p1, data[,c("x", "y")], k=6, level="class")
-getSpatialExternalMetrics <- function(true, pred, location, k=6, alpha=0.5, level="class",
+#' getSpatialExternalMetrics(data$label, data$p1, data[,c("x", "y")], 
+#' k=6, level="class")
+getSpatialExternalMetrics <- function(true, pred, location, k=6, 
+                                      alpha=0.5, level="class",
                                       metrics=c("SpatialWH","SpatialAWH", 
                                                 "SpatialWC","SpatialAWC"),
                                       fuzzy_true=TRUE, fuzzy_pred=FALSE,
@@ -56,20 +62,25 @@ getSpatialExternalMetrics <- function(true, pred, location, k=6, alpha=0.5, leve
 #' class memberships for fuzzy metrics, or when calculating the weighted
 #' accuracy.
 #' @param metrics a vector of metric names to compute. 
-#' @param fuzzy_true Logical; whether to compute fuzzy class memberships for `true`.
-#' @param fuzzy_pred Logical; whether to compute fuzzy class memberships for `pred`.
+#' @param fuzzy_true Logical; whether to compute fuzzy class memberships 
+#' for `true`.
+#' @param fuzzy_pred Logical; whether to compute fuzzy class memberships 
+#' for `pred`.
 #' @param ... Optional params for \code{\link{fuzzyPartitionMetrics}} or 
 #'   \code{\link{findSpatialKNN}}.
 #' @return A data.frame of metrics.
-getSpatialGlobalExternalMetrics <- function(true, pred, location, k=6, alpha=0.5,
+getSpatialGlobalExternalMetrics <- function(true, pred, location, 
+                                            k=6, alpha=0.5,
                                             metrics=c("SpatialRI","SpatialARI",
                                                       "SpatialWH","SpatialAWH", 
                                                       "SpatialWC","SpatialAWC",
                                                       "SpatialAccuracy"), 
                                             fuzzy_true=TRUE, fuzzy_pred=FALSE,
                                             ...){
-  argfindSpatialKNN <- .checkEllipsisArgs(fnList=list(findSpatialKNN, fuzzyPartitionMetrics), ...)[[1]] 
-  argfuzzyPartitionMetrics <- .checkEllipsisArgs(fnList=list(findSpatialKNN, fuzzyPartitionMetrics), ...)[[2]] 
+  argfindSpatialKNN <- .checkEllipsisArgs(fnList=list(findSpatialKNN, 
+                                              fuzzyPartitionMetrics), ...)[[1]] 
+  argfuzzyPartitionMetrics <- .checkEllipsisArgs(fnList=list(findSpatialKNN, 
+                                              fuzzyPartitionMetrics), ...)[[2]] 
   if(length(intersect(metrics, c("SpatialRI","SpatialARI","SpatialWH",
                                  "SpatialAWH", "SpatialWC","SpatialAWC")))>0){
     hardTrue <- true
@@ -117,8 +128,10 @@ getSpatialClassExternalMetrics <- function(true, pred, location, k=6, alpha=0.5,
                                            fuzzy_true=TRUE, fuzzy_pred=FALSE,
                                            ...){
   
-  argfindSpatialKNN <- .checkEllipsisArgs(fnList=list(findSpatialKNN, fuzzyPartitionMetrics), ...)[[1]] 
-  argfuzzyPartitionMetrics <- .checkEllipsisArgs(fnList=list(findSpatialKNN, fuzzyPartitionMetrics), ...)[[2]]
+  argfindSpatialKNN <- .checkEllipsisArgs(fnList=list(findSpatialKNN, 
+                                              fuzzyPartitionMetrics), ...)[[1]] 
+  argfuzzyPartitionMetrics <- .checkEllipsisArgs(fnList=list(findSpatialKNN, 
+                                              fuzzyPartitionMetrics), ...)[[2]]
   hardTrue <- true
   hardPred <- pred
   fuzzyTrue <- do.call(getFuzzyLabel,
@@ -134,7 +147,7 @@ getSpatialClassExternalMetrics <- function(true, pred, location, k=6, alpha=0.5,
                    list(hardTrue=hardTrue, fuzzyTrue=fuzzyTrue,
                         hardPred=hardPred, fuzzyPred=fuzzyPred, 
                         fuzzy_true=fuzzy_true, fuzzy_pred=fuzzy_pred,
-                        metrics=c("fuzzyWH","fuzzyAWH", "fuzzyWC", "fuzzyAWC"))))
+                      metrics=c("fuzzyWH","fuzzyAWH", "fuzzyWC", "fuzzyAWC"))))
   colnames(res) <- sub("fuzzy", "Spatial",colnames(res))
   return(res[,c(metrics, "class","cluster")])
 }
@@ -148,8 +161,9 @@ getSpatialClassExternalMetrics <- function(true, pred, location, k=6, alpha=0.5,
 #'   [findSpatialKNN()].
 #' @keywords internal
 #' @return A data.frame of metrics.
-getSpatialElementExternalMetrics <- function(true, pred, location, k=6, alpha=0.5,
-                                             metrics=c("SpatialSPC", "SpatialNPC"),
+getSpatialElementExternalMetrics <- function(true, pred, location, 
+                                             k=6, alpha=0.5,
+                                         metrics=c("SpatialSPC", "SpatialNPC"),
                                              fuzzy_true=TRUE, fuzzy_pred=FALSE,
                                              ...){
   parsedArgs <- .checkEllipsisArgs(fnList=list(findSpatialKNN,

@@ -12,7 +12,8 @@ rows) from which nearest neighbors will be computed.}
 
 \item{k}{The number of nearest neighbors.}
 
-\item{type}{A string specifying the type of weighting scheme to use for shared neighbors.
+\item{type}{A string specifying the type of weighting scheme to use for
+shared neighbors.
 Possible choices include "rank", "number", and "jaccard". See \code{type} in
 \code{\link[bluster:makeSNNGraph]{bluster::neighborsToSNNGraph()}} for details.}
 

@@ -35,8 +35,8 @@ probability of elements (rows) in clusters (columns).}
 
 \item{metrics}{The metrics to compute. See details.}
 
-\item{level}{The level to calculate the metrics. Options include \code{"element"},
-\code{"class"} and \code{"dataset"}.}
+\item{level}{The level to calculate the metrics. Options include
+\code{"element"}, \code{"class"} and \code{"dataset"}.}
 
 \item{nperms}{The number of permutations (for correction for chance). If
 NULL (default), a first set of 10 permutations will be run to estimate
@@ -48,20 +48,20 @@ standard error of the mean across permutations (giving an idea of the
 precision of the adjusted metrics).}
 
 \item{returnElementPairAccuracy}{Logical. If TRUE, returns the per-element
-pair accuracy instead of the various parition-level and dataset-level metrics.
-Default FALSE.}
+pair accuracy instead of the various parition-level and dataset-level
+metrics. Default FALSE.}
 
 \item{BPPARAM}{BiocParallel params for multithreading (default none)}
 
 \item{useNegatives}{Logical; whether to include negative pairs in the
-concordance score (tends to result in a larger overall concordance and lower
-dynamic range of the score). Default TRUE.}
+concordance score (tends to result in a larger overall concordance and
+lower dynamic range of the score). Default TRUE.}
 
 \item{usePairs}{Logical; whether to compute over pairs instead of elements
 Recommended and TRUE by default.}
 
-\item{...}{Optional arguments for \code{\link{fuzzyPartitionMetrics}}: \code{tnorm}.
-Only useful when \code{fuzzy_true=TRUE} and \code{fuzzy_pred=TRUE}.}
+\item{...}{Optional arguments for \code{\link{fuzzyPartitionMetrics}}:
+\code{tnorm}. Only useful when \code{fuzzy_true=TRUE} and \code{fuzzy_pred=TRUE}.}
 }
 \value{
 A dataframe of metric results.
@@ -73,8 +73,10 @@ Computes a selection of external fuzzy clustering evaluation metrics.
 The allowed values for \code{metrics} depend on the value of \code{level}:
 \itemize{
 \item If \code{level = "element"}, the allowed \code{metrics} are: \code{"fuzzySPC"}.
-\item If \code{level = "class"}, the allowed \code{metrics} are: \code{"fuzzyWH"}, \code{"fuzzyAWH"}, \code{"fuzzyWC"}, \code{"fuzzyAWC"}.
-\item If \code{level = "dataset"}, the allowed \code{metrics} are: \code{"fuzzyRI"}, \code{"fuzzyARI"}, \code{"fuzzyWH"}, \code{"fuzzyAWH"}, \code{"fuzzyWC"}, \code{"fuzzyAWC"}.
+\item If \code{level = "class"}, the allowed \code{metrics} are: \code{"fuzzyWH"},
+\code{"fuzzyAWH"}, \code{"fuzzyWC"}, \code{"fuzzyAWC"}.
+\item If \code{level = "dataset"}, the allowed \code{metrics} are: \code{"fuzzyRI"},
+\code{"fuzzyARI"}, \code{"fuzzyWH"}, \code{"fuzzyAWH"}, \code{"fuzzyWC"}, \code{"fuzzyAWC"}.
 }
 }
 \examples{

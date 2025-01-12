@@ -22,7 +22,8 @@ attr(getGraphElementMetrics, "allowed_metrics") <- c("SI", "ISI", "NP","NCE")
 
 #' @importFrom bluster neighborsToKNNGraph
 #' @importFrom igraph adhesion cohesion set_vertex_attr
-.getGraphElementMetricsFromKnn <- function(x, labels, metrics, directed=NULL, ...){
+.getGraphElementMetricsFromKnn <- function(x, labels, metrics, 
+                                           directed=NULL, ...){
   .checkInputs(x,labels,checkNNcl=FALSE)
   x$nncl <- matrix(labels[x$index], nrow=nrow(x$index))
   labels <- as.factor(labels)
@@ -30,7 +31,8 @@ attr(getGraphElementMetrics, "allowed_metrics") <- c("SI", "ISI", "NP","NCE")
     # if the metrics are all to be computed in an undirected fashion, it's 
     # faster to start from an igraph:
     g <- bluster::neighborsToKNNGraph(x$index, directed=TRUE)
-    return(.getGraphElementMetricsFromKnn(x, labels, metrics, directed=FALSE,...))
+    return(.getGraphElementMetricsFromKnn(x, labels, metrics, 
+                                          directed=FALSE,...))
   }
   res <- as.data.frame(lapply(setNames(metrics,metrics), FUN=function(m){
     switch(m,
@@ -60,7 +62,8 @@ setMethod("getGraphElementMetrics", signature="list",
           })
 
 
-.getGraphElementMetricsFromEmbedding <- function(x, labels, metrics, directed=NULL,
+.getGraphElementMetricsFromEmbedding <- function(x, labels, metrics, 
+                                                 directed=NULL,
                                                k, shared=FALSE, ...){
   stopifnot(is.character(labels) || is.factor(labels) || is.integer(labels))
   labels <- as.factor(labels)

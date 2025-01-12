@@ -9,7 +9,8 @@
 #'  be a vector of characters, integers, numerics, or a factor, but not a list.
 #' @param metrics The metrics to compute. If omitted, main metrics will be 
 #'   computed. See below for more details.
-#' @param ... Optional arguments for MI, VI, or VM. See [clevr::mutual_info()], [clevr::variation_info()]
+#' @param ... Optional arguments for MI, VI, or VM. See [clevr::mutual_info()], 
+#' [clevr::variation_info()]
 #'  and [clevr::v_measure()] for more details.
 #' @keywords internal
 #' @return A dataframe of metric results. Possible metrics are:
@@ -50,9 +51,12 @@ getPartitionGlobalMetrics <-function(true, pred,
   if(length(true) != length(pred)){
     stop("The two input vectors should have the same length.")
   }
-  argMI <- .checkEllipsisArgs(fnList=list(mutual_info, variation_info, v_measure), ...)[[1]] 
-  argVI <- .checkEllipsisArgs(fnList=list(mutual_info, variation_info, v_measure), ...)[[2]] 
-  argVM <- .checkEllipsisArgs(fnList=list(mutual_info, variation_info, v_measure), ...)[[3]] 
+  argMI <- .checkEllipsisArgs(fnList=list(mutual_info, variation_info, 
+                                          v_measure), ...)[[1]] 
+  argVI <- .checkEllipsisArgs(fnList=list(mutual_info, variation_info, 
+                                          v_measure), ...)[[2]] 
+  argVM <- .checkEllipsisArgs(fnList=list(mutual_info, variation_info, 
+                                          v_measure), ...)[[3]] 
 
   res <- sortPairs(true, pred)
   n <- length(true)
@@ -80,10 +84,14 @@ getPartitionGlobalMetrics <-function(true, pred,
            EH = homogeneity(true, pred),
            EC = completeness(true, pred),
            VM = do.call(v_measure, c(argVM, list(true=true, pred=pred))),
-           VDM = mclustcomp(as.vector(true), as.vector(pred), types = "vdm")$scores,
-           Mirkin = mclustcomp(as.vector(true), as.vector(pred), types = "mirkin")$scores,
-           MHM = mclustcomp(as.vector(true), as.vector(pred), types = "mhm")$scores,
-           MMM = mclustcomp(as.vector(true), as.vector(pred), types = "mmm")$scores,
+           VDM = mclustcomp(as.vector(true), as.vector(pred), 
+                            types = "vdm")$scores,
+           Mirkin = mclustcomp(as.vector(true), as.vector(pred), 
+                               types = "mirkin")$scores,
+           MHM = mclustcomp(as.vector(true), as.vector(pred), 
+                            types = "mhm")$scores,
+           MMM = mclustcomp(as.vector(true), as.vector(pred), 
+                            types = "mmm")$scores,
            FM = FMeasure(.aux.conversion(true), 
                          .aux.conversion(pred)),
            NCR = .NCR(true, pred),
@@ -95,5 +103,6 @@ getPartitionGlobalMetrics <-function(true, pred,
   return(as.data.frame(t(res)))
 }
 
-attr(getPartitionGlobalMetrics, "allowed_metrics") <- c("RI","WC","WH","ARI","NCR","AWC",
-"AWH","MI","AMI","VI","EH","EC","VM","FM","VDM","Mirkin","MHM","MMM","Accuracy")
+attr(getPartitionGlobalMetrics, "allowed_metrics") <- c("RI","WC","WH","ARI",
+"NCR","AWC","AWH","MI","AMI","VI","EH","EC","VM","FM","VDM","Mirkin","MHM",
+"MMM","Accuracy")

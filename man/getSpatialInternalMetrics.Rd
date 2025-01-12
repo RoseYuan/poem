@@ -40,11 +40,13 @@ data.
 The allowed values for \code{metrics} depend on the value of \code{level}:
 \itemize{
 \item If \code{level = "element"}, the allowed \code{metrics} are: \code{"PAS"}, \code{"ELSA"}.
-\item If \code{level = "class"}, the allowed \code{metrics} are: \code{"CHAOS"}, \code{"PAS"}, \code{"ELSA"}.
+\item If \code{level = "class"}, the allowed \code{metrics} are: \code{"CHAOS"}, \code{"PAS"},
+\code{"ELSA"}.
 \item If \code{level = "dataset"}, the allowed \code{metrics} are:
 \itemize{
 \item \code{"PAS"}: Proportion of abnormal spots (PAS score)
-\item \code{"ELSA"}: Entropy-based Local indicator of Spatial Association (ELSA score)
+\item \code{"ELSA"}: Entropy-based Local indicator of Spatial Association
+(ELSA score)
 \item \code{"CHAOS"}: Spatial Chaos Score.
 \item \code{"MPC"}: Modified partition coefficient
 \item \code{"PC"}: Partition coefficient

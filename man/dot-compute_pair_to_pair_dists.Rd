@@ -12,7 +12,8 @@
 \item{distance}{String specifying the metric to compute the distances.}
 }
 \value{
-Numeric matrix of pairwise distances with self-distances set to \code{Inf}.
+Numeric matrix of pairwise distances with self-distances set to
+\code{Inf}.
 }
 \description{
 Compute the pairwise distances between points in matrix \code{X}.

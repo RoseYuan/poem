@@ -17,7 +17,8 @@
 in igraph. Currently only mst from igraph is implemented.}
 }
 \value{
-A list containing the density sparseness, internal core distances, and internal node indices.
+A list containing the density sparseness, internal core distances,
+and internal node indices.
 }
 \description{
 Computes the density sparseness for a given cluster.

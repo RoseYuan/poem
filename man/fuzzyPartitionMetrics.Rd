@@ -36,8 +36,8 @@ standard error of the mean across permutations (giving an idea of the
 precision of the adjusted metrics).}
 
 \item{returnElementPairAccuracy}{Logical. If TRUE, returns the per-element
-pair accuracy instead of the various parition-level and dataset-level metrics.
-Default FALSE.}
+pair accuracy instead of the various parition-level and dataset-level
+metrics. Default FALSE.}
 
 \item{BPPARAM}{BiocParallel params for multithreading (default none)}
 
@@ -46,7 +46,8 @@ pairs (either product, min, or lukasiewicz) when calculating the Wallace
 indices. Does not influence the NDC/ACI metrics.}
 }
 \value{
-When \code{returnElementPairAccuracy} is \code{FALSE}, return a list of metrics:
+When \code{returnElementPairAccuracy} is \code{FALSE}, return a list of
+metrics:
 \item{NDC}{Hullermeier's NDC (fuzzy rand index)}
 \item{ACI}{Ambrosio's Adjusted Concordance Index (ACI), i.e. a
 permutation-based fuzzy version of the adjusted Rand index.}
