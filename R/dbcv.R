@@ -2,7 +2,8 @@
 #' @description Compute the pairwise distances between points in matrix `X`.
 #' @param X Numeric matrix.
 #' @param distance String specifying the metric to compute the distances.
-#' @return Numeric matrix of pairwise distances with self-distances set to `Inf`.
+#' @return Numeric matrix of pairwise distances with self-distances set to 
+#' `Inf`.
 #' @keywords internal
 .compute_pair_to_pair_dists <- function(X, distance="euclidean") {
   if(distance == "sqeuclidean"){
@@ -18,7 +19,8 @@
 
 
 #' @title Get Sub matrix
-#' @description Extract a sub matrix from a matrix based on optional row and column indices.
+#' @description Extract a sub matrix from a matrix based on optional row and 
+#' column indices.
 #' @param arr Numeric matrix.
 #' @param inds_a Optional integer vector for row indices.
 #' @param inds_b Optional integer vector for column indices.
@@ -35,11 +37,14 @@
 }
 
 #' @title Get Internal Objects
-#' @description Computes the internal nodes and edges using Minimum Spanning Tree.
-#' @param mutual_reach_dists Numeric matrix representing mutual reachability distances.
+#' @description Computes the internal nodes and edges using Minimum Spanning 
+#' Tree.
+#' @param mutual_reach_dists Numeric matrix representing mutual reachability 
+#' distances.
 #' @param use_igraph_mst Logical flag to use MST implementation 
 #' in igraph. Currently only mst from igraph is implemented.
-#' @return A list containing the indices of internal nodes and their edge weights.
+#' @return A list containing the indices of internal nodes and their edge 
+#' weights.
 #' @importFrom Matrix Diagonal
 #' @keywords internal
 .get_internal_objects <- function(mutual_reach_dists, 
@@ -83,7 +88,8 @@
 #' @keywords internal
 .compute_mutual_reach_dists <- function(dists, d) {
   core_dists <- .compute_cluster_core_distance(dists = dists, d = d)
-  bc_core_dists <- matrix(rep(core_dists, dim(dists)[2]), nrow = dim(dists)[1], ncol = dim(dists)[2], byrow=TRUE)
+  bc_core_dists <- matrix(rep(core_dists, dim(dists)[2]), nrow = dim(dists)[1], 
+                          ncol = dim(dists)[2], byrow=TRUE)
   mutual_reach_dists <- pmax(dists, bc_core_dists)
   mutual_reach_dists <- pmax(mutual_reach_dists, t(bc_core_dists))
   return(list(core_dists = core_dists, mutual_reach_dists = mutual_reach_dists))
@@ -97,16 +103,19 @@
 #' @param use_igraph_mst Logical flag to use MST implementation 
 #' in igraph. Currently only mst from igraph is implemented.
 #' @keywords internal
-#' @return A list containing the density sparseness, internal core distances, and internal node indices.
+#' @return A list containing the density sparseness, internal core distances, 
+#' and internal node indices.
 .fn_density_sparseness <- function(cls_inds, dists, d, 
                                   use_igraph_mst) {
   mutual_reach <- .compute_mutual_reach_dists(dists = dists, d = d)
   internal_objects <- .get_internal_objects(mutual_reach$mutual_reach_dists, 
                                            use_igraph_mst)
   dsc <- max(internal_objects$internal_edge_weights)
-  internal_core_dists <- mutual_reach$core_dists[internal_objects$internal_node_inds]
+  internal_core_dists <- 
+    mutual_reach$core_dists[internal_objects$internal_node_inds]
   internal_node_inds <- cls_inds[internal_objects$internal_node_inds]
-  return(list(dsc = dsc, internal_core_dists = internal_core_dists, internal_node_inds = internal_node_inds))
+  return(list(dsc = dsc, internal_core_dists = internal_core_dists, 
+              internal_node_inds = internal_node_inds))
 }
 
 #' @title Density Separation of a Pair of Clusters
@@ -118,10 +127,15 @@
 #' @param internal_core_dists_j Numeric vector of core distances for cluster j.
 #' @keywords internal
 #' @return A list containing the cluster indices and their density separation.
-.fn_density_separation <- function(cls_i, cls_j, dists, internal_core_dists_i, internal_core_dists_j) {
-  bc_internal_core_dists_i <- matrix(rep(internal_core_dists_i, dim(dists)[2]), nrow = dim(dists)[1], ncol = dim(dists)[2], byrow=FALSE)
+.fn_density_separation <- function(cls_i, cls_j, dists, internal_core_dists_i, 
+                                   internal_core_dists_j) {
+  bc_internal_core_dists_i <- matrix(rep(internal_core_dists_i, dim(dists)[2]),
+                                     nrow = dim(dists)[1],ncol = dim(dists)[2], 
+                                     byrow=FALSE)
   sep <- pmax(dists, bc_internal_core_dists_i)
-  bc_internal_core_dists_j <- matrix(rep(internal_core_dists_j, dim(dists)[1]), nrow = dim(dists)[1], ncol = dim(dists)[2], byrow=TRUE)
+  bc_internal_core_dists_j <- matrix(rep(internal_core_dists_j, dim(dists)[1]),
+                                     nrow = dim(dists)[1],ncol = dim(dists)[2], 
+                                     byrow=TRUE)
   sep <- pmax(sep, bc_internal_core_dists_j)
   dspc_ij <- ifelse(length(sep) > 0, min(sep), Inf)
   return(list(cls_i = cls_i, cls_j = cls_j, dspc_ij = dspc_ij))
@@ -130,7 +144,8 @@
 #' @title Check Duplicated Samples
 #' @description Checks for duplicated samples in matrix `X`.
 #' @param X Numeric matrix of samples.
-#' @param threshold Numeric, the distance threshold to consider samples as duplicates.
+#' @param threshold Numeric, the distance threshold to consider samples as 
+#' duplicates.
 #' @keywords internal
 #' @return None
 .check_duplicated_samples <- function(X, threshold = 1e-9) {
@@ -182,17 +197,19 @@
 #' 
 #' @references Davoud Moulavi, et al. 2014; 10.1137/1.9781611973440.96.
 #' 
-#' @details This implementation will not fully reproduce the results of other existing 
-#' implementations (e.g. \url{https://github.com/FelSiq/DBCV}) due to the different 
-#' algorithms used for computing the Minimum Spanning Tree.
+#' @details This implementation will not fully reproduce the results of other 
+#' existing implementations (e.g. \url{https://github.com/FelSiq/DBCV}) due to 
+#' the different algorithms used for computing the Minimum Spanning Tree.
 #' @export
 #' @examples
 #' data(noisy_moon)
 #' data <- noisy_moon
 #' dbcv(data[, c("x", "y")], data$kmeans_label)
 #' dbcv(data[, c("x", "y")], data$hdbscan_label)
-dbcv <- function(X, labels, distance = "euclidean", noise_id = -1, check_duplicates = FALSE,
-                 use_igraph_mst = TRUE, BPPARAM=BiocParallel::SerialParam(), ...) {
+dbcv <- function(X, labels, distance = "euclidean", noise_id = -1, 
+                 check_duplicates = FALSE,
+                 use_igraph_mst = TRUE, BPPARAM=BiocParallel::SerialParam(), 
+                 ...) {
   X <- as.matrix(X)
   labels <- as.integer(labels)
   n <- dim(X)[1]
@@ -227,20 +244,28 @@ dbcv <- function(X, labels, distance = "euclidean", noise_id = -1, check_duplica
   cls_inds <- lapply(cluster_ids, function(cls_id) which(labels == cls_id))
   
   density_sparseness_results <- bplapply(seq_along(cls_inds), function(cls_id) {
-    .fn_density_sparseness(cls_inds[[cls_id]], .get_submatrix(dists, inds_a = cls_inds[[cls_id]]), 
+    .fn_density_sparseness(cls_inds[[cls_id]], 
+                           .get_submatrix(dists, inds_a = cls_inds[[cls_id]]), 
                           d = ncol(X), use_igraph_mst = use_igraph_mst)
   }, BPPARAM=BPPARAM)
   
   for (cls_id in seq_along(density_sparseness_results)) {
-    internal_objects_per_cls[[cls_id]] <- density_sparseness_results[[cls_id]]$internal_node_inds
-    internal_core_dists_per_cls[[cls_id]] <- density_sparseness_results[[cls_id]]$internal_core_dists
+    internal_objects_per_cls[[cls_id]] <- 
+      density_sparseness_results[[cls_id]]$internal_node_inds
+    internal_core_dists_per_cls[[cls_id]] <- 
+      density_sparseness_results[[cls_id]]$internal_core_dists
     dscs[cls_id] <- density_sparseness_results[[cls_id]]$dsc
   }
   
   if (length(cluster_ids) > 1) {
-    density_separation_results <- bplapply(combn(length(cluster_ids), 2, simplify = FALSE), function(pair) {
-      .fn_density_separation(pair[1], pair[2], .get_submatrix(dists, inds_a = internal_objects_per_cls[[pair[1]]], inds_b = internal_objects_per_cls[[pair[2]]]),
-                            internal_core_dists_per_cls[[pair[1]]], internal_core_dists_per_cls[[pair[2]]])
+    density_separation_results <- bplapply(combn(length(cluster_ids), 
+                                                 2, simplify = FALSE), 
+       function(pair) {
+      .fn_density_separation(pair[1], pair[2], 
+           .get_submatrix(dists, inds_a = internal_objects_per_cls[[pair[1]]], 
+                          inds_b = internal_objects_per_cls[[pair[2]]]),
+                            internal_core_dists_per_cls[[pair[1]]], 
+                            internal_core_dists_per_cls[[pair[2]]])
     }, BPPARAM=BPPARAM)
     
     for (result in density_separation_results) {

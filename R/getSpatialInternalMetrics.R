@@ -12,10 +12,12 @@
 #' @details
 #' The allowed values for `metrics` depend on the value of `level`:
 #'   - If `level = "element"`, the allowed `metrics` are: `"PAS"`, `"ELSA"`.
-#'   - If `level = "class"`, the allowed `metrics` are: `"CHAOS"`, `"PAS"`, `"ELSA"`.
+#'   - If `level = "class"`, the allowed `metrics` are: `"CHAOS"`, `"PAS"`, 
+#'   `"ELSA"`.
 #'   - If `level = "dataset"`, the allowed `metrics` are:
 #'      - `"PAS"`: Proportion of abnormal spots (PAS score)
-#'      - `"ELSA"`: Entropy-based Local indicator of Spatial Association (ELSA score)
+#'      - `"ELSA"`: Entropy-based Local indicator of Spatial Association 
+#'      (ELSA score)
 #'      - `"CHAOS"`: Spatial Chaos Score.
 #'      - `"MPC"`: Modified partition coefficient
 #'      - `"PC"`: Partition coefficient
@@ -62,7 +64,8 @@ getSpatialInternalMetrics <- function(labels, location, k=6, level="class",
 #' 
 #' @return A named vector containing metric values. Possible metrics are:
 #'   \item{PAS}{Proportion of abnormal spots (PAS score).}
-#'   \item{ELSA}{Entropy-based Local indicator of Spatial Association (ELSA score).}
+#'   \item{ELSA}{Entropy-based Local indicator of Spatial Association 
+#'   (ELSA score).}
 #'   \item{CHAOS}{Spatial Chaos Score.}
 #'   \item{MPC}{Modified partition coefficient} 
 #'   \item{PC}{Partition coefficient} 
@@ -87,7 +90,9 @@ getSpatialGlobalInternalMetrics <- function(labels, location, k=6,
   names(res)[names(res) == "ELSA.ELSA"] <- "ELSA"
   return(res)
 }
-attr(getSpatialGlobalInternalMetrics, "allowed_metrics") <- c("PAS","ELSA","CHAOS","MPC","PC","PE")
+attr(getSpatialGlobalInternalMetrics, "allowed_metrics") <- c("PAS","ELSA",
+                                                              "CHAOS","MPC",
+                                                              "PC","PE")
 
 #' Compute spot-level internal evaluation metrics for spatially-resolved data
 #' 
@@ -98,7 +103,8 @@ attr(getSpatialGlobalInternalMetrics, "allowed_metrics") <- c("PAS","ELSA","CHAO
 #' @param metrics Possible metrics: "PAS" and "ELSA".
 #' @param ... Optional params for [PAS()].
 #' @keywords internal
-#' @return A dataframe containing the metric values for all samples in the dataset.
+#' @return A dataframe containing the metric values for all samples in the 
+#' dataset.
 #' If PAS is calculated, the value is a Boolean about the abnormality of a spot.
 #' If ELSA is calculated, Ea, Ec and ELSA for all spots will be returned.
 getSpatialElementInternalMetrics <- function(labels, location, k=6, 
@@ -128,14 +134,18 @@ attr(getSpatialElementInternalMetrics, "allowed_metrics") <- c("PAS","ELSA")
 getSpatialClassInternalMetrics <- function(labels, location, k=6, 
                                       metrics=c("CHAOS", "PAS", "ELSA"), ...){
   res <- data.frame(class=sort(unique(labels)))
-  PAS <- .element2class(data.frame(PAS=PAS(labels, location, k=k, ...)$abnormalty, class=labels))
-  ELSA <- .element2class(data.frame(ELSA=ELSA(labels, location, k=k), class=labels))
+  PAS <- .element2class(data.frame(PAS=PAS(labels, location, 
+                                           k=k, ...)$abnormalty, class=labels))
+  ELSA <- .element2class(data.frame(ELSA=ELSA(labels, location, 
+                                              k=k), class=labels))
   CHAOS <- data.frame(CHAOS=CHAOS(labels, location, BNPARAM=NULL)$CHAOS_class, 
-                              class=names(CHAOS(labels, location, BNPARAM=NULL)$CHAOS_class))
+                              class=names(CHAOS(labels, location, 
+                                                BNPARAM=NULL)$CHAOS_class))
   if("PAS" %in% metrics){res <- merge(res, PAS, by="class")}
   if("ELSA" %in% metrics){res <- merge(res, ELSA, by="class")}
   if("CHAOS" %in% metrics){res <- merge(res, CHAOS, by="class")}
   colnames(res)[colnames(res) == "ELSA.ELSA"] <- "ELSA"
   return(res)
 }
-attr(getSpatialClassInternalMetrics, "allowed_metrics") <- c("CHAOS","PAS","ELSA")
+attr(getSpatialClassInternalMetrics, "allowed_metrics") <- c("CHAOS","PAS",
+                                                             "ELSA")

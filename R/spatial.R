@@ -27,7 +27,8 @@ findSpatialKNN <- function(location, k, keep_ties=TRUE, useMedianDist=FALSE,
                            BNPARAM=NULL){
   BNPARAM <- .decideBNPARAM(nrow(location), BNPARAM)
   if(keep_ties){
-    nn <- BiocNeighbors::findKNN(as.matrix(location), k=k*3, warn.ties=FALSE, BNPARAM=BNPARAM)
+    nn <- BiocNeighbors::findKNN(as.matrix(location), k=k*3, warn.ties=FALSE, 
+                                 BNPARAM=BNPARAM)
     mkd <- median(nn$distance[,k])
     nn <- lapply(seq_len(nrow(nn[[1]])), FUN=function(i){
       d <- nn$distance[i,]
@@ -35,7 +36,8 @@ findSpatialKNN <- function(location, k, keep_ties=TRUE, useMedianDist=FALSE,
       nn$index[i,sort(which(d<=mkd))]
     })
   }else{
-    nn <- BiocNeighbors::findKNN(as.matrix(location), k=k, warn.ties=FALSE, BNPARAM=BNPARAM)$index
+    nn <- BiocNeighbors::findKNN(as.matrix(location), k=k, warn.ties=FALSE, 
+                                 BNPARAM=BNPARAM)$index
     nn <- split(nn, seq_len(nrow(nn)))
   }
   return(nn)
@@ -44,11 +46,11 @@ findSpatialKNN <- function(location, k, keep_ties=TRUE, useMedianDist=FALSE,
 #' Compute neighborhood composition
 #' @description For a given dataset with locations and labels, compute the label
 #' composition of the neighborhood for each sample.
-#' @param alpha The parameter to control to what extend the spot itself contribute 
-#' to the class composition calculation. `"equal"` means it is weighted the 
-#' same as other neighbors. A numeric value between `0` and `1` means the weight of the 
-#' frequency contribution for the spot itself, and the frequency contribution 
-#' for its knn is then `1-alpha`. By default `0.5`.
+#' @param alpha The parameter to control to what extend the spot itself 
+#' contribute to the class composition calculation. `"equal"` means it is 
+#' weighted the same as other neighbors. A numeric value between `0` and `1` 
+#' means the weight of the frequency contribution for the spot itself, and the 
+#' frequency contribution for its knn is then `1-alpha`. By default `0.5`.
 #' @inheritParams findSpatialKNN 
 #' @param labels A vector containing the label for the dataset.
 #' @param ... Optional arguments for [findSpatialKNN()].
@@ -70,15 +72,18 @@ knnComposition <- function(location, k=6, labels, alpha=0.5, ...){
       stop("alpha must be either 'equal', or a numeric between 0 and 1.")
     }
   }
-  knn_weights <- lapply(knnLabels, function(x){x<-factor(x, levels=levels(labels)); as.vector(table(x)/length(x)) * (1-alpha)})
+  knn_weights <- lapply(knnLabels, 
+                        function(x){
+                          x<-factor(x, levels=levels(labels)); 
+                          as.vector(table(x)/length(x)) * (1-alpha)})
   knn_weights <- do.call(rbind, knn_weights)
-  i_weights <-  as.data.frame.matrix(table(seq_along(labels), labels)) * (alpha)
+  i_weights <-  as.data.frame.matrix(table(seq_along(labels), labels))*(alpha)
   return(knn_weights + i_weights)
 }
 
 #' Get fuzzy representation of labels
-#' @description Get fuzzy representation of labels according to the spatial neighborhood 
-#' label composition.
+#' @description Get fuzzy representation of labels according to the spatial 
+#' neighborhood label composition.
 #' @param labels An anomic vector of cluster labels
 #' @param location A matrix or data.frame of coordinates
 #' @param k The wished number of nearest neighbors
@@ -95,7 +100,7 @@ knnComposition <- function(location, k=6, labels, alpha=0.5, ...){
 getFuzzyLabel <- function(labels, location, k=6, alpha=0.5, ...){
   label <- factor(labels)
   stopifnot(!any(is.na(labels)))
-  res <- knnComposition(location=location, k=k, labels=labels, alpha=alpha, ...)
+  res <- knnComposition(location=location, k=k, labels=labels, alpha=alpha,...)
   return(res)
 }
 

@@ -27,7 +27,8 @@ vignette: |
 </style>
 
 ```{r, echo=FALSE, message=FALSE, warning = FALSE}
-knitr::opts_chunk$set(error=FALSE, message=FALSE, warning=FALSE, collapse = TRUE)
+knitr::opts_chunk$set(error=FALSE, message=FALSE, 
+                      warning=FALSE, collapse = TRUE)
 library(BiocStyle)
 ```
 
@@ -44,7 +45,8 @@ library(tidyr)
 # Prepare dataset
 
 ```{r}
-my_cols <-c("#D55E00", "#CC79A7","#E69F00","#0072B2","#009E73","#F0E442","#56B4E9","#000000")
+my_cols <-c("#D55E00", "#CC79A7","#E69F00","#0072B2","#009E73","#F0E442",
+            "#56B4E9","#000000")
 names(my_cols) <- as.character(seq(my_cols))
 ```
 
@@ -70,12 +72,14 @@ The manual annotation looks like this:
 
 ```{r, fig.height = 4, fig.width = 4, fig.small = TRUE}
 p1 <- ggplot(data) +
-  geom_point(aes(x = pxl_col_in_fullres, y = -pxl_row_in_fullres, color = reference), size=0.3) +
+  geom_point(aes(x = pxl_col_in_fullres, y = -pxl_row_in_fullres, 
+                 color = reference), size=0.3) +
   labs(x = "", y = "", color="", title="Manual annotation") +
   theme_minimal() +
   scale_color_manual(values = unname(my_cols)) +
   theme(
-  legend.box.background = element_rect(fill = "grey90", color = "black", size = 0.1),
+  legend.box.background = element_rect(fill = "grey90", color = "black", 
+                                       size = 0.1),
   legend.box.margin = margin(-1, -1, -1, -1),
   axis.title.x=element_blank(),
   legend.position = "bottom",
@@ -87,8 +91,10 @@ p1 <- ggplot(data) +
   panel.spacing.x = unit(-0.5, "cm"),
   panel.grid.major = element_blank(), 
   panel.grid.minor = element_blank(),
-  plot.title = element_text(hjust = 0.5, size=12, margin = margin(b = 5, t = 15))) +
-  guides(color = guide_legend(keywidth = 1, keyheight = 0.8, override.aes = list(size = 3)))
+  plot.title = element_text(hjust = 0.5, size=12, 
+                            margin = margin(b = 5, t = 15))) +
+  guides(color = guide_legend(keywidth = 1, keyheight = 0.8, 
+                              override.aes = list(size = 3)))
 
 p1
 ```
@@ -98,15 +104,19 @@ We then generate some hypothetical domain detection predictions by randomly perm
 ```{r}
 set.seed(123) # For reproducibility
 
-# Given a factor vector representing clustering results, simulate clustering variations including merging two clusters and adding random noise.
-simulate_clustering_variation <- function(clusters, split_cluster = NULL, merge_clusters = NULL, noise_level = 0.1) {
+# Given a factor vector representing clustering results, simulate clustering 
+# variations including merging two clusters and adding random noise.
+simulate_clustering_variation <- function(clusters, split_cluster = NULL, 
+                                          merge_clusters = NULL, 
+                                          noise_level = 0.1) {
   # Convert to numeric for easier manipulation
   merge_clusters <- which(levels(clusters) %in% merge_clusters)
   clusters <- as.numeric(clusters)
 
   # 1. Merging two clusters
   if (!is.null(merge_clusters)) {
-    clusters[clusters %in% merge_clusters] <- merge_clusters[1] # Rename both to the same label
+    clusters[clusters %in% merge_clusters] <- merge_clusters[1] 
+    # Rename both to the same label
   }
   
   # 2. Adding random noise
@@ -115,7 +125,8 @@ simulate_clustering_variation <- function(clusters, split_cluster = NULL, merge_
   if (n_noise > 0) {
     noise_indices <- sample(seq_len(n), n_noise) # Random indices to replace
     existing_levels <- unique(clusters)
-    clusters[noise_indices] <- sample(existing_levels, n_noise, replace = TRUE) # Replace with random levels
+    clusters[noise_indices] <- sample(existing_levels, n_noise, replace = TRUE) 
+    # Replace with random levels
   }
   
   # Convert back to factor and return
@@ -123,7 +134,8 @@ simulate_clustering_variation <- function(clusters, split_cluster = NULL, merge_
 }
 ```
 
-Below we simulate some prediction results with random noise as well as merging or splitting of domains:
+Below we simulate some prediction results with random noise as well as merging 
+or splitting of domains:
 
 ```{r}
 # P1: add random noise
@@ -157,13 +169,15 @@ p2 <- data %>% pivot_longer(cols=-c("pxl_col_in_fullres","pxl_row_in_fullres"),
                       names_to="prediction", values_to="domain") %>% 
   dplyr::filter(prediction != "reference") %>%
   ggplot() +
-  geom_point(aes(x = pxl_col_in_fullres, y = -pxl_row_in_fullres, color = domain), size=0.4) +
+  geom_point(aes(x = pxl_col_in_fullres, y = -pxl_row_in_fullres, 
+                 color = domain), size=0.4) +
   facet_wrap(~prediction, nrow=2) +
   labs(x = "", y = "", color="", title="") +
   theme_minimal() +
   scale_color_manual(values = unname(my_cols)) +
   theme(
-  legend.box.background = element_rect(fill = "grey90", color = "black", size = 0.1),
+  legend.box.background = element_rect(fill = "grey90", 
+                                       color = "black", size = 0.1),
   legend.box.margin = margin(-1, -1, -1, -1),
   axis.title.x=element_blank(),
   legend.position = "bottom",
@@ -177,7 +191,8 @@ p2 <- data %>% pivot_longer(cols=-c("pxl_col_in_fullres","pxl_row_in_fullres"),
   panel.grid.major = element_blank(), 
   panel.grid.minor = element_blank(),
   plot.title = element_text(hjust = 0.5, size=10))  +
-  guides(color = guide_legend(keywidth = 1, keyheight = 0.8, override.aes = list(size = 3)))
+  guides(color = guide_legend(keywidth = 1, keyheight = 0.8, 
+                              override.aes = list(size = 3)))
 
 ggdraw() +
   draw_plot(p2 + theme(plot.margin = margin(0, 2, 2, 2))) +  # Main plot
@@ -193,18 +208,24 @@ Let's first calculate two dataset-level metrics, SpatialARI and SpatialAccuracy:
 
 ```{r, fig.height = 2.5, fig.width = 5}
 res3 <- getSpatialExternalMetrics(true=data$reference, pred=data$P3,
-                                  location=data[,c("pxl_col_in_fullres","pxl_row_in_fullres")], level="dataset",
-                                  metrics=c("SpatialARI","SpatialAccuracy"), k=6,
+                                  location=data[,c("pxl_col_in_fullres",
+                                                   "pxl_row_in_fullres")], 
+                                  level="dataset", k=6,
+                                  metrics=c("SpatialARI","SpatialAccuracy"), 
                                   fuzzy_true = TRUE, fuzzy_pred = FALSE)
 
 res2 <- getSpatialExternalMetrics(true=data$reference, pred=data$P2,
-                                  location=data[,c("pxl_col_in_fullres","pxl_row_in_fullres")], level="dataset",
-                                  metrics=c("SpatialARI","SpatialAccuracy"), k=6,
+                                  location=data[,c("pxl_col_in_fullres",
+                                                   "pxl_row_in_fullres")], 
+                                  level="dataset", k=6,
+                                  metrics=c("SpatialARI","SpatialAccuracy"), 
                                   fuzzy_true = TRUE, fuzzy_pred = FALSE)
 
 res1 <- getSpatialExternalMetrics(true=data$reference, pred=data$P1,
-                                  location=data[,c("pxl_col_in_fullres","pxl_row_in_fullres")], level="dataset",
-                                  metrics=c("SpatialARI","SpatialAccuracy"), k=6,
+                                  location=data[,c("pxl_col_in_fullres",
+                                                   "pxl_row_in_fullres")], 
+                                  level="dataset", k=6,
+                                  metrics=c("SpatialARI","SpatialAccuracy"), 
                                   fuzzy_true = TRUE, fuzzy_pred = FALSE)
 
 cbind(bind_rows(list(res1, res2, res3), .id="P")) %>% 
@@ -217,32 +238,44 @@ cbind(bind_rows(list(res1, res2, res3), .id="P")) %>%
 ```
 
 ## Class/cluster level
-We can further calculate the class/cluster-level metrics, SpatialAWH and SpatialAWC, to get more insights about the errors our predictions make:
+We can further calculate the class/cluster-level metrics, SpatialAWH and 
+SpatialAWC, to get more insights about the errors our predictions make:
 
 ```{r}
 res3 <- getSpatialExternalMetrics(true=data$reference, pred=data$P3,
-                                  location=data[,c("pxl_col_in_fullres","pxl_row_in_fullres")], level="class",
-                                  metrics=c("SpatialAWH","SpatialAWC"), k=6,
+                                  location=data[,c("pxl_col_in_fullres",
+                                                   "pxl_row_in_fullres")], 
+                                  level="class", k=6,
+                                  metrics=c("SpatialAWH","SpatialAWC"), 
                                   fuzzy_true = TRUE, fuzzy_pred = FALSE)
 
 res2 <- getSpatialExternalMetrics(true=data$reference, pred=data$P2,
-                                  location=data[,c("pxl_col_in_fullres","pxl_row_in_fullres")], level="class",
-                                  metrics=c("SpatialAWH","SpatialAWC"), k=6,
+                                  location=data[,c("pxl_col_in_fullres",
+                                                   "pxl_row_in_fullres")], 
+                                  level="class", k=6,
+                                  metrics=c("SpatialAWH","SpatialAWC"),
                                   fuzzy_true = TRUE, fuzzy_pred = FALSE)
 
 res1 <- getSpatialExternalMetrics(true=data$reference, pred=data$P1,
-                                  location=data[,c("pxl_col_in_fullres","pxl_row_in_fullres")], level="class",
-                                  metrics=c("SpatialAWH","SpatialAWC"), k=6,
+                                  location=data[,c("pxl_col_in_fullres",
+                                                   "pxl_row_in_fullres")], 
+                                  level="class", k=6,
+                                  metrics=c("SpatialAWH","SpatialAWC"),
                                   fuzzy_true = TRUE, fuzzy_pred = FALSE)
 res1
 ```
 
-Note that the indices in columns "class" and "cluster" correspond to the levels of original factors passed to `true` and `pred`. We align them back to the previous factor values, and then plot them in heatmap:
+Note that the indices in columns "class" and "cluster" correspond to the levels 
+of original factors passed to `true` and `pred`. We align them back to the 
+previous factor values, and then plot them in heatmap:
 
 ```{r}
-awh1 <- na.omit(res1[,c("SpatialAWH", "cluster")]) %>% mutate(cluster = levels(data$P1)[cluster])
-awh2 <- na.omit(res2[,c("SpatialAWH", "cluster")]) %>% mutate(cluster = levels(data$P2)[cluster])
-awh3 <- na.omit(res3[,c("SpatialAWH", "cluster")]) %>% mutate(cluster = levels(data$P3)[cluster])
+awh1 <- na.omit(res1[,c("SpatialAWH", "cluster")]) %>% 
+  mutate(cluster = levels(data$P1)[cluster])
+awh2 <- na.omit(res2[,c("SpatialAWH", "cluster")]) %>% 
+  mutate(cluster = levels(data$P2)[cluster])
+awh3 <- na.omit(res3[,c("SpatialAWH", "cluster")]) %>% 
+  mutate(cluster = levels(data$P3)[cluster])
 
 awh <- cbind(bind_rows(list(awh1, awh2, awh3), .id="P")) %>% 
   pivot_wider(names_from = cluster, values_from = SpatialAWH) %>%
@@ -256,7 +289,8 @@ colnames(awh) <- seq_len(8)
 awh$prediction <- rownames(awh)
 
 
-p4 <- awh %>% pivot_longer(cols=-c("prediction"), names_to="cluster", values_to = "AWH") %>%
+p4 <- awh %>% pivot_longer(cols=-c("prediction"), names_to="cluster", 
+                           values_to = "AWH") %>%
   mutate(prediction = factor(prediction), cluster=factor(cluster)) %>%
   ggplot(aes(cluster, prediction, fill=AWH)) +
   geom_tile() +
@@ -266,9 +300,12 @@ p4 <- awh %>% pivot_longer(cols=-c("prediction"), names_to="cluster", values_to 
 ```
 
 ```{r}
-awc1 <- na.omit(res1[,c("SpatialAWC", "class")]) %>% mutate(class = levels(data$reference)[class])
-awc2 <- na.omit(res2[,c("SpatialAWC", "class")]) %>% mutate(class = levels(data$reference)[class])
-awc3 <- na.omit(res3[,c("SpatialAWC", "class")]) %>% mutate(class = levels(data$reference)[class])
+awc1 <- na.omit(res1[,c("SpatialAWC", "class")]) %>% 
+  mutate(class = levels(data$reference)[class])
+awc2 <- na.omit(res2[,c("SpatialAWC", "class")]) %>% 
+  mutate(class = levels(data$reference)[class])
+awc3 <- na.omit(res3[,c("SpatialAWC", "class")]) %>% 
+  mutate(class = levels(data$reference)[class])
 
 awc <- cbind(bind_rows(list(awc1, awc2, awc3), .id="P")) %>% 
   pivot_wider(names_from = class, values_from = SpatialAWC) %>%
@@ -281,7 +318,8 @@ awc <- data.frame(awc)
 awc$prediction <- rownames(awc)
 
 
-p5 <- awc %>% pivot_longer(cols=-c("prediction"), names_to="class", values_to = "AWC") %>%
+p5 <- awc %>% pivot_longer(cols=-c("prediction"), names_to="class", 
+                           values_to = "AWC") %>%
   mutate(prediction = factor(prediction), class=factor(class)) %>%
   ggplot(aes(class, prediction, fill=AWC)) +
   geom_tile() +
@@ -294,7 +332,10 @@ p5 <- awc %>% pivot_longer(cols=-c("prediction"), names_to="class", values_to = 
 plot_grid(p4, p5, rel_widths=c(1,1), scale=c(1, 1))
 ```
 
-The class-level AWC highlights that in P2, Layer3 has low completeness. This align with our simulation that Layer3 is splitted into 3 clusters in P2. Similarly, the cluster-level AWH highlights that in P3, cluster 3 has low homogeneity, consistent with the merging of layer 4 and 5.
+The class-level AWC highlights that in P2, Layer3 has low completeness. This 
+align with our simulation that Layer3 is splitted into 3 clusters in P2. 
+Similarly, the cluster-level AWH highlights that in P3, cluster 3 has low 
+homogeneity, consistent with the merging of layer 4 and 5.
 
 
 ## Element level
@@ -303,21 +344,30 @@ One can also calculate element-level metric, SPC, for visualization.
 
 ```{r, fig.height = 2.5, fig.width = 8}
 res1 <- cbind(getSpatialExternalMetrics(true=data$reference, pred=data$P1,
-                                  location=data[,c("pxl_col_in_fullres","pxl_row_in_fullres")], level="element",
+                                  location=data[,c("pxl_col_in_fullres",
+                                                   "pxl_row_in_fullres")], 
+                                  level="element",
                                   metrics=c("SpatialSPC"), k=6,
-                                  fuzzy_true = TRUE, fuzzy_pred = FALSE, useNegatives = FALSE), 
+                                  fuzzy_true = TRUE, fuzzy_pred = FALSE, 
+                                  useNegatives = FALSE), 
               data[,c("pxl_col_in_fullres", "pxl_row_in_fullres")])
 
 res2 <- cbind(getSpatialExternalMetrics(true=data$reference, pred=data$P2,
-                                  location=data[,c("pxl_col_in_fullres","pxl_row_in_fullres")], level="element",
+                                  location=data[,c("pxl_col_in_fullres",
+                                                   "pxl_row_in_fullres")], 
+                                  level="element",
                                   metrics=c("SpatialSPC"), k=6,
-                                  fuzzy_true = TRUE, fuzzy_pred = FALSE, useNegatives = FALSE),
+                                  fuzzy_true = TRUE, fuzzy_pred = FALSE, 
+                                  useNegatives = FALSE),
                data[,c("pxl_col_in_fullres", "pxl_row_in_fullres")])
 
 res3 <- cbind(getSpatialExternalMetrics(true=data$reference, pred=data$P3,
-                                  location=data[,c("pxl_col_in_fullres","pxl_row_in_fullres")], level="element",
+                                  location=data[,c("pxl_col_in_fullres","
+                                                   pxl_row_in_fullres")], 
+                                  level="element",
                                   metrics=c("SpatialSPC"), k=6,
-                                  fuzzy_true = TRUE, fuzzy_pred = FALSE, useNegatives = FALSE),
+                                  fuzzy_true = TRUE, fuzzy_pred = FALSE, 
+                                  useNegatives = FALSE),
                data[,c("pxl_col_in_fullres", "pxl_row_in_fullres")])
 
 
@@ -330,11 +380,15 @@ cbind(bind_rows(list(res1, res2, res3), .id="P")) %>%
   facet_wrap(~P, scales = "free") +
   theme_bw() + labs(x="Prediction", y="", color="SpatialSPC")
 ```
-This clear highlights the low concordance regions in each prediction as expected.
+This clear highlights the low concordance regions in each prediction as 
+expected.
 
 # Calculate internal spatial metrics
 
-When the manual annotation is not available, one can use internal metrics, CHAOS, ELSA and PAS, to understand the domain continuity and local homogeneity for a domain detection result. To illustrate this, we simulate P4 and P5 with 20% and 30% random noise, respectively.
+When the manual annotation is not available, one can use internal metrics, 
+CHAOS, ELSA and PAS, to understand the domain continuity and local homogeneity 
+for a domain detection result. To illustrate this, we simulate P4 and P5 with 
+20% and 30% random noise, respectively.
 
 ```{r}
 # P4: add 20% random noise 
@@ -353,10 +407,13 @@ data$P5 <- simulate_clustering_variation(
 We calculate the internal spatial metrics for P1-P5:
 
 ```{r}
-internal <-lapply(setNames(c("reference","P1","P2","P3","P4","P5"), c("reference","P1","P2","P3","P4","P5")),
-                  function(x){getSpatialInternalMetrics(data[[x]],                                                                                                             location=data[,c("pxl_col_in_fullres","pxl_row_in_fullres")],
-                                                        k=6, level="dataset", 
-                                                        metrics=c("PAS", "ELSA", "CHAOS"))})
+internal <-lapply(setNames(c("reference","P1","P2","P3","P4","P5"), 
+                           c("reference","P1","P2","P3","P4","P5")),
+function(x){getSpatialInternalMetrics(data[[x]],
+                                      location=data[, c("pxl_col_in_fullres",
+                                                        "pxl_row_in_fullres")],
+                                      k=6, level="dataset", 
+                                      metrics=c("PAS", "ELSA", "CHAOS"))})
 internal <- bind_rows(internal,.id = "prediction")
 ```
 
@@ -373,17 +430,21 @@ internal %>%
         axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1))
 ```
 
-The lower the scores, the smoother the predictions. As expected, the smoothness decrease from P3 to P5 as the noise level increase.
+The lower the scores, the smoother the predictions. As expected, the smoothness 
+decrease from P3 to P5 as the noise level increase.
 
-The internal metrics can also be calculated at the element level. For example we can calculate the element-wise ELSA score, which is a score for local diversity and can be regarded as edge detector:
+The internal metrics can also be calculated at the element level. For example we 
+can calculate the element-wise ELSA score, which is a score for local diversity 
+and can be regarded as edge detector:
 
 ```{r, fig.height = 4, fig.width = 8}
-internal <-lapply(setNames(c("reference","P1","P2","P3","P4","P5"), c("reference","P1","P2","P3","P4","P5")),
-                  function(x){cbind(
-                    getSpatialInternalMetrics(data[[x]],
-                                              location = data[,c("pxl_col_in_fullres","pxl_row_in_fullres")],
-                                              k=6, level="element", metrics=c( "ELSA")), 
-                    data[,c("pxl_col_in_fullres", "pxl_row_in_fullres")])})
+internal <-lapply(setNames(c("reference","P1","P2","P3","P4","P5"), 
+                           c("reference","P1","P2","P3","P4","P5")),
+function(x){cbind(
+  getSpatialInternalMetrics(data[[x]],
+                location = data[,c("pxl_col_in_fullres","pxl_row_in_fullres")],
+                k=6, level="element", metrics=c( "ELSA")), 
+  data[,c("pxl_col_in_fullres", "pxl_row_in_fullres")])})
 internal <- bind_rows(internal,.id = "prediction")
 
 internal %>%

@@ -22,11 +22,14 @@ setGeneric("getGraphClassMetrics", signature="x",
                         directed=NULL, ...)
              standardGeneric("getGraphClassMetrics"))
 
-attr(getGraphClassMetrics, "allowed_metrics") <- c("SI", "ISI", "NP", "NCE", "AMSP", "PWC", "adhesion", "cohesion")
+attr(getGraphClassMetrics, "allowed_metrics") <- c("SI", "ISI", "NP", "NCE", 
+                                                   "AMSP", "PWC", "adhesion", 
+                                                   "cohesion")
 
 #' @importFrom bluster neighborsToKNNGraph
 #' @importFrom igraph adhesion cohesion set_vertex_attr
-.getGraphClassMetricsFromKnn <- function(x, labels, metrics, directed=NULL, ...){
+.getGraphClassMetricsFromKnn <- function(x, labels, metrics, 
+                                         directed=NULL, ...){
   .checkInputs(x,labels,checkNNcl=FALSE)
   x$nncl <- matrix(labels[x$index], nrow=nrow(x$index))
   labels <- as.factor(labels)
@@ -43,14 +46,22 @@ attr(getGraphClassMetrics, "allowed_metrics") <- c("SI", "ISI", "NP", "NCE", "AM
   tt <- as.integer(table(labels))
   res <- as.data.frame(lapply(setNames(metrics,metrics), FUN=function(m){
     switch(m,
-           SI=rowsum(.simpsonIndex(x, labels, directed=directed), labels)[,1]/tt,
-           ISI=rowsum(1/.simpsonIndex(x, labels, directed=directed), labels)[,1]/tt,
-           NP=rowsum(.nPurity(x, labels, directed=directed), labels)[,1]/tt,
-           NCE=rowsum(.nlog2Enrichment(x, labels, directed=directed), labels)[,1]/tt,
-           adhesion=.igraphFunPerClass(g, FUN=igraph::adhesion, directed=directed),
-           cohesion=.igraphFunPerClass(g, FUN=igraph::cohesion, directed=directed),
-           AMSP=.igraphFunPerClass(g, FUN=.adjMeanShortestPath, directed=directed),
-           PWC=as.numeric(rowsum(as.integer(.nPurity(x,labels, directed=directed)<=0.5),
+           SI=rowsum(.simpsonIndex(x, labels, directed=directed), 
+                     labels)[,1]/tt,
+           ISI=rowsum(1/.simpsonIndex(x, labels, directed=directed), 
+                      labels)[,1]/tt,
+           NP=rowsum(.nPurity(x, labels, directed=directed), 
+                     labels)[,1]/tt,
+           NCE=rowsum(.nlog2Enrichment(x, labels, directed=directed), 
+                      labels)[,1]/tt,
+           adhesion=.igraphFunPerClass(g, FUN=igraph::adhesion, 
+                                       directed=directed),
+           cohesion=.igraphFunPerClass(g, FUN=igraph::cohesion, 
+                                       directed=directed),
+           AMSP=.igraphFunPerClass(g, FUN=.adjMeanShortestPath, 
+                                   directed=directed),
+           PWC=as.numeric(rowsum(as.integer(.nPurity(x,labels, 
+                                                     directed=directed)<=0.5),
                                  labels)[,1]/tt),
            stop("Unknown metric ", m)
            )
@@ -75,7 +86,8 @@ setMethod("getGraphClassMetrics", signature="list",
           })
 
 
-.getGraphClassMetricsFromEmbedding <- function(x, labels, metrics, directed=NULL,
+.getGraphClassMetricsFromEmbedding <- function(x, labels, metrics, 
+                                               directed=NULL,
                                                k, shared=FALSE, ...){
   stopifnot(is.character(labels) || is.factor(labels) || is.integer(labels))
   labels <- as.factor(labels)
@@ -116,14 +128,22 @@ setMethod("getGraphClassMetrics", signature="matrix",
   tt <- as.integer(table(labels))
   res <- as.data.frame(lapply(setNames(metrics,metrics), FUN=function(m){
     switch(m,
-           SI=rowsum(.simpsonIndex(x, labels, directed=directed), labels)[,1]/tt,
-           ISI=rowsum(1/.simpsonIndex(x, labels, directed=directed), labels)[,1]/tt,
-           NP=rowsum(.nPurity(x, labels, directed=directed), labels)[,1]/tt,
-           NCE=rowsum(.nlog2Enrichment(x, labels, directed=directed), labels)[,1]/tt,
-           adhesion=.igraphFunPerClass(x, FUN=igraph::adhesion, directed=directed),
-           cohesion=.igraphFunPerClass(x, FUN=igraph::cohesion, directed=directed),
-           AMSP=.igraphFunPerClass(x, FUN=.adjMeanShortestPath, directed=directed),
-           PWC=as.numeric(rowsum(as.integer(.nPurity(x,labels, directed=directed)<=0.5),
+           SI=rowsum(.simpsonIndex(x, labels, directed=directed), 
+                     labels)[,1]/tt,
+           ISI=rowsum(1/.simpsonIndex(x, labels, directed=directed), 
+                      labels)[,1]/tt,
+           NP=rowsum(.nPurity(x, labels, directed=directed), 
+                     labels)[,1]/tt,
+           NCE=rowsum(.nlog2Enrichment(x, labels, directed=directed), 
+                      labels)[,1]/tt,
+           adhesion=.igraphFunPerClass(x, FUN=igraph::adhesion, 
+                                       directed=directed),
+           cohesion=.igraphFunPerClass(x, FUN=igraph::cohesion, 
+                                       directed=directed),
+           AMSP=.igraphFunPerClass(x, FUN=.adjMeanShortestPath, 
+                                   directed=directed),
+           PWC=as.numeric(rowsum(as.integer(.nPurity(x,labels, 
+                                                     directed=directed)<=0.5),
                                  labels)[,1]/tt),
            stop("Unknown metric ", m)
     )

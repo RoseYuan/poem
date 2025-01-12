@@ -27,11 +27,12 @@
 #' @importFrom stats mahalanobis dist
 #' @references 
 #' Halkidi, M. and Vazirgiannis, M. (2008) A density-based cluster validity 
-#' approach using multi-representatives. Pattern Recognition Letters 29, 773-786.
-#' @references Halkidi, M., Vazirgiannis, M. and Hennig, C. (2015) Method-independent 
-#' indices for cluster validation. In C. Hennig, M. Meila, F. Murtagh, R. Rocci 
-#' (eds.) Handbook of Cluster Analysis, CRC Press/Taylor \code{&} Francis, Boca 
-#' Raton.
+#' approach using multi-representatives. Pattern Recognition Letters 29, 
+#' 773-786.
+#' @references Halkidi, M., Vazirgiannis, M. and Hennig, C. (2015) 
+#' Method-independent indices for cluster validation. In C. Hennig, M. Meila, 
+#' F. Murtagh, R. Rocci (eds.) Handbook of Cluster Analysis, CRC Press/Taylor 
+#' \code{&} Francis, Boca Raton.
 #'
 #' @author Christian Hennig
 #' @examples

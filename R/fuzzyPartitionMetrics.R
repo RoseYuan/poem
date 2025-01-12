@@ -21,8 +21,8 @@
 #'   standard error of the mean across permutations (giving an idea of the 
 #'   precision of the adjusted metrics).
 #' @param returnElementPairAccuracy Logical. If TRUE, returns the per-element
-#'   pair accuracy instead of the various parition-level and dataset-level metrics.
-#'   Default FALSE.
+#'   pair accuracy instead of the various parition-level and dataset-level 
+#'   metrics. Default FALSE.
 #' @param BPPARAM BiocParallel params for multithreading (default none)
 #' @param tnorm Which type of t-norm operation to use for class membership of
 #'   pairs (either product, min, or lukasiewicz) when calculating the Wallace 
@@ -33,7 +33,8 @@
 #' 
 #' @author Pierre-Luc Germain
 #' 
-#' @return When `returnElementPairAccuracy` is `FALSE`, return a list of metrics:
+#' @return When `returnElementPairAccuracy` is `FALSE`, return a list of 
+#' metrics:
 #'   \item{NDC}{Hullermeier's NDC (fuzzy rand index)}
 #'   \item{ACI}{Ambrosio's Adjusted Concordance Index (ACI), i.e. a 
 #'     permutation-based fuzzy version of the adjusted Rand index.}
@@ -122,8 +123,8 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
       }else{
         Bpair <- Bpairs[,i]
       }
-      # compute 1 - the distance between pair concordances weighted by their being 
-      # of the same class in B
+  # compute 1 - the distance between pair concordances weighted by their being 
+  # of the same class in B
       c(c=sum((1-diff)*Bpair), n=sum(Bpair))
     })
     a[2,which(a[2,]==0)] <- 1  # avoid NaNs for singletons
@@ -209,7 +210,8 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
   switch(tnorm,
      product=tcrossprod,
      lukasiewicz=function(p){
-       vapply(seq_along(p), FUN=function(i) pmax(0,p+p[i]-1), numeric(length(p)))
+       vapply(seq_along(p), FUN=function(i) pmax(0,p+p[i]-1), 
+              numeric(length(p)))
      },
      min=function(p){
        vapply(seq_along(p), FUN=function(i) pmin(p,p[i]), numeric(length(p)))
@@ -243,8 +245,8 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
 #'   whether the variation across permutations is above 0.0025, in which case 
 #'   more (max 1000) permutations will be run.
 #' @param returnElementPairAccuracy Logical. If TRUE, returns the per-element
-#'   pair accuracy instead of the various parition-level and dataset-level metrics.
-#'   Default FALSE.
+#'   pair accuracy instead of the various parition-level and dataset-level
+#'    metrics. Default FALSE.
 #' @param lowMemory Logical; whether to use the slower, low-memory algorithm.
 #'   By default this is enabled if the projected memory usage is higher than 
 #'   ~2GB.
@@ -452,8 +454,8 @@ fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL,
 #'   whether the variation across permutations is above 0.0025, in which case 
 #'   more (max 1000) permutations will be run.
 #' @param returnElementPairAccuracy Logical. If TRUE, returns the per-element
-#'   pair accuracy instead of the various parition-level and dataset-level metrics.
-#'   Default FALSE.
+#'   pair accuracy instead of the various parition-level and dataset-level 
+#'   metrics. Default FALSE.
 #' @param verbose Logical; whether to print info and warnings, including the 
 #'   standard error of the mean across permutations (giving an idea of the 
 #'   precision of the adjusted metrics).
@@ -671,7 +673,8 @@ fuzzySpotConcordance <- function(P, Q){
   stopifnot(is.matrix(Q) && (is.numeric(Q) | is.integer(Q)))
   stopifnot(nrow(P)==nrow(Q))
   
-  diff <- as.matrix(0.5*abs(dist(P,method="manhattan")-dist(Q,method="manhattan")))
+  diff <- as.matrix(0.5*abs(dist(P,method="manhattan") -
+                              dist(Q,method="manhattan")))
   return(1-rowSums(diff/(ncol(diff)-1)))
 }
 
@@ -687,8 +690,8 @@ fuzzySpotConcordance <- function(P, Q){
 #'   probability of elements (rows) in clusters (columns). Must have the same 
 #'   number of rows as the length of `hardTrue`.
 #' @param useNegatives Logical; whether to include negative pairs in the 
-#'   concordance score (tends to result in a larger overall concordance and lower
-#'   dynamic range of the score). Default TRUE.
+#'   concordance score (tends to result in a larger overall concordance and 
+#'   lower dynamic range of the score). Default TRUE.
 #' @param verbose Logical; whether to print expected memory usage for large 
 #'   datasets.
 #'

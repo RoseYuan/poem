@@ -27,7 +27,8 @@ vignette: |
 </style>
 
 ```{r, echo=FALSE, message=FALSE, warning = FALSE}
-knitr::opts_chunk$set(error=FALSE, message=FALSE, warning=FALSE, collapse = TRUE)
+knitr::opts_chunk$set(error=FALSE, message=FALSE, 
+                      warning=FALSE, collapse = TRUE)
 library(BiocStyle)
 ```
 
@@ -188,7 +189,8 @@ plotGraphs <- function(d, k=7){
   }), .id="graph")
   ggplot(gn, aes(x = x, y = y, xend = xend, yend = yend)) + theme_blank() + 
     theme(legend.position = "right") + geom_edges(alpha=0.5, colour="grey") + 
-    geom_nodes(aes(colour=class, shape=class), size=2) + facet_wrap(~graph, nrow=1)
+    geom_nodes(aes(colour=class, shape=class), size=2) + 
+    facet_wrap(~graph, nrow=1)
 }
 ```
 
@@ -208,8 +210,12 @@ getGraphMetrics(x=g1[,c("x","y")], labels=g1$class, metrics=c("PWC","ISI"),
 ```
 
 ```{r, fig.height = 3, fig.width = 7}
-res1 <- getGraphMetrics(x=g1[,c("x","y")], labels=g1$class,metrics=c("PWC","ISI"), level="class", directed=FALSE, k=7, shared=FALSE)
-res2 <- getGraphMetrics(x=g2[,c("x","y")], labels=g2$class, metrics=c("PWC","ISI"), level="class", directed=FALSE, k=7, shared=FALSE)
+res1 <- getGraphMetrics(x=g1[,c("x","y")], 
+                        labels=g1$class,metrics=c("PWC","ISI"), 
+                        level="class", directed=FALSE, k=7, shared=FALSE)
+res2 <- getGraphMetrics(x=g2[,c("x","y")], labels=g2$class, 
+                        metrics=c("PWC","ISI"), level="class", 
+                        directed=FALSE, k=7, shared=FALSE)
 
 bind_rows(list(graph1=res1, graph2=res2), .id="graph") %>% 
   pivot_longer(cols=c("PWC","ISI"), names_to="metric",values_to="value") %>%

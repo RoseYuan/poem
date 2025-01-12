@@ -125,4 +125,5 @@ getPartitionClassMetrics <-function(true, pred, metrics=c("WC","WH","AWC","AWH",
   rownames(res) <- NULL
   return(res)
 }
-attr(getPartitionClassMetrics, "allowed_metrics") <- c("WC","WH","AWC","AWH","FM")
+attr(getPartitionClassMetrics, "allowed_metrics") <- 
+  c("WC","WH","AWC","AWH","FM")
