@@ -50,5 +50,6 @@ Suggests:
     SpatialExperiment,
     STexampleData
 VignetteBuilder: knitr
-biocViews: DimensionReduction, Clustering, GraphAndNetwork, Spatial
+biocViews: DimensionReduction, Clustering, GraphAndNetwork, Spatial, ATACSeq, SingleCell, 
+RNASeq, Software, Visualization
 Config/testthat/edition: 3
