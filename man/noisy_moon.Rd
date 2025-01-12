@@ -20,6 +20,7 @@ A data frame with 100 rows and 5 columns:
 noisy_moon
 }
 \description{
-A simple toy dataset consists of two interleaving half circles.
+A simple toy dataset consists of two interleaving half circles. The code to generate the
+dataset is at system.file('inst/scripts/', 'noisy_moon.R', package='poem').
 }
 \keyword{datasets}
