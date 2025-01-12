@@ -28,6 +28,10 @@ vignette: |
 
 ```{r, echo=FALSE, message=FALSE, warning = FALSE}
 knitr::opts_chunk$set(error=FALSE, message=FALSE, warning=FALSE, collapse = TRUE)
+library(BiocStyle)
+```
+
+```{r, message=FALSE, warning = FALSE}
 library(poem)
 library(ggplot2)
 library(cowplot)
@@ -44,7 +48,7 @@ my_cols <-c("#D55E00", "#CC79A7","#E69F00","#0072B2","#009E73","#F0E442","#56B4E
 names(my_cols) <- as.character(seq(my_cols))
 ```
 
-Our package `poem` can be easily integrated into a workflow with `SpatialExperiment` objects. Here we use the `Visium_humanDLPFC` dataset from package `STexampleData` for illustration. Load it:
+Our package `poem` can be easily integrated into a workflow with `r Biocpkg("SpatialExperiment")` objects. Here we use the `Visium_humanDLPFC` dataset from package `r Biocpkg("STexampleData")` for illustration. Load it:
 
 ```{r}
 spe <- Visium_humanDLPFC()

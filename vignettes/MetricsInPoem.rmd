@@ -26,6 +26,10 @@ vignette: |
 }
 </style>
 
+# Introduction
+
+In this vignette, we explain the details about each evaluation metrics implemented in `poem`. These include the minimum level at which the metric can be calculated, the full name of the metric, and the calculation of the metric. For more details, please refer to our manuscript \url{https://doi.org/10.1101/2024.11.28.625845}.
+
 # Partition-based metrics
 
 ```{r, include=FALSE, eval=TRUE}

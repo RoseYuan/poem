@@ -34,9 +34,9 @@ library(BiocStyle)
 # Installation & loading {-}
 
 ```{r, eval=FALSE}
-if (!requireNamespace("devtools", quietly = TRUE))
-    install.packages("devtools")
-devtools::install_github("RoseYuan/poem")
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("poem")
 ```
 
 ```{r, message = FALSE,  warning = FALSE}
@@ -58,7 +58,7 @@ This package provides multiple approaches for comparing two partitions[^1] of th
 Besides, this package further offers methods for comparing two fuzzy partitions[^2] as well as for comparing a hard partition with a fuzzy partition. This allows the evaluation of fuzzy partition results by assessing its agreement to a fuzzy or a hard ground-truth partition.
 
 Finally, the package implements visualization and evaluation metrics tailored for domain detection in spatially-resolved -omics data.
-These include especially external evaluation metrics (i.e. based on a comparison to ground truth labels), but also internal metrics. 
+These include especially external evaluation metrics (i.e. based on a comparison to ground truth labels), but also internal metrics. For a detailed description on how to work with `r Biocpkg("SpatialExperiment")` objects, we refer to another vignette of `r Biocpkg("poem", vignette = "PoemOnSpatialExperiment.html")`.
 
 [^1]: A partition is a way of organizing the data points of a dataset into distinct, non-overlapping, and non-empty subsets. For example, a clustering is a partition. 
 
