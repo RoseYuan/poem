@@ -67,7 +67,7 @@
 #                0.02, 0.02, 0.96,
 #                0.01, 0.01, 0.98),
 #                ncol = 3, byrow=TRUE)
-# colnames(m1) <- colnames(m2) <- LETTERS[1:3]
+# colnames(m1) <- colnames(m2) <- LETTERS[seq_len(3)]
 # fuzzyPartitionMetrics(m1,m2)
 fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
                                   verbose=TRUE, returnElementPairAccuracy=FALSE,
@@ -154,7 +154,7 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
   if(is.null(nperms)){
     # try few permutations to estimate if more are needed
     allp <- apply(matrix( runif(m*10), nrow=m ), 2, order)
-    res1 <- bplapply(1:10, BPPARAM=BPPARAM, onePerm)
+    res1 <- bplapply(seq_len(10), BPPARAM=BPPARAM, onePerm)
     NDCs <- vapply(res1, FUN.VALUE=numeric(1L), FUN=\(x) x[[1]])
     SE <- sd(NDCs)/sqrt(length(res1))
     if(SE>0.0025) nperms <- 100
@@ -384,7 +384,7 @@ fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL,
   if(is.null(nperms)){
     # try few permutations to estimate if more are needed
     allp <- apply(matrix( runif(m*10), nrow=m ), 2, order)
-    res1 <- bplapply(1:10, BPPARAM=BPPARAM, onePerm)
+    res1 <- bplapply(seq_len(10), BPPARAM=BPPARAM, onePerm)
     NDCs <- vapply(res1, FUN.VALUE=numeric(1L), FUN=\(x) x[[1]])
     SE <- sd(NDCs)/sqrt(length(res1))
     if(SE>0.0025) nperms <- 100
@@ -397,7 +397,7 @@ fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL,
     # generate more permutations
     allp <- apply(matrix( runif(m*nperms), nrow=m ), 2, order)
     
-    res <- bplapply(1:nperms, BPPARAM=BPPARAM, onePerm)
+    res <- bplapply(seq_len(nperms), BPPARAM=BPPARAM, onePerm)
     if(!is.null(res1)) res <- c(res1,res)
     NDCs <- vapply(res, FUN.VALUE=numeric(1L), FUN=\(x) x[[1]])
     SE <- sd(NDCs)/sqrt(nperms)
@@ -581,7 +581,7 @@ fuzzyHardMetrics2 <- function(hardTrue, fuzzyTrue, hardPred, nperms=10,
   if(is.null(nperms)){
     # try few permutations to estimate if more are needed
     allp <- apply(matrix( runif(m*10), nrow=m ), 2, order)
-    res1 <- bplapply(1:10, BPPARAM=BPPARAM, onePerm)
+    res1 <- bplapply(seq_len(10), BPPARAM=BPPARAM, onePerm)
     NDCs <- vapply(res1, FUN.VALUE=numeric(1L), FUN=\(x) x[[1]])
     SE <- sd(NDCs)/sqrt(length(res1))
     if(SE>0.0025) nperms <- 100
@@ -593,7 +593,7 @@ fuzzyHardMetrics2 <- function(hardTrue, fuzzyTrue, hardPred, nperms=10,
   if(!is.null(nperms)){
     # generate more permutations
     allp <- apply(matrix( runif(m*nperms), nrow=m ), 2, order)
-    res <- bplapply(1:nperms, BPPARAM=BPPARAM, onePerm)
+    res <- bplapply(seq_len(nperms), BPPARAM=BPPARAM, onePerm)
     if(!is.null(res1)) res <- c(res1,res)
     NDCs <- vapply(res, FUN.VALUE=numeric(1L), FUN=\(x) x[[1]])
     SE <- sd(NDCs)/sqrt(nperms)
@@ -662,7 +662,7 @@ fuzzyHardMetrics2 <- function(hardTrue, fuzzyTrue, hardPred, nperms=10,
 #'                0.02, 0.02, 0.96, 
 #'                0.01, 0.01, 0.98), 
 #'                ncol = 3, byrow=TRUE)
-#' colnames(m1) <- colnames(m2) <- LETTERS[1:3]
+#' colnames(m1) <- colnames(m2) <- LETTERS[seq_len(3)]
 #' fuzzySpotConcordance(m1,m2)
 fuzzySpotConcordance <- function(P, Q){
   if(is.data.frame(P)) P <- as.matrix(P)

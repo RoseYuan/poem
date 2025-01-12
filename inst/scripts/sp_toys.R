@@ -31,8 +31,8 @@ simulate_hexagonal_grid <- function(n_rows=10, n_cols=10){
   
   index <- 1
   
-  for (row in 1:n_rows) {
-    for (col in 1:n_cols) {
+  for (row in seq_len(n_rows)) {
+    for (col in seq_len(n_cols)) {
       # Calculate x and y for the center of the hexagon
       x <- col * sqrt(3) * hex_radius
       y <- row * hex_height
@@ -58,7 +58,7 @@ simulate_hexagonal_grid <- function(n_rows=10, n_cols=10){
 
 sp_toys <- simulate_hexagonal_grid(n_rows, n_cols)
 sp_toys$label <- NA
-for (i in 1:dim(sp_toys)[1]) {
+for (i in seq_len(dim(sp_toys)[1])) {
   if(sp_toys[i, "col"] > sp_toys[i, "row"] + 6){
     sp_toys[i, "label"] <- 1
   }else{
