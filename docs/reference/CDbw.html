@@ -15,7 +15,7 @@ dependencies that aren't required here)."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">poem</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,8 +26,8 @@ dependencies that aren't required here)."></head><body>
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/poem.html">Get started</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/table.html">Details about each evaluation metrics</a></li>
-    <li><a class="dropdown-item" href="../articles/SpatialExperiment.html">Working with SpatialExperiment</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/MetricsInPoem.html">Details about each evaluation metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/PoemOnSpatialExperiment.html">Working with SpatialExperiment</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -124,11 +124,12 @@ clusters.</p></dd>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Halkidi, M. and Vazirgiannis, M. (2008) A density-based cluster validity
-approach using multi-representatives. Pattern Recognition Letters 29, 773-786.</p>
-<p>Halkidi, M., Vazirgiannis, M. and Hennig, C. (2015) Method-independent
-indices for cluster validation. In C. Hennig, M. Meila, F. Murtagh, R. Rocci
-(eds.) Handbook of Cluster Analysis, CRC Press/Taylor <code>&amp;</code> Francis, Boca
-Raton.</p>
+approach using multi-representatives. Pattern Recognition Letters 29,
+773-786.</p>
+<p>Halkidi, M., Vazirgiannis, M. and Hennig, C. (2015)
+Method-independent indices for cluster validation. In C. Hennig, M. Meila,
+F. Murtagh, R. Rocci (eds.) Handbook of Cluster Analysis, CRC Press/Taylor
+<code>&amp;</code> Francis, Boca Raton.</p>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -138,7 +139,7 @@ Raton.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="mockData.html">mockData</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">CDbw</span><span class="op">(</span><span class="va">d1</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span>, <span class="va">d1</span><span class="op">[</span>,<span class="fl">3</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">CDbw</span><span class="op">(</span><span class="va">d1</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span>, <span class="va">d1</span><span class="op">[</span>,<span class="fl">3</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        cdbw    cohesion compactness         sep </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  0.03805049  0.23717624  0.24202068  0.66288255 </span>
 </code></pre></div>

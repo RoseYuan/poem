@@ -56,6 +56,7 @@ dataset from package `r Biocpkg("STexampleData")` for illustration. Load it:
 
 ```{r}
 spe <- Visium_humanDLPFC()
+spe <- spe[, !is.na(colData(spe)$reference)]
 spe
 ```
 
@@ -423,8 +424,11 @@ getSpatialInternalMetrics(object=spe, labels="reference", k=6)
 is equivalent to:
 
 ```{r}
-getSpatialInternalMetrics(labels=colData(spe)$reference, k=6)
+getSpatialInternalMetrics(labels=colData(spe)$reference, 
+                          location = spatialCoords(spe), k=6)
 ```
+
+To calculate the dataset-level metrics:
 
 ```{r}
 colData(spe) <- cbind(colData(spe), data[, c("P4","P5")])
