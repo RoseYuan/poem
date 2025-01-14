@@ -34,7 +34,8 @@ Imports:
     sp,
     spdep,
     stats,
-    utils
+    utils,
+    SpatialExperiment
 Suggests: 
     testthat (>= 3.0.0),
     BiocStyle,
