@@ -5,16 +5,24 @@
 \title{Compute internal metrics for spatial data}
 \usage{
 getSpatialInternalMetrics(
+  object = NULL,
   labels,
-  location,
+  location = NULL,
   k = 6,
+  alpha = 0.5,
   level = "class",
   metrics = c("CHAOS", "PAS", "ELSA"),
   ...
 )
 }
 \arguments{
-\item{labels}{A vector containing the labels to be evaluated.}
+\item{object}{The main input. Can be a \code{SpatialExperiment} object or missing
+(when using \code{labels}, and \code{location} directly).}
+
+\item{labels}{When \code{object} is missing: a vector containing the labels of the
+predicted clusters. Must be a vector of characters, integers, numerics, or a
+factor, but not a list. When \code{object} is a \code{SpatialExperiment} object: the
+column name in \code{colData(object)} containing the labels.}
 
 \item{location}{A numerical matrix containing the location information, with
 rows as samples and columns as location dimensions.}
@@ -33,8 +41,9 @@ This is used for calculating PAS and ELSA scores.}
 A data.frame of metrics.
 }
 \description{
-Computes a selection of internal clustering evaluation metrics for spatial
-data.
+A generic function to compute a selection of internal clustering evaluation
+metrics for spatial data. It can be applied to raw components
+(\code{labels}, \code{location}) or directly to a \code{SpatialExperiment} object.
 }
 \details{
 The allowed values for \code{metrics} depend on the value of \code{level}:
@@ -55,7 +64,18 @@ The allowed values for \code{metrics} depend on the value of \code{level}:
 }
 }
 \examples{
+# Example with individual components
 data(sp_toys)
 data <- sp_toys
-getSpatialInternalMetrics(data$label, data[,c("x", "y")], k=6, level="class")
+getSpatialInternalMetrics(labels=data$label, location=data[,c("x", "y")], 
+                          k=6, level="class")
+
+# Example with SpatialExperiment object
+se_object <- SpatialExperiment(assays=matrix(NA, 
+                                             ncol = nrow(data[,c("x", "y")]), 
+                                             nrow = ncol(data[,c("x", "y")])), 
+                               spatialCoords=as.matrix(data[,c("x", "y")]))
+colData(se_object) <- cbind(colData(se_object), data.frame(label=data$label))
+getSpatialInternalMetrics(object=se_object, labels="label", k=6, 
+                          level="class")
 }

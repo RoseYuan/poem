@@ -15,7 +15,7 @@
 #' @param level The level to calculate the metrics. Options include `"element"`,
 #' `"class"` and `"dataset"`.
 #' @return A data.frame of metrics.
-#' @importFrom SpatialExperiment colData spatialCoords SpatialExperiment
+#' @importFrom SpatialExperiment spatialCoords SpatialExperiment
 #' @export
 #' @details
 #' The allowed values for `metrics` depend on the value of `level`:

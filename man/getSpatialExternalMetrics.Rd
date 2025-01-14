@@ -2,12 +2,13 @@
 % Please edit documentation in R/getSpatialExternalMetrics.R
 \name{getSpatialExternalMetrics}
 \alias{getSpatialExternalMetrics}
-\title{Compute external metrics for spatial data}
+\title{Calculate Spatial External Metrics}
 \usage{
 getSpatialExternalMetrics(
+  object = NULL,
   true,
   pred,
-  location,
+  location = NULL,
   k = 6,
   alpha = 0.5,
   level = "class",
@@ -18,11 +19,18 @@ getSpatialExternalMetrics(
 )
 }
 \arguments{
-\item{true}{A vector containing the labels of the true classes. Must be a
-vector of characters, integers, numerics, or a factor, but not a list.}
+\item{object}{The main input. Can be a \code{SpatialExperiment} object or missing
+(when using \code{true}, \code{pred}, and \code{location} directly).}
 
-\item{pred}{A vector containing the labels of the predicted clusters. Must
-be a vector of characters, integers, numerics, or a factor, but not a list.}
+\item{true}{When \code{object} is missing: a vector containing the labels of the
+true classes. Must be a vector of characters, integers, numerics, or a factor,
+but not a list. When \code{object} is a \code{SpatialExperiment} object: the column name
+in \code{colData(object)} containing the true labels.}
+
+\item{pred}{When \code{object} is missing: a vector containing the labels of the
+predicted clusters. Must be a vector of characters, integers, numerics, or a
+factor, but not a list. When \code{object} is a \code{SpatialExperiment} object: the
+column name in \code{colData(object)} containing the predicted labels.}
 
 \item{location}{A matrix or data.frame of coordinates}
 
@@ -47,15 +55,15 @@ for \code{true}.}
 \item{fuzzy_pred}{Logical; whether to compute fuzzy class memberships
 for \code{pred}.}
 
-\item{...}{Optional params for \code{\link[=getFuzzyPartitionElementMetrics]{getFuzzyPartitionElementMetrics()}} or
-\code{\link[=findSpatialKNN]{findSpatialKNN()}}.}
+\item{...}{Additional arguments passed to specific methods.}
 }
 \value{
-A data.frame of metrics.
+A data.frame of metrics based on the specified input.
 }
 \description{
-Computes a selection of external clustering evaluation metrics for spatial
-data.
+A generic function to calculate spatial external metrics. It can be applied
+to raw components (\code{true}, \code{pred}, \code{location}) or directly to a
+\code{SpatialExperiment} object.
 }
 \details{
 The allowed values for \code{metrics} depend on the value of \code{level}:
@@ -70,8 +78,20 @@ The allowed values for \code{metrics} depend on the value of \code{level}:
 }
 }
 \examples{
+# Example with individual components
 data(sp_toys)
 data <- sp_toys
-getSpatialExternalMetrics(data$label, data$p1, data[,c("x", "y")], 
-k=6, level="class")
+getSpatialExternalMetrics(true=data$label, pred=data$p1, 
+location=data[,c("x", "y")], k=6, level="class")
+
+# Example with SpatialExperiment object
+se_object <- SpatialExperiment(assays=matrix(NA, 
+                                             ncol = nrow(data[,c("x", "y")]), 
+                                             nrow = ncol(data[,c("x", "y")])), 
+                               spatialCoords=as.matrix(data[,c("x", "y")]))
+colData(se_object) <- cbind(colData(se_object), data.frame(true=data$label, 
+                                                           pred=data$p1))
+getSpatialExternalMetrics(object=se_object, true="true", pred="pred", k=6, 
+                          level="class")
+
 }

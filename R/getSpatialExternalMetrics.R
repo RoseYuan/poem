@@ -28,7 +28,7 @@
 #' @inheritParams getSpatialElementExternalMetrics
 #' @param ... Additional arguments passed to specific methods.
 #' @return A data.frame of metrics based on the specified input.
-#' @importFrom SpatialExperiment colData spatialCoords SpatialExperiment
+#' @importFrom SpatialExperiment spatialCoords SpatialExperiment
 #' @examples
 #' # Example with individual components
 #' data(sp_toys)
