@@ -50,14 +50,19 @@ my_cols <-c("#D55E00", "#CC79A7","#E69F00","#0072B2","#009E73","#F0E442",
 names(my_cols) <- as.character(seq(my_cols))
 ```
 
-Our package `poem` can be easily integrated into a workflow with `r Biocpkg("SpatialExperiment")` objects. Here we use the `Visium_humanDLPFC` dataset from package `r Biocpkg("STexampleData")` for illustration. Load it:
+Our package `poem` can be easily integrated into a workflow with 
+`r Biocpkg("SpatialExperiment")` objects. Here we use the `Visium_humanDLPFC` 
+dataset from package `r Biocpkg("STexampleData")` for illustration. Load it:
 
 ```{r}
 spe <- Visium_humanDLPFC()
 spe
 ```
 
-From this `SpatialExperiment` object, we take the location information (accessible via `spatialCoords`) and the manual annotation in `colData` and store them as a dataframe:
+
+From this `SpatialExperiment` object, we take the location information 
+(accessible via `spatialCoords`) and the manual annotation in `colData` and 
+store them as a dataframe:
 
 ```{r}
 data <- data.frame(spatialCoords(spe))
@@ -99,7 +104,8 @@ p1 <- ggplot(data) +
 p1
 ```
 
-We then generate some hypothetical domain detection predictions by randomly permuting the manual annotation.
+We then generate some hypothetical domain detection predictions by randomly 
+permuting the manual annotation.
 
 ```{r}
 set.seed(123) # For reproducibility
@@ -164,6 +170,7 @@ data$P3 <- simulate_clustering_variation(
 ```
 
 If we visualize them:
+
 ```{r, fig.height = 7, fig.width = 7}
 p2 <- data %>% pivot_longer(cols=-c("pxl_col_in_fullres","pxl_row_in_fullres"), 
                       names_to="prediction", values_to="domain") %>% 
@@ -202,28 +209,39 @@ ggdraw() +
 # Calculate external spatial metrics
 
 We can compare P1-P3 to the manual annotation using external spatial metrics. 
+The `getSpatialExternalMetrics()` function can accept either a 
+`SpatialExperiment` object directly as input, or separate inputs for `true`, 
+`pred` and `location`. For example:
+
+```{r}
+colData(spe) <- cbind(colData(spe), data[, c("P1","P2","P3")])
+getSpatialExternalMetrics(object=spe, true="reference", pred="P3",
+                          k=6, fuzzy_true = TRUE, fuzzy_pred = FALSE)
+```
+
+is equivalent to:
+
+```{r}
+getSpatialExternalMetrics(true=colData(spe)$reference, pred=colData(spe)$P3,
+                          location=spatialCoords(spe), 
+                          k=6, fuzzy_true = TRUE, fuzzy_pred = FALSE)
+```
 
 ## Dataset level
 Let's first calculate two dataset-level metrics, SpatialARI and SpatialAccuracy:
 
 ```{r, fig.height = 2.5, fig.width = 5}
-res3 <- getSpatialExternalMetrics(true=data$reference, pred=data$P3,
-                                  location=data[,c("pxl_col_in_fullres",
-                                                   "pxl_row_in_fullres")], 
+res3 <- getSpatialExternalMetrics(object=spe, true="reference", pred="P3", 
                                   level="dataset", k=6,
                                   metrics=c("SpatialARI","SpatialAccuracy"), 
                                   fuzzy_true = TRUE, fuzzy_pred = FALSE)
 
-res2 <- getSpatialExternalMetrics(true=data$reference, pred=data$P2,
-                                  location=data[,c("pxl_col_in_fullres",
-                                                   "pxl_row_in_fullres")], 
+res2 <- getSpatialExternalMetrics(object=spe, true="reference", pred="P2",
                                   level="dataset", k=6,
                                   metrics=c("SpatialARI","SpatialAccuracy"), 
                                   fuzzy_true = TRUE, fuzzy_pred = FALSE)
 
-res1 <- getSpatialExternalMetrics(true=data$reference, pred=data$P1,
-                                  location=data[,c("pxl_col_in_fullres",
-                                                   "pxl_row_in_fullres")], 
+res1 <- getSpatialExternalMetrics(object=spe, true="reference", pred="P1",
                                   level="dataset", k=6,
                                   metrics=c("SpatialARI","SpatialAccuracy"), 
                                   fuzzy_true = TRUE, fuzzy_pred = FALSE)
@@ -242,23 +260,17 @@ We can further calculate the class/cluster-level metrics, SpatialAWH and
 SpatialAWC, to get more insights about the errors our predictions make:
 
 ```{r}
-res3 <- getSpatialExternalMetrics(true=data$reference, pred=data$P3,
-                                  location=data[,c("pxl_col_in_fullres",
-                                                   "pxl_row_in_fullres")], 
+res3 <- getSpatialExternalMetrics(object=spe, true="reference", pred="P3",
                                   level="class", k=6,
                                   metrics=c("SpatialAWH","SpatialAWC"), 
                                   fuzzy_true = TRUE, fuzzy_pred = FALSE)
 
-res2 <- getSpatialExternalMetrics(true=data$reference, pred=data$P2,
-                                  location=data[,c("pxl_col_in_fullres",
-                                                   "pxl_row_in_fullres")], 
+res2 <- getSpatialExternalMetrics(object=spe, true="reference", pred="P2",
                                   level="class", k=6,
                                   metrics=c("SpatialAWH","SpatialAWC"),
                                   fuzzy_true = TRUE, fuzzy_pred = FALSE)
 
-res1 <- getSpatialExternalMetrics(true=data$reference, pred=data$P1,
-                                  location=data[,c("pxl_col_in_fullres",
-                                                   "pxl_row_in_fullres")], 
+res1 <- getSpatialExternalMetrics(object=spe, true="reference", pred="P1",
                                   level="class", k=6,
                                   metrics=c("SpatialAWH","SpatialAWC"),
                                   fuzzy_true = TRUE, fuzzy_pred = FALSE)
@@ -343,27 +355,21 @@ homogeneity, consistent with the merging of layer 4 and 5.
 One can also calculate element-level metric, SPC, for visualization.
 
 ```{r, fig.height = 2.5, fig.width = 8}
-res1 <- cbind(getSpatialExternalMetrics(true=data$reference, pred=data$P1,
-                                  location=data[,c("pxl_col_in_fullres",
-                                                   "pxl_row_in_fullres")], 
+res1 <- cbind(getSpatialExternalMetrics(object=spe, true="reference", pred="P1",
                                   level="element",
                                   metrics=c("SpatialSPC"), k=6,
                                   fuzzy_true = TRUE, fuzzy_pred = FALSE, 
                                   useNegatives = FALSE), 
               data[,c("pxl_col_in_fullres", "pxl_row_in_fullres")])
 
-res2 <- cbind(getSpatialExternalMetrics(true=data$reference, pred=data$P2,
-                                  location=data[,c("pxl_col_in_fullres",
-                                                   "pxl_row_in_fullres")], 
+res2 <- cbind(getSpatialExternalMetrics(object=spe, true="reference", pred="P2",
                                   level="element",
                                   metrics=c("SpatialSPC"), k=6,
                                   fuzzy_true = TRUE, fuzzy_pred = FALSE, 
                                   useNegatives = FALSE),
                data[,c("pxl_col_in_fullres", "pxl_row_in_fullres")])
 
-res3 <- cbind(getSpatialExternalMetrics(true=data$reference, pred=data$P3,
-                                  location=data[,c("pxl_col_in_fullres","
-                                                   pxl_row_in_fullres")], 
+res3 <- cbind(getSpatialExternalMetrics(object=spe, true="reference", pred="P3",
                                   level="element",
                                   metrics=c("SpatialSPC"), k=6,
                                   fuzzy_true = TRUE, fuzzy_pred = FALSE, 
@@ -380,6 +386,7 @@ cbind(bind_rows(list(res1, res2, res3), .id="P")) %>%
   facet_wrap(~P, scales = "free") +
   theme_bw() + labs(x="Prediction", y="", color="SpatialSPC")
 ```
+
 This clear highlights the low concordance regions in each prediction as 
 expected.
 
@@ -404,14 +411,26 @@ data$P5 <- simulate_clustering_variation(
 )
 ```
 
-We calculate the internal spatial metrics for P1-P5:
+We calculate the internal spatial metrics for P1-P5. Similarly, the 
+`getSpatialInternalMetrics()` function can accept either a 
+`SpatialExperiment` object directly as input, or separate inputs for `labels` 
+and `location`. This means that
 
 ```{r}
+getSpatialInternalMetrics(object=spe, labels="reference", k=6)
+```
+
+is equivalent to:
+
+```{r}
+getSpatialInternalMetrics(labels=colData(spe)$reference, k=6)
+```
+
+```{r}
+colData(spe) <- cbind(colData(spe), data[, c("P4","P5")])
 internal <-lapply(setNames(c("reference","P1","P2","P3","P4","P5"), 
                            c("reference","P1","P2","P3","P4","P5")),
-function(x){getSpatialInternalMetrics(data[[x]],
-                                      location=data[, c("pxl_col_in_fullres",
-                                                        "pxl_row_in_fullres")],
+function(x){getSpatialInternalMetrics(object=spe, labels=x,
                                       k=6, level="dataset", 
                                       metrics=c("PAS", "ELSA", "CHAOS"))})
 internal <- bind_rows(internal,.id = "prediction")
@@ -441,8 +460,7 @@ and can be regarded as edge detector:
 internal <-lapply(setNames(c("reference","P1","P2","P3","P4","P5"), 
                            c("reference","P1","P2","P3","P4","P5")),
 function(x){cbind(
-  getSpatialInternalMetrics(data[[x]],
-                location = data[,c("pxl_col_in_fullres","pxl_row_in_fullres")],
+  getSpatialInternalMetrics(object=spe, labels=x,
                 k=6, level="element", metrics=c( "ELSA")), 
   data[,c("pxl_col_in_fullres", "pxl_row_in_fullres")])})
 internal <- bind_rows(internal,.id = "prediction")
