@@ -1,13 +1,21 @@
 
 #' Compute internal metrics for spatial data
 #' 
-#' Computes a selection of internal clustering evaluation metrics for spatial 
-#' data.
+#' A generic function to compute a selection of internal clustering evaluation
+#'  metrics for spatial data. It can be applied to raw components 
+#' (`labels`, `location`) or directly to a `SpatialExperiment` object.
+#' @param object The main input. Can be a `SpatialExperiment` object or missing
+#'   (when using `labels`, and `location` directly).
+#' @param labels When `object` is missing: a vector containing the labels of the 
+#' predicted clusters. Must be a vector of characters, integers, numerics, or a 
+#' factor, but not a list. When `object` is a `SpatialExperiment` object: the 
+#' column name in `colData(object)` containing the labels. 
 #' @inheritParams getSpatialElementInternalMetrics
 #' @param metrics The metrics to compute. See details.
 #' @param level The level to calculate the metrics. Options include `"element"`,
 #' `"class"` and `"dataset"`.
 #' @return A data.frame of metrics.
+#' @importFrom SpatialExperiment spatialCoords SpatialExperiment
 #' @export
 #' @details
 #' The allowed values for `metrics` depend on the value of `level`:
@@ -23,11 +31,36 @@
 #'      - `"PC"`: Partition coefficient
 #'      - `"PE"`: Partition entropy
 #' @examples
+#' # Example with individual components
 #' data(sp_toys)
 #' data <- sp_toys
-#' getSpatialInternalMetrics(data$label, data[,c("x", "y")], k=6, level="class")
-getSpatialInternalMetrics <- function(labels, location, k=6, level="class",
-                                      metrics=c("CHAOS", "PAS", "ELSA"), ...){
+#' getSpatialInternalMetrics(labels=data$label, location=data[,c("x", "y")], 
+#'                           k=6, level="class")
+#' 
+#' # Example with SpatialExperiment object
+#' se_object <- SpatialExperiment(assays=matrix(NA, 
+#'                                              ncol = nrow(data[,c("x", "y")]), 
+#'                                              nrow = ncol(data[,c("x", "y")])), 
+#'                                spatialCoords=as.matrix(data[,c("x", "y")]))
+#' colData(se_object) <- cbind(colData(se_object), data.frame(label=data$label))
+#' getSpatialInternalMetrics(object=se_object, labels="label", k=6, 
+#'                           level="class")
+setGeneric("getSpatialInternalMetrics", signature="object",
+           def=function(object=NULL, labels, location=NULL, 
+           k=6, alpha=0.5, level="class",
+           metrics=c("CHAOS", "PAS", "ELSA"), ...) {
+  standardGeneric("getSpatialInternalMetrics")
+})
+
+
+setMethod("getSpatialInternalMetrics", signature(object="missing"), 
+          function(labels, location, k, level, metrics, ...) {
+                    # input validation
+                    if (anyNA(labels)) stop("NA are not supported.")
+                    if (is.character(labels)) labels <- as.factor(labels)
+                    if (!is.atomic(labels) || 
+                        (!is.factor(labels) && !is.integer(labels)))
+                      stop("labels must be vector or factor but not list.")
   # Map level to the corresponding function
   level_functions <- list(
     "element" = getSpatialElementInternalMetrics,
@@ -39,8 +72,22 @@ getSpatialInternalMetrics <- function(labels, location, k=6, level="class",
   # Collect all arguments into a list
   args <- list(labels = labels, location=location, k=k, metrics = metrics, ...)
   do.call(level_functions[[level]], args)
-}
+          })
 
+setMethod("getSpatialInternalMetrics", signature(object="SpatialExperiment"), 
+          function(object, labels, k, level, metrics, ...) {
+            if (!labels %in% colnames(colData(object))) {
+              stop(paste("The column", labels, "is not present."))
+            }
+            # Extract true, pred, and location from the SpatialExperiment object
+            labels <- colData(object)[, labels]
+            location <- data.frame(spatialCoords(object))
+            # Call the main function
+            getSpatialInternalMetrics(labels=labels, 
+                                      location=location, 
+                                       k=k, alpha=alpha, level=level, 
+                                       metrics=metrics, ...)
+          })
 
 #' Compute dataset-level internal evaluation metrics for spatially-resolved data
 #' 
