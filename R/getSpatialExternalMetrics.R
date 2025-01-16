@@ -37,7 +37,7 @@
 #' location=data[,c("x", "y")], k=6, level="class")
 #' 
 #' # Example with SpatialExperiment object
-#' se_object <- SpatialExperiment(assays=matrix(NA, 
+#' se_object <- SpatialExperiment::SpatialExperiment(assays=matrix(NA, 
 #'                                              ncol = nrow(data[,c("x", "y")]), 
 #'                                              nrow = ncol(data[,c("x", "y")])), 
 #'                                spatialCoords=as.matrix(data[,c("x", "y")]))
