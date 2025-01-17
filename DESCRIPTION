@@ -49,7 +49,6 @@ Suggests:
     ggnetwork,
     ggplot2,
     tidyr,
-    SpatialExperiment,
     STexampleData
 VignetteBuilder: knitr
 biocViews: DimensionReduction, Clustering, GraphAndNetwork, Spatial, ATACSeq, SingleCell, 

@@ -93,10 +93,10 @@ setMethod("getSpatialExternalMetrics", signature(object="SpatialExperiment"),
           function(object, true, pred, k, alpha, level, metrics, 
           fuzzy_true, fuzzy_pred, ...) {
             if (!true %in% colnames(colData(object))) {
-              stop(paste("The column", true, "is not present."))
+              stop("The column", true, "is not present.")
             }
             if (!pred %in% colnames(colData(object))) {
-              stop(paste("The column", pred, "is not present."))
+              stop("The column", pred, "is not present.")
             }
             # Extract true, pred, and location from the SpatialExperiment object
             true <- colData(object)[, true]

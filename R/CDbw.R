@@ -54,7 +54,7 @@ CDbw <- function(x, labels, r=10, s=seq(0.1,0.8,by=0.1),
   wvar <- numeric(0)
   repx <- list()
   if (trace)
-    print("Find representatives")
+    message("Find representatives")
   for (i in seq_len(cn)){
     nc[i] <- sum(labels==i)
     xcc[i,] <- colMeans(x[labels==i,,drop=FALSE])
