@@ -2,9 +2,39 @@
 % Please edit documentation in R/getSpatialExternalMetrics.R
 \name{getSpatialExternalMetrics}
 \alias{getSpatialExternalMetrics}
+\alias{getSpatialExternalMetrics,missing-method}
+\alias{getSpatialExternalMetrics,SpatialExperiment-method}
 \title{Calculate Spatial External Metrics}
 \usage{
 getSpatialExternalMetrics(
+  object = NULL,
+  true,
+  pred,
+  location = NULL,
+  k = 6,
+  alpha = 0.5,
+  level = "class",
+  metrics = c("SpatialWH", "SpatialAWH", "SpatialWC", "SpatialAWC"),
+  fuzzy_true = TRUE,
+  fuzzy_pred = FALSE,
+  ...
+)
+
+\S4method{getSpatialExternalMetrics}{missing}(
+  object = NULL,
+  true,
+  pred,
+  location = NULL,
+  k = 6,
+  alpha = 0.5,
+  level = "class",
+  metrics = c("SpatialWH", "SpatialAWH", "SpatialWC", "SpatialAWC"),
+  fuzzy_true = TRUE,
+  fuzzy_pred = FALSE,
+  ...
+)
+
+\S4method{getSpatialExternalMetrics}{SpatialExperiment}(
   object = NULL,
   true,
   pred,
@@ -85,7 +115,7 @@ getSpatialExternalMetrics(true=data$label, pred=data$p1,
 location=data[,c("x", "y")], k=6, level="class")
 
 # Example with SpatialExperiment object
-se_object <- SpatialExperiment(assays=matrix(NA, 
+se_object <- SpatialExperiment::SpatialExperiment(assays=matrix(NA, 
                                              ncol = nrow(data[,c("x", "y")]), 
                                              nrow = ncol(data[,c("x", "y")])), 
                                spatialCoords=as.matrix(data[,c("x", "y")]))

@@ -2,9 +2,33 @@
 % Please edit documentation in R/getSpatialInternalMetrics.R
 \name{getSpatialInternalMetrics}
 \alias{getSpatialInternalMetrics}
+\alias{getSpatialInternalMetrics,missing-method}
+\alias{getSpatialInternalMetrics,SpatialExperiment-method}
 \title{Compute internal metrics for spatial data}
 \usage{
 getSpatialInternalMetrics(
+  object = NULL,
+  labels,
+  location = NULL,
+  k = 6,
+  alpha = 0.5,
+  level = "class",
+  metrics = c("CHAOS", "PAS", "ELSA"),
+  ...
+)
+
+\S4method{getSpatialInternalMetrics}{missing}(
+  object = NULL,
+  labels,
+  location = NULL,
+  k = 6,
+  alpha = 0.5,
+  level = "class",
+  metrics = c("CHAOS", "PAS", "ELSA"),
+  ...
+)
+
+\S4method{getSpatialInternalMetrics}{SpatialExperiment}(
   object = NULL,
   labels,
   location = NULL,
@@ -71,7 +95,7 @@ getSpatialInternalMetrics(labels=data$label, location=data[,c("x", "y")],
                           k=6, level="class")
 
 # Example with SpatialExperiment object
-se_object <- SpatialExperiment(assays=matrix(NA, 
+se_object <- SpatialExperiment::SpatialExperiment(assays=matrix(NA, 
                                              ncol = nrow(data[,c("x", "y")]), 
                                              nrow = ncol(data[,c("x", "y")])), 
                                spatialCoords=as.matrix(data[,c("x", "y")]))

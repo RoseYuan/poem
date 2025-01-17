@@ -52,7 +52,7 @@ setGeneric("getSpatialInternalMetrics", signature="object",
   standardGeneric("getSpatialInternalMetrics")
 })
 
-
+#' @rdname getSpatialInternalMetrics
 setMethod("getSpatialInternalMetrics", signature(object="missing"), 
           function(labels, location, k, level, metrics, ...) {
                     # input validation
@@ -74,6 +74,7 @@ setMethod("getSpatialInternalMetrics", signature(object="missing"),
   do.call(level_functions[[level]], args)
           })
 
+#' @rdname getSpatialInternalMetrics
 setMethod("getSpatialInternalMetrics", signature(object="SpatialExperiment"), 
           function(object, labels, k, level, metrics, ...) {
             if (!labels %in% colnames(colData(object))) {
@@ -85,7 +86,7 @@ setMethod("getSpatialInternalMetrics", signature(object="SpatialExperiment"),
             # Call the main function
             getSpatialInternalMetrics(labels=labels, 
                                       location=location, 
-                                       k=k, alpha=alpha, level=level, 
+                                       k=k, level=level, 
                                        metrics=metrics, ...)
           })
 
