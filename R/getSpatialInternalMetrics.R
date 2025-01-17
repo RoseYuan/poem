@@ -16,6 +16,7 @@
 #' `"class"` and `"dataset"`.
 #' @return A data.frame of metrics.
 #' @importFrom SpatialExperiment spatialCoords SpatialExperiment
+#' @importFrom SummarizedExperiment colData "colData<-" 
 #' @export
 #' @details
 #' The allowed values for `metrics` depend on the value of `level`:
@@ -42,7 +43,9 @@
 #'                                              ncol = nrow(data[,c("x", "y")]), 
 #'                                              nrow = ncol(data[,c("x", "y")])), 
 #'                                spatialCoords=as.matrix(data[,c("x", "y")]))
-#' colData(se_object) <- cbind(colData(se_object), data.frame(label=data$label))
+#' SummarizedExperiment::colData(se_object) <- 
+#' cbind(SummarizedExperiment::colData(se_object), 
+#'       data.frame(label=data$label))
 #' getSpatialInternalMetrics(object=se_object, labels="label", k=6, 
 #'                           level="class")
 setGeneric("getSpatialInternalMetrics", signature="object",

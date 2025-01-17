@@ -119,8 +119,9 @@ se_object <- SpatialExperiment::SpatialExperiment(assays=matrix(NA,
                                              ncol = nrow(data[,c("x", "y")]), 
                                              nrow = ncol(data[,c("x", "y")])), 
                                spatialCoords=as.matrix(data[,c("x", "y")]))
-colData(se_object) <- cbind(colData(se_object), data.frame(true=data$label, 
-                                                           pred=data$p1))
+SummarizedExperiment::colData(se_object) <- 
+                      cbind(SummarizedExperiment::colData(se_object), 
+                            data.frame(true=data$label, pred=data$p1))
 getSpatialExternalMetrics(object=se_object, true="true", pred="pred", k=6, 
                           level="class")
 
