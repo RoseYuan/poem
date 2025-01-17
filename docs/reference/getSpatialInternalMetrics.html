@@ -11,7 +11,7 @@ metrics for spatial data. It can be applied to raw components
 
     <a class="navbar-brand me-2" href="../index.html">poem</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,7 +61,28 @@ metrics for spatial data. It can be applied to raw components
 <span>  <span class="va">labels</span>,</span>
 <span>  location <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  k <span class="op">=</span> <span class="fl">6</span>,</span>
-<span>  alpha <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  level <span class="op">=</span> <span class="st">"class"</span>,</span>
+<span>  metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CHAOS"</span>, <span class="st">"PAS"</span>, <span class="st">"ELSA"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for class 'missing'</span></span>
+<span><span class="fu">getSpatialInternalMetrics</span><span class="op">(</span></span>
+<span>  object <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">labels</span>,</span>
+<span>  location <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  k <span class="op">=</span> <span class="fl">6</span>,</span>
+<span>  level <span class="op">=</span> <span class="st">"class"</span>,</span>
+<span>  metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CHAOS"</span>, <span class="st">"PAS"</span>, <span class="st">"ELSA"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for class 'SpatialExperiment'</span></span>
+<span><span class="fu">getSpatialInternalMetrics</span><span class="op">(</span></span>
+<span>  object <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">labels</span>,</span>
+<span>  location <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  k <span class="op">=</span> <span class="fl">6</span>,</span>
 <span>  level <span class="op">=</span> <span class="st">"class"</span>,</span>
 <span>  metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CHAOS"</span>, <span class="st">"PAS"</span>, <span class="st">"ELSA"</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -139,16 +160,19 @@ This is used for calculating PAS and ELSA scores.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2     2 0.008333333 0.06918805 0.1944579 0.05840334 0.2305866</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example with SpatialExperiment object</span></span></span>
-<span class="r-in"><span><span class="va">se_object</span> <span class="op">&lt;-</span> <span class="fu">SpatialExperiment</span><span class="op">(</span>assays<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="cn">NA</span>, </span></span>
+<span class="r-in"><span><span class="va">se_object</span> <span class="op">&lt;-</span> <span class="fu">SpatialExperiment</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SpatialExperiment/man/SpatialExperiment.html" class="external-link">SpatialExperiment</a></span><span class="op">(</span>assays<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="cn">NA</span>, </span></span>
 <span class="r-in"><span>                                             ncol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>, </span></span>
 <span class="r-in"><span>                                             nrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">data</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>, </span></span>
 <span class="r-in"><span>                               spatialCoords<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">data</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in SpatialExperiment(assays = matrix(NA, ncol = nrow(data[, c("x",     "y")]), nrow = ncol(data[, c("x", "y")])), spatialCoords = as.matrix(data[,     c("x", "y")])):</span> could not find function "SpatialExperiment"</span>
-<span class="r-in"><span><span class="fu">colData</span><span class="op">(</span><span class="va">se_object</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu">colData</span><span class="op">(</span><span class="va">se_object</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>label<span class="op">=</span><span class="va">data</span><span class="op">$</span><span class="va">label</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in colData(se_object):</span> could not find function "colData"</span>
+<span class="r-in"><span><span class="fu">SummarizedExperiment</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">se_object</span><span class="op">)</span> <span class="op">&lt;-</span> </span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu">SummarizedExperiment</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">se_object</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>label<span class="op">=</span><span class="va">data</span><span class="op">$</span><span class="va">label</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">getSpatialInternalMetrics</span><span class="op">(</span>object<span class="op">=</span><span class="va">se_object</span>, labels<span class="op">=</span><span class="st">"label"</span>, k<span class="op">=</span><span class="fl">6</span>, </span></span>
 <span class="r-in"><span>                          level<span class="op">=</span><span class="st">"class"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'object' in selecting a method for function 'getSpatialInternalMetrics': object 'se_object' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> the specified variable is considered as categorical...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   class         PAS    ELSA.Ea   ELSA.Ec       ELSA     CHAOS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     1 0.008333333 0.07106927 0.1940084 0.06040663 0.2305866</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     2 0.008333333 0.06918805 0.1944579 0.05840334 0.2305866</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
