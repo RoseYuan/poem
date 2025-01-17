@@ -56,7 +56,7 @@ setGeneric("getSpatialExternalMetrics", signature="object",
   standardGeneric("getSpatialExternalMetrics")
 })
 
-
+#' @rdname getSpatialExternalMetrics
 setMethod("getSpatialExternalMetrics", signature(object="missing"), 
           function(object, true, pred, location, k, 
                    alpha, level, metrics, fuzzy_true, fuzzy_pred, ...) {
@@ -86,7 +86,7 @@ setMethod("getSpatialExternalMetrics", signature(object="missing"),
                     do.call(level_functions[[level]], args)
           })
 
-
+#' @rdname getSpatialExternalMetrics
 setMethod("getSpatialExternalMetrics", signature(object="SpatialExperiment"), 
           function(object, true, pred, k, alpha, level, metrics, 
           fuzzy_true, fuzzy_pred, ...) {
