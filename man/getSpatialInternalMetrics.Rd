@@ -11,7 +11,6 @@ getSpatialInternalMetrics(
   labels,
   location = NULL,
   k = 6,
-  alpha = 0.5,
   level = "class",
   metrics = c("CHAOS", "PAS", "ELSA"),
   ...
@@ -22,7 +21,6 @@ getSpatialInternalMetrics(
   labels,
   location = NULL,
   k = 6,
-  alpha = 0.5,
   level = "class",
   metrics = c("CHAOS", "PAS", "ELSA"),
   ...
@@ -33,7 +31,6 @@ getSpatialInternalMetrics(
   labels,
   location = NULL,
   k = 6,
-  alpha = 0.5,
   level = "class",
   metrics = c("CHAOS", "PAS", "ELSA"),
   ...

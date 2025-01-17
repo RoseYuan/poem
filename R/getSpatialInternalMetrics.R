@@ -50,7 +50,7 @@
 #'                           level="class")
 setGeneric("getSpatialInternalMetrics", signature="object",
            def=function(object=NULL, labels, location=NULL, 
-           k=6, alpha=0.5, level="class",
+           k=6, level="class",
            metrics=c("CHAOS", "PAS", "ELSA"), ...) {
   standardGeneric("getSpatialInternalMetrics")
 })
@@ -81,7 +81,7 @@ setMethod("getSpatialInternalMetrics", signature(object="missing"),
 setMethod("getSpatialInternalMetrics", signature(object="SpatialExperiment"), 
           function(object, labels, k, level, metrics, ...) {
             if (!labels %in% colnames(colData(object))) {
-              stop(paste("The column", labels, "is not present."))
+              stop("The column", labels, "is not present.")
             }
             # Extract true, pred, and location from the SpatialExperiment object
             labels <- colData(object)[, labels]

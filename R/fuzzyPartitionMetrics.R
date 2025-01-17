@@ -744,7 +744,7 @@ fuzzyHardSpotConcordance <- function(hardTrue, fuzzyTrue, hardPred,
   m <- nrow(fuzzyTrue)
   if(verbose && m>=2000){
     os <- 8 * m^2 * 4
-    class(os) = "object_size"
+    class(os) <- "object_size"
     message("Projected memory usage: ", format(os, units = "auto"))
   }
   
