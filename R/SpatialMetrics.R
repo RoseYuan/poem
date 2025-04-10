@@ -192,7 +192,9 @@ getNeighboringPairConcordance <- function(true, pred, location, k=20L,
 #' spatialARI
 #' 
 #' Computes the spatial Rand Index and spatial ARI (Yan, Feng and Luo, 2025).
-#' See details for more information.
+#' Note that by default, the decay functions are different from those of the 
+#' original publication (see details for more information), but the latter can
+#' be replicated with `original=TRUE`.
 #'
 #' @param pred A vector of predicted clusters
 #' @param true A vector of true class labels
@@ -207,7 +209,8 @@ getNeighboringPairConcordance <- function(true, pred, location, k=20L,
 #' @param nChunks The number of processing chunks. If NULL, this will be 
 #'   determined automatically based on the size of the dataset.
 #' @param original Logical; whether to use the original h/f functions from Yan, 
-#'   Feng and Luo (default FALSE).
+#'   Feng and Luo (default FALSE). If set to TRUE, the arguments `fbeta`, 
+#'   `hbeta`, `f` and `h` are ignored.
 #' @param f The f function, which determines the positive contribution of pairs
 #'   that are in different partitions in the reference, but grouped together in
 #'   the clustering, based on the distance between mates.
@@ -224,7 +227,9 @@ getNeighboringPairConcordance <- function(true, pred, location, k=20L,
 #' 
 #' @details
 #' This is a reimplementation of the method from the `spARI` package, made more
-#' scalable through chunk-based processing, and with some additional options. 
+#' scalable (i.e. a bit slower but more memory-efficient) through chunk-based 
+#' processing, extensible to more than 2 dimensions, and with some additional 
+#' options.
 #' Note that by default, this will not produce the same results as the original 
 #' method: to do so, set `original=TRUE`. In our exploration of the method and 
 #' its behavior, we found the decay to be too slow, and we therefore 1) do not 
@@ -236,7 +241,11 @@ getNeighboringPairConcordance <- function(true, pred, location, k=20L,
 #'   of spatial pair concordances for each spot.
 #' @importFrom matrixStats rowMins rowMaxs
 #' @importFrom pdist pdist
+#' @importFrom BiocParallel bplapply SerialParam
 #' @export
+#' @examples
+#' data(sp_toys)
+#' spatialARI(true=sp_toys$label, pred=sp_toys$p2, coords = sp_toys[,1:2])
 spatialARI <- function(true, pred, coords, normCoords=TRUE, alpha=0.8, fbeta=4,
                        hbeta=1, spotWise=FALSE,  nChunks=NULL, original=FALSE,
                        f=function(x){ alpha*exp(-x*fbeta) },

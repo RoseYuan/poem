@@ -46,7 +46,8 @@ spatialARI(
 determined automatically based on the size of the dataset.}
 
 \item{original}{Logical; whether to use the original h/f functions from Yan,
-Feng and Luo (default FALSE).}
+Feng and Luo (default FALSE). If set to TRUE, the arguments \code{fbeta},
+\code{hbeta}, \code{f} and \code{h} are ignored.}
 
 \item{f}{The f function, which determines the positive contribution of pairs
 that are in different partitions in the reference, but grouped together in
@@ -67,16 +68,24 @@ of spatial pair concordances for each spot.
 }
 \description{
 Computes the spatial Rand Index and spatial ARI (Yan, Feng and Luo, 2025).
-See details for more information.
+Note that by default, the decay functions are different from those of the
+original publication (see details for more information), but the latter can
+be replicated with \code{original=TRUE}.
 }
 \details{
 This is a reimplementation of the method from the \code{spARI} package, made more
-scalable through chunk-based processing, and with some additional options.
+scalable (i.e. a bit slower but more memory-efficient) through chunk-based
+processing, extensible to more than 2 dimensions, and with some additional
+options.
 Note that by default, this will not produce the same results as the original
 method: to do so, set \code{original=TRUE}. In our exploration of the method and
 its behavior, we found the decay to be too slow, and we therefore 1) do not
 square the distances, and 2) introduced a beta parameter in each function
 which allows to scale it (a higher beta parameter means a faster decay).
+}
+\examples{
+data(sp_toys)
+spatialARI(true=sp_toys$label, pred=sp_toys$p2, coords = sp_toys[,1:2])
 }
 \references{
 Yan, Feng and Luo, biorxiv 2025, https://doi.org/10.1101/2025.03.25.645156
