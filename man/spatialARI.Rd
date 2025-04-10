@@ -43,7 +43,8 @@ spatialARI(
 (not adjusted for chance).}
 
 \item{nChunks}{The number of processing chunks. If NULL, this will be
-determined automatically based on the size of the dataset.}
+determined automatically based on the size of the dataset, so as to remain
+below 2GB RAM usage.}
 
 \item{original}{Logical; whether to use the original h/f functions from Yan,
 Feng and Luo (default FALSE). If set to TRUE, the arguments \code{fbeta},
@@ -82,6 +83,12 @@ method: to do so, set \code{original=TRUE}. In our exploration of the method and
 its behavior, we found the decay to be too slow, and we therefore 1) do not
 square the distances, and 2) introduced a beta parameter in each function
 which allows to scale it (a higher beta parameter means a faster decay).
+
+By default, chunking to keep RAM usage roughly below 2GB. Higher speed can
+be achieved (at higher memory costs) for larger datasets by limiting the
+number of chunks. The memory usage if done in a single chunk should be
+roughly \code{4e-5*nrow(coords)^2} Mb, and this scales down linearly with the
+number of chunks.
 }
 \examples{
 data(sp_toys)

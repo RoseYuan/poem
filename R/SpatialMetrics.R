@@ -207,7 +207,8 @@ getNeighboringPairConcordance <- function(true, pred, location, k=20L,
 #' @param spotWise Logical; whether to return the spot-wise spatial concordance
 #'   (not adjusted for chance).
 #' @param nChunks The number of processing chunks. If NULL, this will be 
-#'   determined automatically based on the size of the dataset.
+#'   determined automatically based on the size of the dataset, so as to remain
+#'   below 2GB RAM usage.
 #' @param original Logical; whether to use the original h/f functions from Yan, 
 #'   Feng and Luo (default FALSE). If set to TRUE, the arguments `fbeta`, 
 #'   `hbeta`, `f` and `h` are ignored.
@@ -236,6 +237,12 @@ getNeighboringPairConcordance <- function(true, pred, location, k=20L,
 #' square the distances, and 2) introduced a beta parameter in each function 
 #' which allows to scale it (a higher beta parameter means a faster decay).
 #' 
+#' By default, chunking to keep RAM usage roughly below 2GB. Higher speed can 
+#' be achieved (at higher memory costs) for larger datasets by limiting the 
+#' number of chunks. The memory usage if done in a single chunk should be 
+#' roughly `4e-5*nrow(coords)^2` Mb, and this scales down linearly with the 
+#' number of chunks.
+#' 
 #' @return A vector containing the spatial Rand Index (spRI) and spatial 
 #'   adjusted Rand Index (spARI). Alternatively, if `spotWise=TRUE`, a vector 
 #'   of spatial pair concordances for each spot.
@@ -258,6 +265,7 @@ spatialARI <- function(true, pred, coords, normCoords=TRUE, alpha=0.8, fbeta=4,
   stopifnot(is.function(h) && is.function(f))
   N <- length(true)
   stopifnot(length(pred)==N && nrow(coords)==N)
+  
   if(normCoords){
     coords <- t(coords)
     coords <- t((coords-matrixStats::rowMins(coords))/
@@ -268,13 +276,13 @@ spatialARI <- function(true, pred, coords, normCoords=TRUE, alpha=0.8, fbeta=4,
   p <- sum(choose(table(true), 2))/n_choose
   q <- sum(choose(table(pred), 2))/n_choose
   
-  if(is.null(nChunks)) nChunks <- ceiling(length(true)^2/2e+7)
+  if(is.null(nChunks)) nChunks <- ceiling(N^2/5e+7)
   
   sp <- split(seq_len(N), head(rep(seq_len(nChunks), ceiling(N/nChunks)), N))
 
   o <- bplapply(sp, BPPARAM=BPPARAM, FUN=function(i){
     if(nChunks==1){
-      di <- as.matrix(dist(coords))
+      di <- dist(coords)
       same_in_pred <- outer(pred, pred, `==`)
       same_in_true <- outer(true, true, `==`)
     }else{
@@ -282,19 +290,19 @@ spatialARI <- function(true, pred, coords, normCoords=TRUE, alpha=0.8, fbeta=4,
       same_in_pred <- outer(pred[i], pred, `==`)
       same_in_true <- outer(true[i], true, `==`)
     }
-    hv <- h(di)
-    fv <- f(di)
+    hv <- as.matrix(h(di))
+    fv <- as.matrix(f(di))
     w <- ifelse(same_in_pred==same_in_true, 1, ifelse(same_in_pred, fv, hv))
     spc <- (rowSums(w)-1)/(ncol(w)-1L)
     if(spotWise) return(spc)
-    list(spc, sum(hv), sum(fv))
+    c(sum(spc), sum(hv), sum(fv))
   })
   
   if(spotWise) return(unlist(o))
-  spRI <- mean(unlist(lapply(o, \(x) x[[1]])))
-  o <- matrix(unlist(lapply(o, \(x) x[2:3])), ncol=2, byrow = TRUE)
-  sH <- sum(o[,1])/2 - h(0)*length(true)
-  sF <- sum(o[,2])/2
+  o <- matrix(unlist(o), ncol=3, byrow = TRUE)
+  spRI <- sum(o[,1])/N
+  sH <- sum(o[,2])/2 - h(0)*N
+  sF <- sum(o[,3])/2
 
   expSpRI <- 1 + 2*p*q - (p+q) + (sF*q + sH*p - (sH+sF)*p*q)/n_choose
   spARI <- (spRI-expSpRI)/(1-expSpRI)
