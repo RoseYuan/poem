@@ -22,7 +22,8 @@ be a vector of characters, integers, numerics, or a factor, but not a list.}
 \item{metrics}{The metrics to compute. If omitted, main metrics will be
 computed. See below for more details.}
 
-\item{...}{Optional arguments for MI, VI, or VM. See \code{\link[clevr:mutual_info]{clevr::mutual_info()}}, \code{\link[clevr:variation_info]{clevr::variation_info()}}
+\item{...}{Optional arguments for MI, VI, or VM. See \code{\link[clevr:mutual_info]{clevr::mutual_info()}},
+\code{\link[clevr:variation_info]{clevr::variation_info()}}
 and \code{\link[clevr:v_measure]{clevr::v_measure()}} for more details.}
 }
 \value{

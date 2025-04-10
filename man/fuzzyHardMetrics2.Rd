@@ -33,8 +33,8 @@ whether the variation across permutations is above 0.0025, in which case
 more (max 1000) permutations will be run.}
 
 \item{returnElementPairAccuracy}{Logical. If TRUE, returns the per-element
-pair accuracy instead of the various parition-level and dataset-level metrics.
-Default FALSE.}
+pair accuracy instead of the various parition-level and dataset-level
+metrics. Default FALSE.}
 
 \item{verbose}{Logical; whether to print info and warnings, including the
 standard error of the mean across permutations (giving an idea of the
@@ -59,16 +59,16 @@ This is a slightly slower, but low-memory version of
 \examples{
 # generate a fuzzy truth:
 fuzzyTrue <- matrix(c(
-  0.95, 0.025, 0.025, 
-  0.98, 0.01, 0.01, 
-  0.96, 0.02, 0.02, 
-  0.95, 0.04, 0.01, 
-  0.95, 0.01, 0.04, 
-  0.99, 0.005, 0.005, 
-  0.025, 0.95, 0.025, 
-  0.97, 0.02, 0.01, 
-  0.025, 0.025, 0.95), 
-  ncol = 3, byrow=TRUE)
+0.95, 0.025, 0.025,
+0.98, 0.01, 0.01,
+0.96, 0.02, 0.02,
+0.95, 0.04, 0.01,
+0.95, 0.01, 0.04,
+0.99, 0.005, 0.005,
+0.025, 0.95, 0.025,
+0.97, 0.02, 0.01,
+0.025, 0.025, 0.95),
+ncol = 3, byrow=TRUE)
 # a hard truth:
 hardTrue <- apply(fuzzyTrue,1,FUN=which.max)
 # some predicted labels:

@@ -22,8 +22,8 @@ number of rows as the length of \code{hardTrue}.}
 \item{hardPred}{A vector of predicted cluster labels}
 
 \item{useNegatives}{Logical; whether to include negative pairs in the
-concordance score (tends to result in a larger overall concordance and lower
-dynamic range of the score). Default TRUE.}
+concordance score (tends to result in a larger overall concordance and
+lower dynamic range of the score). Default TRUE.}
 
 \item{verbose}{Logical; whether to print expected memory usage for large
 datasets.}

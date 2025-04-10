@@ -27,16 +27,17 @@
 #' @importFrom stats mahalanobis dist
 #' @references 
 #' Halkidi, M. and Vazirgiannis, M. (2008) A density-based cluster validity 
-#' approach using multi-representatives. Pattern Recognition Letters 29, 773-786.
-#' @references Halkidi, M., Vazirgiannis, M. and Hennig, C. (2015) Method-independent 
-#' indices for cluster validation. In C. Hennig, M. Meila, F. Murtagh, R. Rocci 
-#' (eds.) Handbook of Cluster Analysis, CRC Press/Taylor \code{&} Francis, Boca 
-#' Raton.
+#' approach using multi-representatives. Pattern Recognition Letters 29, 
+#' 773-786.
+#' @references Halkidi, M., Vazirgiannis, M. and Hennig, C. (2015) 
+#' Method-independent indices for cluster validation. In C. Hennig, M. Meila, 
+#' F. Murtagh, R. Rocci (eds.) Handbook of Cluster Analysis, CRC Press/Taylor 
+#' \code{&} Francis, Boca Raton.
 #'
 #' @author Christian Hennig
 #' @examples
 #' d1 <- mockData()
-#' CDbw(d1[,1:2], d1[,3])
+#' CDbw(d1[,seq_len(2)], d1[,3])
 CDbw <- function(x, labels, r=10, s=seq(0.1,0.8,by=0.1),
                  clusterstdev=TRUE, trace=FALSE){
   labels <- as.integer(as.factor(labels))
@@ -53,7 +54,7 @@ CDbw <- function(x, labels, r=10, s=seq(0.1,0.8,by=0.1),
   wvar <- numeric(0)
   repx <- list()
   if (trace)
-    print("Find representatives")
+    message("Find representatives")
   for (i in seq_len(cn)){
     nc[i] <- sum(labels==i)
     xcc[i,] <- colMeans(x[labels==i,,drop=FALSE])

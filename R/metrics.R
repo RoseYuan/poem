@@ -121,7 +121,7 @@ FMeasure <- function(true, pred, silent=TRUE){
   r <- apply(a,2,function(x)x/rowSums(a))
   if(!silent) message("Precision: ",
                       sum(apply(p,1,max) * (rowSums(a)/sum(a))),
-                      "\nRecall: ",sum(apply(r,1,max) * (rowSums(a)/sum(a))),"\n")
+                      "\nRecall: ",sum(apply(r,1,max)*(rowSums(a)/sum(a))),"\n")
   f <- 2*r*p / (r+p)
   f[is.na(f)] <- 0
   sum(apply(f,1,max) * (rowSums(a)/sum(a)))
@@ -169,7 +169,8 @@ getPairConcordance <- function(true, pred, usePairs=TRUE, useNegatives=FALSE,
   if(usePairs){
     if(useNegatives){
       # if(adjust){
-      #   allp <- apply(matrix(runif(length(pred) * 20), nrow=length(pred)), 2, order)
+      #   allp <- apply(matrix(runif(length(pred) * 20), 
+      #   nrow=length(pred)), 2, order)
       #   return(sapply(seq_along(pred), FUN=function(i){
       #     true.co <- (true==true[[i]])
       #     pa <- 1-sum(abs( (pred==pred[[i]]) - true.co ))/(length(pred)-1)
@@ -197,7 +198,8 @@ getPairConcordance <- function(true, pred, usePairs=TRUE, useNegatives=FALSE,
       # })
       # dimnames(p) <- dimnames(co)
     }else{
-      truePairsPerCluster <- matrix(rep(colSums(pairs),each=nrow(co)),nrow=nrow(co))
+      truePairsPerCluster <- matrix(rep(colSums(pairs),
+                                        each=nrow(co)),nrow=nrow(co))
       truePairs <- truePairsPerCluster + #per cluster
         rowSums(pairs) - pairs # per class minus double-counting
       p <- unclass(truePairs/choose(tot,2))
@@ -205,11 +207,13 @@ getPairConcordance <- function(true, pred, usePairs=TRUE, useNegatives=FALSE,
         # expected random contingency table
         rco <- as.numeric(table(true)/length(true)) %*% t(table(pred)/length(pred))
         rco <- rco*length(true)
-        # number of spots in the expected union between any class and any cluster:
+        # number of spots in the expected union between any 
+        # class and any cluster:
         rtot <- matrix(rep(rowSums(rco),ncol(rco)),nrow=nrow(rco))+
           matrix(rep(colSums(rco),each=nrow(rco)),nrow=nrow(rco))-rco
         pairs <- choose(rco,2)
-        truePairsPerCluster <- matrix(rep(colSums(pairs),each=nrow(rco)),nrow=nrow(rco))
+        truePairsPerCluster <- matrix(rep(colSums(pairs),each=nrow(rco)),
+                                      nrow=nrow(rco))
         truePairs <- truePairsPerCluster + #per cluster
           rowSums(pairs) - pairs # per class minus double-counting
         rp <- unclass(truePairs/choose(rtot,2))
@@ -223,7 +227,8 @@ getPairConcordance <- function(true, pred, usePairs=TRUE, useNegatives=FALSE,
     p <- unclass(co/tot)
   }
   # assign each spot its score:
-  p <- setNames(as.numeric(p), paste(rep(row.names(p),ncol(p)),rep(colnames(p),each=nrow(p))))
+  p <- setNames(as.numeric(p), paste(rep(row.names(p),ncol(p)),
+                                     rep(colnames(p),each=nrow(p))))
   as.numeric(p[paste(true, pred)])
 }
 

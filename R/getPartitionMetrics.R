@@ -17,7 +17,8 @@
 #'   - If `level = "element"`, the allowed `metrics` are: 
 #'      - `"SPC"`: Spot-wise Pair Concordance.
 #'      - `"ASPC"`: Adjusted Spot-wise Pair Concordance.
-#'   - If `level = "class"`, the allowed `metrics` are: `"WC"`,`"WH"`,`"AWC"`,`"AWH"`,`"FM"` (see below for details).
+#'   - If `level = "class"`, the allowed `metrics` are: `"WC"`,`"WH"`,`"AWC"`,
+#'   `"AWH"`,`"FM"` (see below for details).
 #'   - If `level = "dataset"`, the allowed `metrics` are:
 #'      - `"RI"`: Rand Index 
 #'      - `"WC"`: Wallace Completeness
@@ -40,11 +41,12 @@
 #'      - `"Accuracy"`: Set Matching Accuracy
 #' @export
 #' @examples
-#' true <- rep(LETTERS[1:3], each=10)
+#' true <- rep(LETTERS[seq_len(3)], each=10)
 #' pred <- c(rep("A", 8), rep("B", 9), rep("C", 3), rep("D", 10))
 #' getPartitionMetrics(true, pred, level="class")
 #' getPartitionMetrics(true, pred, level="dataset")
-getPartitionMetrics <-function(true, pred, metrics=c("WC","WH","AWC","AWH","FM"), 
+getPartitionMetrics <-function(true, pred, 
+                               metrics=c("WC","WH","AWC","AWH","FM"), 
                            level="class", ...){
   # Map level to the corresponding function
   level_functions <- list(
@@ -68,7 +70,8 @@ getPartitionMetrics <-function(true, pred, metrics=c("WC","WH","AWC","AWH","FM")
 #' @param metrics The metrics to compute.
 #' @keywords internal
 #' @return A dataframe of metrics.
-getPartitionElementMetrics <- function(true, pred, metrics=c("SPC"), usePairs=TRUE, useNegatives=TRUE){
+getPartitionElementMetrics <- function(true, pred, metrics=c("SPC"), 
+                                       usePairs=TRUE, useNegatives=TRUE){
   if (anyNA(true) | anyNA(pred))
     stop("NA are not supported.")
   if (is.character(true)) true <- as.factor(true)

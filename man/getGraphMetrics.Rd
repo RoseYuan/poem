@@ -25,9 +25,9 @@ label of each element (i.e. row or vertex) of \code{x}.}
 
 \item{metrics}{The metrics to compute. See details.}
 
-\item{directed}{Logical; whether to compute the metrics in a directed fashion.
-If left to NULL, conventional choices will be made per metric (adhesion,
-cohesion, PWC AMSP undirected, others directed).}
+\item{directed}{Logical; whether to compute the metrics in a directed
+fashion. If left to NULL, conventional choices will be made per metric
+(adhesion, cohesion, PWC AMSP undirected, others directed).}
 
 \item{k}{The number of nearest neighbors to compute and/or use. Can be
 omitted if \code{x} is a graph or list of nearest neighbors.}
@@ -36,8 +36,8 @@ omitted if \code{x} is a graph or list of nearest neighbors.}
 instead of a nearest neighbor network. Ignored if \code{x} is not an embedding
 or dist object.}
 
-\item{level}{The level to calculate the metrics. Options include \code{"element"},
-\code{"class"} and \code{"dataset"}.}
+\item{level}{The level to calculate the metrics. Options include
+\code{"element"}, \code{"class"} and \code{"dataset"}.}
 
 \item{...}{Optional arguments for \code{\link[=emb2knn]{emb2knn()}} or \code{\link[=emb2snn]{emb2snn()}}.}
 }
@@ -50,7 +50,8 @@ Computes a selection of graph evaluation metrics using class labels.
 \details{
 The allowed values for \code{metrics} depend on the value of \code{level}:
 \itemize{
-\item If \code{level = "element"}, the allowed \code{metrics} are: \code{"SI"},\code{"ISI"},\code{"NP"},\code{"NCE"} (see below for details).
+\item If \code{level = "element"}, the allowed \code{metrics} are: \code{"SI"},\code{"ISI"},\code{"NP"},
+\code{"NCE"} (see below for details).
 \item If \code{level = "class"}, the allowed \code{metrics} are:
 \itemize{
 \item \code{"SI"}: Simpson’s Index.
@@ -59,13 +60,16 @@ The allowed values for \code{metrics} depend on the value of \code{level}:
 \item \code{"AMSP"}: Adjusted Mean Shortest Path
 \item \code{"PWC"}: Proportion of Weakly Connected
 \item \code{"NCE"}: Neighborhood Class Enrichment
-\item \code{"adhesion"}: adhesion of a graph, is the minumum number of nodes that must be removed to split a graph.
-\item \code{"cohesion"}: cohesion of a graph, is the minumum number of edges that must be removed to split a graph.
+\item \code{"adhesion"}: adhesion of a graph, is the minumum number of nodes
+that must be removed to split a graph.
+\item \code{"cohesion"}: cohesion of a graph, is the minumum number of edges
+that must be removed to split a graph.
 }
-\item If \code{level = "dataset"}, the allowed \code{metrics} are: \code{"SI"},\code{"ISI"},\code{"NP"},\code{"AMSP"},\code{"PWC"},\code{"NCE"}, \code{"adhesion"},\code{"cohesion"}.
+\item If \code{level = "dataset"}, the allowed \code{metrics} are: \code{"SI"},\code{"ISI"},
+\code{"NP"},\code{"AMSP"},\code{"PWC"},\code{"NCE"}, \code{"adhesion"},\code{"cohesion"}.
 }
 }
 \examples{
 d1 <- mockData()
-getGraphMetrics(d1[,1:2], labels=d1$class, level="class")
+getGraphMetrics(d1[,seq_len(2)], labels=d1$class, level="class")
 }

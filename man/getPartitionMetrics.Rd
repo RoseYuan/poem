@@ -25,7 +25,8 @@ computed. See details.}
 \item{level}{The level to calculate the metrics. Options include "element",
 \code{"class"} and \code{"dataset"}.}
 
-\item{...}{Optional arguments for MI, VI, or VM. See \code{\link[clevr:mutual_info]{clevr::mutual_info()}}, \code{\link[clevr:variation_info]{clevr::variation_info()}}
+\item{...}{Optional arguments for MI, VI, or VM. See \code{\link[clevr:mutual_info]{clevr::mutual_info()}},
+\code{\link[clevr:variation_info]{clevr::variation_info()}}
 and \code{\link[clevr:v_measure]{clevr::v_measure()}} for more details.}
 }
 \value{
@@ -42,7 +43,8 @@ The allowed values for \code{metrics} depend on the value of \code{level}:
 \item \code{"SPC"}: Spot-wise Pair Concordance.
 \item \code{"ASPC"}: Adjusted Spot-wise Pair Concordance.
 }
-\item If \code{level = "class"}, the allowed \code{metrics} are: \code{"WC"},\code{"WH"},\code{"AWC"},\code{"AWH"},\code{"FM"} (see below for details).
+\item If \code{level = "class"}, the allowed \code{metrics} are: \code{"WC"},\code{"WH"},\code{"AWC"},
+\code{"AWH"},\code{"FM"} (see below for details).
 \item If \code{level = "dataset"}, the allowed \code{metrics} are:
 \itemize{
 \item \code{"RI"}: Rand Index
@@ -68,7 +70,7 @@ The allowed values for \code{metrics} depend on the value of \code{level}:
 }
 }
 \examples{
-true <- rep(LETTERS[1:3], each=10)
+true <- rep(LETTERS[seq_len(3)], each=10)
 pred <- c(rep("A", 8), rep("B", 9), rep("C", 3), rep("D", 10))
 getPartitionMetrics(true, pred, level="class")
 getPartitionMetrics(true, pred, level="dataset")

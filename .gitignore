@@ -1,3 +1,6 @@
+poem.BiocCheck/*
+# Old data scripts
+data-raw/*
 # History files
 .Rhistory
 .Rapp.history

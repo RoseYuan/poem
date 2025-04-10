@@ -7,15 +7,18 @@
 .get_internal_objects(mutual_reach_dists, use_igraph_mst = TRUE)
 }
 \arguments{
-\item{mutual_reach_dists}{Numeric matrix representing mutual reachability distances.}
+\item{mutual_reach_dists}{Numeric matrix representing mutual reachability
+distances.}
 
 \item{use_igraph_mst}{Logical flag to use MST implementation
 in igraph. Currently only mst from igraph is implemented.}
 }
 \value{
-A list containing the indices of internal nodes and their edge weights.
+A list containing the indices of internal nodes and their edge
+weights.
 }
 \description{
-Computes the internal nodes and edges using Minimum Spanning Tree.
+Computes the internal nodes and edges using Minimum Spanning
+Tree.
 }
 \keyword{internal}

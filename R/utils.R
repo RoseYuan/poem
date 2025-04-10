@@ -37,7 +37,7 @@
 #' @export
 #' @examples
 #' d1 <- mockData()
-#' emb2knn(as.matrix(d1[,1:2]),k=5)
+#' emb2knn(as.matrix(d1[,seq_len(2)]),k=5)
 emb2knn <- function(x, k, BNPARAM=NULL){
   stopifnot(is.matrix(x) && is.numeric(x))
   stopifnot(is.numeric(k) && length(k)==1 && k>0 && (k %/% 1)==k)
@@ -58,7 +58,8 @@ emb2knn <- function(x, k, BNPARAM=NULL){
 #' @param x A numeric matrix (with features as columns and items as 
 #'   rows) from which nearest neighbors will be computed.
 #' @param k The number of nearest neighbors.
-#' @param type A string specifying the type of weighting scheme to use for shared neighbors.
+#' @param type A string specifying the type of weighting scheme to use for 
+#' shared neighbors.
 #' Possible choices include "rank", "number", and "jaccard". See `type` in 
 #' [bluster::neighborsToSNNGraph()] for details.
 #' @param BNPARAM A BiocNeighbors parameter object to compute kNNs. Ignored 
@@ -69,7 +70,7 @@ emb2knn <- function(x, k, BNPARAM=NULL){
 #' @export
 #' @examples
 #' d1 <- mockData()
-#' emb2snn(as.matrix(d1[,1:2]),k=5)
+#' emb2snn(as.matrix(d1[,seq_len(2)]),k=5)
 #' @importFrom bluster neighborsToSNNGraph
 emb2snn <- function(x, k, type="rank", BNPARAM=NULL){
   knn <- emb2knn(x, k, BNPARAM=BNPARAM)
@@ -108,7 +109,8 @@ emb2snn <- function(x, k, type="rank", BNPARAM=NULL){
 #' @importFrom igraph as_adj_list
 .igraph2nn <- function(x, labels=NULL, directed=TRUE){
   if(is.null(labels)) labels <- vertex_attr(x,"class")
-  nn <- lapply(as_adj_list(x, loops="ignore", mode=ifelse(directed,"out","total")),
+  nn <- lapply(as_adj_list(x, loops="ignore", 
+                           mode=ifelse(directed,"out","total")),
                as.integer)
   if(!directed || !all(lengths(nn)==length(nn[[1]]))) return(nn)
   knn <- matrix(unlist(nn),nrow=length(nn),byrow=TRUE)
@@ -149,13 +151,15 @@ emb2snn <- function(x, k, type="rank", BNPARAM=NULL){
 }
 
 # Check for unrecognized arguments and filter arguments for each function
-# example usage: function1(!!!.checkEllipsisArgs(fnList = list(function1, function2), a = 1, b = 2, c = 3)[[1]])
+# example usage: function1(!!!.checkEllipsisArgs(fnList = list(function1, 
+# function2), a = 1, b = 2, c = 3)[[1]])
 .checkEllipsisArgs <- function(fnList=list(), ...) {
   args <- list(...)
   formal_args <- lapply(fnList, FUN=\(x) names(formals(x)))
   
   if(length(unknown <- setdiff(names(args), unlist(formal_args)))>0)
-    stop("Some unrecognized arguments were given: ", paste(unknown, collapse=", "))
+    stop("Some unrecognized arguments were given: ", paste(unknown, 
+                                                           collapse=", "))
   
   lapply(formal_args, FUN=\(x){
     args[names(args) %in% x]
@@ -164,17 +168,20 @@ emb2snn <- function(x, k, type="rank", BNPARAM=NULL){
 
 # Check the argument where multiple values can be inputed once
 # difference with match.arg: if the input arguments contain anything that is not
-# recognised, this will throw an error or warning (depend on the argument "warning").
+# recognised, this will throw an error or warning (depend on the argument 
+# "warning").
 .checkInvalidArgs <- function(args, allowed_args, arg_name, warning=TRUE){
   valid_args <- match.arg(args, allowed_args, several.ok = TRUE)
   invalid_args <- setdiff(args, valid_args)
   if (length(invalid_args) > 0) {
     if (warning){
       warning("Invalid ", arg_name, ": ", paste(invalid_args, collapse = ", "),
-           ". Allowed ", arg_name, " are: ", paste(allowed_args, collapse = ", "))
+           ". Allowed ", arg_name, " are: ", paste(allowed_args, 
+                                                   collapse = ", "))
     }else{
       stop("Invalid ", arg_name, ": ", paste(invalid_args, collapse = ", "),
-           ". Allowed ", arg_name, " are: ", paste(allowed_args, collapse = ", "))
+           ". Allowed ", arg_name, " are: ", paste(allowed_args, 
+                                                   collapse = ", "))
     }
   }
 }
@@ -196,7 +203,8 @@ emb2snn <- function(x, k, type="rank", BNPARAM=NULL){
   return(allowed_args)
 }
 
-# check if the "metrics" argument is valide for the specified "level" of calculation
+# check if the "metrics" argument is valide for the specified "level" of 
+# calculation
 .checkMetricsLevel <- function(metrics, level, level_functions, ...) {
   # Check if level is valid by looking it up in level_functions
   if (!level %in% names(level_functions)) {

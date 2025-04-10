@@ -14,6 +14,8 @@ A data frame.
 metric_info
 }
 \description{
-A dataframe storing the information of all metrics
+A dataframe storing the information of all metrics. The code to
+generate the dataset is at
+system.file('inst/scripts/', 'metric_info.R', package='poem').
 }
 \keyword{datasets}

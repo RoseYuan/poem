@@ -31,8 +31,8 @@ simulate_hexagonal_grid <- function(n_rows=10, n_cols=10){
   
   index <- 1
   
-  for (row in 1:n_rows) {
-    for (col in 1:n_cols) {
+  for (row in seq_len(n_rows)) {
+    for (col in seq_len(n_cols)) {
       # Calculate x and y for the center of the hexagon
       x <- col * sqrt(3) * hex_radius
       y <- row * hex_height
@@ -58,7 +58,7 @@ simulate_hexagonal_grid <- function(n_rows=10, n_cols=10){
 
 sp_toys <- simulate_hexagonal_grid(n_rows, n_cols)
 sp_toys$label <- NA
-for (i in 1:dim(sp_toys)[1]) {
+for (i in seq_len(dim(sp_toys)[1])) {
   if(sp_toys[i, "col"] > sp_toys[i, "row"] + 6){
     sp_toys[i, "label"] <- 1
   }else{
@@ -68,10 +68,14 @@ for (i in 1:dim(sp_toys)[1]) {
 sp_toys$label <- factor(sp_toys$label)
 
 sp_toys$p2 <- sp_toys$label
-sp_toys[sp_toys$row == 4 & (sp_toys$col %in% c(12,14,16,18,20)), "p2"] <- factor(2, levels=c(1,2))
-sp_toys[sp_toys$row == 5 & (sp_toys$col %in% c(13,15,17,19)), "p2"] <- factor(2, levels=c(1,2))
-sp_toys[sp_toys$row == 6 & (sp_toys$col %in% c(14,16,18,20)), "p2"] <- factor(2, levels=c(1,2))
-sp_toys[sp_toys$row == 7 & (sp_toys$col %in% c(15,17,19)), "p2"] <- factor(2, levels=c(1,2))
+sp_toys[sp_toys$row == 4 & (sp_toys$col %in% c(12,14,16,18,20)), 
+        "p2"] <- factor(2, levels=c(1,2))
+sp_toys[sp_toys$row == 5 & (sp_toys$col %in% c(13,15,17,19)), 
+        "p2"] <- factor(2, levels=c(1,2))
+sp_toys[sp_toys$row == 6 & (sp_toys$col %in% c(14,16,18,20)), 
+        "p2"] <- factor(2, levels=c(1,2))
+sp_toys[sp_toys$row == 7 & (sp_toys$col %in% c(15,17,19)), 
+        "p2"] <- factor(2, levels=c(1,2))
 
 sp_toys$p1 <- sp_toys$label
 for (i in unique(sp_toys$row)) {
@@ -79,35 +83,50 @@ for (i in unique(sp_toys$row)) {
 } 
 
 sp_toys$p3 <- sp_toys$label
-sp_toys[sp_toys$row == 3 & (sp_toys$col %in% c(21,23)), "p3"] <- factor(2, levels=c(1,2))
+sp_toys[sp_toys$row == 3 & (sp_toys$col %in% c(21,23)), 
+        "p3"] <- factor(2, levels=c(1,2))
 
-sp_toys[sp_toys$row == 4 & (sp_toys$col %in% c(12,14)), "p3"] <- factor(2, levels=c(1,2))
-sp_toys[sp_toys$row == 5 & (sp_toys$col %in% c(13,15)), "p3"] <- factor(2, levels=c(1,2))
-sp_toys[sp_toys$row == 6 & (sp_toys$col %in% c(14)), "p3"] <- factor(2, levels=c(1,2))
+sp_toys[sp_toys$row == 4 & (sp_toys$col %in% c(12,14)), 
+        "p3"] <- factor(2, levels=c(1,2))
+sp_toys[sp_toys$row == 5 & (sp_toys$col %in% c(13,15)), 
+        "p3"] <- factor(2, levels=c(1,2))
+sp_toys[sp_toys$row == 6 & (sp_toys$col %in% c(14)), 
+        "p3"] <- factor(2, levels=c(1,2))
 
-sp_toys[sp_toys$row == 5 & (sp_toys$col %in% c(21,23)), "p3"] <- factor(2, levels=c(1,2))
-sp_toys[sp_toys$row == 6 & (sp_toys$col %in% c(22)), "p3"] <- factor(2, levels=c(1,2))
+sp_toys[sp_toys$row == 5 & (sp_toys$col %in% c(21,23)), 
+        "p3"] <- factor(2, levels=c(1,2))
+sp_toys[sp_toys$row == 6 & (sp_toys$col %in% c(22)), 
+        "p3"] <- factor(2, levels=c(1,2))
 
-sp_toys[sp_toys$row == 9 & (sp_toys$col %in% c(25)), "p3"] <- factor(2, levels=c(1,2))
+sp_toys[sp_toys$row == 9 & (sp_toys$col %in% c(25)), 
+        "p3"] <- factor(2, levels=c(1,2))
 
-sp_toys[sp_toys$row == 12 & (sp_toys$col %in% c(20,26)), "p3"] <- factor(2, levels=c(1,2))
+sp_toys[sp_toys$row == 12 & (sp_toys$col %in% c(20,26)), 
+        "p3"] <- factor(2, levels=c(1,2))
 
-sp_toys[sp_toys$row == 10 & (sp_toys$col %in% c(18,20)), "p3"] <- factor(2, levels=c(1,2))
-sp_toys[sp_toys$row == 11 & (sp_toys$col %in% c(19)), "p3"] <- factor(2, levels=c(1,2))
+sp_toys[sp_toys$row == 10 & (sp_toys$col %in% c(18,20)), 
+        "p3"] <- factor(2, levels=c(1,2))
+sp_toys[sp_toys$row == 11 & (sp_toys$col %in% c(19)), 
+        "p3"] <- factor(2, levels=c(1,2))
 
 sp_toys$label2 <- sp_toys$p2
 sp_toys$p4 <- sp_toys$label
 
 
 sp_toys$p5 <- sp_toys$p2
-sp_toys[sp_toys$row == 4 & (sp_toys$col %in% c(20)), "p5"] <- factor(1, levels=c(1,2))
-sp_toys[sp_toys$row == 5 & (sp_toys$col %in% c(19)), "p5"] <- factor(1, levels=c(1,2))
-sp_toys[sp_toys$row == 6 & (sp_toys$col %in% c(20)), "p5"] <- factor(1, levels=c(1,2))
-sp_toys[sp_toys$row == 7 & (sp_toys$col %in% c(19)), "p5"] <- factor(1, levels=c(1,2))
+sp_toys[sp_toys$row == 4 & (sp_toys$col %in% c(20)), 
+        "p5"] <- factor(1, levels=c(1,2))
+sp_toys[sp_toys$row == 5 & (sp_toys$col %in% c(19)), 
+        "p5"] <- factor(1, levels=c(1,2))
+sp_toys[sp_toys$row == 6 & (sp_toys$col %in% c(20)), 
+        "p5"] <- factor(1, levels=c(1,2))
+sp_toys[sp_toys$row == 7 & (sp_toys$col %in% c(19)), 
+        "p5"] <- factor(1, levels=c(1,2))
 
 for (i in unique(sp_toys$row)) {
   if(i !=4 & i!=5 & i!=6 & i!=7){
-    sp_toys[sp_toys$row==i & sp_toys$col==i+6, "p5"] <- factor(1, levels=c(1,2))
+    sp_toys[sp_toys$row==i & sp_toys$col==i+6, 
+            "p5"] <- factor(1, levels=c(1,2))
   }
 } 
 

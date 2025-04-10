@@ -15,8 +15,8 @@ articles:
 - title: Articles
   navbar: ~
   contents:
-  - table
-  - SpatialExperiment
+  - MetricsInPoem
+  - PoemOnSpatialExperiment
   
 reference:
 - title: Main functions

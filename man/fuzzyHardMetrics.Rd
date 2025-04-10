@@ -34,8 +34,8 @@ whether the variation across permutations is above 0.0025, in which case
 more (max 1000) permutations will be run.}
 
 \item{returnElementPairAccuracy}{Logical. If TRUE, returns the per-element
-pair accuracy instead of the various parition-level and dataset-level metrics.
-Default FALSE.}
+pair accuracy instead of the various parition-level and dataset-level
+metrics. Default FALSE.}
 
 \item{lowMemory}{Logical; whether to use the slower, low-memory algorithm.
 By default this is enabled if the projected memory usage is higher than

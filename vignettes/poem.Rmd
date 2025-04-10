@@ -27,16 +27,17 @@ vignette: |
 </style>
 
 ```{r, echo=FALSE, message=FALSE, warning = FALSE}
-knitr::opts_chunk$set(error=FALSE, message=FALSE, warning=FALSE, collapse = TRUE)
+knitr::opts_chunk$set(error=FALSE, message=FALSE, 
+                      warning=FALSE, collapse = TRUE)
 library(BiocStyle)
 ```
 
 # Installation & loading {-}
 
 ```{r, eval=FALSE}
-if (!requireNamespace("devtools", quietly = TRUE))
-    install.packages("devtools")
-devtools::install_github("RoseYuan/poem")
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("poem")
 ```
 
 ```{r, message = FALSE,  warning = FALSE}
@@ -58,7 +59,7 @@ This package provides multiple approaches for comparing two partitions[^1] of th
 Besides, this package further offers methods for comparing two fuzzy partitions[^2] as well as for comparing a hard partition with a fuzzy partition. This allows the evaluation of fuzzy partition results by assessing its agreement to a fuzzy or a hard ground-truth partition.
 
 Finally, the package implements visualization and evaluation metrics tailored for domain detection in spatially-resolved -omics data.
-These include especially external evaluation metrics (i.e. based on a comparison to ground truth labels), but also internal metrics. 
+These include especially external evaluation metrics (i.e. based on a comparison to ground truth labels), but also internal metrics. For a detailed description on how to work with `r Biocpkg("SpatialExperiment")` objects, we refer to another vignette of `r Biocpkg("poem", vignette = "PoemOnSpatialExperiment.html")`.
 
 [^1]: A partition is a way of organizing the data points of a dataset into distinct, non-overlapping, and non-empty subsets. For example, a clustering is a partition. 
 
@@ -184,11 +185,12 @@ plotGraphs <- function(d, k=7){
   gn <- dplyr::bind_rows(lapply(split(d[,-1],d$graph), FUN=function(d1){
     nn <- emb2knn(as.matrix(d1[,c("x","y")]), k=k)
     g <- poem:::.nn2graph(nn, labels=d1$class)
-    ggnetwork(g, layout=as.matrix(d1[,1:2]), scale=FALSE)
+    ggnetwork(g, layout=as.matrix(d1[,seq_len(2)]), scale=FALSE)
   }), .id="graph")
   ggplot(gn, aes(x = x, y = y, xend = xend, yend = yend)) + theme_blank() + 
     theme(legend.position = "right") + geom_edges(alpha=0.5, colour="grey") + 
-    geom_nodes(aes(colour=class, shape=class), size=2) + facet_wrap(~graph, nrow=1)
+    geom_nodes(aes(colour=class, shape=class), size=2) + 
+    facet_wrap(~graph, nrow=1)
 }
 ```
 
@@ -208,8 +210,12 @@ getGraphMetrics(x=g1[,c("x","y")], labels=g1$class, metrics=c("PWC","ISI"),
 ```
 
 ```{r, fig.height = 3, fig.width = 7}
-res1 <- getGraphMetrics(x=g1[,c("x","y")], labels=g1$class,metrics=c("PWC","ISI"), level="class", directed=FALSE, k=7, shared=FALSE)
-res2 <- getGraphMetrics(x=g2[,c("x","y")], labels=g2$class, metrics=c("PWC","ISI"), level="class", directed=FALSE, k=7, shared=FALSE)
+res1 <- getGraphMetrics(x=g1[,c("x","y")], 
+                        labels=g1$class,metrics=c("PWC","ISI"), 
+                        level="class", directed=FALSE, k=7, shared=FALSE)
+res2 <- getGraphMetrics(x=g2[,c("x","y")], labels=g2$class, 
+                        metrics=c("PWC","ISI"), level="class", 
+                        directed=FALSE, k=7, shared=FALSE)
 
 bind_rows(list(graph1=res1, graph2=res2), .id="graph") %>% 
   pivot_longer(cols=c("PWC","ISI"), names_to="metric",values_to="value") %>%

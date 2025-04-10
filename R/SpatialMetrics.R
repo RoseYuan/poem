@@ -29,13 +29,15 @@ nnWeightedAccuracy <- function(true, pred, location, k=5, ...){
 
 #' @title Calculate PAS score
 #' @description PAS score measures the clustering performance by calculating 
-#' the randomness of the spots that located outside of the spatial region where it was clustered to.
-#' Lower PAS score indicates better spatial domian clustering performance.
+#' the randomness of the spots that located outside of the spatial region where 
+#' it was clustered to. Lower PAS score indicates better spatial domian 
+#' clustering performance.
 #' @param labels Cluster labels.
 #' @param k Number of nearest neighbors.
 #' @param ... Optional params for [findSpatialKNN()].
 #' @inheritParams getSpatialGlobalInternalMetrics
-#' @return A numeric value for PAS score, and a boolean vector about the abnormal spots.
+#' @return A numeric value for PAS score, and a boolean vector about the 
+#' abnormal spots.
 #' @export
 #' @examples 
 #' data(sp_toys)
@@ -85,12 +87,16 @@ CHAOS <- function(labels, location, BNPARAM=NULL) {
     }
     # Find the nearest neighbors within the cluster using BiocNeighbors::findKNN
     knn_result <- BiocNeighbors::findKNN(as.matrix(location_cluster), k = 1,
-                                         warn.ties=FALSE, get.index = FALSE, BNPARAM=BNPARAM)
-    # The distances to the nearest neighbors are stored in the knn_result$distance
+                                         warn.ties=FALSE, get.index = FALSE, 
+                                         BNPARAM=BNPARAM)
+    # The distances to the nearest neighbors are stored in the 
+    knn_result$distance
     # We sum the distances to the nearest neighbor for each point in the cluster
-    dist_val[count] <- sum(knn_result$distance[, 1])  # 2nd column for the nearest neighbor (not itself)
+    dist_val[count] <- sum(knn_result$distance[, 1])  
+    # 2nd column for the nearest neighbor (not itself)
   }
-  res_class <- dist_val/unlist(lapply(label_unique, function(x){sum(labels==x)}))
+  res_class <- dist_val/unlist(lapply(label_unique, 
+                                      function(x){sum(labels==x)}))
   names(res_class) <- label_unique
   return(list(CHAOS=sum(dist_val) / length(labels), CHAOS_class=res_class))
 }
@@ -105,7 +111,8 @@ CHAOS <- function(labels, location, BNPARAM=NULL) {
 #' @importFrom spdep knn2nb knearneigh nbdists
 #' @importFrom elsa elsa dneigh
 #' @references Naimi, Babak, et al., 2019; 10.1016/j.spasta.2018.10.001
-#' @return A dataframe containing the Ea, Ec and ELSA for all samples in the dataset.
+#' @return A dataframe containing the Ea, Ec and ELSA for all samples in the 
+#' dataset.
 #' @examples
 #' data(sp_toys)
 #' data <- sp_toys
@@ -118,7 +125,8 @@ ELSA <- function(labels, location, k=10){
   spdf <- sp::SpatialPointsDataFrame(location, data=data.frame(label=labels))
   k1 <- spdep::knn2nb(spdep::knearneigh(location, k=k))
   all.linked <- max(unlist(spdep::nbdists(k1, location)))
-  elc <- elsa::elsa(x=spdf, d=elsa::dneigh(spdf, d1=0, d2=all.linked, longlat=FALSE), 
+  elc <- elsa::elsa(x=spdf, d=elsa::dneigh(spdf, d1=0, d2=all.linked, 
+                                           longlat=FALSE), 
               zcol="label")
   df <- as.data.frame(elc@data)
   return(df)

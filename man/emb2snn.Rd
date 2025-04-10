@@ -12,7 +12,8 @@ rows) from which nearest neighbors will be computed.}
 
 \item{k}{The number of nearest neighbors.}
 
-\item{type}{A string specifying the type of weighting scheme to use for shared neighbors.
+\item{type}{A string specifying the type of weighting scheme to use for
+shared neighbors.
 Possible choices include "rank", "number", and "jaccard". See \code{type} in
 \code{\link[bluster:makeSNNGraph]{bluster::neighborsToSNNGraph()}} for details.}
 
@@ -28,5 +29,5 @@ computes shared nearest neighbors from embedding.
 }
 \examples{
 d1 <- mockData()
-emb2snn(as.matrix(d1[,1:2]),k=5)
+emb2snn(as.matrix(d1[,seq_len(2)]),k=5)
 }

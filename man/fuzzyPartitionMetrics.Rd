@@ -36,8 +36,8 @@ standard error of the mean across permutations (giving an idea of the
 precision of the adjusted metrics).}
 
 \item{returnElementPairAccuracy}{Logical. If TRUE, returns the per-element
-pair accuracy instead of the various parition-level and dataset-level metrics.
-Default FALSE.}
+pair accuracy instead of the various parition-level and dataset-level
+metrics. Default FALSE.}
 
 \item{BPPARAM}{BiocParallel params for multithreading (default none)}
 
@@ -46,7 +46,8 @@ pairs (either product, min, or lukasiewicz) when calculating the Wallace
 indices. Does not influence the NDC/ACI metrics.}
 }
 \value{
-When \code{returnElementPairAccuracy} is \code{FALSE}, return a list of metrics:
+When \code{returnElementPairAccuracy} is \code{FALSE}, return a list of
+metrics:
 \item{NDC}{Hullermeier's NDC (fuzzy rand index)}
 \item{ACI}{Ambrosio's Adjusted Concordance Index (ACI), i.e. a
 permutation-based fuzzy version of the adjusted Rand index.}
@@ -64,28 +65,6 @@ permutations according to their variability.
 }
 \examples{
 # generate fuzzy partitions:
-m1 <- matrix(c(0.95, 0.025, 0.025, 
-               0.98, 0.01, 0.01, 
-               0.96, 0.02, 0.02, 
-               0.95, 0.04, 0.01, 
-               0.95, 0.01, 0.04, 
-               0.99, 0.005, 0.005, 
-               0.025, 0.95, 0.025, 
-               0.97, 0.02, 0.01, 
-               0.025, 0.025, 0.95), 
-               ncol = 3, byrow=TRUE)
-m2 <- matrix(c(0.95, 0.025, 0.025,  
-               0.98, 0.01, 0.01, 
-               0.96, 0.02, 0.02, 
-               0.025, 0.95, 0.025, 
-               0.02, 0.96, 0.02, 
-               0.01, 0.98, 0.01, 
-               0.05, 0.05, 0.95, 
-               0.02, 0.02, 0.96, 
-               0.01, 0.01, 0.98), 
-               ncol = 3, byrow=TRUE)
-colnames(m1) <- colnames(m2) <- LETTERS[1:3]
-fuzzyPartitionMetrics(m1,m2)
 }
 \references{
 Hullermeier et al. 2012; 10.1109/TFUZZ.2011.2179303;

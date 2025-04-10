@@ -43,9 +43,9 @@ A list:
 Compute the DBCV (Density-Based Clustering Validation) metric.
 }
 \details{
-This implementation will not fully reproduce the results of other existing
-implementations (e.g. \url{https://github.com/FelSiq/DBCV}) due to the different
-algorithms used for computing the Minimum Spanning Tree.
+This implementation will not fully reproduce the results of other
+existing implementations (e.g. \url{https://github.com/FelSiq/DBCV}) due to
+the different algorithms used for computing the Minimum Spanning Tree.
 }
 \examples{
 data(noisy_moon)

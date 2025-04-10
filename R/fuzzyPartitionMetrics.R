@@ -21,8 +21,8 @@
 #'   standard error of the mean across permutations (giving an idea of the 
 #'   precision of the adjusted metrics).
 #' @param returnElementPairAccuracy Logical. If TRUE, returns the per-element
-#'   pair accuracy instead of the various parition-level and dataset-level metrics.
-#'   Default FALSE.
+#'   pair accuracy instead of the various parition-level and dataset-level 
+#'   metrics. Default FALSE.
 #' @param BPPARAM BiocParallel params for multithreading (default none)
 #' @param tnorm Which type of t-norm operation to use for class membership of
 #'   pairs (either product, min, or lukasiewicz) when calculating the Wallace 
@@ -33,7 +33,8 @@
 #' 
 #' @author Pierre-Luc Germain
 #' 
-#' @return When `returnElementPairAccuracy` is `FALSE`, return a list of metrics:
+#' @return When `returnElementPairAccuracy` is `FALSE`, return a list of 
+#' metrics:
 #'   \item{NDC}{Hullermeier's NDC (fuzzy rand index)}
 #'   \item{ACI}{Ambrosio's Adjusted Concordance Index (ACI), i.e. a 
 #'     permutation-based fuzzy version of the adjusted Rand index.}
@@ -67,7 +68,7 @@
 #                0.02, 0.02, 0.96,
 #                0.01, 0.01, 0.98),
 #                ncol = 3, byrow=TRUE)
-# colnames(m1) <- colnames(m2) <- LETTERS[1:3]
+# colnames(m1) <- colnames(m2) <- LETTERS[seq_len(3)]
 # fuzzyPartitionMetrics(m1,m2)
 fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
                                   verbose=TRUE, returnElementPairAccuracy=FALSE,
@@ -122,8 +123,8 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
       }else{
         Bpair <- Bpairs[,i]
       }
-      # compute 1 - the distance between pair concordances weighted by their being 
-      # of the same class in B
+  # compute 1 - the distance between pair concordances weighted by their being 
+  # of the same class in B
       c(c=sum((1-diff)*Bpair), n=sum(Bpair))
     })
     a[2,which(a[2,]==0)] <- 1  # avoid NaNs for singletons
@@ -154,7 +155,7 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
   if(is.null(nperms)){
     # try few permutations to estimate if more are needed
     allp <- apply(matrix( runif(m*10), nrow=m ), 2, order)
-    res1 <- bplapply(1:10, BPPARAM=BPPARAM, onePerm)
+    res1 <- bplapply(seq_len(10), BPPARAM=BPPARAM, onePerm)
     NDCs <- vapply(res1, FUN.VALUE=numeric(1L), FUN=\(x) x[[1]])
     SE <- sd(NDCs)/sqrt(length(res1))
     if(SE>0.0025) nperms <- 100
@@ -209,7 +210,8 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
   switch(tnorm,
      product=tcrossprod,
      lukasiewicz=function(p){
-       vapply(seq_along(p), FUN=function(i) pmax(0,p+p[i]-1), numeric(length(p)))
+       vapply(seq_along(p), FUN=function(i) pmax(0,p+p[i]-1), 
+              numeric(length(p)))
      },
      min=function(p){
        vapply(seq_along(p), FUN=function(i) pmin(p,p[i]), numeric(length(p)))
@@ -243,8 +245,8 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
 #'   whether the variation across permutations is above 0.0025, in which case 
 #'   more (max 1000) permutations will be run.
 #' @param returnElementPairAccuracy Logical. If TRUE, returns the per-element
-#'   pair accuracy instead of the various parition-level and dataset-level metrics.
-#'   Default FALSE.
+#'   pair accuracy instead of the various parition-level and dataset-level
+#'    metrics. Default FALSE.
 #' @param lowMemory Logical; whether to use the slower, low-memory algorithm.
 #'   By default this is enabled if the projected memory usage is higher than 
 #'   ~2GB.
@@ -384,7 +386,7 @@ fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL,
   if(is.null(nperms)){
     # try few permutations to estimate if more are needed
     allp <- apply(matrix( runif(m*10), nrow=m ), 2, order)
-    res1 <- bplapply(1:10, BPPARAM=BPPARAM, onePerm)
+    res1 <- bplapply(seq_len(10), BPPARAM=BPPARAM, onePerm)
     NDCs <- vapply(res1, FUN.VALUE=numeric(1L), FUN=\(x) x[[1]])
     SE <- sd(NDCs)/sqrt(length(res1))
     if(SE>0.0025) nperms <- 100
@@ -397,7 +399,7 @@ fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL,
     # generate more permutations
     allp <- apply(matrix( runif(m*nperms), nrow=m ), 2, order)
     
-    res <- bplapply(1:nperms, BPPARAM=BPPARAM, onePerm)
+    res <- bplapply(seq_len(nperms), BPPARAM=BPPARAM, onePerm)
     if(!is.null(res1)) res <- c(res1,res)
     NDCs <- vapply(res, FUN.VALUE=numeric(1L), FUN=\(x) x[[1]])
     SE <- sd(NDCs)/sqrt(nperms)
@@ -452,8 +454,8 @@ fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL,
 #'   whether the variation across permutations is above 0.0025, in which case 
 #'   more (max 1000) permutations will be run.
 #' @param returnElementPairAccuracy Logical. If TRUE, returns the per-element
-#'   pair accuracy instead of the various parition-level and dataset-level metrics.
-#'   Default FALSE.
+#'   pair accuracy instead of the various parition-level and dataset-level 
+#'   metrics. Default FALSE.
 #' @param verbose Logical; whether to print info and warnings, including the 
 #'   standard error of the mean across permutations (giving an idea of the 
 #'   precision of the adjusted metrics).
@@ -480,23 +482,23 @@ fuzzyHardMetrics <- function(hardTrue, fuzzyTrue, hardPred, nperms=NULL,
 #' @importFrom Matrix sparseMatrix
 #' @importFrom stats sd
 #' @examples
-# # generate a fuzzy truth:
-# fuzzyTrue <- matrix(c(
-#   0.95, 0.025, 0.025,
-#   0.98, 0.01, 0.01,
-#   0.96, 0.02, 0.02,
-#   0.95, 0.04, 0.01,
-#   0.95, 0.01, 0.04,
-#   0.99, 0.005, 0.005,
-#   0.025, 0.95, 0.025,
-#   0.97, 0.02, 0.01,
-#   0.025, 0.025, 0.95),
-#   ncol = 3, byrow=TRUE)
-# # a hard truth:
-# hardTrue <- apply(fuzzyTrue,1,FUN=which.max)
-# # some predicted labels:
-# hardPred <- c(1,1,1,1,1,1,2,2,2)
-# poem:::fuzzyHardMetrics2(hardTrue, fuzzyTrue, hardPred, nperms=3)
+#' # generate a fuzzy truth:
+#' fuzzyTrue <- matrix(c(
+#' 0.95, 0.025, 0.025,
+#' 0.98, 0.01, 0.01,
+#' 0.96, 0.02, 0.02,
+#' 0.95, 0.04, 0.01,
+#' 0.95, 0.01, 0.04,
+#' 0.99, 0.005, 0.005,
+#' 0.025, 0.95, 0.025,
+#' 0.97, 0.02, 0.01,
+#' 0.025, 0.025, 0.95),
+#' ncol = 3, byrow=TRUE)
+#' # a hard truth:
+#' hardTrue <- apply(fuzzyTrue,1,FUN=which.max)
+#' # some predicted labels:
+#' hardPred <- c(1,1,1,1,1,1,2,2,2)
+#' poem:::fuzzyHardMetrics2(hardTrue, fuzzyTrue, hardPred, nperms=3)
 fuzzyHardMetrics2 <- function(hardTrue, fuzzyTrue, hardPred, nperms=10, 
                              returnElementPairAccuracy=FALSE, verbose=TRUE,
                              BPPARAM=BiocParallel::SerialParam()){ 
@@ -581,7 +583,7 @@ fuzzyHardMetrics2 <- function(hardTrue, fuzzyTrue, hardPred, nperms=10,
   if(is.null(nperms)){
     # try few permutations to estimate if more are needed
     allp <- apply(matrix( runif(m*10), nrow=m ), 2, order)
-    res1 <- bplapply(1:10, BPPARAM=BPPARAM, onePerm)
+    res1 <- bplapply(seq_len(10), BPPARAM=BPPARAM, onePerm)
     NDCs <- vapply(res1, FUN.VALUE=numeric(1L), FUN=\(x) x[[1]])
     SE <- sd(NDCs)/sqrt(length(res1))
     if(SE>0.0025) nperms <- 100
@@ -593,7 +595,7 @@ fuzzyHardMetrics2 <- function(hardTrue, fuzzyTrue, hardPred, nperms=10,
   if(!is.null(nperms)){
     # generate more permutations
     allp <- apply(matrix( runif(m*nperms), nrow=m ), 2, order)
-    res <- bplapply(1:nperms, BPPARAM=BPPARAM, onePerm)
+    res <- bplapply(seq_len(nperms), BPPARAM=BPPARAM, onePerm)
     if(!is.null(res1)) res <- c(res1,res)
     NDCs <- vapply(res, FUN.VALUE=numeric(1L), FUN=\(x) x[[1]])
     SE <- sd(NDCs)/sqrt(nperms)
@@ -662,7 +664,7 @@ fuzzyHardMetrics2 <- function(hardTrue, fuzzyTrue, hardPred, nperms=10,
 #'                0.02, 0.02, 0.96, 
 #'                0.01, 0.01, 0.98), 
 #'                ncol = 3, byrow=TRUE)
-#' colnames(m1) <- colnames(m2) <- LETTERS[1:3]
+#' colnames(m1) <- colnames(m2) <- LETTERS[seq_len(3)]
 #' fuzzySpotConcordance(m1,m2)
 fuzzySpotConcordance <- function(P, Q){
   if(is.data.frame(P)) P <- as.matrix(P)
@@ -671,7 +673,8 @@ fuzzySpotConcordance <- function(P, Q){
   stopifnot(is.matrix(Q) && (is.numeric(Q) | is.integer(Q)))
   stopifnot(nrow(P)==nrow(Q))
   
-  diff <- as.matrix(0.5*abs(dist(P,method="manhattan")-dist(Q,method="manhattan")))
+  diff <- as.matrix(0.5*abs(dist(P,method="manhattan") -
+                              dist(Q,method="manhattan")))
   return(1-rowSums(diff/(ncol(diff)-1)))
 }
 
@@ -687,8 +690,8 @@ fuzzySpotConcordance <- function(P, Q){
 #'   probability of elements (rows) in clusters (columns). Must have the same 
 #'   number of rows as the length of `hardTrue`.
 #' @param useNegatives Logical; whether to include negative pairs in the 
-#'   concordance score (tends to result in a larger overall concordance and lower
-#'   dynamic range of the score). Default TRUE.
+#'   concordance score (tends to result in a larger overall concordance and 
+#'   lower dynamic range of the score). Default TRUE.
 #' @param verbose Logical; whether to print expected memory usage for large 
 #'   datasets.
 #'
@@ -741,7 +744,7 @@ fuzzyHardSpotConcordance <- function(hardTrue, fuzzyTrue, hardPred,
   m <- nrow(fuzzyTrue)
   if(verbose && m>=2000){
     os <- 8 * m^2 * 4
-    class(os) = "object_size"
+    class(os) <- "object_size"
     message("Projected memory usage: ", format(os, units = "auto"))
   }
   

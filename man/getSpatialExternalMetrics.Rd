@@ -2,12 +2,43 @@
 % Please edit documentation in R/getSpatialExternalMetrics.R
 \name{getSpatialExternalMetrics}
 \alias{getSpatialExternalMetrics}
-\title{Compute external metrics for spatial data}
+\alias{getSpatialExternalMetrics,missing-method}
+\alias{getSpatialExternalMetrics,SpatialExperiment-method}
+\title{Calculate Spatial External Metrics}
 \usage{
 getSpatialExternalMetrics(
+  object = NULL,
   true,
   pred,
-  location,
+  location = NULL,
+  k = 6,
+  alpha = 0.5,
+  level = "class",
+  metrics = c("SpatialWH", "SpatialAWH", "SpatialWC", "SpatialAWC"),
+  fuzzy_true = TRUE,
+  fuzzy_pred = FALSE,
+  ...
+)
+
+\S4method{getSpatialExternalMetrics}{missing}(
+  object = NULL,
+  true,
+  pred,
+  location = NULL,
+  k = 6,
+  alpha = 0.5,
+  level = "class",
+  metrics = c("SpatialWH", "SpatialAWH", "SpatialWC", "SpatialAWC"),
+  fuzzy_true = TRUE,
+  fuzzy_pred = FALSE,
+  ...
+)
+
+\S4method{getSpatialExternalMetrics}{SpatialExperiment}(
+  object = NULL,
+  true,
+  pred,
+  location = NULL,
   k = 6,
   alpha = 0.5,
   level = "class",
@@ -18,11 +49,18 @@ getSpatialExternalMetrics(
 )
 }
 \arguments{
-\item{true}{A vector containing the labels of the true classes. Must be a
-vector of characters, integers, numerics, or a factor, but not a list.}
+\item{object}{The main input. Can be a \code{SpatialExperiment} object or missing
+(when using \code{true}, \code{pred}, and \code{location} directly).}
 
-\item{pred}{A vector containing the labels of the predicted clusters. Must
-be a vector of characters, integers, numerics, or a factor, but not a list.}
+\item{true}{When \code{object} is missing: a vector containing the labels of the
+true classes. Must be a vector of characters, integers, numerics, or a factor,
+but not a list. When \code{object} is a \code{SpatialExperiment} object: the column name
+in \code{colData(object)} containing the true labels.}
+
+\item{pred}{When \code{object} is missing: a vector containing the labels of the
+predicted clusters. Must be a vector of characters, integers, numerics, or a
+factor, but not a list. When \code{object} is a \code{SpatialExperiment} object: the
+column name in \code{colData(object)} containing the predicted labels.}
 
 \item{location}{A matrix or data.frame of coordinates}
 
@@ -30,41 +68,61 @@ be a vector of characters, integers, numerics, or a factor, but not a list.}
 class memberships for fuzzy metrics, or when calculating the weighted
 accuracy.}
 
-\item{alpha}{The parameter to control to what extend the spot itself contribute
-to the class composition calculation. \code{"equal"} means it is weighted the
-same as other neighbors. A numeric value between \code{0} and \code{1} means the weight of the
-frequency contribution for the spot itself, and the frequency contribution
-for its knn is then \code{1-alpha}. By default \code{0.5}.}
+\item{alpha}{The parameter to control to what extend the spot itself
+contribute to the class composition calculation. \code{"equal"} means it is
+weighted the same as other neighbors. A numeric value between \code{0} and \code{1}
+means the weight of the frequency contribution for the spot itself, and the
+frequency contribution for its knn is then \code{1-alpha}. By default \code{0.5}.}
 
 \item{level}{The level to calculate the metrics. Options include \code{"element"},
 \code{"class"} and \code{"dataset"}.}
 
 \item{metrics}{The metrics to compute. See details.}
 
-\item{fuzzy_true}{Logical; whether to compute fuzzy class memberships for \code{true}.}
+\item{fuzzy_true}{Logical; whether to compute fuzzy class memberships
+for \code{true}.}
 
-\item{fuzzy_pred}{Logical; whether to compute fuzzy class memberships for \code{pred}.}
+\item{fuzzy_pred}{Logical; whether to compute fuzzy class memberships
+for \code{pred}.}
 
-\item{...}{Optional params for \code{\link[=getFuzzyPartitionElementMetrics]{getFuzzyPartitionElementMetrics()}} or
-\code{\link[=findSpatialKNN]{findSpatialKNN()}}.}
+\item{...}{Additional arguments passed to specific methods.}
 }
 \value{
-A data.frame of metrics.
+A data.frame of metrics based on the specified input.
 }
 \description{
-Computes a selection of external clustering evaluation metrics for spatial
-data.
+A generic function to calculate spatial external metrics. It can be applied
+to raw components (\code{true}, \code{pred}, \code{location}) or directly to a
+\code{SpatialExperiment} object.
 }
 \details{
 The allowed values for \code{metrics} depend on the value of \code{level}:
 \itemize{
-\item If \code{level = "element"}, the allowed \code{metrics} are: \code{"SpatialSPC"}, \code{"SpatialNPC"}.
-\item If \code{level = "class"}, the allowed \code{metrics} are: \code{"SpatialWH"},\code{"SpatialAWH"}, \code{"SpatialWC"},\code{"SpatialAWC"}.
-\item If \code{level = "dataset"}, the allowed \code{metrics} are: \code{"SpatialRI"},\code{"SpatialARI"},\code{"SpatialWH"},\code{"SpatialAWH"}, \code{"SpatialWC"},\code{"SpatialAWC"},\code{"SpatialAccuracy"}.
+\item If \code{level = "element"}, the allowed \code{metrics} are: \code{"SpatialSPC"},
+\code{"SpatialNPC"}.
+\item If \code{level = "class"}, the allowed \code{metrics} are: \code{"SpatialWH"},
+\code{"SpatialAWH"}, \code{"SpatialWC"},\code{"SpatialAWC"}.
+\item If \code{level = "dataset"}, the allowed \code{metrics} are: \code{"SpatialRI"},
+\code{"SpatialARI"},\code{"SpatialWH"},\code{"SpatialAWH"}, \code{"SpatialWC"},\code{"SpatialAWC"},
+\code{"SpatialAccuracy"}.
 }
 }
 \examples{
+# Example with individual components
 data(sp_toys)
 data <- sp_toys
-getSpatialExternalMetrics(data$label, data$p1, data[,c("x", "y")], k=6, level="class")
+getSpatialExternalMetrics(true=data$label, pred=data$p1, 
+location=data[,c("x", "y")], k=6, level="class")
+
+# Example with SpatialExperiment object
+se_object <- SpatialExperiment::SpatialExperiment(assays=matrix(NA, 
+                                             ncol = nrow(data[,c("x", "y")]), 
+                                             nrow = ncol(data[,c("x", "y")])), 
+                               spatialCoords=as.matrix(data[,c("x", "y")]))
+SummarizedExperiment::colData(se_object) <- 
+                      cbind(SummarizedExperiment::colData(se_object), 
+                            data.frame(true=data$label, pred=data$p1))
+getSpatialExternalMetrics(object=se_object, true="true", pred="pred", k=6, 
+                          level="class")
+
 }

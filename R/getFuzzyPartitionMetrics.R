@@ -8,19 +8,21 @@
 #' @param fuzzyPred A object coercible to a numeric matrix with membership 
 #'   probability of elements (rows) in clusters (columns).
 #' @param metrics The metrics to compute. See details.
-#' @param level The level to calculate the metrics. Options include `"element"`, 
-#' `"class"` and `"dataset"`.
+#' @param level The level to calculate the metrics. Options include 
+#' `"element"`, `"class"` and `"dataset"`.
 #' @inheritParams fuzzyPartitionMetrics
 #' @inheritParams fuzzyHardMetrics
 #' @inheritParams fuzzyHardSpotConcordance
 #' @inheritParams getPairConcordance
-#' @param ... Optional arguments for \code{\link{fuzzyPartitionMetrics}}: `tnorm`.
-#'  Only useful when `fuzzy_true=TRUE` and `fuzzy_pred=TRUE`.
+#' @param ... Optional arguments for \code{\link{fuzzyPartitionMetrics}}: 
+#' `tnorm`. Only useful when `fuzzy_true=TRUE` and `fuzzy_pred=TRUE`.
 #' @details
 #' The allowed values for `metrics` depend on the value of `level`:
 #'   - If `level = "element"`, the allowed `metrics` are: `"fuzzySPC"`.
-#'   - If `level = "class"`, the allowed `metrics` are: `"fuzzyWH"`, `"fuzzyAWH"`, `"fuzzyWC"`, `"fuzzyAWC"`.
-#'   - If `level = "dataset"`, the allowed `metrics` are: `"fuzzyRI"`, `"fuzzyARI"`, `"fuzzyWH"`, `"fuzzyAWH"`, `"fuzzyWC"`, `"fuzzyAWC"`.
+#'   - If `level = "class"`, the allowed `metrics` are: `"fuzzyWH"`, 
+#'   `"fuzzyAWH"`, `"fuzzyWC"`, `"fuzzyAWC"`.
+#'   - If `level = "dataset"`, the allowed `metrics` are: `"fuzzyRI"`, 
+#'   `"fuzzyARI"`, `"fuzzyWH"`, `"fuzzyAWH"`, `"fuzzyWC"`, `"fuzzyAWC"`.
 
 #' @return A dataframe of metric results.
 #' @export
@@ -46,7 +48,7 @@
 #'                0.02, 0.02, 0.96, 
 #'                0.01, 0.01, 0.98), 
 #'                ncol = 3, byrow=TRUE)
-#' colnames(m1) <- colnames(m2) <- LETTERS[1:3]
+#' colnames(m1) <- colnames(m2) <- LETTERS[seq_len(3)]
 #' getFuzzyPartitionMetrics(fuzzyTrue=m1,fuzzyPred=m2, level="class")
 #' 
 #' # generate a fuzzy truth:
@@ -65,7 +67,8 @@
 #' hardTrue <- apply(fuzzyTrue,1,FUN=which.max)
 #' # some predicted labels:
 #' hardPred <- c(1,1,1,1,1,1,2,2,2)
-#' getFuzzyPartitionMetrics(hardPred=hardPred, hardTrue=hardTrue, fuzzyTrue=fuzzyTrue, nperms=3, level="class")
+#' getFuzzyPartitionMetrics(hardPred=hardPred, hardTrue=hardTrue, 
+#' fuzzyTrue=fuzzyTrue, nperms=3, level="class")
 #' 
 getFuzzyPartitionMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL, 
                                      hardPred=NULL, fuzzyPred=NULL, 
@@ -79,7 +82,8 @@ getFuzzyPartitionMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
   
   if(verbose){
     mc <- match.call()
-    mc <- mc[intersect(names(mc), c("hardTrue","fuzzyTrue","hardPred","fuzzyPred"))]
+    mc <- mc[intersect(names(mc), 
+                       c("hardTrue","fuzzyTrue","hardPred","fuzzyPred"))]
     paste0(names(mc),"=",unlist(mc), collapse=", ")
   }
   if(!is.null(fuzzyTrue)){
@@ -133,23 +137,27 @@ getFuzzyPartitionMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
                                        fuzzy_true=TRUE, fuzzy_pred=FALSE,
                                        nperms=NULL, verbose=TRUE, 
                                        returnElementPairAccuracy=FALSE,
-                                       BPPARAM=BiocParallel::SerialParam(), ...){
+                                       BPPARAM=BiocParallel::SerialParam(), 
+                                       ...){
   if(fuzzy_true & fuzzy_pred){
     stopifnot(!(is.null(fuzzyTrue)|is.null(fuzzyPred)))
     message("Comparing between a fuzzy truth and a fuzzy prediction...")
-    res <- fuzzyPartitionMetrics(fuzzyTrue, fuzzyPred, nperms=nperms, verbose=verbose, 
+    res <- fuzzyPartitionMetrics(fuzzyTrue, fuzzyPred, nperms=nperms, 
+                                 verbose=verbose, 
                                  returnElementPairAccuracy=returnElementPairAccuracy,
                                  BPPARAM=BPPARAM, ...)
   }else if(fuzzy_true & (!fuzzy_pred)){
     stopifnot(!(is.null(hardTrue)|is.null(fuzzyTrue)|is.null(hardPred)))
     message("Comparing between a fuzzy truth and a hard prediction...")
-    res <- fuzzyHardMetrics(hardTrue, fuzzyTrue, hardPred, nperms=nperms, verbose=verbose, 
+    res <- fuzzyHardMetrics(hardTrue, fuzzyTrue, hardPred, nperms=nperms, 
+                            verbose=verbose, 
                             returnElementPairAccuracy=returnElementPairAccuracy,
                             BPPARAM=BPPARAM)
   }else if((!fuzzy_true) & fuzzy_pred){
     stopifnot(!(is.null(hardTrue)|is.null(fuzzyPred)|is.null(hardPred)))
     message("Comparing between a hard truth and a fuzzy prediction...")
-    res <- fuzzyHardMetrics(hardPred, fuzzyPred, hardTrue, nperms=nperms, verbose=verbose, 
+    res <- fuzzyHardMetrics(hardPred, fuzzyPred, hardTrue, nperms=nperms, 
+                            verbose=verbose, 
                             returnElementPairAccuracy=returnElementPairAccuracy,
                             BPPARAM=BPPARAM)
     res <- .switchListItem(res, "fuzzyWH", "fuzzyWC")
@@ -170,11 +178,13 @@ getFuzzyPartitionGlobalMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
                                                      "fuzzyWC", "fuzzyAWC"),
                                            nperms=NULL, verbose=TRUE, 
                                            returnElementPairAccuracy=FALSE,
-                                           BPPARAM=BiocParallel::SerialParam(), ...){
+                                           BPPARAM=BiocParallel::SerialParam(), 
+                                           ...){
 
   res <- .cal_fuzzyPartitionMetrics(hardTrue=hardTrue, fuzzyTrue=fuzzyTrue, 
                                     hardPred=hardPred, fuzzyPred=fuzzyPred, 
-                                    fuzzy_true=fuzzy_true, fuzzy_pred=fuzzy_pred,
+                                    fuzzy_true=fuzzy_true, 
+                                    fuzzy_pred=fuzzy_pred,
                                     nperms=nperms, verbose=verbose, 
                                     returnElementPairAccuracy=returnElementPairAccuracy,
                                     BPPARAM=BPPARAM, ...)
@@ -206,11 +216,13 @@ getFuzzyPartitionClassMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
                                                     "fuzzyWC", "fuzzyAWC"),
                                           nperms=NULL, verbose=TRUE, 
                                           returnElementPairAccuracy=FALSE,
-                                          BPPARAM=BiocParallel::SerialParam(), ...){
+                                          BPPARAM=BiocParallel::SerialParam(), 
+                                          ...){
   
   res <- .cal_fuzzyPartitionMetrics(hardTrue=hardTrue, fuzzyTrue=fuzzyTrue, 
                                     hardPred=hardPred, fuzzyPred=fuzzyPred, 
-                                    fuzzy_true=fuzzy_true, fuzzy_pred=fuzzy_pred,
+                                    fuzzy_true=fuzzy_true, 
+                                    fuzzy_pred=fuzzy_pred,
                                     nperms=nperms, verbose=verbose, 
                                     returnElementPairAccuracy=returnElementPairAccuracy,
                                     BPPARAM=BPPARAM, ...)
@@ -246,8 +258,10 @@ getFuzzyPartitionClassMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
 
 #' getFuzzyPartitionElementMetrics
 #'
-#' Computes a selection of external fuzzy clustering evaluation metrics at the element level.
-#' @param metrics The metrics to compute. Currently only `"fuzzySPC"` is included at the element level.
+#' Computes a selection of external fuzzy clustering evaluation metrics at the 
+#' element level.
+#' @param metrics The metrics to compute. Currently only `"fuzzySPC"` is 
+#' included at the element level.
 #' @inheritParams fuzzyHardSpotConcordance
 #' @inheritParams getPairConcordance
 #' @inheritParams getFuzzyPartitionMetrics

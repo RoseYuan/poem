@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">poem</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,8 +33,8 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/table.html">Details about each evaluation metrics</a></li>
-    <li><a class="dropdown-item" href="../articles/SpatialExperiment.html">Working with SpatialExperiment</a></li>
+<li><a class="dropdown-item" href="../articles/MetricsInPoem.html">Details about each evaluation metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/PoemOnSpatialExperiment.html">Working with SpatialExperiment</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
@@ -82,7 +82,7 @@ Germain</h4>
             <address class="author_afil">
       Institute for Molecular Life Sciences, University of Zurich,
 Zurich, SwitzerlandDepartment of Health Sciences and Technology, ETH
-Zurich, Zurich, Switzerland<br><h4 data-toc-skip class="date">2024-12-02</h4>
+Zurich, Zurich, Switzerland<br><h4 data-toc-skip class="date">2025-01-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/RoseYuan/poem/blob/HEAD/vignettes/poem.Rmd" class="external-link"><code>vignettes/poem.Rmd</code></a></small>
       <div class="d-none name"><code>poem.Rmd</code></div>
@@ -100,9 +100,9 @@ Zurich, Zurich, Switzerland<br><h4 data-toc-skip class="date">2024-12-02</h4>
 <h2 class="unnumbered" id="installation-loading">Installation &amp; loading<a class="anchor" aria-label="anchor" href="#installation-loading"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"devtools"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"RoseYuan/poem"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"poem"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://roseyuan.github.io/poem/">poem</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
@@ -135,7 +135,9 @@ partition.</p>
 <p>Finally, the package implements visualization and evaluation metrics
 tailored for domain detection in spatially-resolved -omics data. These
 include especially external evaluation metrics (i.e. based on a
-comparison to ground truth labels), but also internal metrics.</p>
+comparison to ground truth labels), but also internal metrics. For a
+detailed description on how to work with <em><a href="https://bioconductor.org/packages/3.19/SpatialExperiment" class="external-link">SpatialExperiment</a></em>
+objects, we refer to another vignette of <em><a href="https://bioconductor.org/packages/3.19/poem/vignettes/PoemOnSpatialExperiment.html" class="external-link">poem</a></em>.</p>
 </div>
 <div class="section level3">
 <h3 id="main-functions">Main functions<a class="anchor" aria-label="anchor" href="#main-functions"></a>
@@ -316,11 +318,12 @@ embedding and then apply graph-based evaluation metrics.</p>
 <span>  <span class="va">gn</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">d</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span>,<span class="va">d</span><span class="op">$</span><span class="va">graph</span><span class="op">)</span>, FUN<span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">d1</span><span class="op">)</span><span class="op">{</span></span>
 <span>    <span class="va">nn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/emb2knn.html">emb2knn</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d1</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>,<span class="st">"y"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>, k<span class="op">=</span><span class="va">k</span><span class="op">)</span></span>
 <span>    <span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">poem</span><span class="fu">:::</span><span class="fu">.nn2graph</span><span class="op">(</span><span class="va">nn</span>, labels<span class="op">=</span><span class="va">d1</span><span class="op">$</span><span class="va">class</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/ggnetwork/man/ggnetwork.html" class="external-link">ggnetwork</a></span><span class="op">(</span><span class="va">g</span>, layout<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d1</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>, scale<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/ggnetwork/man/ggnetwork.html" class="external-link">ggnetwork</a></span><span class="op">(</span><span class="va">g</span>, layout<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d1</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>, scale<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span>, .id<span class="op">=</span><span class="st">"graph"</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">gn</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>, xend <span class="op">=</span> <span class="va">xend</span>, yend <span class="op">=</span> <span class="va">yend</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/ggnetwork/man/theme_blank.html" class="external-link">theme_blank</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"right"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/ggnetwork/man/geom_edges.html" class="external-link">geom_edges</a></span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.5</span>, colour<span class="op">=</span><span class="st">"grey"</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/ggnetwork/man/geom_nodes.html" class="external-link">geom_nodes</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>colour<span class="op">=</span><span class="va">class</span>, shape<span class="op">=</span><span class="va">class</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">graph</span>, nrow<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/ggnetwork/man/geom_nodes.html" class="external-link">geom_nodes</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>colour<span class="op">=</span><span class="va">class</span>, shape<span class="op">=</span><span class="va">class</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">graph</span>, nrow<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>For our examples <code>g1</code> and <code>g2</code>, the constructed
 graphs will look like:</p>
@@ -340,8 +343,12 @@ KNN/SNN graph construction.</p>
 <span><span class="co">## class3 class3 0.05 1.149098</span></span>
 <span><span class="co">## class4 class4 0.05 1.251146</span></span></code></pre></div>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGraphMetrics.html">getGraphMetrics</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">g1</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>,<span class="st">"y"</span><span class="op">)</span><span class="op">]</span>, labels<span class="op">=</span><span class="va">g1</span><span class="op">$</span><span class="va">class</span>,metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PWC"</span>,<span class="st">"ISI"</span><span class="op">)</span>, level<span class="op">=</span><span class="st">"class"</span>, directed<span class="op">=</span><span class="cn">FALSE</span>, k<span class="op">=</span><span class="fl">7</span>, shared<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">res2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGraphMetrics.html">getGraphMetrics</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">g2</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>,<span class="st">"y"</span><span class="op">)</span><span class="op">]</span>, labels<span class="op">=</span><span class="va">g2</span><span class="op">$</span><span class="va">class</span>, metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PWC"</span>,<span class="st">"ISI"</span><span class="op">)</span>, level<span class="op">=</span><span class="st">"class"</span>, directed<span class="op">=</span><span class="cn">FALSE</span>, k<span class="op">=</span><span class="fl">7</span>, shared<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">res1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGraphMetrics.html">getGraphMetrics</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">g1</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>,<span class="st">"y"</span><span class="op">)</span><span class="op">]</span>, </span>
+<span>                        labels<span class="op">=</span><span class="va">g1</span><span class="op">$</span><span class="va">class</span>,metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PWC"</span>,<span class="st">"ISI"</span><span class="op">)</span>, </span>
+<span>                        level<span class="op">=</span><span class="st">"class"</span>, directed<span class="op">=</span><span class="cn">FALSE</span>, k<span class="op">=</span><span class="fl">7</span>, shared<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">res2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGraphMetrics.html">getGraphMetrics</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">g2</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>,<span class="st">"y"</span><span class="op">)</span><span class="op">]</span>, labels<span class="op">=</span><span class="va">g2</span><span class="op">$</span><span class="va">class</span>, </span>
+<span>                        metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PWC"</span>,<span class="st">"ISI"</span><span class="op">)</span>, level<span class="op">=</span><span class="st">"class"</span>, </span>
+<span>                        directed<span class="op">=</span><span class="cn">FALSE</span>, k<span class="op">=</span><span class="fl">7</span>, shared<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>graph1<span class="op">=</span><span class="va">res1</span>, graph2<span class="op">=</span><span class="va">res2</span><span class="op">)</span>, .id<span class="op">=</span><span class="st">"graph"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span>cols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PWC"</span>,<span class="st">"ISI"</span><span class="op">)</span>, names_to<span class="op">=</span><span class="st">"metric"</span>,values_to<span class="op">=</span><span class="st">"value"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -611,40 +618,65 @@ evaluation:</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
 <span><span class="co">## [1] cowplot_1.1.3    igraph_2.1.1     ggnetwork_0.5.13 tidyr_1.3.1     </span></span>
-<span><span class="co">## [5] dplyr_1.1.4      ggplot2_3.5.1    poem_0.99.2      BiocStyle_2.32.1</span></span>
+<span><span class="co">## [5] dplyr_1.1.4      ggplot2_3.5.1    poem_0.99.7      BiocStyle_2.32.1</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
-<span><span class="co">##  [1] tidyselect_1.2.1     farver_2.1.2         fastmap_1.2.0       </span></span>
-<span><span class="co">##  [4] bluster_1.14.0       digest_0.6.36        lifecycle_1.0.4     </span></span>
-<span><span class="co">##  [7] sf_1.0-6             cluster_2.1.6        terra_1.5-21        </span></span>
-<span><span class="co">## [10] dbscan_1.2-0         magrittr_2.0.3       compiler_4.4.2      </span></span>
-<span><span class="co">## [13] rlang_1.1.4          sass_0.4.9           tools_4.4.2         </span></span>
-<span><span class="co">## [16] mclustcomp_0.3.3     utf8_1.2.4           yaml_2.3.10         </span></span>
-<span><span class="co">## [19] knitr_1.48           labeling_0.4.3       htmlwidgets_1.6.4   </span></span>
-<span><span class="co">## [22] sp_2.1-4             classInt_0.4-10      scico_1.5.0         </span></span>
-<span><span class="co">## [25] BiocParallel_1.38.0  KernSmooth_2.23-24   fclust_2.1.1.1      </span></span>
-<span><span class="co">## [28] elsa_1.1-28          withr_3.0.1          purrr_1.0.2         </span></span>
-<span><span class="co">## [31] BiocGenerics_0.50.0  desc_1.4.3           grid_4.4.2          </span></span>
-<span><span class="co">## [34] stats4_4.4.2         fansi_1.0.6          e1071_1.7-9         </span></span>
-<span><span class="co">## [37] colorspace_2.1-1     aricode_1.0.3        scales_1.3.0        </span></span>
-<span><span class="co">## [40] MASS_7.3-61          cli_3.6.3            rmarkdown_2.27      </span></span>
-<span><span class="co">## [43] ragg_1.3.2           generics_0.1.3       rstudioapi_0.16.0   </span></span>
-<span><span class="co">## [46] spdep_1.3-6          DBI_1.2.3            cachem_1.1.0        </span></span>
-<span><span class="co">## [49] proxy_0.4-27         parallel_4.4.2       BiocManager_1.30.23 </span></span>
-<span><span class="co">## [52] s2_1.1.7             vctrs_0.6.5          boot_1.3-30         </span></span>
-<span><span class="co">## [55] Matrix_1.7-0         jsonlite_1.8.8       spData_2.3.3        </span></span>
-<span><span class="co">## [58] bookdown_0.40        clevr_0.1.2          S4Vectors_0.42.1    </span></span>
-<span><span class="co">## [61] BiocNeighbors_1.22.0 clue_0.3-65          crosstalk_1.2.1     </span></span>
-<span><span class="co">## [64] systemfonts_1.1.0    jquerylib_0.1.4      units_0.8-0         </span></span>
-<span><span class="co">## [67] glue_1.8.0           pkgdown_2.1.1        codetools_0.2-20    </span></span>
-<span><span class="co">## [70] DT_0.33              gtable_0.3.5         deldir_2.0-4        </span></span>
-<span><span class="co">## [73] raster_3.5-15        munsell_0.5.1        tibble_3.2.1        </span></span>
-<span><span class="co">## [76] pillar_1.9.0         htmltools_0.5.8.1    R6_2.5.1            </span></span>
-<span><span class="co">## [79] wk_0.9.4             textshaping_0.3.6    Rdpack_2.6.1        </span></span>
-<span><span class="co">## [82] evaluate_0.24.0      lattice_0.22-6       highr_0.11          </span></span>
-<span><span class="co">## [85] rbibutils_2.3        bslib_0.8.0          class_7.3-22        </span></span>
-<span><span class="co">## [88] Rcpp_1.0.13          xfun_0.46            fs_1.6.4            </span></span>
-<span><span class="co">## [91] pkgconfig_2.0.3</span></span></code></pre></div>
+<span><span class="co">##   [1] Rdpack_2.6.1                DBI_1.2.3                  </span></span>
+<span><span class="co">##   [3] deldir_2.0-4                s2_1.1.7                   </span></span>
+<span><span class="co">##   [5] rlang_1.1.4                 magrittr_2.0.3             </span></span>
+<span><span class="co">##   [7] clue_0.3-65                 matrixStats_1.3.0          </span></span>
+<span><span class="co">##   [9] e1071_1.7-9                 compiler_4.4.2             </span></span>
+<span><span class="co">##  [11] systemfonts_1.1.0           vctrs_0.6.5                </span></span>
+<span><span class="co">##  [13] fclust_2.1.1.1              pkgconfig_2.0.3            </span></span>
+<span><span class="co">##  [15] SpatialExperiment_1.14.0    wk_0.9.4                   </span></span>
+<span><span class="co">##  [17] crayon_1.5.3                fastmap_1.2.0              </span></span>
+<span><span class="co">##  [19] magick_2.8.4                XVector_0.44.0             </span></span>
+<span><span class="co">##  [21] labeling_0.4.3              utf8_1.2.4                 </span></span>
+<span><span class="co">##  [23] rmarkdown_2.27              UCSC.utils_1.0.0           </span></span>
+<span><span class="co">##  [25] ragg_1.3.2                  purrr_1.0.2                </span></span>
+<span><span class="co">##  [27] xfun_0.46                   bluster_1.14.0             </span></span>
+<span><span class="co">##  [29] zlibbioc_1.50.0             cachem_1.1.0               </span></span>
+<span><span class="co">##  [31] GenomeInfoDb_1.40.1         jsonlite_1.8.8             </span></span>
+<span><span class="co">##  [33] highr_0.11                  DelayedArray_0.30.1        </span></span>
+<span><span class="co">##  [35] scico_1.5.0                 BiocParallel_1.38.0        </span></span>
+<span><span class="co">##  [37] terra_1.5-21                clevr_0.1.2                </span></span>
+<span><span class="co">##  [39] parallel_4.4.2              aricode_1.0.3              </span></span>
+<span><span class="co">##  [41] cluster_2.1.6               R6_2.5.1                   </span></span>
+<span><span class="co">##  [43] bslib_0.8.0                 boot_1.3-30                </span></span>
+<span><span class="co">##  [45] GenomicRanges_1.56.1        jquerylib_0.1.4            </span></span>
+<span><span class="co">##  [47] Rcpp_1.0.13                 bookdown_0.40              </span></span>
+<span><span class="co">##  [49] SummarizedExperiment_1.34.0 knitr_1.48                 </span></span>
+<span><span class="co">##  [51] IRanges_2.38.1              Matrix_1.7-0               </span></span>
+<span><span class="co">##  [53] tidyselect_1.2.1            rstudioapi_0.16.0          </span></span>
+<span><span class="co">##  [55] abind_1.4-5                 yaml_2.3.10                </span></span>
+<span><span class="co">##  [57] codetools_0.2-20            lattice_0.22-6             </span></span>
+<span><span class="co">##  [59] tibble_3.2.1                withr_3.0.1                </span></span>
+<span><span class="co">##  [61] Biobase_2.64.0              evaluate_0.24.0            </span></span>
+<span><span class="co">##  [63] desc_1.4.3                  sf_1.0-6                   </span></span>
+<span><span class="co">##  [65] units_0.8-0                 spData_2.3.3               </span></span>
+<span><span class="co">##  [67] proxy_0.4-27                elsa_1.1-28                </span></span>
+<span><span class="co">##  [69] pillar_1.9.0                BiocManager_1.30.23        </span></span>
+<span><span class="co">##  [71] MatrixGenerics_1.16.0       KernSmooth_2.23-24         </span></span>
+<span><span class="co">##  [73] DT_0.33                     stats4_4.4.2               </span></span>
+<span><span class="co">##  [75] dbscan_1.2-0                generics_0.1.3             </span></span>
+<span><span class="co">##  [77] sp_2.1-4                    mclustcomp_0.3.3           </span></span>
+<span><span class="co">##  [79] S4Vectors_0.42.1            munsell_0.5.1              </span></span>
+<span><span class="co">##  [81] scales_1.3.0                class_7.3-23               </span></span>
+<span><span class="co">##  [83] glue_1.8.0                  tools_4.4.2                </span></span>
+<span><span class="co">##  [85] BiocNeighbors_1.22.0        fs_1.6.4                   </span></span>
+<span><span class="co">##  [87] grid_4.4.2                  spdep_1.3-6                </span></span>
+<span><span class="co">##  [89] crosstalk_1.2.1             rbibutils_2.3              </span></span>
+<span><span class="co">##  [91] colorspace_2.1-1            SingleCellExperiment_1.26.0</span></span>
+<span><span class="co">##  [93] GenomeInfoDbData_1.2.12     raster_3.5-15              </span></span>
+<span><span class="co">##  [95] cli_3.6.3                   textshaping_0.3.6          </span></span>
+<span><span class="co">##  [97] fansi_1.0.6                 S4Arrays_1.4.1             </span></span>
+<span><span class="co">##  [99] gtable_0.3.5                sass_0.4.9                 </span></span>
+<span><span class="co">## [101] digest_0.6.36               BiocGenerics_0.50.0        </span></span>
+<span><span class="co">## [103] classInt_0.4-10             SparseArray_1.4.8          </span></span>
+<span><span class="co">## [105] farver_2.1.2                rjson_0.2.21               </span></span>
+<span><span class="co">## [107] htmlwidgets_1.6.4           htmltools_0.5.8.1          </span></span>
+<span><span class="co">## [109] pkgdown_2.1.1               lifecycle_1.0.4            </span></span>
+<span><span class="co">## [111] httr_1.4.7                  MASS_7.3-61</span></span></code></pre></div>
 </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

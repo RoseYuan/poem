@@ -17,12 +17,14 @@ rows as samples and columns as location dimensions.}
 \item{...}{Optional params for \code{\link[=findSpatialKNN]{findSpatialKNN()}}.}
 }
 \value{
-A numeric value for PAS score, and a boolean vector about the abnormal spots.
+A numeric value for PAS score, and a boolean vector about the
+abnormal spots.
 }
 \description{
 PAS score measures the clustering performance by calculating
-the randomness of the spots that located outside of the spatial region where it was clustered to.
-Lower PAS score indicates better spatial domian clustering performance.
+the randomness of the spots that located outside of the spatial region where
+it was clustered to. Lower PAS score indicates better spatial domian
+clustering performance.
 }
 \examples{
 data(sp_toys)
