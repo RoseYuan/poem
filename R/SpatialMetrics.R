@@ -179,3 +179,107 @@ getNeighboringPairConcordance <- function(true, pred, location, k=20L,
     sum((1-abs(true_conc-pred_conc))*w)
   })
 }
+
+
+#' spatialARI
+#' 
+#' Computes the spatial Rand Index and spatial ARI (Yan, Feng and Luo, 2025).
+#' See details for more information.
+#'
+#' @param pred A vector of predicted clusters
+#' @param true A vector of true class labels
+#' @param coords A matrix of spatial coordinates, with dimensions as columns
+#' @param normCoords Logical; whether to normalize the coordinates to 0-1.
+#' @param alpha The alpha used in the `f` and `h` functions (default 0.8).
+#' @param fbeta,hbeta Additional factors used in the exponential decay functions 
+#'   (see details). A higher value means a faster decay. These are ignored if 
+#'   `original=TRUE`.
+#' @param spotWise Logical; whether to return the spot-wise spatial concordance
+#'   (not adjusted for chance).
+#' @param nChunks The number of processing chunks. If NULL, this will be 
+#'   determined automatically based on the size of the dataset.
+#' @param original Logical; whether to use the original h/f functions from Yan, 
+#'   Feng and Luo (default FALSE).
+#' @param f The f function, which determines the positive contribution of pairs
+#'   that are in different partitions in the reference, but grouped together in
+#'   the clustering, based on the distance between mates.
+#' @param h The h function, which determines the positive contribution of pairs
+#'   that are in the same partition in the reference, but different ones in
+#'   the clustering, based on the distance between mates.
+#' @param BPPARAM Optional BiocParallel BPPARAM object for multithreading. This
+#'   only makes sense if the dataset is very large and the data is split into
+#'   many chunks.
+#'
+#' @author Pierre-Luc Germain
+#' @references
+#' Yan, Feng and Luo, biorxiv 2025, https://doi.org/10.1101/2025.03.25.645156
+#' 
+#' @details
+#' This is a reimplementation of the method from the `spARI` package, made more
+#' scalable through chunk-based processing, and with some additional options. 
+#' Note that by default, this will not produce the same results as the original 
+#' method: to do so, set `original=TRUE`. In our exploration of the method and 
+#' its behavior, we found the decay to be too slow, and we therefore 1) do not 
+#' square the distances, and 2) introduced a beta parameter in each function 
+#' which allows to scale it (a higher beta parameter means a faster decay).
+#' 
+#' @return A vector containing the spatial Rand Index (spRI) and spatial 
+#'   adjusted Rand Index (spARI). Alternatively, if `spotWise=TRUE`, a vector 
+#'   of spatial pair concordances for each spot.
+#' @importFrom matrixStats rowMins rowMaxs
+#' @importFrom pdist pdist
+#' @export
+spatialARI <- function(true, pred, coords, normCoords=TRUE, alpha=0.8, fbeta=4,
+                       hbeta=1, spotWise=FALSE,  nChunks=NULL, original=FALSE,
+                       f=function(x){ alpha*exp(-x*fbeta) },
+                       h=function(x){ alpha*(1-exp(-x*hbeta)) },
+                       BPPARAM=SerialParam()){
+  if(isTRUE(original)){
+    f <- function(x){ alpha*exp(-x^2) }
+    h <- function(x){ alpha*(1-exp(-x^2)) }
+  }
+  stopifnot(is.function(h) && is.function(f))
+  N <- length(true)
+  stopifnot(length(pred)==N && nrow(coords)==N)
+  if(normCoords){
+    coords <- t(coords)
+    coords <- t((coords-matrixStats::rowMins(coords))/
+                  (matrixStats::rowMaxs(coords)-matrixStats::rowMins(coords)))
+  }
+
+  n_choose = choose(N, 2)
+  p <- sum(choose(table(true), 2))/n_choose
+  q <- sum(choose(table(pred), 2))/n_choose
+  
+  if(is.null(nChunks)) nChunks <- ceiling(length(true)^2/2e+7)
+  
+  sp <- split(seq_len(N), head(rep(seq_len(nChunks), ceiling(N/nChunks)), N))
+
+  o <- bplapply(sp, BPPARAM=BPPARAM, FUN=function(i){
+    if(nChunks==1){
+      di <- as.matrix(dist(coords))
+      same_in_pred <- outer(pred, pred, `==`)
+      same_in_true <- outer(true, true, `==`)
+    }else{
+      di <- as.matrix(pdist::pdist(coords, indices.A=i, indices.B=seq_len(N)))
+      same_in_pred <- outer(pred[i], pred, `==`)
+      same_in_true <- outer(true[i], true, `==`)
+    }
+    hv <- h(di)
+    fv <- f(di)
+    w <- ifelse(same_in_pred==same_in_true, 1, ifelse(same_in_pred, fv, hv))
+    spc <- (rowSums(w)-1)/(ncol(w)-1L)
+    if(spotWise) return(spc)
+    list(spc, sum(hv), sum(fv))
+  })
+  
+  if(spotWise) return(unlist(o))
+  spRI <- mean(unlist(lapply(o, \(x) x[[1]])))
+  o <- matrix(unlist(lapply(o, \(x) x[2:3])), ncol=2, byrow = TRUE)
+  sH <- sum(o[,1])/2 - h(0)*length(true)
+  sF <- sum(o[,2])/2
+
+  expSpRI <- 1 + 2*p*q - (p+q) + (sF*q + sH*p - (sH+sF)*p*q)/n_choose
+  spARI <- (spRI-expSpRI)/(1-expSpRI)
+  c(spRI=spRI, spARI=spARI)
+}
