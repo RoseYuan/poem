@@ -261,11 +261,14 @@ spatialARI <- function(true, pred, coords, normCoords=TRUE, alpha=0.8, fbeta=4,
   stopifnot(is.function(h) && is.function(f))
   N <- length(true)
   stopifnot(length(pred)==N && nrow(coords)==N)
+  stopifnot(!any(is.na(coords)) && !any(is.na(pred)) && !any(is.na(true)))
+  stopifnot(alpha>=0 && alpha<=1)
   
   if(normCoords){
-    coords <- t(coords)
-    coords <- t((coords-matrixStats::rowMins(coords))/
-                  (matrixStats::rowMaxs(coords)-matrixStats::rowMins(coords)))
+    for(f in seq_len(ncol(coords))){
+      mi <- min(coords[,f])
+      coords[,f] <- (coords[,f]-mi)/(max(coords[,f])-mi)
+    }
   }
 
   n_choose = choose(N, 2)
