@@ -1,6 +1,6 @@
 Package: poem
 Title: POpulation-based Evaluation Metrics
-Version: 0.99.12
+Version: 0.99.13
 Authors@R: c(
     person("Siyuan", "Luo", email="roseluosy@gmail.com", role=c("cre","aut"), comment=c(ORCID="0009-0007-6404-3244")),
     person("Pierre-Luc", "Germain", email="pierre-luc.germain@hest.ethz.ch", role=c("aut","ctb"),

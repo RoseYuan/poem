@@ -246,6 +246,7 @@ getNeighboringPairConcordance <- function(true, pred, location, k=20L,
 #' 
 #' @importFrom matrixStats rowMins rowMaxs
 #' @importFrom pdist pdist
+#' @importFrom utils head
 #' @export
 #' @examples
 #' data(sp_toys)
@@ -265,9 +266,9 @@ spatialARI <- function(true, pred, coords, normCoords=TRUE, alpha=0.8, fbeta=4,
   stopifnot(alpha>=0 && alpha<=1)
   
   if(normCoords){
-    for(f in seq_len(ncol(coords))){
-      mi <- min(coords[,f])
-      coords[,f] <- (coords[,f]-mi)/(max(coords[,f])-mi)
+    for(i in seq_len(ncol(coords))){
+      mi <- min(coords[,i])
+      coords[,i] <- (coords[,i]-mi)/(max(coords[,i])-mi)
     }
   }
 
