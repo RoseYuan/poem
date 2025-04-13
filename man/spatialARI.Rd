@@ -20,8 +20,7 @@ spatialARI(
  },
   h = function(x) {
      alpha * (1 - exp(-x * hbeta))
- },
-  BPPARAM = SerialParam()
+ }
 )
 }
 \arguments{
@@ -57,10 +56,6 @@ the clustering, based on the distance between mates.}
 \item{h}{The h function, which determines the positive contribution of pairs
 that are in the same partition in the reference, but different ones in
 the clustering, based on the distance between mates.}
-
-\item{BPPARAM}{Optional BiocParallel BPPARAM object for multithreading. This
-only makes sense if the dataset is very large and the data is split into
-many chunks.}
 }
 \value{
 A vector containing the spatial Rand Index (spRI) and spatial

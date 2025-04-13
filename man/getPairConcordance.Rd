@@ -30,5 +30,8 @@ pairs in the score (default FALSE).}
 A vector of concordance scores
 }
 \description{
-Per-element pair concordance between a clustering and a ground truth
+Per-element pair concordance between a clustering and a ground truth. Note
+that by default, negative pairs (i.e. that are split in both the predicted
+and true groupings) are not counted. To count it (as in the standard Rand
+Index), use \code{useNegatives=TRUE}.
 }
