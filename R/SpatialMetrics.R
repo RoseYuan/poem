@@ -218,9 +218,6 @@ getNeighboringPairConcordance <- function(true, pred, location, k=20L,
 #' @param h The h function, which determines the positive contribution of pairs
 #'   that are in the same partition in the reference, but different ones in
 #'   the clustering, based on the distance between mates.
-#' @param BPPARAM Optional BiocParallel BPPARAM object for multithreading. This
-#'   only makes sense if the dataset is very large and the data is split into
-#'   many chunks.
 #'
 #' @author Pierre-Luc Germain
 #' @references
@@ -246,9 +243,9 @@ getNeighboringPairConcordance <- function(true, pred, location, k=20L,
 #' @return A vector containing the spatial Rand Index (spRI) and spatial 
 #'   adjusted Rand Index (spARI). Alternatively, if `spotWise=TRUE`, a vector 
 #'   of spatial pair concordances for each spot.
+#' 
 #' @importFrom matrixStats rowMins rowMaxs
 #' @importFrom pdist pdist
-#' @importFrom BiocParallel bplapply SerialParam
 #' @export
 #' @examples
 #' data(sp_toys)
@@ -256,8 +253,7 @@ getNeighboringPairConcordance <- function(true, pred, location, k=20L,
 spatialARI <- function(true, pred, coords, normCoords=TRUE, alpha=0.8, fbeta=4,
                        hbeta=1, spotWise=FALSE,  nChunks=NULL, original=FALSE,
                        f=function(x){ alpha*exp(-x*fbeta) },
-                       h=function(x){ alpha*(1-exp(-x*hbeta)) },
-                       BPPARAM=SerialParam()){
+                       h=function(x){ alpha*(1-exp(-x*hbeta)) }){
   if(isTRUE(original)){
     f <- function(x){ alpha*exp(-x^2) }
     h <- function(x){ alpha*(1-exp(-x^2)) }
@@ -280,7 +276,7 @@ spatialARI <- function(true, pred, coords, normCoords=TRUE, alpha=0.8, fbeta=4,
   
   sp <- split(seq_len(N), head(rep(seq_len(nChunks), ceiling(N/nChunks)), N))
 
-  o <- bplapply(sp, BPPARAM=BPPARAM, FUN=function(i){
+  o <- lapply(sp, FUN=function(i){
     if(nChunks==1){
       di <- dist(coords)
       same_in_pred <- outer(pred, pred, `==`)
