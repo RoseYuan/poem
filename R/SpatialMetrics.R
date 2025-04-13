@@ -292,6 +292,7 @@ spatialARI <- function(true, pred, coords, normCoords=TRUE, alpha=0.8, fbeta=4,
     }
     hv <- as.matrix(h(di))
     fv <- as.matrix(f(di))
+    rm(di)
     w <- ifelse(same_in_pred==same_in_true, 1, ifelse(same_in_pred, fv, hv))
     spc <- (rowSums(w)-1)/(ncol(w)-1L)
     if(spotWise) return(spc)
