@@ -142,28 +142,35 @@ spatial_metrics <- data.frame(
                 "class/cluster", 
                 "element", 
                 "dataset", 
+                "dataset", 
                 "element", 
-                "element", 
+                "element",
+                "element",
                 "dataset"),
   Metric = c("Percentage of Abnormal Spots (PAS)", 
              "Spatial Chaos Score (CHAOS)", 
              "Entropy-based Local indicator of Spatial Association (ELSA)", 
              "Neighborhood smoothed RI, ARI, WH, WC, AWH, and AWC", 
+             "Spatial RI/ARI",
              "Spot-wise Pair Concordance (SPC)", 
-             "Spatial SPC", 
+             "Neighborhood smoothed SPC",
+             "Spatial SPC",
              "Spatial Set Matching Accuracy"),
   Calculation = c(
     "PAS measures the percentage of abnormal spots, which is defined as spots with a spatial domain label differing from more than half of its nearest neighbors.",
     "CHAOS is the mean length of the graph edges in the 1-nearest neighbor (1NN) graph for each domain averaged across domains.",
     "For a site $i$, $E_i = E_{ai} \\times E_{ci}$, where $E_{ai}$ summarizes the dissimilarity between site $i$ and the neighbouring sites, and $E_{ci}$ quantifies the diversity of the categories within the neighbourhood of site $i$.",
-    "Spatial versions of the pair-sorting indices, based on fuzzy versions of the metrics. Specifically, we use the Normalized Degree of Concordance (NDC, see Hullermeier et al., 2012) and the Adjusted Concordance Index (ACI, see D'Errico et al., 2021) as fuzzy versions of RI and ARI respectively, and developed fuzzy versions of the other metrics using the same logic. In the spatial context, we first make a fuzzy version of the true labels based on the spatial neighborhood, and then track the maximum pair concordance between the predicted labels and either the hard or fuzzy ground truth.",
+    "Spatially-aware versions of the pair-sorting indices, based on fuzzy versions of the metrics. Specifically, we use the Normalized Degree of Concordance (NDC, see Hullermeier et al., 2012) and the Adjusted Concordance Index (ACI, see D'Errico et al., 2021) as fuzzy versions of RI and ARI respectively, and developed fuzzy versions of the other metrics using the same logic. In the spatial context, we first make a fuzzy version of the true labels based on the spatial neighborhood, and then track the maximum pair concordance between the predicted labels and either the hard or fuzzy ground truth.",
+    "The spatial RI/ARI from Yan, Yinqiao, et al. (2025). Briefly, discordant pairs are tolerated if they are between spots 1) close to each other and that are wrongly clustered together, or 2) distant and wrongly separated. Note that by default, poem uses distance-based functions that are different from those originally used by Yan et al., specifically $h(d) = \\alpha*(1-e^{\\beta_h*-d})$ and $f(d) = \\alpha*(e^{\\beta_f*-d})$, with $\\beta_f=4$ and $\\beta_h==1$. See the spatialARI function for more information and for different options",
     "The proportion, for each spot, of the pairs it forms with all other spots that are concordant (i.e. in the same partition or not in both) across the clustering and ground truth. This value will be the same for all spots that share the same combination of cluster and class, and is especially useful for visualization. A variant of this can be computed that ignores negative pairs (i.e. that are discordant in both the clustering and ground truth). When negative pairs are included, the average of SPC equals to the Rand Index.",
-    "Like the non-spatial Spot-wise Pair Concordance, with the difference that the clustering is evaluated against both a 'hard' and 'fuzzy' version of the ground truth, as for the computation of the Spatial versions of the pair-sorting indices.",
+    "Like the Spot-wise Pair Concordance, with the difference that the clustering is evaluated against both a 'hard' and 'fuzzy' version of the ground truth, as for the computation of the neighborhood-smoothed versions of the pair-sorting indices.",
+    "Like the Spot-wise Pair Concordance, but using the same distance-based tolerance from Spatial RI.",
     "An accuracy that downweights misclassifications based on the spatial neighborhood. Instead of counting as zero in the accuracy computation, the misclassified node counts as the proportion of its spatial neighborhood that is of node's predicted class."
   ),
   stringsAsFactors = FALSE
 )
 ```
+
 
 ```{r, results='asis', echo=FALSE}
 kable_table <- knitr::kable(spatial_metrics, format = "html", 
