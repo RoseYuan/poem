@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">poem</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.13</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,7 +78,7 @@ Germain</h4>
             <address class="author_afil">
       Institute for Molecular Life Sciences, University of Zurich,
 Zurich, SwitzerlandDepartment of Health Sciences and Technology, ETH
-Zurich, Zurich, Switzerland<br><h4 data-toc-skip class="date">2025-01-17</h4>
+Zurich, Zurich, Switzerland<br><h4 data-toc-skip class="date">2025-04-14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/RoseYuan/poem/blob/HEAD/vignettes/PoemOnSpatialExperiment.Rmd" class="external-link"><code>vignettes/PoemOnSpatialExperiment.Rmd</code></a></small>
       <div class="d-none name"><code>PoemOnSpatialExperiment.Rmd</code></div>
@@ -276,62 +276,62 @@ or separate inputs for <code>true</code>, <code>pred</code> and
 <code class="sourceCode R"><span><span class="fu">colData</span><span class="op">(</span><span class="va">spe</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu">colData</span><span class="op">(</span><span class="va">spe</span><span class="op">)</span>, <span class="va">data</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P1"</span>,<span class="st">"P2"</span>,<span class="st">"P3"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/getSpatialExternalMetrics.html">getSpatialExternalMetrics</a></span><span class="op">(</span>object<span class="op">=</span><span class="va">spe</span>, true<span class="op">=</span><span class="st">"reference"</span>, pred<span class="op">=</span><span class="st">"P3"</span>,</span>
 <span>                          k<span class="op">=</span><span class="fl">6</span>, fuzzy_true <span class="op">=</span> <span class="cn">TRUE</span>, fuzzy_pred <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">##    SpatialWH SpatialAWH SpatialWC SpatialAWC class cluster</span></span>
-<span><span class="co">## 1         NA         NA 0.7984473  0.7320190     1      NA</span></span>
-<span><span class="co">## 2         NA         NA 0.8166059  0.7364249     2      NA</span></span>
-<span><span class="co">## 3         NA         NA 0.8602088  0.8144355     3      NA</span></span>
-<span><span class="co">## 4         NA         NA 0.8430965  0.7712156     4      NA</span></span>
-<span><span class="co">## 5         NA         NA 0.8645815  0.8166471     5      NA</span></span>
-<span><span class="co">## 6         NA         NA 0.8619852  0.8169020     6      NA</span></span>
-<span><span class="co">## 7         NA         NA 0.8502012  0.8070391     7      NA</span></span>
-<span><span class="co">## 8  0.7820273  0.7281400        NA         NA    NA       1</span></span>
-<span><span class="co">## 9  0.8834060  0.8552566        NA         NA    NA       2</span></span>
-<span><span class="co">## 10 0.6058199  0.5093312        NA         NA    NA       3</span></span>
-<span><span class="co">## 11 0.9004540  0.8762669        NA         NA    NA       4</span></span>
-<span><span class="co">## 12 0.6953992  0.6189170        NA         NA    NA       5</span></span>
-<span><span class="co">## 13 0.6545309  0.5709844        NA         NA    NA       6</span></span></code></pre></div>
+<span><span class="co">##         nsWH     nsAWH      nsWC     nsAWC class cluster</span></span>
+<span><span class="co">## 1         NA        NA 0.7984473 0.7320190     1      NA</span></span>
+<span><span class="co">## 2         NA        NA 0.8166059 0.7364249     2      NA</span></span>
+<span><span class="co">## 3         NA        NA 0.8602088 0.8144355     3      NA</span></span>
+<span><span class="co">## 4         NA        NA 0.8430965 0.7712156     4      NA</span></span>
+<span><span class="co">## 5         NA        NA 0.8645815 0.8166471     5      NA</span></span>
+<span><span class="co">## 6         NA        NA 0.8619852 0.8169020     6      NA</span></span>
+<span><span class="co">## 7         NA        NA 0.8502012 0.8070391     7      NA</span></span>
+<span><span class="co">## 8  0.7820273 0.7281400        NA        NA    NA       1</span></span>
+<span><span class="co">## 9  0.8834060 0.8552566        NA        NA    NA       2</span></span>
+<span><span class="co">## 10 0.6058199 0.5093312        NA        NA    NA       3</span></span>
+<span><span class="co">## 11 0.9004540 0.8762669        NA        NA    NA       4</span></span>
+<span><span class="co">## 12 0.6953992 0.6189170        NA        NA    NA       5</span></span>
+<span><span class="co">## 13 0.6545309 0.5709844        NA        NA    NA       6</span></span></code></pre></div>
 <p>is equivalent to:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/getSpatialExternalMetrics.html">getSpatialExternalMetrics</a></span><span class="op">(</span>true<span class="op">=</span><span class="fu">colData</span><span class="op">(</span><span class="va">spe</span><span class="op">)</span><span class="op">$</span><span class="va">reference</span>, pred<span class="op">=</span><span class="fu">colData</span><span class="op">(</span><span class="va">spe</span><span class="op">)</span><span class="op">$</span><span class="va">P3</span>,</span>
 <span>                          location<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/SpatialExperiment/man/SpatialExperiment-methods.html" class="external-link">spatialCoords</a></span><span class="op">(</span><span class="va">spe</span><span class="op">)</span>, </span>
 <span>                          k<span class="op">=</span><span class="fl">6</span>, fuzzy_true <span class="op">=</span> <span class="cn">TRUE</span>, fuzzy_pred <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">##    SpatialWH SpatialAWH SpatialWC SpatialAWC class cluster</span></span>
-<span><span class="co">## 1         NA         NA 0.7984473  0.7316641     1      NA</span></span>
-<span><span class="co">## 2         NA         NA 0.8166059  0.7362255     2      NA</span></span>
-<span><span class="co">## 3         NA         NA 0.8602088  0.8143229     3      NA</span></span>
-<span><span class="co">## 4         NA         NA 0.8430965  0.7729225     4      NA</span></span>
-<span><span class="co">## 5         NA         NA 0.8645815  0.8163511     5      NA</span></span>
-<span><span class="co">## 6         NA         NA 0.8619852  0.8170221     6      NA</span></span>
-<span><span class="co">## 7         NA         NA 0.8502012  0.8071763     7      NA</span></span>
-<span><span class="co">## 8  0.7820273  0.7286948        NA         NA    NA       1</span></span>
-<span><span class="co">## 9  0.8834060  0.8548135        NA         NA    NA       2</span></span>
-<span><span class="co">## 10 0.6058199  0.5095818        NA         NA    NA       3</span></span>
-<span><span class="co">## 11 0.9004540  0.8761988        NA         NA    NA       4</span></span>
-<span><span class="co">## 12 0.6953992  0.6212056        NA         NA    NA       5</span></span>
-<span><span class="co">## 13 0.6545309  0.5704844        NA         NA    NA       6</span></span></code></pre></div>
+<span><span class="co">##         nsWH     nsAWH      nsWC     nsAWC class cluster</span></span>
+<span><span class="co">## 1         NA        NA 0.7984473 0.7316641     1      NA</span></span>
+<span><span class="co">## 2         NA        NA 0.8166059 0.7362255     2      NA</span></span>
+<span><span class="co">## 3         NA        NA 0.8602088 0.8143229     3      NA</span></span>
+<span><span class="co">## 4         NA        NA 0.8430965 0.7729225     4      NA</span></span>
+<span><span class="co">## 5         NA        NA 0.8645815 0.8163511     5      NA</span></span>
+<span><span class="co">## 6         NA        NA 0.8619852 0.8170221     6      NA</span></span>
+<span><span class="co">## 7         NA        NA 0.8502012 0.8071763     7      NA</span></span>
+<span><span class="co">## 8  0.7820273 0.7286948        NA        NA    NA       1</span></span>
+<span><span class="co">## 9  0.8834060 0.8548135        NA        NA    NA       2</span></span>
+<span><span class="co">## 10 0.6058199 0.5095818        NA        NA    NA       3</span></span>
+<span><span class="co">## 11 0.9004540 0.8761988        NA        NA    NA       4</span></span>
+<span><span class="co">## 12 0.6953992 0.6212056        NA        NA    NA       5</span></span>
+<span><span class="co">## 13 0.6545309 0.5704844        NA        NA    NA       6</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="dataset-level">Dataset level<a class="anchor" aria-label="anchor" href="#dataset-level"></a>
 </h3>
-<p>Let’s first calculate two dataset-level metrics, SpatialARI and
+<p>Let’s first calculate two dataset-level metrics, nsARI and
 SpatialAccuracy:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getSpatialExternalMetrics.html">getSpatialExternalMetrics</a></span><span class="op">(</span>object<span class="op">=</span><span class="va">spe</span>, true<span class="op">=</span><span class="st">"reference"</span>, pred<span class="op">=</span><span class="st">"P3"</span>, </span>
 <span>                                  level<span class="op">=</span><span class="st">"dataset"</span>, k<span class="op">=</span><span class="fl">6</span>,</span>
-<span>                                  metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SpatialARI"</span>,<span class="st">"SpatialAccuracy"</span><span class="op">)</span>, </span>
+<span>                                  metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nsARI"</span>,<span class="st">"SpatialAccuracy"</span><span class="op">)</span>, </span>
 <span>                                  fuzzy_true <span class="op">=</span> <span class="cn">TRUE</span>, fuzzy_pred <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">res2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getSpatialExternalMetrics.html">getSpatialExternalMetrics</a></span><span class="op">(</span>object<span class="op">=</span><span class="va">spe</span>, true<span class="op">=</span><span class="st">"reference"</span>, pred<span class="op">=</span><span class="st">"P2"</span>,</span>
 <span>                                  level<span class="op">=</span><span class="st">"dataset"</span>, k<span class="op">=</span><span class="fl">6</span>,</span>
-<span>                                  metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SpatialARI"</span>,<span class="st">"SpatialAccuracy"</span><span class="op">)</span>, </span>
+<span>                                  metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nsARI"</span>,<span class="st">"SpatialAccuracy"</span><span class="op">)</span>, </span>
 <span>                                  fuzzy_true <span class="op">=</span> <span class="cn">TRUE</span>, fuzzy_pred <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">res1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getSpatialExternalMetrics.html">getSpatialExternalMetrics</a></span><span class="op">(</span>object<span class="op">=</span><span class="va">spe</span>, true<span class="op">=</span><span class="st">"reference"</span>, pred<span class="op">=</span><span class="st">"P1"</span>,</span>
 <span>                                  level<span class="op">=</span><span class="st">"dataset"</span>, k<span class="op">=</span><span class="fl">6</span>,</span>
-<span>                                  metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SpatialARI"</span>,<span class="st">"SpatialAccuracy"</span><span class="op">)</span>, </span>
+<span>                                  metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nsARI"</span>,<span class="st">"SpatialAccuracy"</span><span class="op">)</span>, </span>
 <span>                                  fuzzy_true <span class="op">=</span> <span class="cn">TRUE</span>, fuzzy_pred <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">res1</span>, <span class="va">res2</span>, <span class="va">res3</span><span class="op">)</span>, .id<span class="op">=</span><span class="st">"P"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span>cols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SpatialARI"</span>, <span class="st">"SpatialAccuracy"</span><span class="op">)</span>, </span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span>cols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nsARI"</span>, <span class="st">"SpatialAccuracy"</span><span class="op">)</span>, </span>
 <span>               names_to<span class="op">=</span><span class="st">"metric"</span>, values_to<span class="op">=</span><span class="st">"value"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">P</span>, y<span class="op">=</span><span class="va">value</span>, group<span class="op">=</span><span class="va">metric</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">3</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>color<span class="op">=</span><span class="va">P</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -342,54 +342,53 @@ SpatialAccuracy:</p>
 <div class="section level3">
 <h3 id="classcluster-level">Class/cluster level<a class="anchor" aria-label="anchor" href="#classcluster-level"></a>
 </h3>
-<p>We can further calculate the class/cluster-level metrics, SpatialAWH
-and SpatialAWC, to get more insights about the errors our predictions
-make:</p>
+<p>We can further calculate the class/cluster-level metrics, nsAWH and
+nsAWC, to get more insights about the errors our predictions make:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getSpatialExternalMetrics.html">getSpatialExternalMetrics</a></span><span class="op">(</span>object<span class="op">=</span><span class="va">spe</span>, true<span class="op">=</span><span class="st">"reference"</span>, pred<span class="op">=</span><span class="st">"P3"</span>,</span>
 <span>                                  level<span class="op">=</span><span class="st">"class"</span>, k<span class="op">=</span><span class="fl">6</span>,</span>
-<span>                                  metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SpatialAWH"</span>,<span class="st">"SpatialAWC"</span><span class="op">)</span>, </span>
+<span>                                  metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nsAWH"</span>,<span class="st">"nsAWC"</span><span class="op">)</span>, </span>
 <span>                                  fuzzy_true <span class="op">=</span> <span class="cn">TRUE</span>, fuzzy_pred <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">res2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getSpatialExternalMetrics.html">getSpatialExternalMetrics</a></span><span class="op">(</span>object<span class="op">=</span><span class="va">spe</span>, true<span class="op">=</span><span class="st">"reference"</span>, pred<span class="op">=</span><span class="st">"P2"</span>,</span>
 <span>                                  level<span class="op">=</span><span class="st">"class"</span>, k<span class="op">=</span><span class="fl">6</span>,</span>
-<span>                                  metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SpatialAWH"</span>,<span class="st">"SpatialAWC"</span><span class="op">)</span>,</span>
+<span>                                  metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nsAWH"</span>,<span class="st">"nsAWC"</span><span class="op">)</span>,</span>
 <span>                                  fuzzy_true <span class="op">=</span> <span class="cn">TRUE</span>, fuzzy_pred <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">res1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getSpatialExternalMetrics.html">getSpatialExternalMetrics</a></span><span class="op">(</span>object<span class="op">=</span><span class="va">spe</span>, true<span class="op">=</span><span class="st">"reference"</span>, pred<span class="op">=</span><span class="st">"P1"</span>,</span>
 <span>                                  level<span class="op">=</span><span class="st">"class"</span>, k<span class="op">=</span><span class="fl">6</span>,</span>
-<span>                                  metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SpatialAWH"</span>,<span class="st">"SpatialAWC"</span><span class="op">)</span>,</span>
+<span>                                  metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nsAWH"</span>,<span class="st">"nsAWC"</span><span class="op">)</span>,</span>
 <span>                                  fuzzy_true <span class="op">=</span> <span class="cn">TRUE</span>, fuzzy_pred <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">res1</span></span>
-<span><span class="co">##    SpatialAWH SpatialAWC class cluster</span></span>
-<span><span class="co">## 1          NA  0.7877648     1      NA</span></span>
-<span><span class="co">## 2          NA  0.8173338     2      NA</span></span>
-<span><span class="co">## 3          NA  0.7943769     3      NA</span></span>
-<span><span class="co">## 4          NA  0.8187909     4      NA</span></span>
-<span><span class="co">## 5          NA  0.7564167     5      NA</span></span>
-<span><span class="co">## 6          NA  0.8150322     6      NA</span></span>
-<span><span class="co">## 7          NA  0.7969735     7      NA</span></span>
-<span><span class="co">## 8   0.7695170         NA    NA       1</span></span>
-<span><span class="co">## 9   0.8721490         NA    NA       2</span></span>
-<span><span class="co">## 10  0.8279055         NA    NA       3</span></span>
-<span><span class="co">## 11  0.5872653         NA    NA       4</span></span>
-<span><span class="co">## 12  0.8990039         NA    NA       5</span></span>
-<span><span class="co">## 13  0.6255869         NA    NA       6</span></span>
-<span><span class="co">## 14  0.6279922         NA    NA       7</span></span></code></pre></div>
+<span><span class="co">##        nsAWH     nsAWC class cluster</span></span>
+<span><span class="co">## 1         NA 0.7877648     1      NA</span></span>
+<span><span class="co">## 2         NA 0.8173338     2      NA</span></span>
+<span><span class="co">## 3         NA 0.7943769     3      NA</span></span>
+<span><span class="co">## 4         NA 0.8187909     4      NA</span></span>
+<span><span class="co">## 5         NA 0.7564167     5      NA</span></span>
+<span><span class="co">## 6         NA 0.8150322     6      NA</span></span>
+<span><span class="co">## 7         NA 0.7969735     7      NA</span></span>
+<span><span class="co">## 8  0.7695170        NA    NA       1</span></span>
+<span><span class="co">## 9  0.8721490        NA    NA       2</span></span>
+<span><span class="co">## 10 0.8279055        NA    NA       3</span></span>
+<span><span class="co">## 11 0.5872653        NA    NA       4</span></span>
+<span><span class="co">## 12 0.8990039        NA    NA       5</span></span>
+<span><span class="co">## 13 0.6255869        NA    NA       6</span></span>
+<span><span class="co">## 14 0.6279922        NA    NA       7</span></span></code></pre></div>
 <p>Note that the indices in columns “class” and “cluster” correspond to
 the levels of original factors passed to <code>true</code> and
 <code>pred</code>. We align them back to the previous factor values, and
 then plot them in heatmap:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">awh1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">res1</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SpatialAWH"</span>, <span class="st">"cluster"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="va">awh1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">res1</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nsAWH"</span>, <span class="st">"cluster"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>cluster <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">P1</span><span class="op">)</span><span class="op">[</span><span class="va">cluster</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="va">awh2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">res2</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SpatialAWH"</span>, <span class="st">"cluster"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">awh2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">res2</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nsAWH"</span>, <span class="st">"cluster"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>cluster <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">P2</span><span class="op">)</span><span class="op">[</span><span class="va">cluster</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="va">awh3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">res3</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SpatialAWH"</span>, <span class="st">"cluster"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">awh3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">res3</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nsAWH"</span>, <span class="st">"cluster"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>cluster <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">P3</span><span class="op">)</span><span class="op">[</span><span class="va">cluster</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">awh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">awh1</span>, <span class="va">awh2</span>, <span class="va">awh3</span><span class="op">)</span>, .id<span class="op">=</span><span class="st">"P"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">cluster</span>, values_from <span class="op">=</span> <span class="va">SpatialAWH</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">cluster</span>, values_from <span class="op">=</span> <span class="va">nsAWH</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span>select <span class="op">=</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">P</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">awh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">awh</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">awh</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P1"</span>, <span class="st">"P2"</span>, <span class="st">"P3"</span><span class="op">)</span></span>
@@ -408,15 +407,15 @@ then plot them in heatmap:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_distiller</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"RdPu"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"Predicted domain"</span>, y<span class="op">=</span><span class="st">""</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">awc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">res1</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SpatialAWC"</span>, <span class="st">"class"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="va">awc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">res1</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nsAWC"</span>, <span class="st">"class"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">reference</span><span class="op">)</span><span class="op">[</span><span class="va">class</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="va">awc2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">res2</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SpatialAWC"</span>, <span class="st">"class"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">awc2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">res2</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nsAWC"</span>, <span class="st">"class"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">reference</span><span class="op">)</span><span class="op">[</span><span class="va">class</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="va">awc3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">res3</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SpatialAWC"</span>, <span class="st">"class"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">awc3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">res3</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nsAWC"</span>, <span class="st">"class"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">reference</span><span class="op">)</span><span class="op">[</span><span class="va">class</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">awc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">awc1</span>, <span class="va">awc2</span>, <span class="va">awc3</span><span class="op">)</span>, .id<span class="op">=</span><span class="st">"P"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">class</span>, values_from <span class="op">=</span> <span class="va">SpatialAWC</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">class</span>, values_from <span class="op">=</span> <span class="va">nsAWC</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span>select <span class="op">=</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">P</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">awc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">awc</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">awc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P1"</span>, <span class="st">"P2"</span>, <span class="st">"P3"</span><span class="op">)</span></span>
@@ -450,34 +449,34 @@ visualization.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="../reference/getSpatialExternalMetrics.html">getSpatialExternalMetrics</a></span><span class="op">(</span>object<span class="op">=</span><span class="va">spe</span>, true<span class="op">=</span><span class="st">"reference"</span>, pred<span class="op">=</span><span class="st">"P1"</span>,</span>
 <span>                                  level<span class="op">=</span><span class="st">"element"</span>,</span>
-<span>                                  metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SpatialSPC"</span><span class="op">)</span>, k<span class="op">=</span><span class="fl">6</span>,</span>
+<span>                                  metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nsSPC"</span><span class="op">)</span>, k<span class="op">=</span><span class="fl">6</span>,</span>
 <span>                                  fuzzy_true <span class="op">=</span> <span class="cn">TRUE</span>, fuzzy_pred <span class="op">=</span> <span class="cn">FALSE</span>, </span>
 <span>                                  useNegatives <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, </span>
 <span>              <span class="va">data</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pxl_col_in_fullres"</span>, <span class="st">"pxl_row_in_fullres"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">res2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="../reference/getSpatialExternalMetrics.html">getSpatialExternalMetrics</a></span><span class="op">(</span>object<span class="op">=</span><span class="va">spe</span>, true<span class="op">=</span><span class="st">"reference"</span>, pred<span class="op">=</span><span class="st">"P2"</span>,</span>
 <span>                                  level<span class="op">=</span><span class="st">"element"</span>,</span>
-<span>                                  metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SpatialSPC"</span><span class="op">)</span>, k<span class="op">=</span><span class="fl">6</span>,</span>
+<span>                                  metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nsSPC"</span><span class="op">)</span>, k<span class="op">=</span><span class="fl">6</span>,</span>
 <span>                                  fuzzy_true <span class="op">=</span> <span class="cn">TRUE</span>, fuzzy_pred <span class="op">=</span> <span class="cn">FALSE</span>, </span>
 <span>                                  useNegatives <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
 <span>               <span class="va">data</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pxl_col_in_fullres"</span>, <span class="st">"pxl_row_in_fullres"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">res3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="../reference/getSpatialExternalMetrics.html">getSpatialExternalMetrics</a></span><span class="op">(</span>object<span class="op">=</span><span class="va">spe</span>, true<span class="op">=</span><span class="st">"reference"</span>, pred<span class="op">=</span><span class="st">"P3"</span>,</span>
 <span>                                  level<span class="op">=</span><span class="st">"element"</span>,</span>
-<span>                                  metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SpatialSPC"</span><span class="op">)</span>, k<span class="op">=</span><span class="fl">6</span>,</span>
+<span>                                  metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nsSPC"</span><span class="op">)</span>, k<span class="op">=</span><span class="fl">6</span>,</span>
 <span>                                  fuzzy_true <span class="op">=</span> <span class="cn">TRUE</span>, fuzzy_pred <span class="op">=</span> <span class="cn">FALSE</span>, </span>
 <span>                                  useNegatives <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
 <span>               <span class="va">data</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pxl_col_in_fullres"</span>, <span class="st">"pxl_row_in_fullres"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">res1</span>, <span class="va">res2</span>, <span class="va">res3</span><span class="op">)</span>, .id<span class="op">=</span><span class="st">"P"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span>cols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SpatialSPC"</span><span class="op">)</span>, </span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span>cols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nsSPC"</span><span class="op">)</span>, </span>
 <span>               names_to<span class="op">=</span><span class="st">"metric"</span>, values_to<span class="op">=</span><span class="st">"value"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">pxl_col_in_fullres</span>, y <span class="op">=</span> <span class="op">-</span> <span class="va">pxl_row_in_fullres</span>, color <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html" class="external-link">scale_colour_gradient</a></span><span class="op">(</span>high<span class="op">=</span><span class="st">"white"</span>, low <span class="op">=</span><span class="st">"deeppink4"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">0.3</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">P</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"Prediction"</span>, y<span class="op">=</span><span class="st">""</span>, color<span class="op">=</span><span class="st">"SpatialSPC"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"Prediction"</span>, y<span class="op">=</span><span class="st">""</span>, color<span class="op">=</span><span class="st">"nsSPC"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="PoemOnSpatialExperiment_files/figure-html/unnamed-chunk-17-1.png" width="768"></p>
 <p>This clear highlights the low concordance regions in each prediction
 as expected.</p>
@@ -591,7 +590,7 @@ for local diversity and can be regarded as edge detector:</p>
 </h2>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">## R version 4.4.2 (2024-10-31)</span></span>
+<span><span class="co">## R version 4.4.3 (2025-02-28)</span></span>
 <span><span class="co">## Platform: x86_64-pc-linux-gnu</span></span>
 <span><span class="co">## Running under: Ubuntu 22.04.5 LTS</span></span>
 <span><span class="co">## </span></span>
@@ -625,7 +624,7 @@ for local diversity and can be regarded as edge detector:</p>
 <span><span class="co">## [15] S4Vectors_0.42.1            BiocGenerics_0.50.0        </span></span>
 <span><span class="co">## [17] MatrixGenerics_1.16.0       matrixStats_1.3.0          </span></span>
 <span><span class="co">## [19] cowplot_1.1.3               ggplot2_3.5.1              </span></span>
-<span><span class="co">## [21] poem_0.99.7                 BiocStyle_2.32.1           </span></span>
+<span><span class="co">## [21] poem_0.99.13                BiocStyle_2.32.1           </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
 <span><span class="co">##   [1] RColorBrewer_1.1-3      rstudioapi_0.16.0       jsonlite_1.8.8         </span></span>
@@ -634,38 +633,38 @@ for local diversity and can be regarded as edge detector:</p>
 <span><span class="co">##  [10] zlibbioc_1.50.0         ragg_1.3.2              vctrs_0.6.5            </span></span>
 <span><span class="co">##  [13] spdep_1.3-6             memoise_2.0.1           elsa_1.1-28            </span></span>
 <span><span class="co">##  [16] terra_1.5-21            htmltools_0.5.8.1       S4Arrays_1.4.1         </span></span>
-<span><span class="co">##  [19] curl_5.2.1              BiocNeighbors_1.22.0    raster_3.5-15          </span></span>
+<span><span class="co">##  [19] curl_6.2.1              BiocNeighbors_1.22.0    raster_3.5-15          </span></span>
 <span><span class="co">##  [22] s2_1.1.7                SparseArray_1.4.8       sass_0.4.9             </span></span>
 <span><span class="co">##  [25] spData_2.3.3            KernSmooth_2.23-24      bslib_0.8.0            </span></span>
 <span><span class="co">##  [28] htmlwidgets_1.6.4       desc_1.4.3              cachem_1.1.0           </span></span>
 <span><span class="co">##  [31] igraph_2.1.1            mime_0.12               lifecycle_1.0.4        </span></span>
-<span><span class="co">##  [34] pkgconfig_2.0.3         Matrix_1.7-0            R6_2.5.1               </span></span>
+<span><span class="co">##  [34] pkgconfig_2.0.3         Matrix_1.7-0            R6_2.6.1               </span></span>
 <span><span class="co">##  [37] fastmap_1.2.0           GenomeInfoDbData_1.2.12 rbibutils_2.3          </span></span>
-<span><span class="co">##  [40] aricode_1.0.3           clue_0.3-65             digest_0.6.36          </span></span>
+<span><span class="co">##  [40] aricode_1.0.3           clue_0.3-66             digest_0.6.37          </span></span>
 <span><span class="co">##  [43] colorspace_2.1-1        AnnotationDbi_1.66.0    textshaping_0.3.6      </span></span>
-<span><span class="co">##  [46] RSQLite_2.3.7           labeling_0.4.3          filelock_1.0.3         </span></span>
-<span><span class="co">##  [49] fansi_1.0.6             httr_1.4.7              abind_1.4-5            </span></span>
-<span><span class="co">##  [52] compiler_4.4.2          proxy_0.4-27            bit64_4.0.5            </span></span>
-<span><span class="co">##  [55] withr_3.0.1             BiocParallel_1.38.0     DBI_1.2.3              </span></span>
+<span><span class="co">##  [46] RSQLite_2.3.7           pdist_1.2.1             labeling_0.4.3         </span></span>
+<span><span class="co">##  [49] filelock_1.0.3          httr_1.4.7              abind_1.4-5            </span></span>
+<span><span class="co">##  [52] compiler_4.4.3          proxy_0.4-27            bit64_4.0.5            </span></span>
+<span><span class="co">##  [55] withr_3.0.2             BiocParallel_1.38.0     DBI_1.2.3              </span></span>
 <span><span class="co">##  [58] highr_0.11              MASS_7.3-61             rappdirs_0.3.3         </span></span>
 <span><span class="co">##  [61] DelayedArray_0.30.1     rjson_0.2.21            classInt_0.4-10        </span></span>
-<span><span class="co">##  [64] bluster_1.14.0          tools_4.4.2             units_0.8-0            </span></span>
-<span><span class="co">##  [67] glue_1.8.0              dbscan_1.2-0            grid_4.4.2             </span></span>
+<span><span class="co">##  [64] bluster_1.14.0          tools_4.4.3             units_0.8-0            </span></span>
+<span><span class="co">##  [67] glue_1.8.0              dbscan_1.2-0            grid_4.4.3             </span></span>
 <span><span class="co">##  [70] sf_1.0-6                cluster_2.1.6           generics_0.1.3         </span></span>
 <span><span class="co">##  [73] gtable_0.3.5            clevr_0.1.2             class_7.3-23           </span></span>
-<span><span class="co">##  [76] fclust_2.1.1.1          sp_2.1-4                utf8_1.2.4             </span></span>
-<span><span class="co">##  [79] XVector_0.44.0          BiocVersion_3.19.1      pillar_1.9.0           </span></span>
-<span><span class="co">##  [82] lattice_0.22-6          bit_4.0.5               deldir_2.0-4           </span></span>
-<span><span class="co">##  [85] tidyselect_1.2.1        Biostrings_2.72.1       knitr_1.48             </span></span>
-<span><span class="co">##  [88] bookdown_0.40           xfun_0.46               UCSC.utils_1.0.0       </span></span>
-<span><span class="co">##  [91] yaml_2.3.10             boot_1.3-30             evaluate_0.24.0        </span></span>
-<span><span class="co">##  [94] codetools_0.2-20        tibble_3.2.1            mclustcomp_0.3.3       </span></span>
-<span><span class="co">##  [97] BiocManager_1.30.23     cli_3.6.3               systemfonts_1.1.0      </span></span>
-<span><span class="co">## [100] Rdpack_2.6.1            munsell_0.5.1           jquerylib_0.1.4        </span></span>
-<span><span class="co">## [103] Rcpp_1.0.13             png_0.1-8               parallel_4.4.2         </span></span>
-<span><span class="co">## [106] pkgdown_2.1.1           blob_1.2.4              scales_1.3.0           </span></span>
-<span><span class="co">## [109] e1071_1.7-9             purrr_1.0.2             crayon_1.5.3           </span></span>
-<span><span class="co">## [112] rlang_1.1.4             KEGGREST_1.44.1</span></span></code></pre></div>
+<span><span class="co">##  [76] fclust_2.1.1.1          sp_2.1-4                XVector_0.44.0         </span></span>
+<span><span class="co">##  [79] BiocVersion_3.19.1      pillar_1.10.1           lattice_0.22-6         </span></span>
+<span><span class="co">##  [82] bit_4.0.5               deldir_2.0-4            tidyselect_1.2.1       </span></span>
+<span><span class="co">##  [85] Biostrings_2.72.1       knitr_1.48              bookdown_0.40          </span></span>
+<span><span class="co">##  [88] xfun_0.46               UCSC.utils_1.0.0        yaml_2.3.10            </span></span>
+<span><span class="co">##  [91] boot_1.3-30             evaluate_0.24.0         codetools_0.2-20       </span></span>
+<span><span class="co">##  [94] tibble_3.2.1            mclustcomp_0.3.3        BiocManager_1.30.23    </span></span>
+<span><span class="co">##  [97] cli_3.6.4               systemfonts_1.1.0       Rdpack_2.6.1           </span></span>
+<span><span class="co">## [100] munsell_0.5.1           jquerylib_0.1.4         Rcpp_1.0.14            </span></span>
+<span><span class="co">## [103] png_0.1-8               parallel_4.4.3          pkgdown_2.1.1          </span></span>
+<span><span class="co">## [106] blob_1.2.4              scales_1.3.0            e1071_1.7-9            </span></span>
+<span><span class="co">## [109] purrr_1.0.2             crayon_1.5.3            rlang_1.1.5            </span></span>
+<span><span class="co">## [112] KEGGREST_1.44.1</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

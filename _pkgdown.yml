@@ -45,6 +45,9 @@ reference:
   - PAS
   - CHAOS
   - ELSA
+- subtitle: External metrics for spatial domain detection
+  contents:
+  - spatialARI
 - subtitle: Element-wise external metrics for spatial domain detection, particularly useful for visualizations.
   contents:
   - fuzzyHardSpotConcordance

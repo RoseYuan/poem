@@ -189,7 +189,7 @@ getNeighboringPairConcordance <- function(true, pred, location, k=20L,
 }
 
 
-#' Spatially aware ARI from Yan, Yinqiao, et. al., 2025
+#' Spatially aware ARI from Yan, Yinqiao, et al. (2025).
 #' 
 #' Computes the spatial Rand Index and spatial ARI (Yan, Feng and Luo, 2025).
 #' Note that by default, the decay functions are different from those of the 

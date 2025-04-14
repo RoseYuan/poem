@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">poem</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.13</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,7 +82,7 @@ Germain</h4>
             <address class="author_afil">
       Institute for Molecular Life Sciences, University of Zurich,
 Zurich, SwitzerlandDepartment of Health Sciences and Technology, ETH
-Zurich, Zurich, Switzerland<br><h4 data-toc-skip class="date">2025-01-17</h4>
+Zurich, Zurich, Switzerland<br><h4 data-toc-skip class="date">2025-04-14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/RoseYuan/poem/blob/HEAD/vignettes/poem.Rmd" class="external-link"><code>vignettes/poem.Rmd</code></a></small>
       <div class="d-none name"><code>poem.Rmd</code></div>
@@ -499,10 +499,10 @@ cluster.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/getSpatialExternalMetrics.html">getSpatialExternalMetrics</a></span><span class="op">(</span>true<span class="op">=</span><span class="va">sp_toys</span><span class="op">$</span><span class="va">label</span>, pred<span class="op">=</span><span class="va">sp_toys</span><span class="op">$</span><span class="va">p1</span>,</span>
 <span>                      location<span class="op">=</span><span class="va">sp_toys</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>,<span class="st">"y"</span><span class="op">)</span><span class="op">]</span>, level<span class="op">=</span><span class="st">"dataset"</span>,</span>
-<span>                      metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SpatialARI"</span>,<span class="st">"SpatialAccuracy"</span><span class="op">)</span>,</span>
+<span>                      metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nsARI"</span>,<span class="st">"SpatialAccuracy"</span><span class="op">)</span>,</span>
 <span>                      fuzzy_true <span class="op">=</span> <span class="cn">TRUE</span>, fuzzy_pred <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">##   SpatialARI SpatialAccuracy</span></span>
-<span><span class="co">## 1  0.7871135        0.956746</span></span></code></pre></div>
+<span><span class="co">##       nsARI SpatialAccuracy</span></span>
+<span><span class="co">## 1 0.7871135        0.956746</span></span></code></pre></div>
 <p>By specifying <code>fuzzy_true</code> and <code>fuzzy_pred</code>,
 one can control whether the fuzzy or hard version of <code>true</code>
 and <code>pred</code> is used in comparison. If <code>fuzzy_true</code>
@@ -512,19 +512,19 @@ representation of the class/cluster memberships.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/getSpatialExternalMetrics.html">getSpatialExternalMetrics</a></span><span class="op">(</span>true<span class="op">=</span><span class="va">sp_toys</span><span class="op">$</span><span class="va">label</span>, pred<span class="op">=</span><span class="va">sp_toys</span><span class="op">$</span><span class="va">p1</span>,</span>
 <span>                      location<span class="op">=</span><span class="va">sp_toys</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>,<span class="st">"y"</span><span class="op">)</span><span class="op">]</span>, level<span class="op">=</span><span class="st">"class"</span><span class="op">)</span></span>
-<span><span class="co">##   SpatialWH SpatialAWH SpatialWC SpatialAWC class cluster</span></span>
-<span><span class="co">## 1        NA         NA 0.8078698  0.5929504     1      NA</span></span>
-<span><span class="co">## 2        NA         NA 1.0000000  1.0000000     2      NA</span></span>
-<span><span class="co">## 3 1.0000000  1.0000000        NA         NA    NA       1</span></span>
-<span><span class="co">## 4 0.8323893  0.6493279        NA         NA    NA       2</span></span></code></pre></div>
+<span><span class="co">##        nsWH     nsAWH      nsWC     nsAWC class cluster</span></span>
+<span><span class="co">## 1        NA        NA 0.8078698 0.5929504     1      NA</span></span>
+<span><span class="co">## 2        NA        NA 1.0000000 1.0000000     2      NA</span></span>
+<span><span class="co">## 3 1.0000000 1.0000000        NA        NA    NA       1</span></span>
+<span><span class="co">## 4 0.8323893 0.6493279        NA        NA    NA       2</span></span></code></pre></div>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res1.1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getSpatialExternalMetrics.html">getSpatialExternalMetrics</a></span><span class="op">(</span>true<span class="op">=</span><span class="va">sp_toys</span><span class="op">$</span><span class="va">label</span>, pred<span class="op">=</span><span class="va">sp_toys</span><span class="op">$</span><span class="va">p1</span>,</span>
 <span>                      location<span class="op">=</span><span class="va">sp_toys</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>,<span class="st">"y"</span><span class="op">)</span><span class="op">]</span>, level<span class="op">=</span><span class="st">"dataset"</span>,</span>
-<span>                      metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SpatialARI"</span>,<span class="st">"SpatialAccuracy"</span><span class="op">)</span>,</span>
+<span>                      metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nsARI"</span>,<span class="st">"SpatialAccuracy"</span><span class="op">)</span>,</span>
 <span>                      fuzzy_true <span class="op">=</span> <span class="cn">TRUE</span>, fuzzy_pred <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">res2.1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getSpatialExternalMetrics.html">getSpatialExternalMetrics</a></span><span class="op">(</span>true<span class="op">=</span><span class="va">sp_toys</span><span class="op">$</span><span class="va">label</span>, pred<span class="op">=</span><span class="va">sp_toys</span><span class="op">$</span><span class="va">p2</span>,</span>
 <span>                      location<span class="op">=</span><span class="va">sp_toys</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>,<span class="st">"y"</span><span class="op">)</span><span class="op">]</span>, level<span class="op">=</span><span class="st">"dataset"</span>,</span>
-<span>                      metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SpatialARI"</span>,<span class="st">"SpatialAccuracy"</span><span class="op">)</span>,</span>
+<span>                      metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nsARI"</span>,<span class="st">"SpatialAccuracy"</span><span class="op">)</span>,</span>
 <span>                      fuzzy_true <span class="op">=</span> <span class="cn">TRUE</span>, fuzzy_pred <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">res1.2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getPartitionMetrics.html">getPartitionMetrics</a></span><span class="op">(</span>true<span class="op">=</span><span class="va">sp_toys</span><span class="op">$</span><span class="va">label</span>, pred<span class="op">=</span><span class="va">sp_toys</span><span class="op">$</span><span class="va">p1</span>,</span>
 <span>                      level<span class="op">=</span><span class="st">"dataset"</span>, metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ARI"</span><span class="op">)</span><span class="op">)</span></span>
@@ -533,7 +533,7 @@ representation of the class/cluster memberships.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">res1.1</span>, <span class="va">res2.1</span><span class="op">)</span>, .id<span class="op">=</span><span class="st">"P"</span><span class="op">)</span>,</span>
 <span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">res1.2</span>, <span class="va">res2.2</span><span class="op">)</span>, .id<span class="op">=</span><span class="st">"P"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span>cols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SpatialARI"</span>, <span class="st">"SpatialAccuracy"</span>, <span class="st">"ARI"</span><span class="op">)</span>, </span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span>cols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nsARI"</span>, <span class="st">"SpatialAccuracy"</span>, <span class="st">"ARI"</span><span class="op">)</span>, </span>
 <span>               names_to<span class="op">=</span><span class="st">"metric"</span>, values_to<span class="op">=</span><span class="st">"value"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">P</span>, y<span class="op">=</span><span class="va">value</span>, group<span class="op">=</span><span class="va">metric</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">3</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>color<span class="op">=</span><span class="va">P</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -541,7 +541,7 @@ representation of the class/cluster memberships.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"Prediction"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="poem_files/figure-html/unnamed-chunk-25-1.png" width="480"></p>
 <p>When the evaluation is non-spatial-aware, P1 and P2 get the same ARI
-score. However, with spatial-aware metrics like SpatialARI and
+score. However, with spatial-aware metrics like nsARI and
 SpatialAccuracy, P2 gets a higher scores than P1.</p>
 </div>
 <div class="section level3">
@@ -594,7 +594,7 @@ evaluation:</p>
 </h2>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">## R version 4.4.2 (2024-10-31)</span></span>
+<span><span class="co">## R version 4.4.3 (2025-02-28)</span></span>
 <span><span class="co">## Platform: x86_64-pc-linux-gnu</span></span>
 <span><span class="co">## Running under: Ubuntu 22.04.5 LTS</span></span>
 <span><span class="co">## </span></span>
@@ -618,65 +618,65 @@ evaluation:</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
 <span><span class="co">## [1] cowplot_1.1.3    igraph_2.1.1     ggnetwork_0.5.13 tidyr_1.3.1     </span></span>
-<span><span class="co">## [5] dplyr_1.1.4      ggplot2_3.5.1    poem_0.99.7      BiocStyle_2.32.1</span></span>
+<span><span class="co">## [5] dplyr_1.1.4      ggplot2_3.5.1    poem_0.99.13     BiocStyle_2.32.1</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
 <span><span class="co">##   [1] Rdpack_2.6.1                DBI_1.2.3                  </span></span>
 <span><span class="co">##   [3] deldir_2.0-4                s2_1.1.7                   </span></span>
-<span><span class="co">##   [5] rlang_1.1.4                 magrittr_2.0.3             </span></span>
-<span><span class="co">##   [7] clue_0.3-65                 matrixStats_1.3.0          </span></span>
-<span><span class="co">##   [9] e1071_1.7-9                 compiler_4.4.2             </span></span>
+<span><span class="co">##   [5] rlang_1.1.5                 magrittr_2.0.3             </span></span>
+<span><span class="co">##   [7] clue_0.3-66                 matrixStats_1.3.0          </span></span>
+<span><span class="co">##   [9] e1071_1.7-9                 compiler_4.4.3             </span></span>
 <span><span class="co">##  [11] systemfonts_1.1.0           vctrs_0.6.5                </span></span>
 <span><span class="co">##  [13] fclust_2.1.1.1              pkgconfig_2.0.3            </span></span>
 <span><span class="co">##  [15] SpatialExperiment_1.14.0    wk_0.9.4                   </span></span>
 <span><span class="co">##  [17] crayon_1.5.3                fastmap_1.2.0              </span></span>
 <span><span class="co">##  [19] magick_2.8.4                XVector_0.44.0             </span></span>
-<span><span class="co">##  [21] labeling_0.4.3              utf8_1.2.4                 </span></span>
-<span><span class="co">##  [23] rmarkdown_2.27              UCSC.utils_1.0.0           </span></span>
-<span><span class="co">##  [25] ragg_1.3.2                  purrr_1.0.2                </span></span>
-<span><span class="co">##  [27] xfun_0.46                   bluster_1.14.0             </span></span>
-<span><span class="co">##  [29] zlibbioc_1.50.0             cachem_1.1.0               </span></span>
-<span><span class="co">##  [31] GenomeInfoDb_1.40.1         jsonlite_1.8.8             </span></span>
-<span><span class="co">##  [33] highr_0.11                  DelayedArray_0.30.1        </span></span>
-<span><span class="co">##  [35] scico_1.5.0                 BiocParallel_1.38.0        </span></span>
+<span><span class="co">##  [21] labeling_0.4.3              rmarkdown_2.27             </span></span>
+<span><span class="co">##  [23] UCSC.utils_1.0.0            ragg_1.3.2                 </span></span>
+<span><span class="co">##  [25] purrr_1.0.2                 xfun_0.46                  </span></span>
+<span><span class="co">##  [27] bluster_1.14.0              zlibbioc_1.50.0            </span></span>
+<span><span class="co">##  [29] cachem_1.1.0                GenomeInfoDb_1.40.1        </span></span>
+<span><span class="co">##  [31] jsonlite_1.8.8              highr_0.11                 </span></span>
+<span><span class="co">##  [33] DelayedArray_0.30.1         scico_1.5.0                </span></span>
+<span><span class="co">##  [35] BiocParallel_1.38.0         pdist_1.2.1                </span></span>
 <span><span class="co">##  [37] terra_1.5-21                clevr_0.1.2                </span></span>
-<span><span class="co">##  [39] parallel_4.4.2              aricode_1.0.3              </span></span>
-<span><span class="co">##  [41] cluster_2.1.6               R6_2.5.1                   </span></span>
+<span><span class="co">##  [39] parallel_4.4.3              aricode_1.0.3              </span></span>
+<span><span class="co">##  [41] cluster_2.1.6               R6_2.6.1                   </span></span>
 <span><span class="co">##  [43] bslib_0.8.0                 boot_1.3-30                </span></span>
 <span><span class="co">##  [45] GenomicRanges_1.56.1        jquerylib_0.1.4            </span></span>
-<span><span class="co">##  [47] Rcpp_1.0.13                 bookdown_0.40              </span></span>
+<span><span class="co">##  [47] Rcpp_1.0.14                 bookdown_0.40              </span></span>
 <span><span class="co">##  [49] SummarizedExperiment_1.34.0 knitr_1.48                 </span></span>
 <span><span class="co">##  [51] IRanges_2.38.1              Matrix_1.7-0               </span></span>
 <span><span class="co">##  [53] tidyselect_1.2.1            rstudioapi_0.16.0          </span></span>
 <span><span class="co">##  [55] abind_1.4-5                 yaml_2.3.10                </span></span>
 <span><span class="co">##  [57] codetools_0.2-20            lattice_0.22-6             </span></span>
-<span><span class="co">##  [59] tibble_3.2.1                withr_3.0.1                </span></span>
+<span><span class="co">##  [59] tibble_3.2.1                withr_3.0.2                </span></span>
 <span><span class="co">##  [61] Biobase_2.64.0              evaluate_0.24.0            </span></span>
 <span><span class="co">##  [63] desc_1.4.3                  sf_1.0-6                   </span></span>
 <span><span class="co">##  [65] units_0.8-0                 spData_2.3.3               </span></span>
 <span><span class="co">##  [67] proxy_0.4-27                elsa_1.1-28                </span></span>
-<span><span class="co">##  [69] pillar_1.9.0                BiocManager_1.30.23        </span></span>
+<span><span class="co">##  [69] pillar_1.10.1               BiocManager_1.30.23        </span></span>
 <span><span class="co">##  [71] MatrixGenerics_1.16.0       KernSmooth_2.23-24         </span></span>
-<span><span class="co">##  [73] DT_0.33                     stats4_4.4.2               </span></span>
+<span><span class="co">##  [73] DT_0.33                     stats4_4.4.3               </span></span>
 <span><span class="co">##  [75] dbscan_1.2-0                generics_0.1.3             </span></span>
 <span><span class="co">##  [77] sp_2.1-4                    mclustcomp_0.3.3           </span></span>
 <span><span class="co">##  [79] S4Vectors_0.42.1            munsell_0.5.1              </span></span>
 <span><span class="co">##  [81] scales_1.3.0                class_7.3-23               </span></span>
-<span><span class="co">##  [83] glue_1.8.0                  tools_4.4.2                </span></span>
+<span><span class="co">##  [83] glue_1.8.0                  tools_4.4.3                </span></span>
 <span><span class="co">##  [85] BiocNeighbors_1.22.0        fs_1.6.4                   </span></span>
-<span><span class="co">##  [87] grid_4.4.2                  spdep_1.3-6                </span></span>
+<span><span class="co">##  [87] grid_4.4.3                  spdep_1.3-6                </span></span>
 <span><span class="co">##  [89] crosstalk_1.2.1             rbibutils_2.3              </span></span>
 <span><span class="co">##  [91] colorspace_2.1-1            SingleCellExperiment_1.26.0</span></span>
 <span><span class="co">##  [93] GenomeInfoDbData_1.2.12     raster_3.5-15              </span></span>
-<span><span class="co">##  [95] cli_3.6.3                   textshaping_0.3.6          </span></span>
-<span><span class="co">##  [97] fansi_1.0.6                 S4Arrays_1.4.1             </span></span>
-<span><span class="co">##  [99] gtable_0.3.5                sass_0.4.9                 </span></span>
-<span><span class="co">## [101] digest_0.6.36               BiocGenerics_0.50.0        </span></span>
-<span><span class="co">## [103] classInt_0.4-10             SparseArray_1.4.8          </span></span>
-<span><span class="co">## [105] farver_2.1.2                rjson_0.2.21               </span></span>
-<span><span class="co">## [107] htmlwidgets_1.6.4           htmltools_0.5.8.1          </span></span>
-<span><span class="co">## [109] pkgdown_2.1.1               lifecycle_1.0.4            </span></span>
-<span><span class="co">## [111] httr_1.4.7                  MASS_7.3-61</span></span></code></pre></div>
+<span><span class="co">##  [95] cli_3.6.4                   textshaping_0.3.6          </span></span>
+<span><span class="co">##  [97] S4Arrays_1.4.1              gtable_0.3.5               </span></span>
+<span><span class="co">##  [99] sass_0.4.9                  digest_0.6.37              </span></span>
+<span><span class="co">## [101] BiocGenerics_0.50.0         classInt_0.4-10            </span></span>
+<span><span class="co">## [103] SparseArray_1.4.8           farver_2.1.2               </span></span>
+<span><span class="co">## [105] rjson_0.2.21                htmlwidgets_1.6.4          </span></span>
+<span><span class="co">## [107] htmltools_0.5.8.1           pkgdown_2.1.1              </span></span>
+<span><span class="co">## [109] lifecycle_1.0.4             httr_1.4.7                 </span></span>
+<span><span class="co">## [111] MASS_7.3-61</span></span></code></pre></div>
 </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -2,7 +2,7 @@
 % Please edit documentation in R/SpatialMetrics.R
 \name{spatialARI}
 \alias{spatialARI}
-\title{Spatially aware ARI from Yan, Yinqiao, et. al., 2025}
+\title{Spatially aware ARI from Yan, Yinqiao, et al. (2025).}
 \usage{
 spatialARI(
   true,
