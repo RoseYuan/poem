@@ -11,7 +11,7 @@ getSpatialGlobalExternalMetrics(
   k = 6,
   alpha = 0.5,
   metrics = c("nsRI", "nsARI", "nsWH", "nsAWH", "nsWC", "nsAWC", "SpatialAccuracy",
-    "SpatialARI"),
+    "SpatialRI", "SpatialARI"),
   fuzzy_true = TRUE,
   fuzzy_pred = FALSE,
   ...

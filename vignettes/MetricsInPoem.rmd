@@ -148,7 +148,7 @@ spatial_metrics <- data.frame(
   Metric = c("Percentage of Abnormal Spots (PAS)", 
              "Spatial Chaos Score (CHAOS)", 
              "Entropy-based Local indicator of Spatial Association (ELSA)", 
-             "Spatial RI, ARI, WH, WC, AWH, and AWC", 
+             "Neighborhood smoothed RI, ARI, WH, WC, AWH, and AWC", 
              "Spot-wise Pair Concordance (SPC)", 
              "Spatial SPC", 
              "Spatial Set Matching Accuracy"),
