@@ -14,7 +14,7 @@ getSpatialExternalMetrics(
   k = 6,
   alpha = 0.5,
   level = "class",
-  metrics = c("SpatialWH", "SpatialAWH", "SpatialWC", "SpatialAWC"),
+  metrics = c("nsWH", "nsAWH", "nsWC", "nsAWC"),
   fuzzy_true = TRUE,
   fuzzy_pred = FALSE,
   ...
@@ -28,7 +28,7 @@ getSpatialExternalMetrics(
   k = 6,
   alpha = 0.5,
   level = "class",
-  metrics = c("SpatialWH", "SpatialAWH", "SpatialWC", "SpatialAWC"),
+  metrics = c("nsWH", "nsAWH", "nsWC", "nsAWC"),
   fuzzy_true = TRUE,
   fuzzy_pred = FALSE,
   ...
@@ -42,7 +42,7 @@ getSpatialExternalMetrics(
   k = 6,
   alpha = 0.5,
   level = "class",
-  metrics = c("SpatialWH", "SpatialAWH", "SpatialWC", "SpatialAWC"),
+  metrics = c("nsWH", "nsAWH", "nsWC", "nsAWC"),
   fuzzy_true = TRUE,
   fuzzy_pred = FALSE,
   ...
@@ -98,13 +98,13 @@ to raw components (\code{true}, \code{pred}, \code{location}) or directly to a
 \details{
 The allowed values for \code{metrics} depend on the value of \code{level}:
 \itemize{
-\item If \code{level = "element"}, the allowed \code{metrics} are: \code{"SpatialSPC"},
-\code{"SpatialNPC"}.
-\item If \code{level = "class"}, the allowed \code{metrics} are: \code{"SpatialWH"},
-\code{"SpatialAWH"}, \code{"SpatialWC"},\code{"SpatialAWC"}.
-\item If \code{level = "dataset"}, the allowed \code{metrics} are: \code{"SpatialRI"},
-\code{"SpatialARI"},\code{"SpatialWH"},\code{"SpatialAWH"}, \code{"SpatialWC"},\code{"SpatialAWC"},
-\code{"SpatialAccuracy"}.
+\item If \code{level = "element"}, the allowed \code{metrics} are: \code{"nsSPC"},
+\code{"NPC"}.
+\item If \code{level = "class"}, the allowed \code{metrics} are: \code{"nsWH"},
+\code{"nsAWH"}, \code{"nsWC"},\code{"nsAWC"}.
+\item If \code{level = "dataset"}, the allowed \code{metrics} are: \code{"nsRI"},
+\code{"nsARI"},\code{"nsWH"},\code{"nsAWH"}, \code{"nsWC"},\code{"nsAWC"},
+\code{"SpatialAccuracy"},\code{"SpatialARI"}.
 }
 }
 \examples{

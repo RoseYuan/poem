@@ -10,7 +10,7 @@ getSpatialClassExternalMetrics(
   location,
   k = 6,
   alpha = 0.5,
-  metrics = c("SpatialWH", "SpatialAWH", "SpatialWC", "SpatialAWC"),
+  metrics = c("nsWH", "nsAWH", "nsWC", "nsAWC"),
   fuzzy_true = TRUE,
   fuzzy_pred = FALSE,
   ...

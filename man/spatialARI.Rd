@@ -7,19 +7,19 @@
 spatialARI(
   true,
   pred,
-  coords,
+  location,
   normCoords = TRUE,
-  alpha = 0.8,
+  lambda = 0.8,
   fbeta = 4,
   hbeta = 1,
   spotWise = FALSE,
   nChunks = NULL,
   original = FALSE,
   f = function(x) {
-     alpha * exp(-x * fbeta)
+     lambda * exp(-x * fbeta)
  },
   h = function(x) {
-     alpha * (1 - exp(-x * hbeta))
+     lambda * (1 - exp(-x * hbeta))
  }
 )
 }
@@ -28,11 +28,12 @@ spatialARI(
 
 \item{pred}{A vector of predicted clusters}
 
-\item{coords}{A matrix of spatial coordinates, with dimensions as columns}
+\item{location}{A matrix of spatial coordinates, with dimensions as columns}
 
 \item{normCoords}{Logical; whether to normalize the coordinates to 0-1.}
 
-\item{alpha}{The alpha used in the \code{f} and \code{h} functions (default 0.8).}
+\item{lambda}{The \code{alpha} used in the \code{f} and \code{h} functions (default 0.8) in
+Yan, Feng and Luo, 2025.}
 
 \item{fbeta, hbeta}{Additional factors used in the exponential decay functions
 (see details). A higher value means a faster decay. These are ignored if
@@ -82,12 +83,12 @@ which allows to scale it (a higher beta parameter means a faster decay).
 By default, chunking to keep RAM usage roughly below 2GB. Higher speed can
 be achieved (at higher memory costs) for larger datasets by limiting the
 number of chunks. The memory usage if done in a single chunk should be
-roughly \code{4e-5*nrow(coords)^2} Mb, and this scales down linearly with the
+roughly \code{4e-5*nrow(location)^2} Mb, and this scales down linearly with the
 number of chunks.
 }
 \examples{
 data(sp_toys)
-spatialARI(true=sp_toys$label, pred=sp_toys$p2, coords = sp_toys[,1:2])
+spatialARI(true=sp_toys$label, pred=sp_toys$p2, location = sp_toys[,1:2])
 }
 \references{
 Yan, Feng and Luo, biorxiv 2025, https://doi.org/10.1101/2025.03.25.645156
