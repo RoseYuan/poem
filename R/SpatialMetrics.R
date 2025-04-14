@@ -198,9 +198,10 @@ getNeighboringPairConcordance <- function(true, pred, location, k=20L,
 #'
 #' @param pred A vector of predicted clusters
 #' @param true A vector of true class labels
-#' @param coords A matrix of spatial coordinates, with dimensions as columns
+#' @param location A matrix of spatial coordinates, with dimensions as columns
 #' @param normCoords Logical; whether to normalize the coordinates to 0-1.
-#' @param alpha The alpha used in the `f` and `h` functions (default 0.8).
+#' @param lambda The `alpha` used in the `f` and `h` functions (default 0.8) in
+#'   Yan, Feng and Luo, 2025.
 #' @param fbeta,hbeta Additional factors used in the exponential decay functions 
 #'   (see details). A higher value means a faster decay. These are ignored if 
 #'   `original=TRUE`.
@@ -237,7 +238,7 @@ getNeighboringPairConcordance <- function(true, pred, location, k=20L,
 #' By default, chunking to keep RAM usage roughly below 2GB. Higher speed can 
 #' be achieved (at higher memory costs) for larger datasets by limiting the 
 #' number of chunks. The memory usage if done in a single chunk should be 
-#' roughly `4e-5*nrow(coords)^2` Mb, and this scales down linearly with the 
+#' roughly `4e-5*nrow(location)^2` Mb, and this scales down linearly with the 
 #' number of chunks.
 #' 
 #' @return A vector containing the spatial Rand Index (spRI) and spatial 
@@ -250,25 +251,25 @@ getNeighboringPairConcordance <- function(true, pred, location, k=20L,
 #' @export
 #' @examples
 #' data(sp_toys)
-#' spatialARI(true=sp_toys$label, pred=sp_toys$p2, coords = sp_toys[,1:2])
-spatialARI <- function(true, pred, coords, normCoords=TRUE, alpha=0.8, fbeta=4,
+#' spatialARI(true=sp_toys$label, pred=sp_toys$p2, location = sp_toys[,1:2])
+spatialARI <- function(true, pred, location, normCoords=TRUE, lambda=0.8, fbeta=4,
                        hbeta=1, spotWise=FALSE,  nChunks=NULL, original=FALSE,
-                       f=function(x){ alpha*exp(-x*fbeta) },
-                       h=function(x){ alpha*(1-exp(-x*hbeta)) }){
+                       f=function(x){ lambda*exp(-x*fbeta) },
+                       h=function(x){ lambda*(1-exp(-x*hbeta)) }){
   if(isTRUE(original)){
-    f <- function(x){ alpha*exp(-x^2) }
-    h <- function(x){ alpha*(1-exp(-x^2)) }
+    f <- function(x){ lambda*exp(-x^2) }
+    h <- function(x){ lambda*(1-exp(-x^2)) }
   }
   stopifnot(is.function(h) && is.function(f))
   N <- length(true)
-  stopifnot(length(pred)==N && nrow(coords)==N)
-  stopifnot(!any(is.na(coords)) && !any(is.na(pred)) && !any(is.na(true)))
-  stopifnot(alpha>=0 && alpha<=1)
+  stopifnot(length(pred)==N && nrow(location)==N)
+  stopifnot(!any(is.na(location)) && !any(is.na(pred)) && !any(is.na(true)))
+  stopifnot(lambda>=0 && lambda<=1)
   
   if(normCoords){
-    for(i in seq_len(ncol(coords))){
-      mi <- min(coords[,i])
-      coords[,i] <- (coords[,i]-mi)/(max(coords[,i])-mi)
+    for(i in seq_len(ncol(location))){
+      mi <- min(location[,i])
+      location[,i] <- (location[,i]-mi)/(max(location[,i])-mi)
     }
   }
 
@@ -281,11 +282,11 @@ spatialARI <- function(true, pred, coords, normCoords=TRUE, alpha=0.8, fbeta=4,
 
   o <- lapply(sp, FUN=function(i){
     if(nChunks==1){
-      di <- dist(coords)
+      di <- dist(location)
       same_in_pred <- outer(pred, pred, `==`)
       same_in_true <- outer(true, true, `==`)
     }else{
-      di <- as.matrix(pdist::pdist(coords, indices.A=i, indices.B=seq_len(N)))
+      di <- as.matrix(pdist::pdist(location, indices.A=i, indices.B=seq_len(N)))
       same_in_pred <- outer(pred[i], pred, `==`)
       same_in_true <- outer(true[i], true, `==`)
     }
