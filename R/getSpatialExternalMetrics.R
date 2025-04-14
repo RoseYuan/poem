@@ -144,13 +144,13 @@ getSpatialGlobalExternalMetrics <- function(true, pred, location,
                                             ...){
   argfindSpatialKNN <- .checkEllipsisArgs(fnList=list(findSpatialKNN, 
                                               fuzzyPartitionMetrics,
-                                              SpatialARI), ...)[[1]] 
+                                              spatialARI), ...)[[1]] 
   argfuzzyPartitionMetrics <- .checkEllipsisArgs(fnList=list(findSpatialKNN, 
                                               fuzzyPartitionMetrics,
-                                              SpatialARI), ...)[[2]] 
-  argSpatialARI <- .checkEllipsisArgs(fnList=list(findSpatialKNN, 
+                                              spatialARI), ...)[[2]] 
+  argspatialARI <- .checkEllipsisArgs(fnList=list(findSpatialKNN, 
                                               fuzzyPartitionMetrics,
-                                              SpatialARI), ...)[[3]]
+                                              spatialARI), ...)[[3]]
   if(length(intersect(metrics, c("nsRI","nsARI","nsWH",
                                  "nsAWH", "nsWC","nsAWC")))>0){
     hardTrue <- true
@@ -178,7 +178,7 @@ getSpatialGlobalExternalMetrics <- function(true, pred, location,
                                      argfindSpatialKNN))
   }
   if("SpatialARI" %in% metrics){
-    res$SpatialARI <- do.call(SpatialARI, 
+    res$SpatialARI <- do.call(spatialARI, 
                                    c(list(true=true, pred=pred, 
                                           location=location), 
                                      argSpatialARI))
