@@ -24,7 +24,7 @@
 #'   `"nsAWH"`, `"nsWC"`,`"nsAWC"`.
 #'   - If `level = "dataset"`, the allowed `metrics` are: `"nsRI"`,
 #'   `"nsARI"`,`"nsWH"`,`"nsAWH"`, `"nsWC"`,`"nsAWC"`,
-#'   `"SpatialAccuracy"`. 
+#'   `"SpatialAccuracy"`,`"SpatialARI"`. 
 #' @inheritParams getSpatialElementExternalMetrics
 #' @param ... Additional arguments passed to specific methods.
 #' @return A data.frame of metrics based on the specified input.
@@ -138,13 +138,19 @@ getSpatialGlobalExternalMetrics <- function(true, pred, location,
                                             metrics=c("nsRI","nsARI",
                                                       "nsWH","nsAWH", 
                                                       "nsWC","nsAWC",
-                                                      "SpatialAccuracy"), 
+                                                      "SpatialAccuracy",
+                                                      "SpatialARI"), 
                                             fuzzy_true=TRUE, fuzzy_pred=FALSE,
                                             ...){
   argfindSpatialKNN <- .checkEllipsisArgs(fnList=list(findSpatialKNN, 
-                                              fuzzyPartitionMetrics), ...)[[1]] 
+                                              fuzzyPartitionMetrics,
+                                              SpatialARI), ...)[[1]] 
   argfuzzyPartitionMetrics <- .checkEllipsisArgs(fnList=list(findSpatialKNN, 
-                                              fuzzyPartitionMetrics), ...)[[2]] 
+                                              fuzzyPartitionMetrics,
+                                              SpatialARI), ...)[[2]] 
+  argSpatialARI <- .checkEllipsisArgs(fnList=list(findSpatialKNN, 
+                                              fuzzyPartitionMetrics,
+                                              SpatialARI), ...)[[3]]
   if(length(intersect(metrics, c("nsRI","nsARI","nsWH",
                                  "nsAWH", "nsWC","nsAWC")))>0){
     hardTrue <- true
@@ -170,6 +176,12 @@ getSpatialGlobalExternalMetrics <- function(true, pred, location,
                                    c(list(true=true, pred=pred, 
                                           location=location, k=k), 
                                      argfindSpatialKNN))
+  }
+  if("SpatialARI" %in% metrics){
+    res$SpatialARI <- do.call(SpatialARI, 
+                                   c(list(true=true, pred=pred, 
+                                          location=location), 
+                                     argSpatialARI))
   }
   colnames(res) <- sub("fuzzy", "Spatial",colnames(res))
   return(res[,metrics, drop=FALSE])
