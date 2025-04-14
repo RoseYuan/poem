@@ -30,14 +30,14 @@ metric_info <- data.frame(Name=c("SW",
                                  "fuzzyRI", "fuzzyARI", "fuzzyWH", "fuzzyAWH", 
                                  "fuzzyWC", "fuzzyAWC",
                                  
-                                 "SpatialSPC", "SpatialNPA",
+                                 "nsSPC", "NPC",
                                  
-                                 "SpatialWH","SpatialAWH", 
-                                 "SpatialWC","SpatialAWC",
+                                 "nsWH","nsAWH", 
+                                 "nsWC","nsAWC",
                                  
-                                 "SpatialRI","SpatialARI","SpatialWH",
-                                 "SpatialAWH", "SpatialWC","SpatialAWC",
-                                 "SpatialAccuracy",
+                                 "nsRI","nsARI","nsWH",
+                                 "nsAWH", "nsWC","nsAWC",
+                                 "SpatialAccuracy", "SpatialARI",
                                  
                                  "PAS", "ELSA",
                                  
@@ -63,7 +63,7 @@ metric_info <- data.frame(Name=c("SW",
                                    
                                    rep("element",2),
                                    rep("class",4),
-                                   rep("dataset",7),
+                                   rep("dataset",8),
                                    
                                    rep("element",2),
                                    rep("class",3),
@@ -74,7 +74,7 @@ metric_info <- data.frame(Name=c("SW",
                             rep("getGraphMetrics",20),
                             rep("getPartitionMetrics",26),
                             rep("getFuzzyPartitionMetrics",11),
-                            rep("getSpatialExternalMetrics",13),
+                            rep("getSpatialExternalMetrics",14),
                             rep("getSpatialInternalMetrics",11)
                             ))
 
@@ -84,7 +84,11 @@ metric_info <- metric_info %>% group_by(Name) %>% summarize(
 )
 
 
-tmp <- data.frame(metric=c("Adjusted Mutual Information",
+
+
+
+tmp <- data.frame(metric=c(
+           "Adjusted Mutual Information",
            "Adjusted Mean Shortest Path",
            "Adjusted Rand Index",
            "Adjusted Spot-wise Pair Concordance",
@@ -105,6 +109,7 @@ tmp <- data.frame(metric=c("Adjusted Mutual Information",
            "Neighborhood Class Enrichment",
            "Normalized Class Size Rand Index",
            "Neighborhood Purity",
+           "Neihboring Pair Concordance for Spatial Clustering",
            "Proportion of Abnormal Spots (PAS score)",
            "Partition Coefficient",
            "Partition Entropy",
@@ -113,15 +118,8 @@ tmp <- data.frame(metric=c("Adjusted Mutual Information",
            "Simpson’s Index",
            "Spot-wise Pair Concordance",
            "Silhouette Width",
-           "Adjusted Rand Index for Spatial Clustering",
-           "Adjusted Wallace Completeness for Spatial Clustering",
-           "Adjusted Wallace Homogeneity for Spatial Clustering", 
+           "Adjusted Rand Index weighted by distance for Spatial Clustering",
            "Set-matching Accuracy for Spatial Clustering",
-           "Neihboring Pair Concordance for Spatial Clustering",
-           "Rand Index for Spatial Clustering",
-           "Spot-wise Pair Concordance for Spatial Clustering",
-           "Wallace Completeness for Spatial Clustering",
-           "Wallace Homogeneity for Spatial Clustering",
            "Van Dongen Measure",
            "Variation of Information",
            "V-measure",
@@ -144,6 +142,13 @@ tmp <- data.frame(metric=c("Adjusted Mutual Information",
            "Mean Silhouette Width",
            "Minimal of Class-level Silhouette Width",
            "Minimal Silhouette Width", 
+           "Neighborhood smoothed Adjusted Rand Index for Spatial Clustering",
+           "Neighborhood smoothed Adjusted Wallace Completeness for Spatial Clustering",
+           "Neighborhood smoothed Adjusted Wallace Homogeneity for Spatial Clustering", 
+           "Neighborhood smoothed Rand Index for Spatial Clustering",
+           "Neighborhood smoothed Spot-wise Pair Concordance for Spatial Clustering",
+           "Neighborhood smoothed Wallace Completeness for Spatial Clustering",
+           "Neighborhood smoothed Wallace Homogeneity for Spatial Clustering",
            "Proportion of Negative Silhouette Width", 
            "CDbw seperation"
                         

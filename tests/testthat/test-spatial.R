@@ -20,14 +20,14 @@ test_that("External spatial metrics work", {
   expect_true(all(!is.na(as.matrix(sm))))
   sm <- getSpatialExternalMetrics(true=d$label, pred=d$p1, 
                                   location=d[,seq_len(2)], level="class")
-  expect_true(sm$SpatialAWH[3]==1)
-  expect_true(sm$SpatialAWC[2]==1)
+  expect_true(sm$nsAWH[3]==1)
+  expect_true(sm$nsAWC[2]==1)
   sm2 <- getSpatialExternalMetrics(true=d$label, pred=d$p1, 
                                    location=d[,seq_len(2)], level="element",
-                                   metrics=c("SpatialSPC","SpatialNPC"))
+                                   metrics=c("nsSPC","NPC"))
   sm2 <- getSpatialExternalMetrics(true=d$label, pred=d$p1, 
                                    location=d[,seq_len(2)], level="element", 
-                                   metrics=c("SpatialSPC"), useNegatives=FALSE)
-  medSPC <- sapply(split(sm2$SpatialSPC, d$label!=d$p1), median)
+                                   metrics=c("nsSPC"), useNegatives=FALSE)
+  medSPC <- sapply(split(sm2$nsSPC, d$label!=d$p1), median)
   expect_true(all(medSPC[1]>0.8 & medSPC[2]<0.3))
 })

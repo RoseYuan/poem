@@ -339,7 +339,7 @@ Let's quantify this by calculating external spatial metrics:
 ```{r}
 getSpatialExternalMetrics(true=sp_toys$label, pred=sp_toys$p1,
                       location=sp_toys[,c("x","y")], level="dataset",
-                      metrics=c("SpatialARI","SpatialAccuracy"),
+                      metrics=c("nsARI","SpatialAccuracy"),
                       fuzzy_true = TRUE, fuzzy_pred = FALSE)
 ```
 
@@ -354,11 +354,11 @@ getSpatialExternalMetrics(true=sp_toys$label, pred=sp_toys$p1,
 ```{r}
 res1.1 <- getSpatialExternalMetrics(true=sp_toys$label, pred=sp_toys$p1,
                       location=sp_toys[,c("x","y")], level="dataset",
-                      metrics=c("SpatialARI","SpatialAccuracy"),
+                      metrics=c("nsARI","SpatialAccuracy"),
                       fuzzy_true = TRUE, fuzzy_pred = FALSE)
 res2.1 <- getSpatialExternalMetrics(true=sp_toys$label, pred=sp_toys$p2,
                       location=sp_toys[,c("x","y")], level="dataset",
-                      metrics=c("SpatialARI","SpatialAccuracy"),
+                      metrics=c("nsARI","SpatialAccuracy"),
                       fuzzy_true = TRUE, fuzzy_pred = FALSE)
 res1.2 <- getPartitionMetrics(true=sp_toys$label, pred=sp_toys$p1,
                       level="dataset", metrics=c("ARI"))
@@ -369,7 +369,7 @@ res2.2 <- getPartitionMetrics(true=sp_toys$label, pred=sp_toys$p2,
 ```{r, fig.height = 2, fig.width = 5}
 cbind(bind_rows(list(res1.1, res2.1), .id="P"),
       bind_rows(list(res1.2, res2.2), .id="P")) %>% 
-  pivot_longer(cols=c("SpatialARI", "SpatialAccuracy", "ARI"), 
+  pivot_longer(cols=c("nsARI", "SpatialAccuracy", "ARI"), 
                names_to="metric", values_to="value") %>%
   ggplot(aes(x=P, y=value, group=metric)) +
   geom_point(size=3, aes(color=P)) +
@@ -377,7 +377,7 @@ cbind(bind_rows(list(res1.1, res2.1), .id="P"),
   theme_bw() + labs(x="Prediction")
 ```
 
-When the evaluation is non-spatial-aware, P1 and P2 get the same ARI score. However, with spatial-aware metrics like SpatialARI and SpatialAccuracy, P2 gets a higher scores than P1.
+When the evaluation is non-spatial-aware, P1 and P2 get the same ARI score. However, with spatial-aware metrics like nsARI and SpatialAccuracy, P2 gets a higher scores than P1.
 
 ## Internal metrics
 Last but not least, there are internal metrics for spatial clustering evaluation:
