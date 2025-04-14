@@ -99,12 +99,12 @@ to raw components (\code{true}, \code{pred}, \code{location}) or directly to a
 The allowed values for \code{metrics} depend on the value of \code{level}:
 \itemize{
 \item If \code{level = "element"}, the allowed \code{metrics} are: \code{"nsSPC"},
-\code{"NPC"}.
+\code{"NPC"},\code{"SpatialSPC"}.
 \item If \code{level = "class"}, the allowed \code{metrics} are: \code{"nsWH"},
 \code{"nsAWH"}, \code{"nsWC"},\code{"nsAWC"}.
 \item If \code{level = "dataset"}, the allowed \code{metrics} are: \code{"nsRI"},
 \code{"nsARI"},\code{"nsWH"},\code{"nsAWH"}, \code{"nsWC"},\code{"nsAWC"},
-\code{"SpatialAccuracy"},\code{"SpatialARI"}.
+\code{"SpatialAccuracy"},\code{"SpatialRI"},\code{"SpatialARI"}.
 }
 }
 \examples{

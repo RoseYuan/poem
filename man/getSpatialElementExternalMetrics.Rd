@@ -10,7 +10,7 @@ getSpatialElementExternalMetrics(
   location,
   k = 6,
   alpha = 0.5,
-  metrics = c("nsSPC", "NPC"),
+  metrics = c("nsSPC", "NPC", "SpatialSPC"),
   fuzzy_true = TRUE,
   fuzzy_pred = FALSE,
   ...
