@@ -41,15 +41,24 @@
 #' @examples
 #' d1 <- mockData()
 #' getGraphMetrics(d1[,seq_len(2)], labels=d1$class, level="class")
-getGraphMetrics <-function(x, labels, metrics=c("SI","NP","AMSP","PWC","NCE"), 
+getGraphMetrics <-function(x, labels, metrics=NULL, 
                            directed=NULL, k=10, shared=FALSE, 
                            level="class", ...){
   # Map level to the corresponding function
+  level <- match.arg(level, c("dataset","class","element"))
   level_functions <- list(
     "element" = getGraphElementMetrics,
     "class" = getGraphClassMetrics,
     "dataset" = getGraphGlobalMetrics
   )
+  if(is.null(metrics))
+    metrics <- switch(level,
+                      "dataset"=c("SI","NP","AMSP","PWC","NCE"),
+                      "class"=c("SI","NP","AMSP","PWC","NCE"),
+                      "element"=c("SI","NP"),
+                      stop("Unknown `level` specified.")
+    )
+  
   .checkMetricsLevel(metrics, level, level_functions, use_default=FALSE, 
                      use_attribute=TRUE, attr_name="allowed_metrics")
   # Collect all arguments into a list

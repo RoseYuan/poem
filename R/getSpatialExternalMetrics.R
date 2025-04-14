@@ -52,9 +52,15 @@
 setGeneric("getSpatialExternalMetrics", signature="object",
            def=function(object=NULL, true, pred, location=NULL, 
            k=6, alpha=0.5, level="class",
-           metrics=c("nsWH", "nsAWH", 
-                     "nsWC", "nsAWC"),
-           fuzzy_true=TRUE, fuzzy_pred=FALSE, ...) {
+           metrics=NULL, fuzzy_true=TRUE, fuzzy_pred=FALSE, ...) {
+  level <- match.arg(level, c("dataset","class","element"))
+  if(is.null(metrics))
+    metrics <- switch(level,
+      "dataset"=c("nsWH", "nsAWH", "nsWC", "nsAWC", "SpatialRI", "SpatialARI"),
+      "class"=c("nsWH", "nsAWH", "nsWC", "nsAWC"),
+      "element"=c("NPC", "nsSPC", "SpatialSPC"),
+      stop("Unknown `level` specified.")
+    )
   standardGeneric("getSpatialExternalMetrics")
 })
 

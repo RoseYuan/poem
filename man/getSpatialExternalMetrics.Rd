@@ -14,7 +14,7 @@ getSpatialExternalMetrics(
   k = 6,
   alpha = 0.5,
   level = "class",
-  metrics = c("nsWH", "nsAWH", "nsWC", "nsAWC"),
+  metrics = NULL,
   fuzzy_true = TRUE,
   fuzzy_pred = FALSE,
   ...
@@ -28,7 +28,7 @@ getSpatialExternalMetrics(
   k = 6,
   alpha = 0.5,
   level = "class",
-  metrics = c("nsWH", "nsAWH", "nsWC", "nsAWC"),
+  metrics = NULL,
   fuzzy_true = TRUE,
   fuzzy_pred = FALSE,
   ...
@@ -42,7 +42,7 @@ getSpatialExternalMetrics(
   k = 6,
   alpha = 0.5,
   level = "class",
-  metrics = c("nsWH", "nsAWH", "nsWC", "nsAWC"),
+  metrics = NULL,
   fuzzy_true = TRUE,
   fuzzy_pred = FALSE,
   ...

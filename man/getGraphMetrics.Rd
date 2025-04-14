@@ -7,7 +7,7 @@
 getGraphMetrics(
   x,
   labels,
-  metrics = c("SI", "NP", "AMSP", "PWC", "NCE"),
+  metrics = NULL,
   directed = NULL,
   k = 10,
   shared = FALSE,
