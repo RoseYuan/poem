@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">poem</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.13</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.16</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -603,15 +603,39 @@ dataset
 Neighborhood smoothed RI, ARI, WH, WC, AWH, and AWC
 </td>
 <td style="text-align:left;">
-Spatial versions of the pair-sorting indices, based on fuzzy versions of
-the metrics. Specifically, we use the Normalized Degree of Concordance
-(NDC, see Hullermeier et al., 2012) and the Adjusted Concordance Index
-(ACI, see D’Errico et al., 2021) as fuzzy versions of RI and ARI
-respectively, and developed fuzzy versions of the other metrics using
-the same logic. In the spatial context, we first make a fuzzy version of
-the true labels based on the spatial neighborhood, and then track the
-maximum pair concordance between the predicted labels and either the
-hard or fuzzy ground truth.
+Spatially-aware versions of the pair-sorting indices, based on fuzzy
+versions of the metrics. Specifically, we use the Normalized Degree of
+Concordance (NDC, see Hullermeier et al., 2012) and the Adjusted
+Concordance Index (ACI, see D’Errico et al., 2021) as fuzzy versions of
+RI and ARI respectively, and developed fuzzy versions of the other
+metrics using the same logic. In the spatial context, we first make a
+fuzzy version of the true labels based on the spatial neighborhood, and
+then track the maximum pair concordance between the predicted labels and
+either the hard or fuzzy ground truth.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+dataset
+</td>
+<td style="text-align:left;">
+Spatial RI/ARI
+</td>
+<td style="text-align:left;">
+The spatial RI/ARI from Yan, Yinqiao, et al. (2025). Briefly, discordant
+pairs are tolerated if they are between spots 1) close to each other and
+that are wrongly clustered together, or 2) distant and wrongly
+separated. Note that by default, poem uses distance-based functions that
+are different from those originally used by Yan et al., specifically
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>d</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>α</mi><mo>*</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><msup><mi>e</mi><mrow><msub><mi>β</mi><mi>h</mi></msub><mo>*</mo><mi>−</mi><mi>d</mi></mrow></msup><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">h(d) = \alpha*(1-e^{\beta_h*-d})</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>d</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>α</mi><mo>*</mo><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>e</mi><mrow><msub><mi>β</mi><mi>f</mi></msub><mo>*</mo><mi>−</mi><mi>d</mi></mrow></msup><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">f(d) = \alpha*(e^{\beta_f*-d})</annotation></semantics></math>,
+with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mi>f</mi></msub><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">\beta_f=4</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mi>h</mi></msub><mo>=</mo><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\beta_h==1</annotation></semantics></math>.
+See the spatialARI function for more information and for different
+options
 </td>
 </tr>
 <tr>
@@ -637,13 +661,25 @@ average of SPC equals to the Rand Index.
 element
 </td>
 <td style="text-align:left;">
+Neighborhood smoothed SPC
+</td>
+<td style="text-align:left;">
+Like the Spot-wise Pair Concordance, with the difference that the
+clustering is evaluated against both a ‘hard’ and ‘fuzzy’ version of the
+ground truth, as for the computation of the neighborhood-smoothed
+versions of the pair-sorting indices.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+element
+</td>
+<td style="text-align:left;">
 Spatial SPC
 </td>
 <td style="text-align:left;">
-Like the non-spatial Spot-wise Pair Concordance, with the difference
-that the clustering is evaluated against both a ‘hard’ and ‘fuzzy’
-version of the ground truth, as for the computation of the Spatial
-versions of the pair-sorting indices.
+Like the Spot-wise Pair Concordance, but using the same distance-based
+tolerance from Spatial RI.
 </td>
 </tr>
 <tr>
