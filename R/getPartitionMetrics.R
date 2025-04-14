@@ -45,15 +45,22 @@
 #' pred <- c(rep("A", 8), rep("B", 9), rep("C", 3), rep("D", 10))
 #' getPartitionMetrics(true, pred, level="class")
 #' getPartitionMetrics(true, pred, level="dataset")
-getPartitionMetrics <-function(true, pred, 
-                               metrics=c("WC","WH","AWC","AWH","FM"), 
-                           level="class", ...){
+getPartitionMetrics <-function(true, pred, metrics=NULL, level="class", ...){
+  level <- match.arg(level, c("dataset","class","element"))
   # Map level to the corresponding function
   level_functions <- list(
     "element" = getPartitionElementMetrics,
     "class" = getPartitionClassMetrics,
     "dataset" = getPartitionGlobalMetrics
   )
+  if(is.null(metrics))
+    metrics <- switch(level,
+                      "dataset"=c("RI","WC","WH","ARI","NCR","AWC","AWH","MI",
+                                  "AMI","VI","EH","EC","VM","FM"),
+                      "class"=c("WC","WH","AWC","AWH","FM"),
+                      "element"=c("SPC"),
+                      stop("Unknown `level` specified.")
+    )
   .checkMetricsLevel(metrics, level, level_functions, use_default=FALSE, 
                      use_attribute=TRUE, attr_name="allowed_metrics")
   # Collect all arguments into a list

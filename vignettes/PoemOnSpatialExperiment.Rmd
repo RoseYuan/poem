@@ -216,39 +216,35 @@ The `getSpatialExternalMetrics()` function can accept either a
 
 ```{r}
 colData(spe) <- cbind(colData(spe), data[, c("P1","P2","P3")])
-getSpatialExternalMetrics(object=spe, true="reference", pred="P3",
-                          k=6, fuzzy_true = TRUE, fuzzy_pred = FALSE)
+getSpatialExternalMetrics(object=spe, true="reference", pred="P3", k=6)
 ```
 
 is equivalent to:
 
 ```{r}
 getSpatialExternalMetrics(true=colData(spe)$reference, pred=colData(spe)$P3,
-                          location=spatialCoords(spe), 
-                          k=6, fuzzy_true = TRUE, fuzzy_pred = FALSE)
+                          location=spatialCoords(spe), k=6)
 ```
 
 ## Dataset level
-Let's first calculate two dataset-level metrics, SpatialARI and SpatialAccuracy:
+
+Let's first calculate two dataset-level metrics, nsARI and spatialARI:
 
 ```{r, fig.height = 2.5, fig.width = 5}
 res3 <- getSpatialExternalMetrics(object=spe, true="reference", pred="P3", 
                                   level="dataset", k=6,
-                                  metrics=c("SpatialARI","SpatialAccuracy"), 
-                                  fuzzy_true = TRUE, fuzzy_pred = FALSE)
+                                  metrics=c("nsARI","SpatialARI"))
 
 res2 <- getSpatialExternalMetrics(object=spe, true="reference", pred="P2",
                                   level="dataset", k=6,
-                                  metrics=c("SpatialARI","SpatialAccuracy"), 
-                                  fuzzy_true = TRUE, fuzzy_pred = FALSE)
+                                  metrics=c("nsARI","SpatialARI"))
 
 res1 <- getSpatialExternalMetrics(object=spe, true="reference", pred="P1",
                                   level="dataset", k=6,
-                                  metrics=c("SpatialARI","SpatialAccuracy"), 
-                                  fuzzy_true = TRUE, fuzzy_pred = FALSE)
+                                  metrics=c("nsARI","SpatialARI"))
 
 cbind(bind_rows(list(res1, res2, res3), .id="P")) %>% 
-  pivot_longer(cols=c("SpatialARI", "SpatialAccuracy"), 
+  pivot_longer(cols=c("nsARI", "SpatialARI"), 
                names_to="metric", values_to="value") %>%
   ggplot(aes(x=P, y=value, group=metric)) +
   geom_point(size=3, aes(color=P)) +
@@ -257,24 +253,22 @@ cbind(bind_rows(list(res1, res2, res3), .id="P")) %>%
 ```
 
 ## Class/cluster level
-We can further calculate the class/cluster-level metrics, SpatialAWH and 
-SpatialAWC, to get more insights about the errors our predictions make:
+
+We can further calculate the class/cluster-level metrics, nsAWH and 
+nsAWC, to get more insights about the errors our predictions make:
 
 ```{r}
 res3 <- getSpatialExternalMetrics(object=spe, true="reference", pred="P3",
                                   level="class", k=6,
-                                  metrics=c("SpatialAWH","SpatialAWC"), 
-                                  fuzzy_true = TRUE, fuzzy_pred = FALSE)
+                                  metrics=c("nsAWH","nsAWC"))
 
 res2 <- getSpatialExternalMetrics(object=spe, true="reference", pred="P2",
                                   level="class", k=6,
-                                  metrics=c("SpatialAWH","SpatialAWC"),
-                                  fuzzy_true = TRUE, fuzzy_pred = FALSE)
+                                  metrics=c("nsAWH","nsAWC"))
 
 res1 <- getSpatialExternalMetrics(object=spe, true="reference", pred="P1",
                                   level="class", k=6,
-                                  metrics=c("SpatialAWH","SpatialAWC"),
-                                  fuzzy_true = TRUE, fuzzy_pred = FALSE)
+                                  metrics=c("nsAWH","nsAWC"))
 res1
 ```
 
@@ -283,15 +277,15 @@ of original factors passed to `true` and `pred`. We align them back to the
 previous factor values, and then plot them in heatmap:
 
 ```{r}
-awh1 <- na.omit(res1[,c("SpatialAWH", "cluster")]) %>% 
+awh1 <- na.omit(res1[,c("nsAWH", "cluster")]) %>% 
   mutate(cluster = levels(data$P1)[cluster])
-awh2 <- na.omit(res2[,c("SpatialAWH", "cluster")]) %>% 
+awh2 <- na.omit(res2[,c("nsAWH", "cluster")]) %>% 
   mutate(cluster = levels(data$P2)[cluster])
-awh3 <- na.omit(res3[,c("SpatialAWH", "cluster")]) %>% 
+awh3 <- na.omit(res3[,c("nsAWH", "cluster")]) %>% 
   mutate(cluster = levels(data$P3)[cluster])
 
 awh <- cbind(bind_rows(list(awh1, awh2, awh3), .id="P")) %>% 
-  pivot_wider(names_from = cluster, values_from = SpatialAWH) %>%
+  pivot_wider(names_from = cluster, values_from = nsAWH) %>%
   subset(select = -c(P))
 awh <- as.matrix(awh)
 rownames(awh) <- c("P1", "P2", "P3")
@@ -313,15 +307,15 @@ p4 <- awh %>% pivot_longer(cols=-c("prediction"), names_to="cluster",
 ```
 
 ```{r}
-awc1 <- na.omit(res1[,c("SpatialAWC", "class")]) %>% 
+awc1 <- na.omit(res1[,c("nsAWC", "class")]) %>% 
   mutate(class = levels(data$reference)[class])
-awc2 <- na.omit(res2[,c("SpatialAWC", "class")]) %>% 
+awc2 <- na.omit(res2[,c("nsAWC", "class")]) %>% 
   mutate(class = levels(data$reference)[class])
-awc3 <- na.omit(res3[,c("SpatialAWC", "class")]) %>% 
+awc3 <- na.omit(res3[,c("nsAWC", "class")]) %>% 
   mutate(class = levels(data$reference)[class])
 
 awc <- cbind(bind_rows(list(awc1, awc2, awc3), .id="P")) %>% 
-  pivot_wider(names_from = class, values_from = SpatialAWC) %>%
+  pivot_wider(names_from = class, values_from = nsAWC) %>%
   subset(select = -c(P))
 awc <- as.matrix(awc)
 rownames(awc) <- c("P1", "P2", "P3")
@@ -353,39 +347,37 @@ homogeneity, consistent with the merging of layer 4 and 5.
 
 ## Element level
 
-One can also calculate element-level metric, SPC, for visualization.
+One can also calculate element-level metric, such as the neighborhood-smoothed 
+spot-wise pair concordance (nsSPC), for visualization.
 
 ```{r, fig.height = 2.5, fig.width = 8}
 res1 <- cbind(getSpatialExternalMetrics(object=spe, true="reference", pred="P1",
                                   level="element",
-                                  metrics=c("SpatialSPC"), k=6,
-                                  fuzzy_true = TRUE, fuzzy_pred = FALSE, 
+                                  metrics=c("nsSPC"), k=6,
                                   useNegatives = FALSE), 
               data[,c("pxl_col_in_fullres", "pxl_row_in_fullres")])
 
 res2 <- cbind(getSpatialExternalMetrics(object=spe, true="reference", pred="P2",
                                   level="element",
-                                  metrics=c("SpatialSPC"), k=6,
-                                  fuzzy_true = TRUE, fuzzy_pred = FALSE, 
+                                  metrics=c("nsSPC"), k=6,
                                   useNegatives = FALSE),
                data[,c("pxl_col_in_fullres", "pxl_row_in_fullres")])
 
 res3 <- cbind(getSpatialExternalMetrics(object=spe, true="reference", pred="P3",
                                   level="element",
-                                  metrics=c("SpatialSPC"), k=6,
-                                  fuzzy_true = TRUE, fuzzy_pred = FALSE, 
+                                  metrics=c("nsSPC"), k=6,
                                   useNegatives = FALSE),
                data[,c("pxl_col_in_fullres", "pxl_row_in_fullres")])
 
 
 cbind(bind_rows(list(res1, res2, res3), .id="P")) %>% 
-  pivot_longer(cols=c("SpatialSPC"), 
+  pivot_longer(cols=c("nsSPC"), 
                names_to="metric", values_to="value") %>%
   ggplot(aes(x = pxl_col_in_fullres, y = - pxl_row_in_fullres, color = value)) +
   scale_colour_gradient(high="white", low ="deeppink4") +
   geom_point(size=0.3) +
   facet_wrap(~P, scales = "free") +
-  theme_bw() + labs(x="Prediction", y="", color="SpatialSPC")
+  theme_bw() + labs(x="Prediction", y="", color="nsSPC")
 ```
 
 This clear highlights the low concordance regions in each prediction as 

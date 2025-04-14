@@ -33,15 +33,22 @@
 #' d1 <- mockData()
 #' getEmbeddingMetrics(d1[,seq_len(2)], labels=d1$class, 
 #' metrics=c("meanSW", "minSW", "pnSW", "dbcv"), level="class")
-getEmbeddingMetrics <-function(x, labels, 
-                               metrics=c("meanSW", "minSW", "pnSW", "dbcv"), 
+getEmbeddingMetrics <-function(x, labels, metrics=NULL, 
                                distance="euclidean", level="class", ...){
+  level <- match.arg(level, c("dataset","class","element"))
   # Map level to the corresponding function
   level_functions <- list(
     "element" = getEmbeddingElementMetrics,
     "class" = getEmbeddingClassMetrics,
     "dataset" = getEmbeddingGlobalMetrics
   )
+  if(is.null(metrics))
+    metrics <- switch(level,
+                      "dataset"=c("meanSW", "pnSW", "dbcv","cdbw"),
+                      "class"=c("meanSW", "minSW", "pnSW", "dbcv"),
+                      "element"=c("SW"),
+                      stop("Unknown `level` specified.")
+    )
   .checkMetricsLevel(metrics, level, level_functions, use_default=TRUE, 
                      use_attribute=FALSE)
   # Collect all arguments into a list

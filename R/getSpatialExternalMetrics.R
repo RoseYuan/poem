@@ -18,13 +18,13 @@
 #' `"class"` and `"dataset"`.
 #' @details
 #' The allowed values for `metrics` depend on the value of `level`:
-#'   - If `level = "element"`, the allowed `metrics` are: `"SpatialSPC"`, 
-#'   `"SpatialNPC"`.
-#'   - If `level = "class"`, the allowed `metrics` are: `"SpatialWH"`,
-#'   `"SpatialAWH"`, `"SpatialWC"`,`"SpatialAWC"`.
-#'   - If `level = "dataset"`, the allowed `metrics` are: `"SpatialRI"`,
-#'   `"SpatialARI"`,`"SpatialWH"`,`"SpatialAWH"`, `"SpatialWC"`,`"SpatialAWC"`,
-#'   `"SpatialAccuracy"`. 
+#'   - If `level = "element"`, the allowed `metrics` are: `"nsSPC"`, 
+#'   `"NPC"`,`"SpatialSPC"`.
+#'   - If `level = "class"`, the allowed `metrics` are: `"nsWH"`,
+#'   `"nsAWH"`, `"nsWC"`,`"nsAWC"`.
+#'   - If `level = "dataset"`, the allowed `metrics` are: `"nsRI"`,
+#'   `"nsARI"`,`"nsWH"`,`"nsAWH"`, `"nsWC"`,`"nsAWC"`,
+#'   `"SpatialAccuracy"`,`"SpatialRI"`,`"SpatialARI"`. 
 #' @inheritParams getSpatialElementExternalMetrics
 #' @param ... Additional arguments passed to specific methods.
 #' @return A data.frame of metrics based on the specified input.
@@ -52,9 +52,15 @@
 setGeneric("getSpatialExternalMetrics", signature="object",
            def=function(object=NULL, true, pred, location=NULL, 
            k=6, alpha=0.5, level="class",
-           metrics=c("SpatialWH", "SpatialAWH", 
-                     "SpatialWC", "SpatialAWC"),
-           fuzzy_true=TRUE, fuzzy_pred=FALSE, ...) {
+           metrics=NULL, fuzzy_true=TRUE, fuzzy_pred=FALSE, ...) {
+  level <- match.arg(level, c("dataset","class","element"))
+  if(is.null(metrics))
+    metrics <- switch(level,
+      "dataset"=c("nsWH", "nsAWH", "nsWC", "nsAWC", "SpatialRI", "SpatialARI"),
+      "class"=c("nsWH", "nsAWH", "nsWC", "nsAWC"),
+      "element"=c("NPC", "nsSPC", "SpatialSPC"),
+      stop("Unknown `level` specified.")
+    )
   standardGeneric("getSpatialExternalMetrics")
 })
 
@@ -135,18 +141,24 @@ setMethod("getSpatialExternalMetrics", signature(object="SpatialExperiment"),
 #' @return A data.frame of metrics.
 getSpatialGlobalExternalMetrics <- function(true, pred, location, 
                                             k=6, alpha=0.5,
-                                            metrics=c("SpatialRI","SpatialARI",
-                                                      "SpatialWH","SpatialAWH", 
-                                                      "SpatialWC","SpatialAWC",
-                                                      "SpatialAccuracy"), 
+                                            metrics=c("nsRI","nsARI",
+                                                      "nsWH","nsAWH", 
+                                                      "nsWC","nsAWC",
+                                                      "SpatialAccuracy",
+                                                      "SpatialRI","SpatialARI"), 
                                             fuzzy_true=TRUE, fuzzy_pred=FALSE,
                                             ...){
   argfindSpatialKNN <- .checkEllipsisArgs(fnList=list(findSpatialKNN, 
-                                              fuzzyPartitionMetrics), ...)[[1]] 
+                                              fuzzyPartitionMetrics,
+                                              spatialARI), ...)[[1]] 
   argfuzzyPartitionMetrics <- .checkEllipsisArgs(fnList=list(findSpatialKNN, 
-                                              fuzzyPartitionMetrics), ...)[[2]] 
-  if(length(intersect(metrics, c("SpatialRI","SpatialARI","SpatialWH",
-                                 "SpatialAWH", "SpatialWC","SpatialAWC")))>0){
+                                              fuzzyPartitionMetrics,
+                                              spatialARI), ...)[[2]] 
+  argspatialARI <- .checkEllipsisArgs(fnList=list(findSpatialKNN, 
+                                              fuzzyPartitionMetrics,
+                                              spatialARI), ...)[[3]]
+  if(length(intersect(metrics, c("nsRI","nsARI","nsWH",
+                                 "nsAWH", "nsWC","nsAWC")))>0){
     hardTrue <- true
     hardPred <- pred
     fuzzyTrue <- do.call(getFuzzyLabel,
@@ -171,7 +183,14 @@ getSpatialGlobalExternalMetrics <- function(true, pred, location,
                                           location=location, k=k), 
                                      argfindSpatialKNN))
   }
-  colnames(res) <- sub("fuzzy", "Spatial",colnames(res))
+  if("SpatialARI" %in% metrics | "SpatialRI" %in% metrics){
+    tmp <- do.call(spatialARI, c(list(true=true, pred=pred, 
+                                          location=location), 
+                                          argspatialARI))
+    res$SpatialRI <- tmp[1]
+    res$SpatialARI <- tmp[2]
+  }
+  colnames(res) <- sub("fuzzy", "ns", colnames(res))
   return(res[,metrics, drop=FALSE])
 }
 
@@ -187,8 +206,8 @@ getSpatialGlobalExternalMetrics <- function(true, pred, location,
 #'   \code{\link{findSpatialKNN}}.
 #' @return A data.frame of metrics.
 getSpatialClassExternalMetrics <- function(true, pred, location, k=6, alpha=0.5,
-                                           metrics=c("SpatialWH","SpatialAWH", 
-                                                     "SpatialWC","SpatialAWC"), 
+                                           metrics=c("nsWH","nsAWH", 
+                                                     "nsWC","nsAWC"), 
                                            fuzzy_true=TRUE, fuzzy_pred=FALSE,
                                            ...){
   
@@ -212,7 +231,7 @@ getSpatialClassExternalMetrics <- function(true, pred, location, k=6, alpha=0.5,
                         hardPred=hardPred, fuzzyPred=fuzzyPred, 
                         fuzzy_true=fuzzy_true, fuzzy_pred=fuzzy_pred,
                       metrics=c("fuzzyWH","fuzzyAWH", "fuzzyWC", "fuzzyAWC"))))
-  colnames(res) <- sub("fuzzy", "Spatial",colnames(res))
+  colnames(res) <- sub("fuzzy", "ns",colnames(res))
   return(res[,c(metrics, "class","cluster")])
 }
 
@@ -227,18 +246,19 @@ getSpatialClassExternalMetrics <- function(true, pred, location, k=6, alpha=0.5,
 #' @return A data.frame of metrics.
 getSpatialElementExternalMetrics <- function(true, pred, location, 
                                              k=6, alpha=0.5,
-                                         metrics=c("SpatialSPC", "SpatialNPC"),
+                                         metrics=c("nsSPC", "NPC", "SpatialSPC"),
                                              fuzzy_true=TRUE, fuzzy_pred=FALSE,
                                              ...){
   parsedArgs <- .checkEllipsisArgs(fnList=list(findSpatialKNN,
                                                getFuzzyPartitionElementMetrics,
-                                               getNeighboringPairConcordance),
+                                               getNeighboringPairConcordance,
+                                               spatialARI),
                                    ...)
   argfindSpatialKNN <- parsedArgs[[1]] 
   arggetFuzzyPartitionElementMetrics <- parsedArgs[[2]]
   arggetNeighboringPairConcordance <- parsedArgs[[3]]
-  
-  if("SpatialSPC" %in% metrics){
+  argspatialARI <- parsedArgs[[4]]
+  if("nsSPC" %in% metrics){
   hardTrue <- true
   hardPred <- pred
   fuzzyTrue <- do.call(getFuzzyLabel,
@@ -249,23 +269,29 @@ getSpatialElementExternalMetrics <- function(true, pred, location,
                        c(argfindSpatialKNN, 
                          list(labels=hardPred, location=location, k=k,
                               alpha=alpha)))
-  SpatialSPC <- do.call(getFuzzyPartitionElementMetrics,
+  nsSPC <- do.call(getFuzzyPartitionElementMetrics,
                         c(list(hardTrue=hardTrue, fuzzyTrue=fuzzyTrue, 
                                 hardPred=hardPred, fuzzyPred=fuzzyPred, 
                                 fuzzy_true=fuzzy_true, fuzzy_pred=fuzzy_pred,
-                                metrics=c("SpatialSPC")),
+                                metrics=c("nsSPC")),
                           arggetFuzzyPartitionElementMetrics))$fuzzySPC  
   }
 
-  if("SpatialNPC" %in% metrics){
-    SpatialNPC <- do.call(getNeighboringPairConcordance,
+  if("NPC" %in% metrics){
+    NPC <- do.call(getNeighboringPairConcordance,
                           c(list(true=true, pred=pred, location=location, k=k),
                             arggetNeighboringPairConcordance))
   }
+  if("SpatialSPC" %in% metrics){
+    SpatialSPC <- do.call(spatialARI,
+                          c(list(true=true, pred=pred, location=location, 
+                          spotWise=TRUE), argspatialARI))
+  }
   res <- as.data.frame(lapply(setNames(metrics, metrics), FUN=function(m){
     switch(m,
+           nsSPC = nsSPC,
+           NPC = NPC,
            SpatialSPC = SpatialSPC,
-           SpatialNPC = SpatialNPC,
            stop("Unknown metric.")
            )})
     )

@@ -4,13 +4,7 @@
 \alias{getPartitionMetrics}
 \title{Compute partition-based metrics}
 \usage{
-getPartitionMetrics(
-  true,
-  pred,
-  metrics = c("WC", "WH", "AWC", "AWH", "FM"),
-  level = "class",
-  ...
-)
+getPartitionMetrics(true, pred, metrics = NULL, level = "class", ...)
 }
 \arguments{
 \item{true}{A vector containing the labels of the true classes. Must be a

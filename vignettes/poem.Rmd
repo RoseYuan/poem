@@ -334,16 +334,17 @@ plot_grid(p0 + theme(legend.position = "none",
 Here in C, the spots are colored by the ground-truth class. In P1 and P2, the color inside each spot is according to the ground-truth class, while the color of the border is according to clustering predictions. P1 and P2 misclassified the same amount of red spots into the blue cluster.
 
 ## External metrics
+
 Let's quantify this by calculating external spatial metrics:
 
 ```{r}
 getSpatialExternalMetrics(true=sp_toys$label, pred=sp_toys$p1,
                       location=sp_toys[,c("x","y")], level="dataset",
-                      metrics=c("SpatialARI","SpatialAccuracy"),
+                      metrics=c("nsARI","SpatialARI"),
                       fuzzy_true = TRUE, fuzzy_pred = FALSE)
 ```
 
-By specifying `fuzzy_true` and `fuzzy_pred`, one can control whether the fuzzy or hard version of `true` and `pred` is used in comparison. If `fuzzy_true` or `fuzzy_pred` is `TRUE`, the spatial neighborhood information will be used to construct the fuzzy representation of the  class/cluster memberships. 
+By specifying `fuzzy_true` and `fuzzy_pred`, one can control whether the fuzzy or hard version of `true` and `pred` is used in comparison for the neighborhood-smoothed ARI (nsARI). If `fuzzy_true` or `fuzzy_pred` is `TRUE`, the spatial neighborhood information will be used to construct the fuzzy representation of the  class/cluster memberships. 
 
 
 ```{r}
@@ -354,11 +355,11 @@ getSpatialExternalMetrics(true=sp_toys$label, pred=sp_toys$p1,
 ```{r}
 res1.1 <- getSpatialExternalMetrics(true=sp_toys$label, pred=sp_toys$p1,
                       location=sp_toys[,c("x","y")], level="dataset",
-                      metrics=c("SpatialARI","SpatialAccuracy"),
+                      metrics=c("nsARI","SpatialARI"),
                       fuzzy_true = TRUE, fuzzy_pred = FALSE)
 res2.1 <- getSpatialExternalMetrics(true=sp_toys$label, pred=sp_toys$p2,
                       location=sp_toys[,c("x","y")], level="dataset",
-                      metrics=c("SpatialARI","SpatialAccuracy"),
+                      metrics=c("nsARI","SpatialARI"),
                       fuzzy_true = TRUE, fuzzy_pred = FALSE)
 res1.2 <- getPartitionMetrics(true=sp_toys$label, pred=sp_toys$p1,
                       level="dataset", metrics=c("ARI"))
@@ -369,7 +370,7 @@ res2.2 <- getPartitionMetrics(true=sp_toys$label, pred=sp_toys$p2,
 ```{r, fig.height = 2, fig.width = 5}
 cbind(bind_rows(list(res1.1, res2.1), .id="P"),
       bind_rows(list(res1.2, res2.2), .id="P")) %>% 
-  pivot_longer(cols=c("SpatialARI", "SpatialAccuracy", "ARI"), 
+  pivot_longer(cols=c("nsARI", "SpatialARI", "ARI"), 
                names_to="metric", values_to="value") %>%
   ggplot(aes(x=P, y=value, group=metric)) +
   geom_point(size=3, aes(color=P)) +
@@ -377,9 +378,10 @@ cbind(bind_rows(list(res1.1, res2.1), .id="P"),
   theme_bw() + labs(x="Prediction")
 ```
 
-When the evaluation is non-spatial-aware, P1 and P2 get the same ARI score. However, with spatial-aware metrics like SpatialARI and SpatialAccuracy, P2 gets a higher scores than P1.
+When the evaluation is non-spatial-aware, P1 and P2 get the same ARI score. However, with spatial-aware metrics like nsARI and SpatialARI, P2 gets a higher scores than P1.
 
 ## Internal metrics
+
 Last but not least, there are internal metrics for spatial clustering evaluation:
 
 ```{r}

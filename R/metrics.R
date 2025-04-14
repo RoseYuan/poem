@@ -139,7 +139,10 @@ FMeasure <- function(true, pred, silent=TRUE){
 
 #' Per-element pair concordance score
 #' 
-#' Per-element pair concordance between a clustering and a ground truth
+#' Per-element pair concordance between a clustering and a ground truth. Note 
+#' that by default, negative pairs (i.e. that are split in both the predicted 
+#' and true groupings) are not counted. To count it (as in the standard Rand 
+#' Index), use `useNegatives=TRUE`.
 #'
 #' @param pred A vector of predicted clusters
 #' @param true A vector of true class labels
@@ -182,21 +185,15 @@ getPairConcordance <- function(true, pred, usePairs=TRUE, useNegatives=FALSE,
       #   }))
       # }
 
-      return(vapply(seq_along(pred), FUN.VALUE=numeric(1L), FUN=function(i){
-        1-sum(abs( (pred==pred[[i]]) - (true==true[[i]]) ))/(length(pred)-1)
-      }))
-      
-      # # faster version on CM, but wrong at the moment:
-      # p <- sapply(seq_len(ncol(co)),FUN=function(j){
-      #   sapply(seq_len(nrow(co)), FUN=function(i){
-      #     if(co[i,j]==0) return(0)
-      #     pos <- choose(co[i,j],2)
-      #     neg <- co[i,j]*sum(co[-i,-j])/2
-      #     max <- pos+(co[i,j]*(nrow(co)-co[i,j]))/2
-      #     (pos+neg)/max
-      #   })
-      # })
-      # dimnames(p) <- dimnames(co)
+      p <- sapply(seq_len(ncol(co)),FUN=function(j){
+        sapply(seq_len(nrow(co)), FUN=function(i){
+          if(co[i,j]==0) return(0)
+          concordant <- co[i,j]+sum(co[-i,-j])-1L
+          discordant <- sum(co[i,-j]) + sum(co[-i,j])
+          concordant/(concordant+discordant)
+        })
+      })
+      dimnames(p) <- dimnames(co)
     }else{
       truePairsPerCluster <- matrix(rep(colSums(pairs),
                                         each=nrow(co)),nrow=nrow(co))
@@ -231,6 +228,7 @@ getPairConcordance <- function(true, pred, usePairs=TRUE, useNegatives=FALSE,
                                      rep(colnames(p),each=nrow(p))))
   as.numeric(p[paste(true, pred)])
 }
+
 
 #' The non-spatially-weighted counterpart of nnWeightedAccuracy
 #' 
