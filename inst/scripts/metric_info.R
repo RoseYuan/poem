@@ -109,7 +109,7 @@ tmp <- data.frame(metric=c(
            "Neighborhood Class Enrichment",
            "Normalized Class Size Rand Index",
            "Neighborhood Purity",
-           "Neihboring Pair Concordance for Spatial Clustering",
+           "Neighboring Pair Concordance for Spatial Clustering",
            "Proportion of Abnormal Spots (PAS score)",
            "Partition Coefficient",
            "Partition Entropy",
