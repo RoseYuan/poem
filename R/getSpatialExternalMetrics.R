@@ -139,7 +139,7 @@ getSpatialGlobalExternalMetrics <- function(true, pred, location,
                                                       "nsWH","nsAWH", 
                                                       "nsWC","nsAWC",
                                                       "SpatialAccuracy",
-                                                      "SpatialARI"), 
+                                                      "SpatialRI","SpatialARI"), 
                                             fuzzy_true=TRUE, fuzzy_pred=FALSE,
                                             ...){
   argfindSpatialKNN <- .checkEllipsisArgs(fnList=list(findSpatialKNN, 
@@ -177,13 +177,14 @@ getSpatialGlobalExternalMetrics <- function(true, pred, location,
                                           location=location, k=k), 
                                      argfindSpatialKNN))
   }
-  if("SpatialARI" %in% metrics){
-    res$SpatialARI <- do.call(spatialARI, 
-                                   c(list(true=true, pred=pred, 
+  if("SpatialARI" %in% metrics | "SpatialRI" %in% metrics){
+    tmp <- do.call(spatialARI, c(list(true=true, pred=pred, 
                                           location=location), 
-                                     argSpatialARI))
+                                          argspatialARI))
+    res$SpatialRI <- tmp[1]
+    res$SpatialARI <- tmp[2]
   }
-  colnames(res) <- sub("fuzzy", "Spatial",colnames(res))
+  colnames(res) <- sub("fuzzy", "ns", colnames(res))
   return(res[,metrics, drop=FALSE])
 }
 
