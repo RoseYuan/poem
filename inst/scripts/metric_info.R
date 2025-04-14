@@ -37,7 +37,8 @@ metric_info <- data.frame(Name=c("SW",
                                  
                                  "nsRI","nsARI","nsWH",
                                  "nsAWH", "nsWC","nsAWC",
-                                 "SpatialAccuracy", "SpatialARI",
+                                 "SpatialAccuracy", "SpatialARI", "SpatialRI", 
+                                 "SpatialSPC", 
                                  
                                  "PAS", "ELSA",
                                  
@@ -63,9 +64,9 @@ metric_info <- data.frame(Name=c("SW",
                                    
                                    rep("element",2),
                                    rep("class",4),
-                                   rep("dataset",8),
+                                   rep("dataset",9),
                                    
-                                   rep("element",2),
+                                   rep("element",3),
                                    rep("class",3),
                                    rep("dataset",6)
                                         ), 
@@ -74,7 +75,7 @@ metric_info <- data.frame(Name=c("SW",
                             rep("getGraphMetrics",20),
                             rep("getPartitionMetrics",26),
                             rep("getFuzzyPartitionMetrics",11),
-                            rep("getSpatialExternalMetrics",14),
+                            rep("getSpatialExternalMetrics",16),
                             rep("getSpatialInternalMetrics",11)
                             ))
 
@@ -82,7 +83,6 @@ metric_info <- metric_info %>% group_by(Name) %>% summarize(
   Levels = paste(unique(Levels), collapse = ", "),
   MainFunction = paste(unique(MainFunction), collapse = ", ")
 )
-
 
 
 
@@ -120,6 +120,8 @@ tmp <- data.frame(metric=c(
            "Silhouette Width",
            "Adjusted Rand Index weighted by distance for Spatial Clustering",
            "Set-matching Accuracy for Spatial Clustering",
+           "Rand Index weighted by distance for Spatial Clustering",
+           "Spot-wise Pair Concordance weighted by distance for Spatial Clustering",
            "Van Dongen Measure",
            "Variation of Information",
            "V-measure",

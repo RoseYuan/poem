@@ -19,12 +19,12 @@
 #' @details
 #' The allowed values for `metrics` depend on the value of `level`:
 #'   - If `level = "element"`, the allowed `metrics` are: `"nsSPC"`, 
-#'   `"NPC"`.
+#'   `"NPC"`,`"SpatialSPC"`.
 #'   - If `level = "class"`, the allowed `metrics` are: `"nsWH"`,
 #'   `"nsAWH"`, `"nsWC"`,`"nsAWC"`.
 #'   - If `level = "dataset"`, the allowed `metrics` are: `"nsRI"`,
 #'   `"nsARI"`,`"nsWH"`,`"nsAWH"`, `"nsWC"`,`"nsAWC"`,
-#'   `"SpatialAccuracy"`,`"SpatialARI"`. 
+#'   `"SpatialAccuracy"`,`"SpatialRI"`,`"SpatialARI"`. 
 #' @inheritParams getSpatialElementExternalMetrics
 #' @param ... Additional arguments passed to specific methods.
 #' @return A data.frame of metrics based on the specified input.
@@ -240,17 +240,18 @@ getSpatialClassExternalMetrics <- function(true, pred, location, k=6, alpha=0.5,
 #' @return A data.frame of metrics.
 getSpatialElementExternalMetrics <- function(true, pred, location, 
                                              k=6, alpha=0.5,
-                                         metrics=c("nsSPC", "NPC"),
+                                         metrics=c("nsSPC", "NPC", "SpatialSPC"),
                                              fuzzy_true=TRUE, fuzzy_pred=FALSE,
                                              ...){
   parsedArgs <- .checkEllipsisArgs(fnList=list(findSpatialKNN,
                                                getFuzzyPartitionElementMetrics,
-                                               getNeighboringPairConcordance),
+                                               getNeighboringPairConcordance,
+                                               spatialARI),
                                    ...)
   argfindSpatialKNN <- parsedArgs[[1]] 
   arggetFuzzyPartitionElementMetrics <- parsedArgs[[2]]
   arggetNeighboringPairConcordance <- parsedArgs[[3]]
-  
+  argspatialARI <- parsedArgs[[4]]
   if("nsSPC" %in% metrics){
   hardTrue <- true
   hardPred <- pred
@@ -275,10 +276,16 @@ getSpatialElementExternalMetrics <- function(true, pred, location,
                           c(list(true=true, pred=pred, location=location, k=k),
                             arggetNeighboringPairConcordance))
   }
+  if("SpatialSPC" %in% metrics){
+    SpatialSPC <- do.call(spatialARI,
+                          c(list(true=true, pred=pred, location=location, 
+                          spotWise=TRUE), argspatialARI))
+  }
   res <- as.data.frame(lapply(setNames(metrics, metrics), FUN=function(m){
     switch(m,
            nsSPC = nsSPC,
            NPC = NPC,
+           SpatialSPC = SpatialSPC,
            stop("Unknown metric.")
            )})
     )
