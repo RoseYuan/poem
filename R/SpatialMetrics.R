@@ -277,7 +277,6 @@ spatialARI <- function(true, pred, coords, normCoords=TRUE, alpha=0.8, fbeta=4,
   q <- sum(choose(table(pred), 2))/n_choose
   
   if(is.null(nChunks)) nChunks <- ceiling(N^2/5e+7)
-  
   sp <- split(seq_len(N), head(rep(seq_len(nChunks), ceiling(N/nChunks)), N))
 
   o <- lapply(sp, FUN=function(i){
@@ -293,8 +292,14 @@ spatialARI <- function(true, pred, coords, normCoords=TRUE, alpha=0.8, fbeta=4,
     hv <- as.matrix(h(di))
     fv <- as.matrix(f(di))
     rm(di)
-    w <- ifelse(same_in_pred==same_in_true, 1, ifelse(same_in_pred, fv, hv))
+    w1 <- which(same_in_pred & !same_in_true)
+    w2 <- which(!same_in_pred & same_in_true)
+    rm(same_in_pred, same_in_true)
+    w <- matrix(1, nrow=length(i), ncol=N)
+    w[w1] <- fv[w1]
+    w[w2] <- hv[w2]
     spc <- (rowSums(w)-1)/(ncol(w)-1L)
+    rm(w)
     if(spotWise) return(spc)
     c(sum(spc), sum(hv), sum(fv))
   })
@@ -302,6 +307,7 @@ spatialARI <- function(true, pred, coords, normCoords=TRUE, alpha=0.8, fbeta=4,
   if(spotWise) return(unlist(o))
   o <- matrix(unlist(o), ncol=3, byrow = TRUE)
   spRI <- sum(o[,1])/N
+  sp
   sH <- sum(o[,2])/2 - h(0)*N
   sF <- sum(o[,3])/2
 
