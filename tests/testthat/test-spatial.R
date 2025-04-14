@@ -30,4 +30,7 @@ test_that("External spatial metrics work", {
                                    metrics=c("nsSPC"), useNegatives=FALSE)
   medSPC <- sapply(split(sm2$nsSPC, d$label!=d$p1), median)
   expect_true(all(medSPC[1]>0.8 & medSPC[2]<0.3))
+  
+  sa <- spatialARI(d$label, d$p2, d[,1:2], original=TRUE)
+  expect_true(round(sa,4)==c(0.9235, 0.7437))
 })
