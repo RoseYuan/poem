@@ -91,7 +91,7 @@ Hullermeier et al. 2012; 10.1109/TFUZZ.2011.2179303;
 D'Ambrosio et al. 2021; 10.1007/s00357-020-09367-0
 }
 \seealso{
-\code{\link[=FuzzyPartitionMetrics]{FuzzyPartitionMetrics()}}.
+\code{\link[=fuzzyPartitionMetrics]{fuzzyPartitionMetrics()}}.
 }
 \author{
 Pierre-Luc Germain
