@@ -258,7 +258,7 @@ fuzzyPartitionMetrics <- function(P, Q, computeWallace=TRUE, nperms=NULL,
 #' @references Hullermeier et al. 2012; 10.1109/TFUZZ.2011.2179303;
 #' @references D'Ambrosio et al. 2021; 10.1007/s00357-020-09367-0
 #' 
-#' @seealso [FuzzyPartitionMetrics()].
+#' @seealso [fuzzyPartitionMetrics()].
 #' 
 #' @author Pierre-Luc Germain
 #'
