@@ -632,53 +632,6 @@ fuzzyHardMetrics2 <- function(hardTrue, fuzzyTrue, hardPred, nperms=10,
 }
 
 
-#' Per-element concordance between two fuzzy partitions
-#' 
-#' @param P A object coercible to a numeric matrix with membership probability 
-#'   of elements (rows) in clusters (columns)
-#' @param Q A object coercible to a numeric matrix with membership probability 
-#'   of elements (rows) in clusters (columns). Must have the same number of rows
-#'   as `P`
-#'
-#' @return A numeric vector of concordance scores for each row of `P`.
-#' @export
-#' @examples
-#' # generate fuzzy partitions:
-#' m1 <- matrix(c(0.95, 0.025, 0.025, 
-#'                0.98, 0.01, 0.01, 
-#'                0.96, 0.02, 0.02, 
-#'                0.95, 0.04, 0.01, 
-#'                0.95, 0.01, 0.04, 
-#'                0.99, 0.005, 0.005, 
-#'                0.025, 0.95, 0.025, 
-#'                0.97, 0.02, 0.01, 
-#'                0.025, 0.025, 0.95), 
-#'                ncol = 3, byrow=TRUE)
-#' m2 <- matrix(c(0.95, 0.025, 0.025,  
-#'                0.98, 0.01, 0.01, 
-#'                0.96, 0.02, 0.02, 
-#'                0.025, 0.95, 0.025, 
-#'                0.02, 0.96, 0.02, 
-#'                0.01, 0.98, 0.01, 
-#'                0.05, 0.05, 0.95, 
-#'                0.02, 0.02, 0.96, 
-#'                0.01, 0.01, 0.98), 
-#'                ncol = 3, byrow=TRUE)
-#' colnames(m1) <- colnames(m2) <- LETTERS[seq_len(3)]
-#' fuzzySpotConcordance(m1,m2)
-fuzzySpotConcordance <- function(P, Q){
-  if(is.data.frame(P)) P <- as.matrix(P)
-  if(is.data.frame(Q)) Q <- as.matrix(Q)
-  stopifnot(is.matrix(P) && (is.numeric(P) | is.integer(P)))
-  stopifnot(is.matrix(Q) && (is.numeric(Q) | is.integer(Q)))
-  stopifnot(nrow(P)==nrow(Q))
-  
-  diff <- as.matrix(0.5*abs(dist(P,method="manhattan") -
-                              dist(Q,method="manhattan")))
-  return(1-rowSums(diff/(ncol(diff)-1)))
-}
-
-
 #' Per-element maximal concordance between a hard and a fuzzy partition
 #'
 #' Per-element maximal concordance between a hard clustering and hard and fuzzy 

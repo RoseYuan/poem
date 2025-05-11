@@ -265,7 +265,8 @@ getFuzzyPartitionElementMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
   if(fuzzy_true & fuzzy_pred){
     stopifnot(!(is.null(fuzzyTrue)|is.null(fuzzyPred)))
     message("Comparing between a fuzzy truth and a fuzzy prediction...")
-    res <- fuzzySpotConcordance(fuzzyTrue, fuzzyPred)
+    res <- fuzzyPartitionMetrics(fuzzyTrue, fuzzyPred, verbose=verbose,
+                                returnElementPairAccuracy=TRUE)
   }else if(fuzzy_true & (!fuzzy_pred)){
     stopifnot(!(is.null(hardTrue)|is.null(fuzzyTrue)|is.null(hardPred)))
     message("Comparing between a fuzzy truth and a hard prediction...")
