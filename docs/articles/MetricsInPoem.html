@@ -8,8 +8,8 @@
 <title>Details about each evaluation metrics • poem</title>
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Details about each evaluation metrics">
 </head>
 <body>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">poem</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.17</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,9 +78,9 @@ Germain</h4>
             <address class="author_afil">
       Institute for Molecular Life Sciences, University of Zurich,
 Zurich, SwitzerlandDepartment of Health Sciences and Technology, ETH
-Zurich, Zurich, Switzerland<br><h4 data-toc-skip class="date">2025-04-14</h4>
+Zurich, Zurich, Switzerland<br><h4 data-toc-skip class="date">2025-05-11</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/RoseYuan/poem/blob/HEAD/vignettes/MetricsInPoem.rmd" class="external-link"><code>vignettes/MetricsInPoem.rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/RoseYuan/poem/blob/gh-pages/vignettes/MetricsInPoem.rmd" class="external-link"><code>vignettes/MetricsInPoem.rmd</code></a></small>
       <div class="d-none name"><code>MetricsInPoem.rmd</code></div>
     </address>
 </div>
@@ -135,7 +135,7 @@ and
 is the total number of objects;
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>E</mi><annotation encoding="application/x-tex">E</annotation></semantics></math>
 is the expectation operator;
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>⋅</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">H(⋅)</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>⋅</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">H(⋅)</annotation></semantics></math>
 is the Shannon entropy; <span class="math inline">$eta$</span> is the
 ratio of weight attributed to homogeneity vs completeness; the
 expactation value of RI, WH, and WC is calculated when assuming a
@@ -161,7 +161,7 @@ dataset
 Rand Index (RI)
 </td>
 <td style="text-align:left;">
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mrow><mi>a</mi><mo>+</mo><mi>d</mi></mrow><mrow><mi>n</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mi>/</mi><mn>2</mn></mrow></mfrac><annotation encoding="application/x-tex">\frac{a+d}{n(n-1)/2}</annotation></semantics></math>;
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mrow><mi>a</mi><mo>+</mo><mi>d</mi></mrow><mrow><mi>n</mi><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mn>2</mn></mrow></mfrac><annotation encoding="application/x-tex">\frac{a+d}{n(n-1)/2}</annotation></semantics></math>;
 the ratio of the sum of true positive and true negative pairs to the
 total number of object pairs.
 </td>
@@ -202,7 +202,7 @@ dataset
 Adjusted Rand Index (ARI)
 </td>
 <td style="text-align:left;">
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mtext mathvariant="normal">RI</mtext><mo>−</mo><mi mathvariant="normal">E</mi><mrow><mo stretchy="true" form="prefix">(</mo><mtext mathvariant="normal">RI</mtext><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mn>1</mn><mo>−</mo><mi mathvariant="normal">E</mi><mrow><mo stretchy="true" form="prefix">(</mo><mtext mathvariant="normal">RI</mtext><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac><mo>=</mo><mfrac><mrow><mn>2</mn><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mi>d</mi><mo>−</mo><mi>b</mi><mi>c</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo>+</mo><mi>b</mi><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>b</mi><mo>+</mo><mi>d</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo>+</mo><mi>c</mi><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>c</mi><mo>+</mo><mi>d</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex">\frac{\text{RI}-\mathrm{E}(\text{RI})}{1-\mathrm{E}(\text{RI})} = \frac{2(ad-bc)}{(a+b)(b+d)+(a+c)(c+d)}</annotation></semantics></math>;
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mtext mathvariant="normal">RI</mtext><mo>−</mo><mi mathvariant="normal">E</mi><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">RI</mtext><mo stretchy="false" form="postfix">)</mo></mrow><mrow><mn>1</mn><mo>−</mo><mi mathvariant="normal">E</mi><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">RI</mtext><mo stretchy="false" form="postfix">)</mo></mrow></mfrac><mo>=</mo><mfrac><mrow><mn>2</mn><mo stretchy="false" form="prefix">(</mo><mi>a</mi><mi>d</mi><mo>−</mo><mi>b</mi><mi>c</mi><mo stretchy="false" form="postfix">)</mo></mrow><mrow><mo stretchy="false" form="prefix">(</mo><mi>a</mi><mo>+</mo><mi>b</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="prefix">(</mo><mi>b</mi><mo>+</mo><mi>d</mi><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mi>a</mi><mo>+</mo><mi>c</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="prefix">(</mo><mi>c</mi><mo>+</mo><mi>d</mi><mo stretchy="false" form="postfix">)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">\frac{\text{RI}-\mathrm{E}(\text{RI})}{1-\mathrm{E}(\text{RI})} = \frac{2(ad-bc)}{(a+b)(b+d)+(a+c)(c+d)}</annotation></semantics></math>;
 adjusting RI by accounting for the expected similarity of all pairings
 due to chance using the Permutation Model for clusterings. ARI is the
 harmonic mean of AWH and AWC.
@@ -229,7 +229,7 @@ dataset
 Mutual Information (MI)
 </td>
 <td style="text-align:left;">
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>G</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mi>H</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>G</mi><mo stretchy="false" form="prefix">|</mo><mi>P</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">H(G) - H(G|P)</annotation></semantics></math>;
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>G</mi><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>G</mi><mo stretchy="false" form="prefix">|</mo><mi>P</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">H(G) - H(G|P)</annotation></semantics></math>;
 the difference between the shannon entropy of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>G</mi><annotation encoding="application/x-tex">G</annotation></semantics></math>
 and the conditional entropy of
@@ -249,7 +249,7 @@ and Adjusted Mutual Information (AMI)
 <td style="text-align:left;">
 Chance adjusted version of WH, WC and MI, respectively. For a metric M,
 the chance adjusted version of it is
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mrow><mtext mathvariant="normal">M</mtext><mo>−</mo><mi mathvariant="normal">E</mi><mrow><mo stretchy="true" form="prefix">(</mo><mtext mathvariant="normal">M</mtext><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mn>1</mn><mo>−</mo><mi mathvariant="normal">E</mi><mrow><mo stretchy="true" form="prefix">(</mo><mtext mathvariant="normal">M</mtext><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac><annotation encoding="application/x-tex">\frac{\text{M}-\mathrm{E}(\text{M})}{1-\mathrm{E}(\text{M})}</annotation></semantics></math>.
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mrow><mtext mathvariant="normal">M</mtext><mo>−</mo><mi mathvariant="normal">E</mi><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">M</mtext><mo stretchy="false" form="postfix">)</mo></mrow><mrow><mn>1</mn><mo>−</mo><mi mathvariant="normal">E</mi><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">M</mtext><mo stretchy="false" form="postfix">)</mo></mrow></mfrac><annotation encoding="application/x-tex">\frac{\text{M}-\mathrm{E}(\text{M})}{1-\mathrm{E}(\text{M})}</annotation></semantics></math>.
 </td>
 </tr>
 <tr>
@@ -260,9 +260,9 @@ dataset
 (Entropy-based) Homogeneity (EH)
 </td>
 <td style="text-align:left;">
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mfrac><mrow><mi>H</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>G</mi><mo stretchy="false" form="prefix">|</mo><mi>P</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mi>H</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>G</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex">1-\frac{H(G|P)}{H(G)}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mfrac><mrow><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>G</mi><mo stretchy="false" form="prefix">|</mo><mi>P</mi><mo stretchy="false" form="postfix">)</mo></mrow><mrow><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>G</mi><mo stretchy="false" form="postfix">)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">1-\frac{H(G|P)}{H(G)}</annotation></semantics></math>
 if
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>G</mi><mo>,</mo><mi>P</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>≠</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">H(G,P)\neq0</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>G</mi><mo>,</mo><mi>P</mi><mo stretchy="false" form="postfix">)</mo><mo>≠</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">H(G,P)\neq0</annotation></semantics></math>,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>
 otherwise; the ratio of MI to the individual entropy of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>G</mi><annotation encoding="application/x-tex">G</annotation></semantics></math>.
@@ -276,9 +276,9 @@ dataset
 (Entropy-based) Completeness (EC)
 </td>
 <td style="text-align:left;">
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mfrac><mrow><mi>H</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>P</mi><mo stretchy="false" form="prefix">|</mo><mi>G</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mi>H</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>P</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex">1-\frac{H(P|G)}{H(P)}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mfrac><mrow><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>P</mi><mo stretchy="false" form="prefix">|</mo><mi>G</mi><mo stretchy="false" form="postfix">)</mo></mrow><mrow><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>P</mi><mo stretchy="false" form="postfix">)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">1-\frac{H(P|G)}{H(P)}</annotation></semantics></math>
 if
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>P</mi><mo>,</mo><mi>G</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>≠</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">H(P,G)\neq0</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>P</mi><mo>,</mo><mi>G</mi><mo stretchy="false" form="postfix">)</mo><mo>≠</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">H(P,G)\neq0</annotation></semantics></math>,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>
 otherwise; the ratio of MI to the individual entropy of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math>.
@@ -292,7 +292,7 @@ class/cluster
 V Measure (VM)
 </td>
 <td style="text-align:left;">
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mrow><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><mi>β</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>×</mo><mtext mathvariant="normal">EH</mtext><mo>×</mo><mtext mathvariant="normal">EC</mtext></mrow><mrow><mi>β</mi><mo>×</mo><mtext mathvariant="normal">EH</mtext><mo>+</mo><mtext mathvariant="normal">EC</mtext></mrow></mfrac><annotation encoding="application/x-tex">\frac{(1+\beta)\times\text{EH}\times\text{EC}}{\beta\times\text{EH}+\text{EC}}</annotation></semantics></math>;
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><mi>β</mi><mo stretchy="false" form="postfix">)</mo><mo>×</mo><mtext mathvariant="normal">EH</mtext><mo>×</mo><mtext mathvariant="normal">EC</mtext></mrow><mrow><mi>β</mi><mo>×</mo><mtext mathvariant="normal">EH</mtext><mo>+</mo><mtext mathvariant="normal">EC</mtext></mrow></mfrac><annotation encoding="application/x-tex">\frac{(1+\beta)\times\text{EH}\times\text{EC}}{\beta\times\text{EH}+\text{EC}}</annotation></semantics></math>;
 the harmonic mean between EH and EC. It is identical to normalized
 mutual information (NMI) when arithmetic mean is used for averaging in
 NMI calculation.
@@ -340,7 +340,7 @@ dataset
 Silhouette score
 </td>
 <td style="text-align:left;">
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mrow><mi>n</mi><mo>−</mo><mi>m</mi></mrow><mrow><mtext mathvariant="normal">max</mtext><mrow><mo stretchy="true" form="prefix">(</mo><mi>m</mi><mo>,</mo><mi>n</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac><annotation encoding="application/x-tex">\frac{n-m}{\text{max}(m, n)}</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mrow><mi>n</mi><mo>−</mo><mi>m</mi></mrow><mrow><mtext mathvariant="normal">max</mtext><mo stretchy="false" form="prefix">(</mo><mi>m</mi><mo>,</mo><mi>n</mi><mo stretchy="false" form="postfix">)</mo></mrow></mfrac><annotation encoding="application/x-tex">\frac{n-m}{\text{max}(m, n)}</annotation></semantics></math>,
 where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
 is the mean distance between a sample and the nearest class that the
@@ -409,7 +409,7 @@ Modularity
 <td style="text-align:left;">
 For a given graph partition, it quantifies the number of edges within
 communities relative to what would be expected by random chance.
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo>=</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mi>m</mi></mrow></mfrac><msub><mo>∑</mo><mrow><mi>i</mi><mi>j</mi></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>A</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>−</mo><mi>γ</mi><mfrac><mrow><msub><mi>k</mi><mi>i</mi></msub><msub><mi>k</mi><mi>j</mi></msub></mrow><mrow><mn>2</mn><mi>m</mi></mrow></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mi>δ</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>c</mi><mi>i</mi></msub><mo>,</mo><msub><mi>c</mi><mi>j</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">Q = \frac{1}{2m} \sum_{ij} \left( A_{ij} - \gamma \frac{k_i k_j}{2m} \right) \delta(c_i, c_j)</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo>=</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mi>m</mi></mrow></mfrac><msub><mo>∑</mo><mrow><mi>i</mi><mi>j</mi></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>A</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>−</mo><mi>γ</mi><mfrac><mrow><msub><mi>k</mi><mi>i</mi></msub><msub><mi>k</mi><mi>j</mi></msub></mrow><mrow><mn>2</mn><mi>m</mi></mrow></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mi>δ</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>c</mi><mi>i</mi></msub><mo>,</mo><msub><mi>c</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">Q = \frac{1}{2m} \sum_{ij} \left( A_{ij} - \gamma \frac{k_i k_j}{2m} \right) \delta(c_i, c_j)</annotation></semantics></math>,
 where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>
 is the number of edges,
@@ -420,7 +420,7 @@ is the (weighted) degree of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>
 is the resolution parameter, and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>c</mi><mi>i</mi></msub><mo>,</mo><msub><mi>c</mi><mi>j</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\delta(c_i, c_j)</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>c</mi><mi>i</mi></msub><mo>,</mo><msub><mi>c</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\delta(c_i, c_j)</annotation></semantics></math>
 is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>
 if
@@ -504,7 +504,7 @@ elements of a given class. If the graph subclass is disconnected, the
 mean shortest path of each connected subgraph
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>
 are summed.
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mrow><msub><mo>∑</mo><mi>i</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><msub><mi>m</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><msqrt><mi>N</mi></msqrt></mfrac><annotation encoding="application/x-tex">\frac{\sum_{i} (1+m_i)}{\sqrt{N}}</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mrow><msub><mo>∑</mo><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><msub><mi>m</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><msqrt><mi>N</mi></msqrt></mfrac><annotation encoding="application/x-tex">\frac{\sum_{i} (1+m_i)}{\sqrt{N}}</annotation></semantics></math>,
 where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>
 is the mean shortest path and
@@ -627,9 +627,9 @@ pairs are tolerated if they are between spots 1) close to each other and
 that are wrongly clustered together, or 2) distant and wrongly
 separated. Note that by default, poem uses distance-based functions that
 are different from those originally used by Yan et al., specifically
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>d</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>α</mi><mo>*</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><msup><mi>e</mi><mrow><msub><mi>β</mi><mi>h</mi></msub><mo>*</mo><mi>−</mi><mi>d</mi></mrow></msup><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">h(d) = \alpha*(1-e^{\beta_h*-d})</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mo stretchy="false" form="prefix">(</mo><mi>d</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>α</mi><mo>*</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msup><mi>e</mi><mrow><msub><mi>β</mi><mi>h</mi></msub><mo>*</mo><mi>−</mi><mi>d</mi></mrow></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">h(d) = \alpha*(1-e^{\beta_h*-d})</annotation></semantics></math>
 and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>d</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>α</mi><mo>*</mo><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>e</mi><mrow><msub><mi>β</mi><mi>f</mi></msub><mo>*</mo><mi>−</mi><mi>d</mi></mrow></msup><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">f(d) = \alpha*(e^{\beta_f*-d})</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mi>d</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>α</mi><mo>*</mo><mo stretchy="false" form="prefix">(</mo><msup><mi>e</mi><mrow><msub><mi>β</mi><mi>f</mi></msub><mo>*</mo><mi>−</mi><mi>d</mi></mrow></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">f(d) = \alpha*(e^{\beta_f*-d})</annotation></semantics></math>,
 with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mi>f</mi></msub><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">\beta_f=4</annotation></semantics></math>
 and
@@ -704,13 +704,13 @@ neighborhood that is of node’s predicted class.
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## R version 4.4.3 (2025-02-28)</span></span>
+<pre><code><span><span class="co">## R version 4.5.0 (2025-04-11)</span></span>
 <span><span class="co">## Platform: x86_64-pc-linux-gnu</span></span>
-<span><span class="co">## Running under: Ubuntu 22.04.5 LTS</span></span>
+<span><span class="co">## Running under: Ubuntu 24.04.2 LTS</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Matrix products: default</span></span>
-<span><span class="co">## BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.10.0 </span></span>
-<span><span class="co">## LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.10.0</span></span>
+<span><span class="co">## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 </span></span>
+<span><span class="co">## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so;  LAPACK version 3.12.0</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## locale:</span></span>
 <span><span class="co">##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              </span></span>
@@ -720,29 +720,29 @@ neighborhood that is of node’s predicted class.
 <span><span class="co">##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            </span></span>
 <span><span class="co">## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       </span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">## time zone: Europe/Zurich</span></span>
+<span><span class="co">## time zone: UTC</span></span>
 <span><span class="co">## tzcode source: system (glibc)</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## attached base packages:</span></span>
 <span><span class="co">## [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">## [1] BiocStyle_2.32.1</span></span>
+<span><span class="co">## [1] BiocStyle_2.36.0</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
-<span><span class="co">##  [1] vctrs_0.6.5         svglite_2.1.3       cli_3.6.4          </span></span>
-<span><span class="co">##  [4] knitr_1.48          rlang_1.1.5         xfun_0.46          </span></span>
-<span><span class="co">##  [7] stringi_1.8.4       textshaping_0.3.6   jsonlite_1.8.8     </span></span>
-<span><span class="co">## [10] glue_1.8.0          colorspace_2.1-1    htmltools_0.5.8.1  </span></span>
-<span><span class="co">## [13] ragg_1.3.2          sass_0.4.9          scales_1.3.0       </span></span>
-<span><span class="co">## [16] rmarkdown_2.27      munsell_0.5.1       evaluate_0.24.0    </span></span>
-<span><span class="co">## [19] jquerylib_0.1.4     kableExtra_1.4.0    fastmap_1.2.0      </span></span>
-<span><span class="co">## [22] yaml_2.3.10         lifecycle_1.0.4     bookdown_0.40      </span></span>
-<span><span class="co">## [25] stringr_1.5.1       BiocManager_1.30.23 compiler_4.4.3     </span></span>
-<span><span class="co">## [28] fs_1.6.4            htmlwidgets_1.6.4   rstudioapi_0.16.0  </span></span>
-<span><span class="co">## [31] systemfonts_1.1.0   digest_0.6.37       viridisLite_0.4.2  </span></span>
-<span><span class="co">## [34] R6_2.6.1            magrittr_2.0.3      bslib_0.8.0        </span></span>
-<span><span class="co">## [37] tools_4.4.3         xml2_1.3.6          pkgdown_2.1.1      </span></span>
+<span><span class="co">##  [1] vctrs_0.6.5         svglite_2.2.0       cli_3.6.5          </span></span>
+<span><span class="co">##  [4] knitr_1.50          rlang_1.1.6         xfun_0.52          </span></span>
+<span><span class="co">##  [7] stringi_1.8.7       textshaping_1.0.1   jsonlite_2.0.0     </span></span>
+<span><span class="co">## [10] glue_1.8.0          htmltools_0.5.8.1   ragg_1.4.0         </span></span>
+<span><span class="co">## [13] sass_0.4.10         scales_1.4.0        rmarkdown_2.29     </span></span>
+<span><span class="co">## [16] evaluate_1.0.3      jquerylib_0.1.4     kableExtra_1.4.0   </span></span>
+<span><span class="co">## [19] fastmap_1.2.0       yaml_2.3.10         lifecycle_1.0.4    </span></span>
+<span><span class="co">## [22] bookdown_0.43       stringr_1.5.1       BiocManager_1.30.25</span></span>
+<span><span class="co">## [25] compiler_4.5.0      RColorBrewer_1.1-3  fs_1.6.6           </span></span>
+<span><span class="co">## [28] htmlwidgets_1.6.4   rstudioapi_0.17.1   farver_2.1.2       </span></span>
+<span><span class="co">## [31] systemfonts_1.2.3   digest_0.6.37       viridisLite_0.4.2  </span></span>
+<span><span class="co">## [34] R6_2.6.1            magrittr_2.0.3      bslib_0.9.0        </span></span>
+<span><span class="co">## [37] tools_4.5.0         xml2_1.3.8          pkgdown_2.1.2      </span></span>
 <span><span class="co">## [40] cachem_1.1.0        desc_1.4.3</span></span></code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -756,7 +756,7 @@ neighborhood that is of node’s predicted class.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
     </footer>
