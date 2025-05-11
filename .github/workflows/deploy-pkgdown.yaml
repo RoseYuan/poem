@@ -34,6 +34,7 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
+          git config --global --add safe.directory /__w/poem/poem
           git add .
           git commit -m "Deploy updated pkgdown site"
           git push origin gh-pages  # Push to the gh-pages branch
