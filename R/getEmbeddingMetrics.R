@@ -170,4 +170,5 @@ getEmbeddingGlobalMetrics <-function(x, labels,
     y <- as.integer(factor(labels, levels = sort(unique(labels))))
     res$dbcv <- dbcv(x, y, distance = distance, ...)$dbcv
   as.data.frame(t(res))
+  }
 }

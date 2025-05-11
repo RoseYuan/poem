@@ -155,7 +155,7 @@ spatial_metrics <- data.frame(
              "Spot-wise Pair Concordance (SPC)", 
              "Neighborhood smoothed SPC",
              "Spatial SPC",
-             "Spatial Set Matching Accuracy"),
+             "Neighborhood smoothed Set Matching Accuracy"),
   Calculation = c(
     "PAS measures the percentage of abnormal spots, which is defined as spots with a spatial domain label differing from more than half of its nearest neighbors.",
     "CHAOS is the mean length of the graph edges in the 1-nearest neighbor (1NN) graph for each domain averaged across domains.",
