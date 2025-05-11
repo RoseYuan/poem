@@ -10,6 +10,13 @@
 #' @param metrics The metrics to compute. See details.
 #' @param level The level to calculate the metrics. Options include 
 #' `"element"`, `"class"` and `"dataset"`.
+#' @param lowMemory Logical, whether to use a low memory mode. This is only 
+#'  useful when`fuzzy_true=TRUE` and `fuzzy_pred=FALSE`. If `TRUE`, 
+#'  the function will compute the metrics in a low memory mode, which is 
+#'  slower but uses less memory. If `FALSE`, the function will compute the 
+#'  metrics in a high memory mode, which is faster but uses more memory. 
+#'  By default it is set automatically based on the size of the input data. See 
+#'  \code{\link{fuzzyHardMetrics}}.
 #' @inheritParams fuzzyPartitionMetrics
 #' @inheritParams fuzzyHardMetrics
 #' @inheritParams fuzzyHardSpotConcordance
@@ -77,7 +84,9 @@ getFuzzyPartitionMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
                                      level="class",
                                      nperms=NULL, verbose=TRUE, 
                                      BPPARAM=BiocParallel::SerialParam(), 
-                                     useNegatives=TRUE, usePairs=NULL, ...){
+                                     useNegatives=TRUE, usePairs=NULL, 
+                                     lowMemory=NULL,
+                                     ...){
   
   if(verbose){
     mc <- match.call()
@@ -112,8 +121,10 @@ getFuzzyPartitionMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
              metrics=metrics, verbose=verbose)
   args <- list(	
     "element"=c(args, list(usePairs=usePairs, useNegatives=useNegatives)),
-    "class"=c(args, list(nperms=nperms, BPPARAM=BPPARAM, ...)),
-    "dataset"=c(args, list(nperms=nperms, BPPARAM=BPPARAM, ...)))
+    "class"=c(args, list(nperms=nperms, BPPARAM=BPPARAM, 
+                         lowMemory=lowMemory, ...)),
+    "dataset"=c(args, list(nperms=nperms, BPPARAM=BPPARAM, 
+                           lowMemory=lowMemory, ...)))
   do.call(level_functions[[level]], args[[level]])
 }
 
@@ -122,7 +133,8 @@ getFuzzyPartitionMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
 .cal_fuzzyPartitionMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL, 
                                        hardPred=NULL, fuzzyPred=NULL, 
                                        fuzzy_true=TRUE, fuzzy_pred=FALSE,
-                                       nperms=NULL, verbose=TRUE, 
+                                       nperms=NULL, verbose=TRUE,
+                                       lowMemory=NULL,  
                                        returnElementPairAccuracy=FALSE,
                                        BPPARAM=BiocParallel::SerialParam(), 
                                        ...){
@@ -137,14 +149,14 @@ getFuzzyPartitionMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
     stopifnot(!(is.null(hardTrue)|is.null(fuzzyTrue)|is.null(hardPred)))
     message("Comparing between a fuzzy truth and a hard prediction...")
     res <- fuzzyHardMetrics(hardTrue, fuzzyTrue, hardPred, nperms=nperms, 
-                            verbose=verbose, 
+                            verbose=verbose, lowMemory=lowMemory, 
                             returnElementPairAccuracy=returnElementPairAccuracy,
                             BPPARAM=BPPARAM)
   }else if((!fuzzy_true) & fuzzy_pred){
     stopifnot(!(is.null(hardTrue)|is.null(fuzzyPred)|is.null(hardPred)))
     message("Comparing between a hard truth and a fuzzy prediction...")
     res <- fuzzyHardMetrics(hardPred, fuzzyPred, hardTrue, nperms=nperms, 
-                            verbose=verbose, 
+                            verbose=verbose, lowMemory=lowMemory,  
                             returnElementPairAccuracy=returnElementPairAccuracy,
                             BPPARAM=BPPARAM)
     res <- .switchListItem(res, "fuzzyWH", "fuzzyWC")
@@ -164,6 +176,7 @@ getFuzzyPartitionGlobalMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
                                                      "fuzzyWH", "fuzzyAWH",
                                                      "fuzzyWC", "fuzzyAWC"),
                                            nperms=NULL, verbose=TRUE, 
+                                           lowMemory=NULL,
                                            BPPARAM=BiocParallel::SerialParam(), 
                                            ...){
 
@@ -171,6 +184,7 @@ getFuzzyPartitionGlobalMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
                                     hardPred=hardPred, fuzzyPred=fuzzyPred, 
                                     fuzzy_true=fuzzy_true, 
                                     fuzzy_pred=fuzzy_pred,
+                                    lowMemory=lowMemory,
                                     nperms=nperms, verbose=verbose, 
                                     returnElementPairAccuracy=FALSE,
                                     BPPARAM=BPPARAM, ...)
@@ -201,6 +215,7 @@ getFuzzyPartitionClassMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
                                           metrics=c("fuzzyWH", "fuzzyAWH",
                                                     "fuzzyWC", "fuzzyAWC"),
                                           nperms=NULL, verbose=TRUE, 
+                                          lowMemory=NULL,
                                           BPPARAM=BiocParallel::SerialParam(), 
                                           ...){
   
@@ -208,6 +223,7 @@ getFuzzyPartitionClassMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
                                     hardPred=hardPred, fuzzyPred=fuzzyPred, 
                                     fuzzy_true=fuzzy_true, 
                                     fuzzy_pred=fuzzy_pred,
+                                    lowMemory=lowMemory,
                                     nperms=nperms, verbose=verbose, 
                                     returnElementPairAccuracy=FALSE,
                                     BPPARAM=BPPARAM, ...)
