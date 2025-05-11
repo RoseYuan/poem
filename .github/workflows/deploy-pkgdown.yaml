@@ -4,12 +4,21 @@ on:
   push:
     branches:
       - gh-pages  # Trigger when you push to gh-pages
+  release:
+    types: [published]
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     container: plger/metrics:latest
-
+    # Only restrict concurrency for non-PR jobs
+    concurrency:
+      group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      contents: write
     steps:
       - name: Checkout gh-pages branch
         uses: actions/checkout@v2
@@ -36,5 +45,5 @@ jobs:
           git config --global user.email "actions@github.com"
           git config --global --add safe.directory /__w/poem/poem
           git add .
-          git commit -m "Deploy updated pkgdown site"
+          git commit -m "Deploy updated pkgdown site" || echo "Nothing to commit"
           git push origin gh-pages  # Push to the gh-pages branch
