@@ -76,7 +76,6 @@ getFuzzyPartitionMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
                                                "fuzzyWC", "fuzzyAWC"),
                                      level="class",
                                      nperms=NULL, verbose=TRUE, 
-                                     returnElementPairAccuracy=FALSE,
                                      BPPARAM=BiocParallel::SerialParam(), 
                                      useNegatives=TRUE, usePairs=NULL, ...){
   
@@ -107,26 +106,14 @@ getFuzzyPartitionMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
                      use_attribute=FALSE)
   
   # Collect all arguments into a list
-  args <- list(
-    "element" = list(hardTrue=hardTrue, fuzzyTrue=fuzzyTrue, 
-                     hardPred=hardPred, fuzzyPred=fuzzyPred, 
-                     fuzzy_true=fuzzy_true, fuzzy_pred=fuzzy_pred,
-                     metrics=metrics,
-                     useNegatives=useNegatives, verbose=verbose,
-                     usePairs=usePairs),
-    "class" = list(hardTrue=hardTrue, fuzzyTrue=fuzzyTrue, 
-                   hardPred=hardPred, fuzzyPred=fuzzyPred, 
-                   fuzzy_true=fuzzy_true, fuzzy_pred=fuzzy_pred,
-                   metrics=metrics, nperms=nperms, verbose=verbose, 
-                   returnElementPairAccuracy=returnElementPairAccuracy,
-                   BPPARAM=BPPARAM, ...),
-    "dataset" = list(hardTrue=hardTrue, fuzzyTrue=fuzzyTrue, 
-                    hardPred=hardPred, fuzzyPred=fuzzyPred, 
-                    fuzzy_true=fuzzy_true, fuzzy_pred=fuzzy_pred,
-                    metrics=metrics, nperms=nperms, verbose=verbose, 
-                    returnElementPairAccuracy=returnElementPairAccuracy,
-                    BPPARAM=BPPARAM, ...)
-  )
+  args <- list(hardTrue=hardTrue, fuzzyTrue=fuzzyTrue, 
+             hardPred=hardPred, fuzzyPred=fuzzyPred, 
+             fuzzy_true=fuzzy_true, fuzzy_pred=fuzzy_pred,
+             metrics=metrics, verbose=verbose)
+  args <- list(	
+    "element"=c(args, list(usePairs=usePairs, useNegatives=useNegatives)),
+    "class"=c(args, list(nperms=nperms, BPPARAM=BPPARAM, ...)),
+    "dataset"=c(args, list(nperms=nperms, BPPARAM=BPPARAM, ...)))
   do.call(level_functions[[level]], args[[level]])
 }
 
@@ -177,7 +164,6 @@ getFuzzyPartitionGlobalMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
                                                      "fuzzyWH", "fuzzyAWH",
                                                      "fuzzyWC", "fuzzyAWC"),
                                            nperms=NULL, verbose=TRUE, 
-                                           returnElementPairAccuracy=FALSE,
                                            BPPARAM=BiocParallel::SerialParam(), 
                                            ...){
 
@@ -186,7 +172,7 @@ getFuzzyPartitionGlobalMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
                                     fuzzy_true=fuzzy_true, 
                                     fuzzy_pred=fuzzy_pred,
                                     nperms=nperms, verbose=verbose, 
-                                    returnElementPairAccuracy=returnElementPairAccuracy,
+                                    returnElementPairAccuracy=FALSE,
                                     BPPARAM=BPPARAM, ...)
   fuzzyMetrics <- res
   fuzzyRI <- fuzzyMetrics$NDC
@@ -215,7 +201,6 @@ getFuzzyPartitionClassMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
                                           metrics=c("fuzzyWH", "fuzzyAWH",
                                                     "fuzzyWC", "fuzzyAWC"),
                                           nperms=NULL, verbose=TRUE, 
-                                          returnElementPairAccuracy=FALSE,
                                           BPPARAM=BiocParallel::SerialParam(), 
                                           ...){
   
@@ -224,7 +209,7 @@ getFuzzyPartitionClassMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL,
                                     fuzzy_true=fuzzy_true, 
                                     fuzzy_pred=fuzzy_pred,
                                     nperms=nperms, verbose=verbose, 
-                                    returnElementPairAccuracy=returnElementPairAccuracy,
+                                    returnElementPairAccuracy=FALSE,
                                     BPPARAM=BPPARAM, ...)
   fuzzyMetrics <- res
   fuzzyWH <- fuzzyMetrics$fuzzyWH$perPartition
