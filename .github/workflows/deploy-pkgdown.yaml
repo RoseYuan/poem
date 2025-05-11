@@ -21,9 +21,10 @@ jobs:
 
       - name: Install dependencies
         run: |
-          install.packages('remotes')
+          install.packages("remotes")
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("pkgdown")
+        shell: Rscript {0}
 
       - name: Build the site
         run: |
