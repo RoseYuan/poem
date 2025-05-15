@@ -6,3 +6,5 @@
   getFuzzyPartitionGlobalMetrics() and getFuzzyPartitionClassMetrics()
 
 + SpatialAccuracy metric renamed to nsAccuracy for consistency
+
++ Bug fixed in getEmbeddingGlobalMetrics() and getFuzzyPartitionMetrics()
