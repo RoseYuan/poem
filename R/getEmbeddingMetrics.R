@@ -163,8 +163,13 @@ getEmbeddingGlobalMetrics <-function(x, labels,
     if ("meanClassSW" %in% metrics) res$meanClassSW <- mean(ag)
     if ("minClassSW" %in% metrics) res$minClassSW <- min(ag)
   }
-  if ("cdbw" %in% metrics) {
-    res$cdbw <- CDbw(x, as.integer(labels), ...)
+  if ("cdbw" %in% metrics | "cohesion" %in% metrics | "compactness" %in% metrics | 
+      "sep" %in% metrics) {
+    tmp <- CDbw(x, as.integer(labels), ...)
+    if ("cohesion" %in% metrics) res$cohesion <- tmp[["cohesion"]]
+    if ("compactness" %in% metrics) res$compactness <- tmp[["compactness"]]
+    if ("sep" %in% metrics) res$sep <- tmp[["sep"]]
+    if ("cdbw" %in% metrics) res$cdbw <- tmp[["cdbw"]]
   }
   if("dbcv" %in% metrics){
     y <- as.integer(factor(labels, levels = sort(unique(labels))))
