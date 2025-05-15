@@ -1,0 +1,7 @@
+                        Changes in version 1.1.2
+
++ lowMemory argument added to getFuzzyPartitionMetrics()
+
++ returnElementPairAccuracy argument removed from getFuzzyPartitionMetrics(), getFuzzyPartitionGlobalMetrics() and getFuzzyPartitionClassMetrics()
+
++ SpatialAccuracy metric renamed to nsAccuracy for consistency
