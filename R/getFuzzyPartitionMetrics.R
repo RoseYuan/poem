@@ -11,7 +11,7 @@
 #' @param level The level to calculate the metrics. Options include 
 #' `"element"`, `"class"` and `"dataset"`.
 #' @param lowMemory Logical, whether to use a low memory mode. This is only 
-#'  useful when`fuzzy_true=TRUE` and `fuzzy_pred=FALSE`. If `TRUE`, 
+#'  useful when`hardTrue` and `fuzzyPred` is used. If `TRUE`, 
 #'  the function will compute the metrics in a low memory mode, which is 
 #'  slower but uses less memory. If `FALSE`, the function will compute the 
 #'  metrics in a high memory mode, which is faster but uses more memory. 
@@ -22,7 +22,7 @@
 #' @inheritParams fuzzyHardSpotConcordance
 #' @inheritParams getPairConcordance
 #' @param ... Optional arguments for \code{\link{fuzzyPartitionMetrics}}: 
-#' `tnorm`. Only useful when `fuzzy_true=TRUE` and `fuzzy_pred=TRUE`.
+#' `tnorm`. Only useful when `fuzzyTrue` and `fuzzyPred` is used.
 #' @details
 #' The allowed values for `metrics` depend on the value of `level`:
 #'   - If `level = "element"`, the allowed `metrics` are: `"fuzzySPC"`.
@@ -76,7 +76,8 @@
 #' hardPred <- c(1,1,1,1,1,1,2,2,2)
 #' getFuzzyPartitionMetrics(hardPred=hardPred, hardTrue=hardTrue, 
 #' fuzzyTrue=fuzzyTrue, nperms=3, level="class")
-#' 
+#' getFuzzyPartitionMetrics(hardTrue=hardPred, hardPred=hardTrue, 
+#' fuzzyPred=fuzzyTrue, nperms=3, level="class")
 getFuzzyPartitionMetrics <- function(hardTrue=NULL, fuzzyTrue=NULL, 
                                      hardPred=NULL, fuzzyPred=NULL, 
                                      metrics=c("fuzzyWH", "fuzzyAWH",
