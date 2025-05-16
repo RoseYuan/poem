@@ -147,6 +147,7 @@ getSpatialGlobalExternalMetrics <- function(true, pred, location,
                                                       "nsAccuracy",
                                                       "SpatialRI","SpatialARI"), 
                                             fuzzy_true=TRUE, fuzzy_pred=FALSE,
+                                            lowMemory=NULL,
                                             ...){
   argfindSpatialKNN <- .checkEllipsisArgs(fnList=list(findSpatialKNN, 
                                               fuzzyPartitionMetrics,
@@ -174,6 +175,7 @@ getSpatialGlobalExternalMetrics <- function(true, pred, location,
                      list(hardTrue=hardTrue, fuzzyTrue=fuzzyTrue, 
                           hardPred=hardPred, fuzzyPred=fuzzyPred, 
                           fuzzy_true=fuzzy_true, fuzzy_pred=fuzzy_pred,
+                          lowMemory=lowMemory,
                           metrics=c("fuzzyRI", "fuzzyARI", "fuzzyWH", 
                                     "fuzzyAWH", "fuzzyWC", "fuzzyAWC"))))
   }else{res <- data.frame(matrix(nrow = 1, ncol = 0))}  
@@ -209,6 +211,7 @@ getSpatialClassExternalMetrics <- function(true, pred, location, k=6, alpha=0.5,
                                            metrics=c("nsWH","nsAWH", 
                                                      "nsWC","nsAWC"), 
                                            fuzzy_true=TRUE, fuzzy_pred=FALSE,
+                                           lowMemory=NULL,
                                            ...){
   
   argfindSpatialKNN <- .checkEllipsisArgs(fnList=list(findSpatialKNN, 
@@ -230,6 +233,7 @@ getSpatialClassExternalMetrics <- function(true, pred, location, k=6, alpha=0.5,
                    list(hardTrue=hardTrue, fuzzyTrue=fuzzyTrue,
                         hardPred=hardPred, fuzzyPred=fuzzyPred, 
                         fuzzy_true=fuzzy_true, fuzzy_pred=fuzzy_pred,
+                        lowMemory=lowMemory,
                       metrics=c("fuzzyWH","fuzzyAWH", "fuzzyWC", "fuzzyAWC"))))
   colnames(res) <- sub("fuzzy", "ns",colnames(res))
   return(res[,c(metrics, "class","cluster")])
