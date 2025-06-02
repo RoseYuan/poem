@@ -66,7 +66,6 @@ getEmbeddingMetrics <-function(x, labels, metrics=NULL,
 #'   
 #' @return A data.frame of metrics for each node/element of `x`.
 #' @keywords internal
-#' @importFrom cluster silhouette
 #' @importFrom stats dist
 getEmbeddingElementMetrics <-function(x, labels, metrics=c("SW"), 
                                       distance="euclidean", ...){
@@ -80,7 +79,7 @@ getEmbeddingElementMetrics <-function(x, labels, metrics=c("SW"),
                   "metrics")
   d <- dist(x, method=distance, ...)
   data.frame(row.names=row.names(x), class=labels,
-             SW=cluster::silhouette(as.integer(labels), dist=d)[,3])
+             SW=silhouetteWidths(x, labels))
 }
 
 #' getEmbeddingClassMetrics
