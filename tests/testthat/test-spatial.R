@@ -18,6 +18,10 @@ test_that("External spatial metrics work", {
   sm <- getSpatialExternalMetrics(true=d$label, pred=d$p1, 
                                   location=d[,seq_len(2)], level="dataset")
   expect_true(all(!is.na(as.matrix(sm))))
+  sm_low <- getSpatialExternalMetrics(true=d$label, pred=d$p1, 
+                                      location=d[,seq_len(2)], level="dataset",
+                                      lowMemory=FALSE)
+  expect_true(all(!is.na(as.matrix(sm_low))))
   sm <- getSpatialExternalMetrics(true=d$label, pred=d$p1, 
                                   location=d[,seq_len(2)], level="class")
   expect_true(sm$nsAWH[3]==1)

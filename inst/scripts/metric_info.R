@@ -37,7 +37,7 @@ metric_info <- data.frame(Name=c("SW",
                                  
                                  "nsRI","nsARI","nsWH",
                                  "nsAWH", "nsWC","nsAWC",
-                                 "SpatialAccuracy", "SpatialARI", "SpatialRI", 
+                                 "nsAccuracy", "SpatialARI", "SpatialRI", 
                                  "SpatialSPC", 
                                  
                                  "PAS", "ELSA",
