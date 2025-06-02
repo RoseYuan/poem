@@ -24,7 +24,7 @@
 #'   `"nsAWH"`, `"nsWC"`,`"nsAWC"`.
 #'   - If `level = "dataset"`, the allowed `metrics` are: `"nsRI"`,
 #'   `"nsARI"`,`"nsWH"`,`"nsAWH"`, `"nsWC"`,`"nsAWC"`,
-#'   `"SpatialAccuracy"`,`"SpatialRI"`,`"SpatialARI"`. 
+#'   `"nsAccuracy"`,`"SpatialRI"`,`"SpatialARI"`. 
 #' @inheritParams getSpatialElementExternalMetrics
 #' @param ... Additional arguments passed to specific methods.
 #' @return A data.frame of metrics based on the specified input.
@@ -144,9 +144,10 @@ getSpatialGlobalExternalMetrics <- function(true, pred, location,
                                             metrics=c("nsRI","nsARI",
                                                       "nsWH","nsAWH", 
                                                       "nsWC","nsAWC",
-                                                      "SpatialAccuracy",
+                                                      "nsAccuracy",
                                                       "SpatialRI","SpatialARI"), 
                                             fuzzy_true=TRUE, fuzzy_pred=FALSE,
+                                            lowMemory=NULL,
                                             ...){
   argfindSpatialKNN <- .checkEllipsisArgs(fnList=list(findSpatialKNN, 
                                               fuzzyPartitionMetrics,
@@ -174,11 +175,12 @@ getSpatialGlobalExternalMetrics <- function(true, pred, location,
                      list(hardTrue=hardTrue, fuzzyTrue=fuzzyTrue, 
                           hardPred=hardPred, fuzzyPred=fuzzyPred, 
                           fuzzy_true=fuzzy_true, fuzzy_pred=fuzzy_pred,
+                          lowMemory=lowMemory,
                           metrics=c("fuzzyRI", "fuzzyARI", "fuzzyWH", 
                                     "fuzzyAWH", "fuzzyWC", "fuzzyAWC"))))
   }else{res <- data.frame(matrix(nrow = 1, ncol = 0))}  
-  if("SpatialAccuracy" %in% metrics){
-    res$SpatialAccuracy <- do.call(nnWeightedAccuracy, 
+  if("nsAccuracy" %in% metrics){
+    res$nsAccuracy <- do.call(nnWeightedAccuracy, 
                                    c(list(true=true, pred=pred, 
                                           location=location, k=k), 
                                      argfindSpatialKNN))
@@ -209,6 +211,7 @@ getSpatialClassExternalMetrics <- function(true, pred, location, k=6, alpha=0.5,
                                            metrics=c("nsWH","nsAWH", 
                                                      "nsWC","nsAWC"), 
                                            fuzzy_true=TRUE, fuzzy_pred=FALSE,
+                                           lowMemory=NULL,
                                            ...){
   
   argfindSpatialKNN <- .checkEllipsisArgs(fnList=list(findSpatialKNN, 
@@ -230,6 +233,7 @@ getSpatialClassExternalMetrics <- function(true, pred, location, k=6, alpha=0.5,
                    list(hardTrue=hardTrue, fuzzyTrue=fuzzyTrue,
                         hardPred=hardPred, fuzzyPred=fuzzyPred, 
                         fuzzy_true=fuzzy_true, fuzzy_pred=fuzzy_pred,
+                        lowMemory=lowMemory,
                       metrics=c("fuzzyWH","fuzzyAWH", "fuzzyWC", "fuzzyAWC"))))
   colnames(res) <- sub("fuzzy", "ns",colnames(res))
   return(res[,c(metrics, "class","cluster")])

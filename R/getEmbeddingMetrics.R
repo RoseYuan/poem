@@ -66,7 +66,6 @@ getEmbeddingMetrics <-function(x, labels, metrics=NULL,
 #'   
 #' @return A data.frame of metrics for each node/element of `x`.
 #' @keywords internal
-#' @importFrom cluster silhouette
 #' @importFrom stats dist
 getEmbeddingElementMetrics <-function(x, labels, metrics=c("SW"), 
                                       distance="euclidean", ...){
@@ -80,7 +79,7 @@ getEmbeddingElementMetrics <-function(x, labels, metrics=c("SW"),
                   "metrics")
   d <- dist(x, method=distance, ...)
   data.frame(row.names=row.names(x), class=labels,
-             SW=cluster::silhouette(as.integer(labels), dist=d)[,3])
+             SW=silhouetteWidths(x, labels))
 }
 
 #' getEmbeddingClassMetrics
@@ -107,15 +106,21 @@ getEmbeddingClassMetrics <-function(x, labels,
   metrics <- match.arg(metrics, several.ok = TRUE)
   stopifnot(length(metrics)>0)
   res <- data.frame(class=sort(unique(labels)))
-  nsw <- getEmbeddingElementMetrics(x, labels, distance=distance, metrics="SW")
-  if("meanSW" %in% metrics)
-    res$meanSW <- aggregate(nsw$SW, by=list(nsw$class), FUN=mean)[,2]
-  if("minSW" %in% metrics)
-    res$minSW <- aggregate(nsw$SW, by=list(nsw$class), FUN=min)[,2]
-  if("pnSW" %in% metrics)
-    res$pnSW <- aggregate(nsw$SW, by=list(nsw$class), FUN=function(x){
-      sum(x<0)/length(x)
-  })[,2]
+
+  sw_metrics <- c("meanSW", "pnSW", "minSW")
+  need_sw <- any(sw_metrics %in% metrics)
+  if (need_sw){
+    nsw <- getEmbeddingElementMetrics(x, labels, distance=distance, metrics="SW")
+    if("meanSW" %in% metrics)
+      res$meanSW <- aggregate(nsw$SW, by=list(nsw$class), FUN=mean)[,2]
+    if("minSW" %in% metrics)
+      res$minSW <- aggregate(nsw$SW, by=list(nsw$class), FUN=min)[,2]
+    if("pnSW" %in% metrics)
+      res$pnSW <- aggregate(nsw$SW, by=list(nsw$class), FUN=function(x){
+        sum(x<0)/length(x)
+    })[,2]
+  }
+  
   if("dbcv" %in% metrics){
     y <- as.integer(factor(labels, levels = sort(unique(labels))))
     res$dbcv <- dbcv(x, y, distance = distance, ...)$vcs}
@@ -144,22 +149,31 @@ getEmbeddingGlobalMetrics <-function(x, labels,
                     "metrics")
   metrics <- match.arg(metrics, several.ok = TRUE)
   stopifnot(length(metrics)>0)
-  res <- data.frame(class=sort(unique(labels)))
-  nsw <- getEmbeddingElementMetrics(x, labels, distance=distance, metrics="SW")
-  ag <- aggregate(nsw$SW, by=list(nsw$class), FUN=mean)[,2]
-  res <- c(CDbw(x, as.integer(labels), ...),
-    meanSW=mean(nsw$SW), pnSW=sum(nsw$SW<0)/nrow(nsw),
-    meanClassSW=mean(ag), minClassSW=min(ag))[metrics]
-  if("dbcv" %in% metrics){ # lazy computation of dbcv, because it's slow
-  y <- as.integer(factor(labels, levels = sort(unique(labels))))
-  dbcv <- dbcv(x, y, distance = distance, ...)$dbcv
-  res <- c(CDbw(x, as.integer(labels), ...),
-           meanSW=mean(nsw$SW), pnSW=sum(nsw$SW<0)/nrow(nsw),
-           meanClassSW=mean(ag), minClassSW=min(ag), dbcv=dbcv)[metrics]
-  }else{
-    res <- c(CDbw(x, as.integer(labels), ...),
-             meanSW=mean(nsw$SW), pnSW=sum(nsw$SW<0)/nrow(nsw),
-             meanClassSW=mean(ag), minClassSW=min(ag))[metrics]
+  res <- list()
+
+  # Determine which metrics need silhouette width calculations
+  sw_metrics <- c("meanSW", "meanClassSW", "pnSW", "minClassSW")
+  need_sw <- any(sw_metrics %in% metrics)
+  if (need_sw) {
+    nsw <- getEmbeddingElementMetrics(x, labels, distance=distance, metrics="SW")
+    ag <- aggregate(nsw$SW, by=list(nsw$class), FUN=mean)[,2]
+    if ("meanSW" %in% metrics) res$meanSW <- mean(nsw$SW)
+    if ("pnSW" %in% metrics) res$pnSW <- sum(nsw$SW < 0) / nrow(nsw)
+    if ("meanClassSW" %in% metrics) res$meanClassSW <- mean(ag)
+    if ("minClassSW" %in% metrics) res$minClassSW <- min(ag)
   }
+  if ("cdbw" %in% metrics | "cohesion" %in% metrics | "compactness" %in% metrics | 
+      "sep" %in% metrics) {
+    tmp <- CDbw(x, as.integer(labels), ...)
+    if ("cohesion" %in% metrics) res$cohesion <- tmp[["cohesion"]]
+    if ("compactness" %in% metrics) res$compactness <- tmp[["compactness"]]
+    if ("sep" %in% metrics) res$sep <- tmp[["sep"]]
+    if ("cdbw" %in% metrics) res$cdbw <- tmp[["cdbw"]]
+  }
+  if("dbcv" %in% metrics){
+    y <- as.integer(factor(labels, levels = sort(unique(labels))))
+    res$dbcv <- dbcv(x, y, distance = distance, ...)$dbcv
+  }
+  res <- unlist(res)
   as.data.frame(t(res))
 }
