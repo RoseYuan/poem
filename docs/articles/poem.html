@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">poem</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,7 +82,7 @@ Germain</h4>
             <address class="author_afil">
       Institute for Molecular Life Sciences, University of Zurich,
 Zurich, SwitzerlandDepartment of Health Sciences and Technology, ETH
-Zurich, Zurich, Switzerland<br><h4 data-toc-skip class="date">2025-05-11</h4>
+Zurich, Zurich, Switzerland<br><h4 data-toc-skip class="date">2025-06-02</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/RoseYuan/poem/blob/gh-pages/vignettes/poem.Rmd" class="external-link"><code>vignettes/poem.Rmd</code></a></small>
       <div class="d-none name"><code>poem.Rmd</code></div>
@@ -297,10 +297,10 @@ see what are the allowed metrics at the class level. For example:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/getEmbeddingMetrics.html">getEmbeddingMetrics</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">g1</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>,<span class="st">"y"</span><span class="op">)</span><span class="op">]</span>, labels<span class="op">=</span><span class="va">g1</span><span class="op">$</span><span class="va">class</span>, level<span class="op">=</span><span class="st">"dataset"</span>,</span>
 <span>                    metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"meanSW"</span>, <span class="st">"meanClassSW"</span>, <span class="st">"pnSW"</span>, <span class="st">"minClassSW"</span>,</span>
 <span>                              <span class="st">"cdbw"</span>, <span class="st">"cohesion"</span>, <span class="st">"compactness"</span>, <span class="st">"sep"</span>, <span class="st">"dbcv"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">##      meanSW meanClassSW   pnSW minClassSW      cdbw  cohesion compactness</span></span>
-<span><span class="co">## 1 0.5029477   0.5029477 0.0375  0.4240817 0.0553208 0.2732925   0.2800803</span></span>
-<span><span class="co">##         sep        dbcv</span></span>
-<span><span class="co">## 1 0.7227335 -0.09368922</span></span></code></pre></div>
+<span><span class="co">##      meanSW   pnSW meanClassSW minClassSW  cohesion compactness       sep</span></span>
+<span><span class="co">## 1 0.5029477 0.0375   0.5029477  0.4240817 0.2732925   0.2800803 0.7227335</span></span>
+<span><span class="co">##        cdbw        dbcv</span></span>
+<span><span class="co">## 1 0.0553208 -0.09368922</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -619,17 +619,17 @@ evaluation:</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
 <span><span class="co">## [1] cowplot_1.1.3    igraph_2.1.4     ggnetwork_0.5.13 tidyr_1.3.1     </span></span>
-<span><span class="co">## [5] dplyr_1.1.4      ggplot2_3.5.2    poem_1.1.1       BiocStyle_2.36.0</span></span>
+<span><span class="co">## [5] dplyr_1.1.4      ggplot2_3.5.2    poem_1.1.2       BiocStyle_2.36.0</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
 <span><span class="co">##   [1] Rdpack_2.6.4                DBI_1.2.3                  </span></span>
-<span><span class="co">##   [3] deldir_2.0-4                s2_1.1.7                   </span></span>
+<span><span class="co">##   [3] deldir_2.0-4                s2_1.1.9                   </span></span>
 <span><span class="co">##   [5] rlang_1.1.6                 magrittr_2.0.3             </span></span>
 <span><span class="co">##   [7] clue_0.3-66                 matrixStats_1.5.0          </span></span>
 <span><span class="co">##   [9] e1071_1.7-16                compiler_4.5.0             </span></span>
 <span><span class="co">##  [11] systemfonts_1.2.3           vctrs_0.6.5                </span></span>
 <span><span class="co">##  [13] fclust_2.1.1.1              pkgconfig_2.0.3            </span></span>
-<span><span class="co">##  [15] SpatialExperiment_1.18.0    wk_0.9.4                   </span></span>
+<span><span class="co">##  [15] SpatialExperiment_1.18.1    wk_0.9.4                   </span></span>
 <span><span class="co">##  [17] crayon_1.5.3                fastmap_1.2.0              </span></span>
 <span><span class="co">##  [19] magick_2.8.6                XVector_0.48.0             </span></span>
 <span><span class="co">##  [21] labeling_0.4.3              rmarkdown_2.29             </span></span>
@@ -638,8 +638,8 @@ evaluation:</p>
 <span><span class="co">##  [27] bluster_1.18.0              cachem_1.1.0               </span></span>
 <span><span class="co">##  [29] GenomeInfoDb_1.44.0         jsonlite_2.0.0             </span></span>
 <span><span class="co">##  [31] DelayedArray_0.34.1         scico_1.5.0                </span></span>
-<span><span class="co">##  [33] BiocParallel_1.42.0         pdist_1.2.1                </span></span>
-<span><span class="co">##  [35] terra_1.8-50                clevr_0.1.2                </span></span>
+<span><span class="co">##  [33] BiocParallel_1.42.1         pdist_1.2.1                </span></span>
+<span><span class="co">##  [35] terra_1.8-54                clevr_0.1.2                </span></span>
 <span><span class="co">##  [37] parallel_4.5.0              aricode_1.0.3              </span></span>
 <span><span class="co">##  [39] cluster_2.1.8.1             R6_2.6.1                   </span></span>
 <span><span class="co">##  [41] bslib_0.9.0                 RColorBrewer_1.1-3         </span></span>
@@ -652,7 +652,7 @@ evaluation:</p>
 <span><span class="co">##  [55] codetools_0.2-20            lattice_0.22-6             </span></span>
 <span><span class="co">##  [57] tibble_3.2.1                Biobase_2.68.0             </span></span>
 <span><span class="co">##  [59] withr_3.0.2                 evaluate_1.0.3             </span></span>
-<span><span class="co">##  [61] desc_1.4.3                  sf_1.0-20                  </span></span>
+<span><span class="co">##  [61] desc_1.4.3                  sf_1.0-21                  </span></span>
 <span><span class="co">##  [63] units_0.8-7                 spData_2.3.4               </span></span>
 <span><span class="co">##  [65] proxy_0.4-27                elsa_1.1-28                </span></span>
 <span><span class="co">##  [67] pillar_1.10.2               BiocManager_1.30.25        </span></span>
@@ -667,13 +667,13 @@ evaluation:</p>
 <span><span class="co">##  [85] crosstalk_1.2.1             rbibutils_2.3              </span></span>
 <span><span class="co">##  [87] SingleCellExperiment_1.30.1 GenomeInfoDbData_1.2.14    </span></span>
 <span><span class="co">##  [89] raster_3.6-32               cli_3.6.5                  </span></span>
-<span><span class="co">##  [91] textshaping_1.0.1           S4Arrays_1.8.0             </span></span>
+<span><span class="co">##  [91] textshaping_1.0.1           S4Arrays_1.8.1             </span></span>
 <span><span class="co">##  [93] gtable_0.3.6                sass_0.4.10                </span></span>
 <span><span class="co">##  [95] digest_0.6.37               BiocGenerics_0.54.0        </span></span>
 <span><span class="co">##  [97] classInt_0.4-11             SparseArray_1.8.0          </span></span>
 <span><span class="co">##  [99] rjson_0.2.23                htmlwidgets_1.6.4          </span></span>
 <span><span class="co">## [101] farver_2.1.2                htmltools_0.5.8.1          </span></span>
-<span><span class="co">## [103] pkgdown_2.1.2               lifecycle_1.0.4            </span></span>
+<span><span class="co">## [103] pkgdown_2.1.3               lifecycle_1.0.4            </span></span>
 <span><span class="co">## [105] httr_1.4.7                  MASS_7.3-65</span></span></code></pre></div>
 </div>
 
@@ -688,7 +688,7 @@ evaluation:</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>
