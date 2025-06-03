@@ -243,3 +243,55 @@ setMatchingAccuracy <- function(true, pred){
   true <- as.integer(as.factor(true))
   sum(pred==true,na.rm=TRUE)/length(pred)
 }
+
+
+#' silhouetteWidths
+#' 
+#' Computes the silhouette widths. If the dataset is sufficiently small for the
+#' `cluster::silhouette` implementation to work, this will be used. Otherwise a
+#' slower chunked implementation is used.
+#' 
+#' @param x A numeric matrix or data.frame with observations as rows.
+#' @param labels An integer/factor vector of clustering labels, or length equal
+#'   to the number of rows in `x`.
+#'
+#' @return A numeric vector of silhouette widths for each element of `x`.
+#' @export
+#'
+#' @importFrom cluster silhouette
+#' @importFrom matrixStats rowMins
+#' @examples
+#' # generate dummy data
+#' m <- matrix(rnorm(100*3),ncol=3)
+#' labels <- sample.int(3,100,replace=TRUE)
+#' # calculate SWs:
+#' sw <- silhouetteWidths(m, labels)
+silhouetteWidths <- function(x, labels){
+  stopifnot(length(labels)==nrow(x))
+  labels <- as.integer(droplevels(as.factor(labels)))
+  if(nrow(x)^2L<.Machine$integer.max){
+    return(cluster::silhouette(labels, dist(x))[,3])
+  }
+  rowsPerLabel <- split(seq_len(nrow(x)), labels)
+  sp <- lapply(rowsPerLabel, \(i){
+    nChunks <- ceiling(length(i)*max(lengths(rowsPerLabel))/.Machine$integer.max)
+    split(i, head(rep(seq_len(nChunks), ceiling(length(i)/nChunks)), length(i)))
+  })
+  o <- lapply(seq_along(sp), FUN=function(clIndex){
+    d <- do.call(rbind, lapply(sp[[clIndex]], \(j){
+      sapply(rowsPerLabel, \(i){
+        if(identical(i,j)){
+          y <- rowSums(as.matrix(dist(x[j,,drop=FALSE])))
+        }else{
+          y <- rowSums(as.matrix(pdist::pdist(x[j,,drop=FALSE],
+                                              x[i,,drop=FALSE],)))
+        }
+        y/(length(i)-as.integer(j %in% i))
+      })
+    }))
+    a <- d[,clIndex,drop=FALSE]
+    b <- matrixStats::rowMins(d[,-clIndex,drop=FALSE])
+    (b-a)/pmax(b,a)
+  })
+  unlist(o)[order(unlist(sp,recursive=TRUE))]
+}

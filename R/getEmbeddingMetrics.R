@@ -78,9 +78,13 @@ getEmbeddingElementMetrics <-function(x, labels, metrics=c("SW"),
   .checkInvalidArgs(metrics, 
                   .get_allowed_args(getEmbeddingElementMetrics, "metrics"), 
                   "metrics")
-  d <- dist(x, method=distance, ...)
-  data.frame(row.names=row.names(x), class=labels,
-             SW=cluster::silhouette(as.integer(labels), dist=d)[,3])
+  if(distance=="euclidean"){
+    sw <- silhouetteWidths(x, as.integer(labels))
+  }else{
+    d <- dist(x, method=distance, ...)
+    sw <- cluster::silhouette(as.integer(labels), dist=d)[,3]
+  }
+  data.frame(row.names=row.names(x), class=labels, SW=sw)
 }
 
 #' getEmbeddingClassMetrics
