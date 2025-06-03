@@ -244,7 +244,6 @@ setMatchingAccuracy <- function(true, pred){
   sum(pred==true,na.rm=TRUE)/length(pred)
 }
 
-
 #' silhouetteWidths
 #' 
 #' Computes the silhouette widths. If the dataset is sufficiently small for the
@@ -259,7 +258,9 @@ setMatchingAccuracy <- function(true, pred){
 #' @export
 #'
 #' @importFrom cluster silhouette
+#' @importFrom pdist pdist
 #' @importFrom matrixStats rowMins
+#' @keywords internal
 #' @examples
 #' # generate dummy data
 #' m <- matrix(rnorm(100*3),ncol=3)
@@ -283,14 +284,14 @@ silhouetteWidths <- function(x, labels){
         if(identical(i,j)){
           y <- rowSums(as.matrix(dist(x[j,,drop=FALSE])))
         }else{
-          y <- rowSums(as.matrix(pdist::pdist(x[j,,drop=FALSE],
+          y <- rowSums(as.matrix(pdist(x[j,,drop=FALSE],
                                               x[i,,drop=FALSE],)))
         }
         y/(length(i)-as.integer(j %in% i))
       })
     }))
     a <- d[,clIndex,drop=FALSE]
-    b <- matrixStats::rowMins(d[,-clIndex,drop=FALSE])
+    b <- rowMins(d[,-clIndex,drop=FALSE])
     (b-a)/pmax(b,a)
   })
   unlist(o)[order(unlist(sp,recursive=TRUE))]

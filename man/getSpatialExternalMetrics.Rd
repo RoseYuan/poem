@@ -104,7 +104,7 @@ The allowed values for \code{metrics} depend on the value of \code{level}:
 \code{"nsAWH"}, \code{"nsWC"},\code{"nsAWC"}.
 \item If \code{level = "dataset"}, the allowed \code{metrics} are: \code{"nsRI"},
 \code{"nsARI"},\code{"nsWH"},\code{"nsAWH"}, \code{"nsWC"},\code{"nsAWC"},
-\code{"SpatialAccuracy"},\code{"SpatialRI"},\code{"SpatialARI"}.
+\code{"nsAccuracy"},\code{"SpatialRI"},\code{"SpatialARI"}.
 }
 }
 \examples{

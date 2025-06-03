@@ -143,16 +143,19 @@ emb2snn <- function(x, k, type="rank", BNPARAM=NULL){
 }
 
 # switch the values between two named items in a list
-.switchListItem <- function(mylist, name1, name2){
+.switchListItem <- function(my_list, name1, name2){
   # Switching the values
   temp <- my_list[[name1]]
   my_list[[name1]] <- my_list[[name2]]
   my_list[[name2]] <- temp
+  return(my_list)
 }
 
 # Check for unrecognized arguments and filter arguments for each function
 # example usage: function1(!!!.checkEllipsisArgs(fnList = list(function1, 
 # function2), a = 1, b = 2, c = 3)[[1]])
+# fnList: A list of functions (defaults to empty).
+# ...: Arbitrary named arguments to validate/split.
 .checkEllipsisArgs <- function(fnList=list(), ...) {
   args <- list(...)
   formal_args <- lapply(fnList, FUN=\(x) names(formals(x)))
