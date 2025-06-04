@@ -245,12 +245,18 @@ setMatchingAccuracy <- function(true, pred){
 }
 
 #' silhouetteWidths
-#'
+#' 
+#' Computes the silhouette widths. If the dataset is sufficiently small for the
+#' `cluster::silhouette` implementation to work, this will be used. Otherwise a
+#' slower chunked implementation is used.
+#' 
 #' @param x A numeric matrix or data.frame with observations as rows.
 #' @param labels An integer/factor vector of clustering labels, or length equal
 #'   to the number of rows in `x`.
 #'
 #' @return A numeric vector of silhouette widths for each element of `x`.
+#' @export
+#'
 #' @importFrom cluster silhouette
 #' @importFrom pdist pdist
 #' @importFrom matrixStats rowMins
@@ -265,7 +271,7 @@ silhouetteWidths <- function(x, labels){
   stopifnot(length(labels)==nrow(x))
   labels <- as.integer(droplevels(as.factor(labels)))
   if(nrow(x)^2L<.Machine$integer.max){
-    return(silhouette(labels, dist(x))[,3])
+    return(cluster::silhouette(labels, dist(x))[,3])
   }
   rowsPerLabel <- split(seq_len(nrow(x)), labels)
   sp <- lapply(rowsPerLabel, \(i){
