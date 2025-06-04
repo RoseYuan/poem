@@ -173,6 +173,43 @@
   return(ifelse(labels %in% singleton_clusters, noise_id, labels))
 }
 
+#' @title Compute Cross Distances
+#' @description Computes the cross distances between two sets of indices in matrix `X`.
+#' @param X Numeric matrix of samples.
+#' @param inds_a Integer vector of indices for the first set.
+#' @param inds_b Integer vector of indices for the second set.
+#' @param distance String specifying the distance metric.
+#' @return Numeric matrix of cross distances.
+#' @keywords internal
+.compute_cross_dists <- function(X, inds_a, inds_b, distance) {
+  if (length(inds_a) == 0 || length(inds_b) == 0) {
+    return(matrix(numeric(0), nrow = length(inds_a), ncol = length(inds_b)))
+  }
+  
+  if (distance == "euclidean") {
+    a <- X[inds_a, , drop = FALSE]
+    b <- X[inds_b, , drop = FALSE]
+    aa <- rowSums(a^2)
+    bb <- rowSums(b^2)
+    ab <- tcrossprod(a, b)
+    dists <- sqrt(pmax(outer(aa, bb, "+") - 2 * ab, 0))
+  } else if (distance == "sqeuclidean") {
+    a <- X[inds_a, , drop = FALSE]
+    b <- X[inds_b, , drop = FALSE]
+    aa <- rowSums(a^2)
+    bb <- rowSums(b^2)
+    ab <- tcrossprod(a, b)
+    dists <- pmax(outer(aa, bb, "+") - 2 * ab, 0)
+  } else {
+    # General method for other distances
+    dists <- as.matrix(dist(rbind(X[inds_a, , drop = FALSE], 
+                            X[inds_b, , drop = FALSE]), 
+                         method = distance))
+  }
+  dists[dists < 1e-12] <- 1e-12
+  return(dists)
+}
+
 #' @title Calculate DBCV Metric 
 #' @description Compute the DBCV (Density-Based Clustering Validation) metric.
 #' 
@@ -208,74 +245,107 @@
 #' dbcv(data[, c("x", "y")], data$hdbscan_label)
 dbcv <- function(X, labels, distance = "euclidean", noise_id = -1, 
                  check_duplicates = FALSE,
-                 use_igraph_mst = TRUE, BPPARAM=BiocParallel::SerialParam(), 
+                 use_igraph_mst = TRUE, BPPARAM = BiocParallel::SerialParam(), 
                  ...) {
   X <- as.matrix(X)
   labels <- as.integer(labels)
-  n <- dim(X)[1]
-  if (nrow(X) != length(labels)) {
+  n <- nrow(X)
+  if (n != length(labels)) {
     stop("Mismatch in number of samples and cluster labels.")
   }
   
   labels <- .convert_singleton_clusters_to_noise(labels, noise_id = noise_id)
-  
   non_noise_inds <- labels != noise_id
   X <- X[non_noise_inds, ]
   labels <- labels[non_noise_inds]
   
   if (length(labels) == 0) {
-    return(0.0)
+    return(list(vcs = numeric(0), dbcv = 0.0))
   }
-  
-  cluster_ids <- sort(unique(labels))
   
   if (check_duplicates) {
     .check_duplicated_samples(X)
   }
   
-  dists <- .compute_pair_to_pair_dists(X, distance = distance)
+  cluster_ids <- sort(unique(labels))
+  n_clusters <- length(cluster_ids)
+  cls_inds <- lapply(cluster_ids, function(id) which(labels == id))
   
-  dscs <- numeric(length(cluster_ids))
-  min_dspcs <- rep(Inf, length(cluster_ids))
+  # Initialize storage
+  dscs <- numeric(n_clusters)
+  min_dspcs <- rep(Inf, n_clusters)
+  internal_objects_per_cls <- vector("list", n_clusters)
+  internal_core_dists_per_cls <- vector("list", n_clusters)
   
-  internal_objects_per_cls <- list()
-  internal_core_dists_per_cls <- list()
+  # Process each cluster
+  density_sparseness_results <- BiocParallel::bplapply(
+    seq_along(cls_inds),
+    function(i) {
+      inds <- cls_inds[[i]]
+      X_cls <- X[inds, , drop = FALSE]
+      dists_intra <- .compute_pair_to_pair_dists(X_cls, distance = distance)
+      mutual_reach <- .compute_mutual_reach_dists(dists_intra, d = ncol(X))
+      internal_objects <- .get_internal_objects(
+        mutual_reach$mutual_reach_dists, 
+        use_igraph_mst = use_igraph_mst
+      )
+      dsc <- max(internal_objects$internal_edge_weights)
+      internal_node_inds_global <- inds[internal_objects$internal_node_inds]
+      internal_core_dists <- mutual_reach$core_dists[internal_objects$internal_node_inds]
+      list(
+        dsc = dsc,
+        internal_node_inds_global = internal_node_inds_global,
+        internal_core_dists = internal_core_dists
+      )
+    },
+    BPPARAM = BPPARAM
+  )
   
-  cls_inds <- lapply(cluster_ids, function(cls_id) which(labels == cls_id))
-  
-  density_sparseness_results <- bplapply(seq_along(cls_inds), function(cls_id) {
-    .fn_density_sparseness(cls_inds[[cls_id]], 
-                           .get_submatrix(dists, inds_a = cls_inds[[cls_id]]), 
-                          d = ncol(X), use_igraph_mst = use_igraph_mst)
-  }, BPPARAM=BPPARAM)
-  
-  for (cls_id in seq_along(density_sparseness_results)) {
-    internal_objects_per_cls[[cls_id]] <- 
-      density_sparseness_results[[cls_id]]$internal_node_inds
-    internal_core_dists_per_cls[[cls_id]] <- 
-      density_sparseness_results[[cls_id]]$internal_core_dists
-    dscs[cls_id] <- density_sparseness_results[[cls_id]]$dsc
+  # Extract results
+  for (i in seq_along(density_sparseness_results)) {
+    dscs[i] <- density_sparseness_results[[i]]$dsc
+    internal_objects_per_cls[[i]] <- density_sparseness_results[[i]]$internal_node_inds_global
+    internal_core_dists_per_cls[[i]] <- density_sparseness_results[[i]]$internal_core_dists
   }
   
-  if (length(cluster_ids) > 1) {
-    density_separation_results <- bplapply(combn(length(cluster_ids), 
-                                                 2, simplify = FALSE), 
-       function(pair) {
-      .fn_density_separation(pair[1], pair[2], 
-           .get_submatrix(dists, inds_a = internal_objects_per_cls[[pair[1]]], 
-                          inds_b = internal_objects_per_cls[[pair[2]]]),
-                            internal_core_dists_per_cls[[pair[1]]], 
-                            internal_core_dists_per_cls[[pair[2]]])
-    }, BPPARAM=BPPARAM)
+  # Process cluster pairs
+  if (n_clusters > 1) {
+    pairs <- utils::combn(n_clusters, 2, simplify = FALSE)
+    density_separation_results <- BiocParallel::bplapply(
+      pairs,
+      function(pair) {
+        i <- pair[1]
+        j <- pair[2]
+        inds_i <- internal_objects_per_cls[[i]]
+        inds_j <- internal_objects_per_cls[[j]]
+        if (length(inds_i) == 0 || length(inds_j) == 0) {
+          return(list(cls_i = i, cls_j = j, dspc_ij = Inf))
+        }
+        dists_inter <- .compute_cross_dists(
+          X, inds_i, inds_j, distance
+        )
+        core_i <- internal_core_dists_per_cls[[i]]
+        core_j <- internal_core_dists_per_cls[[j]]
+        mat_core_i <- matrix(core_i, nrow = length(core_i), ncol = length(core_j), byrow = FALSE)
+        mat_core_j <- matrix(core_j, nrow = length(core_i), ncol = length(core_j), byrow = TRUE)
+        sep <- pmax(dists_inter, mat_core_i, mat_core_j)
+        dspc_ij <- min(sep)
+        list(cls_i = i, cls_j = j, dspc_ij = dspc_ij)
+      },
+      BPPARAM = BPPARAM
+    )
     
     for (result in density_separation_results) {
-      min_dspcs[result$cls_i] <- min(min_dspcs[result$cls_i], result$dspc_ij)
-      min_dspcs[result$cls_j] <- min(min_dspcs[result$cls_j], result$dspc_ij)
+      i <- result$cls_i
+      j <- result$cls_j
+      min_dspcs[i] <- min(min_dspcs[i], result$dspc_ij)
+      min_dspcs[j] <- min(min_dspcs[j], result$dspc_ij)
     }
   }
   
+  # Compute validity scores
   vcs <- (min_dspcs - dscs) / pmax(min_dspcs, dscs)
   vcs[is.nan(vcs)] <- 0.0
-  dbcv <- sum(vcs * table(labels)) / n
-  return(list("vcs"=vcs ,"dbcv"=dbcv))
+  dbcv <- sum(vcs * table(labels)) / nrow(X)
+  return(list(vcs = vcs, dbcv = dbcv))
 }
