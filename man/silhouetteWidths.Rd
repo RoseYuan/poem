@@ -27,3 +27,4 @@ labels <- sample.int(3,100,replace=TRUE)
 # calculate SWs:
 sw <- silhouetteWidths(m, labels)
 }
+\keyword{internal}
