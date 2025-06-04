@@ -113,12 +113,6 @@ standard error of the mean across permutations (giving an idea of the
 precision of the adjusted metrics).</p></dd>
 
 
-<dt id="arg-returnelementpairaccuracy">returnElementPairAccuracy<a class="anchor" aria-label="anchor" href="#arg-returnelementpairaccuracy"></a></dt>
-<dd><p>Logical. If TRUE, returns the per-element
-pair accuracy instead of the various parition-level and dataset-level
-metrics. Default FALSE.</p></dd>
-
-
 <dt id="arg-bpparam">BPPARAM<a class="anchor" aria-label="anchor" href="#arg-bpparam"></a></dt>
 <dd><p>BiocParallel params for multithreading (default none)</p></dd>
 
@@ -134,9 +128,19 @@ lower dynamic range of the score). Default TRUE.</p></dd>
 Recommended and TRUE by default.</p></dd>
 
 
+<dt id="arg-lowmemory">lowMemory<a class="anchor" aria-label="anchor" href="#arg-lowmemory"></a></dt>
+<dd><p>Logical, whether to use a low memory mode. This is only
+useful when<code>hardTrue</code> and <code>fuzzyPred</code> is used. If <code>TRUE</code>,
+the function will compute the metrics in a low memory mode, which is
+slower but uses less memory. If <code>FALSE</code>, the function will compute the
+metrics in a high memory mode, which is faster but uses more memory.
+By default it is set automatically based on the size of the input data. See
+<code><a href="fuzzyHardMetrics.html">fuzzyHardMetrics</a></code>.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Optional arguments for <code><a href="fuzzyPartitionMetrics.html">fuzzyPartitionMetrics</a></code>:
-<code>tnorm</code>. Only useful when <code>fuzzy_true=TRUE</code> and <code>fuzzy_pred=TRUE</code>.</p></dd>
+<code>tnorm</code>. Only useful when <code>fuzzyTrue</code> and <code>fuzzyPred</code> is used.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -215,7 +219,17 @@ Recommended and TRUE by default.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 1.0000000       NaN     3         NA         NA      NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4        NA        NA    NA 1.00000000  1.0000000       1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5        NA        NA    NA 0.06166667 -0.8006397       2</span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">getFuzzyPartitionMetrics</span><span class="op">(</span>hardTrue<span class="op">=</span><span class="va">hardPred</span>, hardPred<span class="op">=</span><span class="va">hardTrue</span>, </span></span>
+<span class="r-in"><span>fuzzyPred<span class="op">=</span><span class="va">fuzzyTrue</span>, nperms<span class="op">=</span><span class="fl">3</span>, level<span class="op">=</span><span class="st">"class"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Comparing between a hard truth and a fuzzy prediction...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Standard error of the mean NDC across permutations:0.106</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> You might want to increase the number of permutations to increase the robustness of the adjusted metrics.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      fuzzyWC  fuzzyAWC class   fuzzyWH  fuzzyAWH cluster</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 1.00000000  1.000000     1        NA        NA      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.06166667 -1.978836     2        NA        NA      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3         NA        NA    NA 0.7195238 0.3967224       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4         NA        NA    NA 1.0000000       NaN       2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5         NA        NA    NA 1.0000000       NaN       3</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

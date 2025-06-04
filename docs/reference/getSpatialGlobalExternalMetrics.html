@@ -66,6 +66,7 @@ metrics and set matching-based accuracy.</p>
 <span>    <span class="st">"SpatialRI"</span>, <span class="st">"SpatialARI"</span><span class="op">)</span>,</span>
 <span>  fuzzy_true <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  fuzzy_pred <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  lowMemory <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -114,6 +115,16 @@ for <code>true</code>.</p></dd>
 <dt id="arg-fuzzy-pred">fuzzy_pred<a class="anchor" aria-label="anchor" href="#arg-fuzzy-pred"></a></dt>
 <dd><p>Logical; whether to compute fuzzy class memberships
 for <code>pred</code>.</p></dd>
+
+
+<dt id="arg-lowmemory">lowMemory<a class="anchor" aria-label="anchor" href="#arg-lowmemory"></a></dt>
+<dd><p>Logical, whether to use a low memory mode. This is only
+useful when<code>hardTrue</code> and <code>fuzzyPred</code> is used. If <code>TRUE</code>,
+the function will compute the metrics in a low memory mode, which is
+slower but uses less memory. If <code>FALSE</code>, the function will compute the
+metrics in a high memory mode, which is faster but uses more memory.
+By default it is set automatically based on the size of the input data. See
+<code><a href="fuzzyHardMetrics.html">fuzzyHardMetrics</a></code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
