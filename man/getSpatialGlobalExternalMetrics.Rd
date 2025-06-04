@@ -14,6 +14,7 @@ getSpatialGlobalExternalMetrics(
     "SpatialRI", "SpatialARI"),
   fuzzy_true = TRUE,
   fuzzy_pred = FALSE,
+  lowMemory = NULL,
   ...
 )
 }
@@ -43,6 +44,14 @@ for \code{true}.}
 
 \item{fuzzy_pred}{Logical; whether to compute fuzzy class memberships
 for \code{pred}.}
+
+\item{lowMemory}{Logical, whether to use a low memory mode. This is only
+useful when\code{hardTrue} and \code{fuzzyPred} is used. If \code{TRUE},
+the function will compute the metrics in a low memory mode, which is
+slower but uses less memory. If \code{FALSE}, the function will compute the
+metrics in a high memory mode, which is faster but uses more memory.
+By default it is set automatically based on the size of the input data. See
+\code{\link{fuzzyHardMetrics}}.}
 
 \item{...}{Optional params for \code{\link{fuzzyPartitionMetrics}} or
 \code{\link{findSpatialKNN}}.}

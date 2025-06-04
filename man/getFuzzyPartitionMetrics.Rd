@@ -47,10 +47,6 @@ more (max 1000) permutations will be run.}
 standard error of the mean across permutations (giving an idea of the
 precision of the adjusted metrics).}
 
-\item{returnElementPairAccuracy}{Logical. If TRUE, returns the per-element
-pair accuracy instead of the various parition-level and dataset-level
-metrics. Default FALSE.}
-
 \item{BPPARAM}{BiocParallel params for multithreading (default none)}
 
 \item{useNegatives}{Logical; whether to include negative pairs in the
@@ -60,8 +56,16 @@ lower dynamic range of the score). Default TRUE.}
 \item{usePairs}{Logical; whether to compute over pairs instead of elements
 Recommended and TRUE by default.}
 
+\item{lowMemory}{Logical, whether to use a low memory mode. This is only
+useful when\code{hardTrue} and \code{fuzzyPred} is used. If \code{TRUE},
+the function will compute the metrics in a low memory mode, which is
+slower but uses less memory. If \code{FALSE}, the function will compute the
+metrics in a high memory mode, which is faster but uses more memory.
+By default it is set automatically based on the size of the input data. See
+\code{\link{fuzzyHardMetrics}}.}
+
 \item{...}{Optional arguments for \code{\link{fuzzyPartitionMetrics}}:
-\code{tnorm}. Only useful when \code{fuzzy_true=TRUE} and \code{fuzzy_pred=TRUE}.}
+\code{tnorm}. Only useful when \code{fuzzyTrue} and \code{fuzzyPred} is used.}
 }
 \value{
 A dataframe of metric results.
@@ -122,5 +126,6 @@ hardTrue <- apply(fuzzyTrue,1,FUN=which.max)
 hardPred <- c(1,1,1,1,1,1,2,2,2)
 getFuzzyPartitionMetrics(hardPred=hardPred, hardTrue=hardTrue, 
 fuzzyTrue=fuzzyTrue, nperms=3, level="class")
-
+getFuzzyPartitionMetrics(hardTrue=hardPred, hardPred=hardTrue, 
+fuzzyPred=fuzzyTrue, nperms=3, level="class")
 }
