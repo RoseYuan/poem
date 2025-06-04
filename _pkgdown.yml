@@ -36,6 +36,7 @@ reference:
   contents:
   - CDbw
   - dbcv
+  - silhouetteWidths
 - subtitle: Fuzzy metrics
   contents:
   - fuzzyHardMetrics
