@@ -1,0 +1,9 @@
+bibentry(bibtype = "misc",
+         title = "On metrics for subpopulation detection in single-cell and spatial omics data",
+         author = c(person("Siyuan", "Luo"), person("Pierre-Luc", "Germain"),
+            person("Ferdinand", "von Meyenn"), person("Mark D.", "Robinson")),
+      	 year = {2024},
+         publisher = "bioRxiv",
+         journal = "bioRxiv",
+         doi = "10.1101/2024.11.28.625845"
+)
