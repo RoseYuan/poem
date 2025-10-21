@@ -88,10 +88,9 @@
     expect <- table(labels)/length(labels)
     return(mapply(nn=relist(labels[unlist(knn)],knn),
                   label=labels, FUN=function(nn,label){
-                    k <- ncol(knn$index)
-                    expected <- length(nn)*expect
+                    expected <- length(nn)*expect[label]
                     log2((pseudoCount+sum(nn==label))/
-                           (pseudoCount+length(nn)*expect))
+                           (pseudoCount+length(nn)*expected))
                   }))
   }
   .checkInputs(knn, labels)
