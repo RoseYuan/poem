@@ -15,11 +15,11 @@
   FUN(g, ...)
 }
 
-#' @importFrom igraph mean_distance decompose.graph is_directed V
+#' @importFrom igraph mean_distance decompose is_directed V
 .adjMeanShortestPath <- function(g, directed=FALSE, normalize=TRUE){
   stopifnot(is(g,"igraph"))
   if(is.null(directed)) directed <- FALSE
-  gc <- decompose.graph(g)
+  gc <- decompose(g)
   msp <- vapply(gc, directed=directed, FUN.VALUE=numeric(1L), FUN=mean_distance)
   amsp <- length(gc)+sum(pmax(1L,msp,na.rm=TRUE))
   if(normalize) amsp <- amsp/length(V(g))
