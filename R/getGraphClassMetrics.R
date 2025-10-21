@@ -154,9 +154,9 @@ setMethod("getGraphClassMetrics", signature="matrix",
 
 #' @rdname getGraphClassMetrics
 setMethod("getGraphClassMetrics", signature="igraph",
-          definition=function(x, labels, ...){
+          definition=function(x, labels, metrics, ...){
             stopifnot(is(x,"igraph"))
-            .getGraphClassMetricsFromGraph(x, labels=labels, ...)
+            .getGraphClassMetricsFromGraph(x, labels=labels, metrics=metrics, ...)
           })
 
 
@@ -177,7 +177,7 @@ setMethod("getGraphClassMetrics", signature="igraph",
 
 #' @rdname getGraphClassMetrics
 setMethod("getGraphClassMetrics", signature="dist",
-          definition=function(x, labels, ...){
+          definition=function(x, labels, metrics, ...){
             stopifnot(is(x,"dist"))
-            .getGraphClassMetricsFromDist(x, labels=labels, ...)
+            .getGraphClassMetricsFromDist(x, labels=labels, metrics=metrics, ...)
           })
