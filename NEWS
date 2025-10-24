@@ -1,10 +1,9 @@
+			Changes in version 1.1.3 (2025-10-21)
++ Fixed bug of metrics argument not being passed with graph input
+
                         Changes in version 1.1.2
-
 + lowMemory argument added to getFuzzyPartitionMetrics()
-
 + returnElementPairAccuracy argument removed from getFuzzyPartitionMetrics(), 
   getFuzzyPartitionGlobalMetrics() and getFuzzyPartitionClassMetrics()
-
 + SpatialAccuracy metric renamed to nsAccuracy for consistency
-
 + Bug fixed in getEmbeddingGlobalMetrics() and getFuzzyPartitionMetrics()

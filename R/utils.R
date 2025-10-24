@@ -227,7 +227,9 @@ emb2snn <- function(x, k, type="rank", BNPARAM=NULL){
 .class2global <- function(class_res, summarize_fun=base::mean){
   stopifnot(is.data.frame(class_res))
   class_res$class <- 1
-  res <- aggregate(. ~ class, data = class_res, FUN = summarize_fun)
+  # use NA-insensitive aggregation by default
+  res <- aggregate(. ~ class, data = class_res, 
+                   FUN = function(x) summarize_fun(x, na.rm = TRUE))
   subset(res, select = -class)
 }
 
