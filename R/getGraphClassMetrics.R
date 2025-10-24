@@ -46,23 +46,43 @@ attr(getGraphClassMetrics, "allowed_metrics") <- c("SI", "ISI", "NP", "NCE",
   tt <- as.integer(table(labels))
   res <- as.data.frame(lapply(setNames(metrics,metrics), FUN=function(m){
     switch(m,
-           SI=rowsum(.simpsonIndex(x, labels, directed=directed), 
-                     labels)[,1]/tt,
-           ISI=rowsum(1/.simpsonIndex(x, labels, directed=directed), 
-                      labels)[,1]/tt,
-           NP=rowsum(.nPurity(x, labels, directed=directed), 
-                     labels)[,1]/tt,
-           NCE=rowsum(.nlog2Enrichment(x, labels, directed=directed), 
-                      labels)[,1]/tt,
+          SI={
+             v <- .simpsonIndex(x, labels, directed=directed)
+             num <- rowsum(v, labels, na.rm=TRUE)[,1]
+             den <- rowsum(as.integer(!is.na(v)), labels)[,1]
+             num/ifelse(den==0, NA_real_, den)
+           },
+           ISI={
+             v <- 1/.simpsonIndex(x, labels, directed=directed)
+             num <- rowsum(v, labels, na.rm=TRUE)[,1]
+             den <- rowsum(as.integer(!is.na(v)), labels)[,1]
+             num/ifelse(den==0, NA_real_, den)
+           },
+           NP={
+             v <- .nPurity(x, labels, directed=directed)
+             num <- rowsum(v, labels, na.rm=TRUE)[,1]
+             den <- rowsum(as.integer(!is.na(v)), labels)[,1]
+             num/ifelse(den==0, NA_real_, den)
+           },
+           NCE={
+             v <- .nlog2Enrichment(x, labels, directed=directed)
+             num <- rowsum(v, labels, na.rm=TRUE)[,1]
+             den <- rowsum(as.integer(!is.na(v)), labels)[,1]
+             num/ifelse(den==0, NA_real_, den)
+           },
            adhesion=.igraphFunPerClass(g, FUN=igraph::adhesion, 
                                        directed=directed),
            cohesion=.igraphFunPerClass(g, FUN=igraph::cohesion, 
                                        directed=directed),
            AMSP=.igraphFunPerClass(g, FUN=.adjMeanShortestPath, 
                                    directed=directed),
-           PWC=as.numeric(rowsum(as.integer(.nPurity(x,labels, 
-                                                     directed=directed)<=0.5),
-                                 labels)[,1]/tt),
+       PWC={
+             pur <- .nPurity(x, labels, directed=directed)
+             v <- as.integer(pur <= 0.5)
+             num <- rowsum(v, labels, na.rm=TRUE)[,1]
+         den <- rowsum(as.integer(!is.na(pur)), labels)[,1]
+             as.numeric(num/ifelse(den==0, NA_real_, den))
+           },
            stop("Unknown metric ", m)
            )
   }))
@@ -128,23 +148,43 @@ setMethod("getGraphClassMetrics", signature="matrix",
   tt <- as.integer(table(labels))
   res <- as.data.frame(lapply(setNames(metrics,metrics), FUN=function(m){
     switch(m,
-           SI=rowsum(.simpsonIndex(x, labels, directed=directed), 
-                     labels)[,1]/tt,
-           ISI=rowsum(1/.simpsonIndex(x, labels, directed=directed), 
-                      labels)[,1]/tt,
-           NP=rowsum(.nPurity(x, labels, directed=directed), 
-                     labels)[,1]/tt,
-           NCE=rowsum(.nlog2Enrichment(x, labels, directed=directed), 
-                      labels)[,1]/tt,
+          SI={
+             v <- .simpsonIndex(x, labels, directed=directed)
+             num <- rowsum(v, labels, na.rm=TRUE)[,1]
+             den <- rowsum(as.integer(!is.na(v)), labels)[,1]
+             num/ifelse(den==0, NA_real_, den)
+           },
+           ISI={
+             v <- 1/.simpsonIndex(x, labels, directed=directed)
+             num <- rowsum(v, labels, na.rm=TRUE)[,1]
+             den <- rowsum(as.integer(!is.na(v)), labels)[,1]
+             num/ifelse(den==0, NA_real_, den)
+           },
+           NP={
+             v <- .nPurity(x, labels, directed=directed)
+             num <- rowsum(v, labels, na.rm=TRUE)[,1]
+             den <- rowsum(as.integer(!is.na(v)), labels)[,1]
+             num/ifelse(den==0, NA_real_, den)
+           },
+           NCE={
+             v <- .nlog2Enrichment(x, labels, directed=directed)
+             num <- rowsum(v, labels, na.rm=TRUE)[,1]
+             den <- rowsum(as.integer(!is.na(v)), labels)[,1]
+             num/ifelse(den==0, NA_real_, den)
+           },
            adhesion=.igraphFunPerClass(x, FUN=igraph::adhesion, 
                                        directed=directed),
            cohesion=.igraphFunPerClass(x, FUN=igraph::cohesion, 
                                        directed=directed),
            AMSP=.igraphFunPerClass(x, FUN=.adjMeanShortestPath, 
                                    directed=directed),
-           PWC=as.numeric(rowsum(as.integer(.nPurity(x,labels, 
-                                                     directed=directed)<=0.5),
-                                 labels)[,1]/tt),
+       PWC={
+             pur <- .nPurity(x, labels, directed=directed)
+             v <- as.integer(pur <= 0.5)
+             num <- rowsum(v, labels, na.rm=TRUE)[,1]
+         den <- rowsum(as.integer(!is.na(pur)), labels)[,1]
+             as.numeric(num/ifelse(den==0, NA_real_, den))
+           },
            stop("Unknown metric ", m)
     )
   }))
