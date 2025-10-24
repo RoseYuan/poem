@@ -19,7 +19,7 @@ the more standard implementation of the metrics."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">poem</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -187,13 +187,12 @@ permutation-based fuzzy version of the adjusted Rand index.</p></dd>
 <span class="r-in"><span><span class="co"># some predicted labels:</span></span></span>
 <span class="r-in"><span><span class="va">hardPred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">fuzzyHardMetrics</span><span class="op">(</span><span class="va">hardTrue</span>, <span class="va">fuzzyTrue</span>, <span class="va">hardPred</span>, nperms<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Standard error of the mean NDC across permutations:0.0352</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> You might want to increase the number of permutations to increase the robustness of the adjusted metrics.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Standard error of the mean NDC across permutations:0.000245</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $NDC</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.7581944</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ACI</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5394992</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5685967</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fuzzyWH</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fuzzyWH$global</span>
@@ -215,20 +214,20 @@ permutation-based fuzzy version of the adjusted Rand index.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fuzzyAWH</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fuzzyAWH$global</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.6403322</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.6669953</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fuzzyAWH$perPartition</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         1         2 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1.000000 -3.456464 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1    2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1 -Inf </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fuzzyAWC</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fuzzyAWC$global</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4682516</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4976546</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fuzzyAWC$perPartition</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         1         2         3 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.4682516       NaN       NaN </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.4976546       NaN       NaN </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>

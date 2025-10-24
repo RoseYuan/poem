@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">poem</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -183,14 +183,14 @@ By default it is set automatically based on the size of the input data. See
 <span class="r-in"><span><span class="fu">getFuzzyPartitionMetrics</span><span class="op">(</span>fuzzyTrue<span class="op">=</span><span class="va">m1</span>,fuzzyPred<span class="op">=</span><span class="va">m2</span>, level<span class="op">=</span><span class="st">"class"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Comparing between a fuzzy truth and a fuzzy prediction...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Running 100 extra permutations.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Standard error of the mean NDC across permutations:0.00215</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Standard error of the mean NDC across permutations:0.00238</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     fuzzyWC    fuzzyAWC class   fuzzyWH   fuzzyAWH cluster</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.3445840  0.05010597     1        NA         NA      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.7242508 -0.02250224     2        NA         NA      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 0.7520319  0.06388584     3        NA         NA      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        NA          NA    NA 0.9359492  0.8286227       1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5        NA          NA    NA 0.9214151  0.8274947       2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6        NA          NA    NA 0.1588990 -1.1160180       3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.3445840  0.04491864     1        NA         NA      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.7242508 -0.03533695     2        NA         NA      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 0.7520319  0.06834937     3        NA         NA      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        NA          NA    NA 0.9359492  0.8310175       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        NA          NA    NA 0.9214151  0.8267223       2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6        NA          NA    NA 0.1588990 -1.2635621       3</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># generate a fuzzy truth:</span></span></span>
 <span class="r-in"><span><span class="va">fuzzyTrue</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
@@ -211,25 +211,24 @@ By default it is set automatically based on the size of the input data. See
 <span class="r-in"><span><span class="fu">getFuzzyPartitionMetrics</span><span class="op">(</span>hardPred<span class="op">=</span><span class="va">hardPred</span>, hardTrue<span class="op">=</span><span class="va">hardTrue</span>, </span></span>
 <span class="r-in"><span>fuzzyTrue<span class="op">=</span><span class="va">fuzzyTrue</span>, nperms<span class="op">=</span><span class="fl">3</span>, level<span class="op">=</span><span class="st">"class"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Comparing between a fuzzy truth and a hard prediction...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Standard error of the mean NDC across permutations:0.0947</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> You might want to increase the number of permutations to increase the robustness of the adjusted metrics.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     fuzzyWC  fuzzyAWC class    fuzzyWH   fuzzyAWH cluster</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.7195238 0.3542847     1         NA         NA      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 1.0000000       NaN     2         NA         NA      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 1.0000000       NaN     3         NA         NA      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        NA        NA    NA 1.00000000  1.0000000       1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5        NA        NA    NA 0.06166667 -0.8006397       2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Standard error of the mean NDC across permutations:0.00158</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     fuzzyWC  fuzzyAWC class    fuzzyWH fuzzyAWH cluster</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.7195238 0.4967246     1         NA       NA      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 1.0000000       NaN     2         NA       NA      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 1.0000000       NaN     3         NA       NA      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        NA        NA    NA 1.00000000        1       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        NA        NA    NA 0.06166667     -Inf       2</span>
 <span class="r-in"><span><span class="fu">getFuzzyPartitionMetrics</span><span class="op">(</span>hardTrue<span class="op">=</span><span class="va">hardPred</span>, hardPred<span class="op">=</span><span class="va">hardTrue</span>, </span></span>
 <span class="r-in"><span>fuzzyPred<span class="op">=</span><span class="va">fuzzyTrue</span>, nperms<span class="op">=</span><span class="fl">3</span>, level<span class="op">=</span><span class="st">"class"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Comparing between a hard truth and a fuzzy prediction...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Standard error of the mean NDC across permutations:0.106</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Standard error of the mean NDC across permutations:0.0353</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> You might want to increase the number of permutations to increase the robustness of the adjusted metrics.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      fuzzyWC  fuzzyAWC class   fuzzyWH  fuzzyAWH cluster</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 1.00000000  1.000000     1        NA        NA      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.06166667 -1.978836     2        NA        NA      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3         NA        NA    NA 0.7195238 0.3967224       1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4         NA        NA    NA 1.0000000       NaN       2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5         NA        NA    NA 1.0000000       NaN       3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      fuzzyWC  fuzzyAWC class   fuzzyWH fuzzyAWH cluster</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 1.00000000  1.000000     1        NA       NA      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.06166667 -3.540323     2        NA       NA      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3         NA        NA    NA 0.7195238  0.46737       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4         NA        NA    NA 1.0000000      NaN       2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5         NA        NA    NA 1.0000000      NaN       3</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
