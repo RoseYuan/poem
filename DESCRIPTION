@@ -25,7 +25,6 @@ Imports:
     clevr,
     clue,
     cluster,
-    elsa,
     fclust,
     igraph,
     Matrix,
@@ -33,12 +32,8 @@ Imports:
     mclustcomp,
     methods,
     pdist,
-    sp,
-    spdep,
     stats,
-    utils,
-    SpatialExperiment,
-    SummarizedExperiment
+    utils
 Suggests: 
     testthat (>= 3.0.0),
     BiocStyle,
@@ -51,7 +46,12 @@ Suggests:
     ggnetwork,
     ggplot2,
     tidyr,
-    STexampleData
+    STexampleData,
+    SpatialExperiment,
+    SummarizedExperiment,
+    elsa,
+    sp,
+    spdep
 VignetteBuilder: knitr
 biocViews: DimensionReduction, Clustering, GraphAndNetwork, Spatial, ATACSeq, SingleCell, 
     RNASeq, Software, Visualization

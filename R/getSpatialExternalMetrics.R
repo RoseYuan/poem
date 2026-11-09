@@ -28,8 +28,6 @@
 #' @inheritParams getSpatialElementExternalMetrics
 #' @param ... Additional arguments passed to specific methods.
 #' @return A data.frame of metrics based on the specified input.
-#' @importFrom SpatialExperiment spatialCoords SpatialExperiment
-#' @importFrom SummarizedExperiment colData "colData<-" 
 #' @examples
 #' # Example with individual components
 #' data(sp_toys)
@@ -95,19 +93,22 @@ setMethod("getSpatialExternalMetrics", signature(object="missing"),
           })
 
 #' @rdname getSpatialExternalMetrics
-setMethod("getSpatialExternalMetrics", signature(object="SpatialExperiment"), 
+setMethod("getSpatialExternalMetrics", signature(object="ANY"), 
           function(object, true, pred, k, alpha, level, metrics, 
           fuzzy_true, fuzzy_pred, ...) {
-            if (!true %in% colnames(colData(object))) {
+            if (!is(object, "SpatialExperiment"))
+              stop("`object` must be a SpatialExperiment.")
+            .requireSuggested("SpatialExperiment", "A SpatialExperiment `object`")
+            if (!true %in% colnames(SummarizedExperiment::colData(object))) {
               stop("The column", true, "is not present.")
             }
-            if (!pred %in% colnames(colData(object))) {
+            if (!pred %in% colnames(SummarizedExperiment::colData(object))) {
               stop("The column", pred, "is not present.")
             }
             # Extract true, pred, and location from the SpatialExperiment object
-            true <- colData(object)[, true]
-            pred <- colData(object)[, pred]
-            location <- data.frame(spatialCoords(object))
+            true <- SummarizedExperiment::colData(object)[, true]
+            pred <- SummarizedExperiment::colData(object)[, pred]
+            location <- data.frame(SpatialExperiment::spatialCoords(object))
             # Call the main function
             getSpatialExternalMetrics(true=true, pred=pred, location=location, 
                                        k=k, alpha=alpha, level=level, 

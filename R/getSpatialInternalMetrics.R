@@ -15,8 +15,6 @@
 #' @param level The level to calculate the metrics. Options include `"element"`,
 #' `"class"` and `"dataset"`.
 #' @return A data.frame of metrics.
-#' @importFrom SpatialExperiment spatialCoords SpatialExperiment
-#' @importFrom SummarizedExperiment colData "colData<-" 
 #' @export
 #' @details
 #' The allowed values for `metrics` depend on the value of `level`:
@@ -78,14 +76,17 @@ setMethod("getSpatialInternalMetrics", signature(object="missing"),
           })
 
 #' @rdname getSpatialInternalMetrics
-setMethod("getSpatialInternalMetrics", signature(object="SpatialExperiment"), 
+setMethod("getSpatialInternalMetrics", signature(object="ANY"), 
           function(object, labels, k, level, metrics, ...) {
-            if (!labels %in% colnames(colData(object))) {
+            if (!is(object, "SpatialExperiment"))
+              stop("`object` must be a SpatialExperiment.")
+            .requireSuggested("SpatialExperiment", "A SpatialExperiment `object`")
+            if (!labels %in% colnames(SummarizedExperiment::colData(object))) {
               stop("The column", labels, "is not present.")
             }
             # Extract true, pred, and location from the SpatialExperiment object
-            labels <- colData(object)[, labels]
-            location <- data.frame(spatialCoords(object))
+            labels <- SummarizedExperiment::colData(object)[, labels]
+            location <- data.frame(SpatialExperiment::spatialCoords(object))
             # Call the main function
             getSpatialInternalMetrics(labels=labels, 
                                       location=location, 
