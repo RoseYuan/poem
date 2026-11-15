@@ -186,16 +186,21 @@ attr(getSpatialElementInternalMetrics, "allowed_metrics") <- c("PAS","ELSA")
 getSpatialClassInternalMetrics <- function(labels, location, k=6, 
                                       metrics=c("CHAOS", "PAS", "ELSA"), ...){
   res <- data.frame(class=sort(unique(labels)))
-  PAS <- .element2class(data.frame(PAS=PAS(labels, location, 
-                                           k=k, ...)$abnormalty, class=labels))
-  ELSA <- .element2class(data.frame(ELSA=ELSA(labels, location, 
-                                              k=k), class=labels))
-  CHAOS <- data.frame(CHAOS=CHAOS(labels, location, BNPARAM=NULL)$CHAOS_class, 
-                              class=names(CHAOS(labels, location, 
-                                                BNPARAM=NULL)$CHAOS_class))
-  if("PAS" %in% metrics){res <- merge(res, PAS, by="class")}
-  if("ELSA" %in% metrics){res <- merge(res, ELSA, by="class")}
-  if("CHAOS" %in% metrics){res <- merge(res, CHAOS, by="class")}
+  # Only compute the requested metrics (ELSA needs suggested packages)
+  if("PAS" %in% metrics){
+    PAS <- .element2class(data.frame(PAS=PAS(labels, location,
+                                             k=k, ...)$abnormalty, class=labels))
+    res <- merge(res, PAS, by="class")
+  }
+  if("ELSA" %in% metrics){
+    ELSA <- .element2class(data.frame(ELSA=ELSA(labels, location,
+                                                k=k), class=labels))
+    res <- merge(res, ELSA, by="class")
+  }
+  if("CHAOS" %in% metrics){
+    chaos <- CHAOS(labels, location, BNPARAM=NULL)$CHAOS_class
+    res <- merge(res, data.frame(CHAOS=chaos, class=names(chaos)), by="class")
+  }
   colnames(res)[colnames(res) == "ELSA.ELSA"] <- "ELSA"
   return(res)
 }

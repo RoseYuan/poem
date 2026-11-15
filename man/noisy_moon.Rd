@@ -19,7 +19,7 @@ centers.}
 }
 }
 \usage{
-noisy_moon
+data(noisy_moon)
 }
 \description{
 A simple toy dataset consists of two interleaving half circles. The code to

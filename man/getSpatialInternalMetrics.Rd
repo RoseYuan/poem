@@ -3,7 +3,7 @@
 \name{getSpatialInternalMetrics}
 \alias{getSpatialInternalMetrics}
 \alias{getSpatialInternalMetrics,missing-method}
-\alias{getSpatialInternalMetrics,SpatialExperiment-method}
+\alias{getSpatialInternalMetrics,ANY-method}
 \title{Compute internal metrics for spatial data}
 \usage{
 getSpatialInternalMetrics(
@@ -26,7 +26,7 @@ getSpatialInternalMetrics(
   ...
 )
 
-\S4method{getSpatialInternalMetrics}{SpatialExperiment}(
+\S4method{getSpatialInternalMetrics}{ANY}(
   object = NULL,
   labels,
   location = NULL,

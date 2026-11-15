@@ -16,7 +16,7 @@ A data frame.
 }
 }
 \usage{
-toyExamples
+data(toyExamples)
 }
 \description{
 Toy example 2D embeddings of elements of different classes, with varying

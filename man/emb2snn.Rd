@@ -15,7 +15,7 @@ rows) from which nearest neighbors will be computed.}
 \item{type}{A string specifying the type of weighting scheme to use for
 shared neighbors.
 Possible choices include "rank", "number", and "jaccard". See \code{type} in
-\code{\link[bluster:makeSNNGraph]{bluster::neighborsToSNNGraph()}} for details.}
+\code{\link[bluster:neighborsToSNNGraph]{bluster::neighborsToSNNGraph()}} for details.}
 
 \item{BNPARAM}{A BiocNeighbors parameter object to compute kNNs. Ignored
 unless the input is a matrix or data.frame. If omitted, the Annoy

@@ -18,7 +18,7 @@ spots:
 }
 }
 \usage{
-sp_toys
+data(sp_toys)
 }
 \description{
 Toy examples of spatial data. The code to generate the dataset is at

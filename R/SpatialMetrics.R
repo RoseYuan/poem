@@ -119,7 +119,8 @@ CHAOS <- function(labels, location, BNPARAM=NULL) {
 #' ELSA(data$p2, data[,c("x", "y")], k=6)
 #' @export
 ELSA <- function(labels, location, k=10){
-  .requireSuggested(c("sp", "spdep", "elsa"), "ELSA()")
+  .requireSuggested(c("sp", "spdep", "elsa"), "ELSA",
+    hint='or, in getSpatialInternalMetrics(), leave "ELSA" out of `metrics`')
   labels <- as.numeric(labels)
   spdf <- sp::SpatialPointsDataFrame(location, data=data.frame(label=labels))
   k1 <- spdep::knn2nb(spdep::knearneigh(location, k=k))
@@ -317,9 +318,12 @@ spatialARI <- function(true, pred, location, normCoords=TRUE, lambda=0.8, fbeta=
 }
 
 # Stop with an install hint when a suggested package is missing.
-.requireSuggested <- function(pkgs, what) {
+# `hint` is an optional extra way out, appended to the message.
+.requireSuggested <- function(pkgs, what, hint=NULL) {
   missing <- pkgs[!vapply(pkgs, requireNamespace, logical(1), quietly=TRUE)]
   if (length(missing))
     stop(what, " requires the package(s) ", paste(missing, collapse=", "),
-         "; install them to use it.", call.=FALSE)
+         ". Install them with BiocManager::install(c(",
+         paste0('"', missing, '"', collapse=", "), "))",
+         if (!is.null(hint)) paste0(", ", hint), ".", call.=FALSE)
 }
