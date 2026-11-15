@@ -11,7 +11,7 @@ A data frame.
 }
 }
 \usage{
-metric_info
+data(metric_info)
 }
 \description{
 A dataframe storing the information of all metrics. The code to

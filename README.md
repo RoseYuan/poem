@@ -33,3 +33,36 @@ BiocManager::install("poem")
 
 In case you have any questions or suggestions to `poem`, please consider opening an
 issue to the [GitHub repository](https://github.com/RoseYuan/poem).
+
+## Citation
+
+If you use *poem* or find it useful, please cite:
+
+Luo S, Germain P, von Meyenn F, Robinson M (2025). “On metrics for subpopulation detection in single-cell and spatial omics data.” Nucleic Acids Research, 53(18). doi:10.1093/nar/gkaf921, https://doi.org/10.1093/nar/gkaf921.
+
+### Bioconductor package
+poem: POpulation-based Evaluation Metrics (v1.3.0). Bioconductor DOI: 10.18129/B9.bioc.poem, https://bioconductor.org/packages/poem/.
+
+
+### BibTeX
+
+```bibtex
+@article{Luo2025Poem,
+  title   = {On metrics for subpopulation detection in single-cell and spatial omics data},
+  author  = {Luo, Siyuan and Germain, Pierre-Luc and von Meyenn, Ferdinand and Robinson, Mark D.},
+  journal = {Nucleic Acids Research},
+  volume  = {53},
+  number  = {18},
+  pages   = {gkaf921},
+  year    = {2025},
+  doi     = {10.1093/nar/gkaf921}
+}
+
+@manual{poemBioc,
+  title        = {{poem}: POpulation-based Evaluation Metrics},
+  author       = {Luo, Siyuan and Germain, Pierre-Luc},
+  year         = {2025},
+  note         = {R package version 1.3.0, Bioconductor},
+  doi          = {10.18129/B9.bioc.poem},
+  url          = {https://bioconductor.org/packages/poem/}
+}

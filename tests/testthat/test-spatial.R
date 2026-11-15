@@ -1,7 +1,17 @@
 data(sp_toys)
 d <- sp_toys
 
+test_that("Class-level internal metrics only compute what is requested", {
+  # ELSA needs suggested packages, so it must not run unless asked for
+  local_mocked_bindings(ELSA=function(...) stop("ELSA should not be called"))
+  sm <- getSpatialInternalMetrics(labels=d$label, location=d[,seq_len(2)],
+                                  level="class", metrics="CHAOS")
+  expect_identical(colnames(sm), c("class", "CHAOS"))
+})
+
 test_that("Internal spatial metrics work", {
+  skip_if_not_installed("elsa")
+  skip_if_not_installed("spdep")
   sm <- getSpatialInternalMetrics(labels=d$label, location=d[,seq_len(2)], 
                                   level="dataset")
   expect_true(all(!is.na(as.matrix(sm))))

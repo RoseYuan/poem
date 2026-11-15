@@ -3,7 +3,7 @@
 \name{getSpatialExternalMetrics}
 \alias{getSpatialExternalMetrics}
 \alias{getSpatialExternalMetrics,missing-method}
-\alias{getSpatialExternalMetrics,SpatialExperiment-method}
+\alias{getSpatialExternalMetrics,ANY-method}
 \title{Calculate Spatial External Metrics}
 \usage{
 getSpatialExternalMetrics(
@@ -34,7 +34,7 @@ getSpatialExternalMetrics(
   ...
 )
 
-\S4method{getSpatialExternalMetrics}{SpatialExperiment}(
+\S4method{getSpatialExternalMetrics}{ANY}(
   object = NULL,
   true,
   pred,

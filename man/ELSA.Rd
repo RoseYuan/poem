@@ -21,6 +21,7 @@ dataset.
 \description{
 Calculating the Entropy-based Local indicator of Spatial Association (ELSA)
 scores, which consist of Ea, Ec and the overall ELSA.
+Requires the suggested packages sp, spdep and elsa.
 }
 \examples{
 data(sp_toys)

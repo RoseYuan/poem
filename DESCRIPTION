@@ -1,6 +1,6 @@
 Package: poem
 Title: POpulation-based Evaluation Metrics
-Version: 1.1.7
+Version: 1.5.1
 Authors@R: c(
     person("Siyuan", "Luo", email="roseluosy@gmail.com", role=c("cre","aut"), comment=c(ORCID="0009-0007-6404-3244")),
     person("Pierre-Luc", "Germain", email="pierre-luc.germain@hest.ethz.ch", role=c("aut","ctb"),
@@ -14,7 +14,6 @@ License: GPL (>= 3)
 URL: https://roseyuan.github.io/poem/
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
 Depends:
     R (>= 4.0)
 Imports:
@@ -25,7 +24,6 @@ Imports:
     clevr,
     clue,
     cluster,
-    elsa,
     fclust,
     igraph,
     Matrix,
@@ -33,14 +31,10 @@ Imports:
     mclustcomp,
     methods,
     pdist,
-    sp,
-    spdep,
     stats,
-    utils,
-    SpatialExperiment,
-    SummarizedExperiment
+    utils
 Suggests: 
-    testthat (>= 3.0.0),
+    testthat (>= 3.1.7),
     BiocStyle,
     knitr,
     DT,
@@ -51,8 +45,14 @@ Suggests:
     ggnetwork,
     ggplot2,
     tidyr,
-    STexampleData
+    STexampleData,
+    SpatialExperiment,
+    SummarizedExperiment,
+    elsa,
+    sp,
+    spdep
 VignetteBuilder: knitr
 biocViews: DimensionReduction, Clustering, GraphAndNetwork, Spatial, ATACSeq, SingleCell, 
     RNASeq, Software, Visualization
 Config/testthat/edition: 3
+Config/roxygen2/version: 8.1.1
