@@ -105,11 +105,9 @@ CHAOS <- function(labels, location, BNPARAM=NULL) {
 #' @description
 #' Calculating the Entropy-based Local indicator of Spatial Association (ELSA) 
 #' scores, which consist of Ea, Ec and the overall ELSA.
+#' Requires the suggested packages sp, spdep and elsa.
 #' 
 #' @inheritParams PAS
-#' @importFrom sp SpatialPointsDataFrame
-#' @importFrom spdep knn2nb knearneigh nbdists
-#' @importFrom elsa elsa dneigh
 #' @references Naimi, Babak, et al., 2019; 10.1016/j.spasta.2018.10.001
 #' @return A dataframe containing the Ea, Ec and ELSA for all samples in the 
 #' dataset.
@@ -121,6 +119,7 @@ CHAOS <- function(labels, location, BNPARAM=NULL) {
 #' ELSA(data$p2, data[,c("x", "y")], k=6)
 #' @export
 ELSA <- function(labels, location, k=10){
+  .requireSuggested(c("sp", "spdep", "elsa"), "ELSA()")
   labels <- as.numeric(labels)
   spdf <- sp::SpatialPointsDataFrame(location, data=data.frame(label=labels))
   k1 <- spdep::knn2nb(spdep::knearneigh(location, k=k))
@@ -315,4 +314,12 @@ spatialARI <- function(true, pred, location, normCoords=TRUE, lambda=0.8, fbeta=
   expSpRI <- 1 + 2*p*q - (p+q) + (sF*q + sH*p - (sH+sF)*p*q)/n_choose
   spARI <- (spRI-expSpRI)/(1-expSpRI)
   c(spRI=spRI, spARI=spARI)
+}
+
+# Stop with an install hint when a suggested package is missing.
+.requireSuggested <- function(pkgs, what) {
+  missing <- pkgs[!vapply(pkgs, requireNamespace, logical(1), quietly=TRUE)]
+  if (length(missing))
+    stop(what, " requires the package(s) ", paste(missing, collapse=", "),
+         "; install them to use it.", call.=FALSE)
 }
