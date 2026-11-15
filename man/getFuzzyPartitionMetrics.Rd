@@ -13,10 +13,10 @@ getFuzzyPartitionMetrics(
   level = "class",
   nperms = NULL,
   verbose = TRUE,
-  returnElementPairAccuracy = FALSE,
   BPPARAM = BiocParallel::SerialParam(),
   useNegatives = TRUE,
   usePairs = NULL,
+  lowMemory = NULL,
   ...
 )
 }
