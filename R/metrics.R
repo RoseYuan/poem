@@ -7,9 +7,11 @@
   if(!is.null(classAttr)){
     va <- vertex_attr(g,classAttr)
     stopifnot(is.factor(va) || is.character(va) || is.integer(va))
-    names(cls) <- cls <- unique(va)
-    return(vapply(cls, FUN.VALUE=numeric(1L), FUN=function(cl){
-      FUN(subgraph(g, vids=which(va==cl)), ...)
+    # split() orders classes like levels(as.factor(va)), which callers use as
+    # row names; unique() would give first-appearance order instead.
+    idx <- split(seq_along(va), va)
+    return(vapply(idx, FUN.VALUE=numeric(1L), FUN=function(i){
+      FUN(subgraph(g, vids=i), ...)
     }))
   }
   FUN(g, ...)
@@ -20,7 +22,10 @@
   stopifnot(is(g,"igraph"))
   if(is.null(directed)) directed <- FALSE
   gc <- decompose(g)
-  msp <- vapply(gc, directed=directed, FUN.VALUE=numeric(1L), FUN=mean_distance)
+  # weights=NA: hop counts. Edge weights (e.g. SNN) are similarities, not
+  # lengths, and igraph would otherwise use them by default.
+  msp <- vapply(gc, directed=directed, weights=NA, FUN.VALUE=numeric(1L),
+                FUN=mean_distance)
   amsp <- length(gc)+sum(pmax(1L,msp,na.rm=TRUE))
   if(normalize) amsp <- amsp/length(V(g))
   return(amsp)
