@@ -58,3 +58,20 @@ test_that("Dataset-level graph metrics work", {
   expect_true(m$SI>0.6 & m$SI<0.9)
   expect_true(m$PWC>0.1 & m$PWC<0.3)
 })
+test_that("Per-class AMSP is assigned to the right class", {
+  x <- as.matrix(d2[,seq_len(2)])
+  m <- getGraphMetrics(x, d2$class, k=5, level="class", metrics="AMSP")
+  # reversing rows makes first-appearance order differ from level order
+  r <- rev(seq_len(nrow(x)))
+  mr <- getGraphMetrics(x[r,], d2$class[r], k=5, level="class",
+                        metrics="AMSP")
+  expect_equal(mr, m)
+})
+
+test_that("AMSP ignores edge weights", {
+  g <- emb2snn(as.matrix(d1[,seq_len(2)]), k=5)
+  m <- getGraphMetrics(g, d1$class, level="class", metrics="AMSP")
+  mu <- getGraphMetrics(igraph::delete_edge_attr(g, "weight"), d1$class,
+                        level="class", metrics="AMSP")
+  expect_equal(m, mu)
+})
