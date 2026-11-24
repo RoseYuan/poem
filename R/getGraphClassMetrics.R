@@ -33,6 +33,7 @@ attr(getGraphClassMetrics, "allowed_metrics") <- c("SI", "ISI", "NP", "NCE",
   .checkInputs(x,labels,checkNNcl=FALSE)
   x$nncl <- matrix(labels[x$index], nrow=nrow(x$index))
   labels <- as.factor(labels)
+  g <- NULL
   if(isFALSE(directed) || any(c("adhesion","cohesion","AMSP") %in% metrics)){
     # convert to graph
     g <- bluster::neighborsToKNNGraph(x$index, directed=FALSE)
@@ -43,51 +44,7 @@ attr(getGraphClassMetrics, "allowed_metrics") <- c("SI", "ISI", "NP", "NCE",
                                             directed=FALSE, ...))
     g <- set_vertex_attr(g, "class", value=labels)
   }
-  tt <- as.integer(table(labels))
-  res <- as.data.frame(lapply(setNames(metrics,metrics), FUN=function(m){
-    switch(m,
-          SI={
-             v <- .simpsonIndex(x, labels, directed=directed)
-             num <- rowsum(v, labels, na.rm=TRUE)[,1]
-             den <- rowsum(as.integer(!is.na(v)), labels)[,1]
-             num/ifelse(den==0, NA_real_, den)
-           },
-           ISI={
-             v <- 1/.simpsonIndex(x, labels, directed=directed)
-             num <- rowsum(v, labels, na.rm=TRUE)[,1]
-             den <- rowsum(as.integer(!is.na(v)), labels)[,1]
-             num/ifelse(den==0, NA_real_, den)
-           },
-           NP={
-             v <- .nPurity(x, labels, directed=directed)
-             num <- rowsum(v, labels, na.rm=TRUE)[,1]
-             den <- rowsum(as.integer(!is.na(v)), labels)[,1]
-             num/ifelse(den==0, NA_real_, den)
-           },
-           NCE={
-             v <- .nlog2Enrichment(x, labels, directed=directed)
-             num <- rowsum(v, labels, na.rm=TRUE)[,1]
-             den <- rowsum(as.integer(!is.na(v)), labels)[,1]
-             num/ifelse(den==0, NA_real_, den)
-           },
-           adhesion=.igraphFunPerClass(g, FUN=igraph::adhesion, 
-                                       directed=directed),
-           cohesion=.igraphFunPerClass(g, FUN=igraph::cohesion, 
-                                       directed=directed),
-           AMSP=.igraphFunPerClass(g, FUN=.adjMeanShortestPath, 
-                                   directed=directed),
-       PWC={
-             pur <- .nPurity(x, labels, directed=directed)
-             v <- as.integer(pur <= 0.5)
-             num <- rowsum(v, labels, na.rm=TRUE)[,1]
-         den <- rowsum(as.integer(!is.na(pur)), labels)[,1]
-             as.numeric(num/ifelse(den==0, NA_real_, den))
-           },
-           stop("Unknown metric ", m)
-           )
-  }))
-  row.names(res) <- levels(labels)
-  cbind(class=levels(labels),res)
+  .classMetricsFromNN(x, g, labels, metrics, directed=directed)
 }
 
 
@@ -145,46 +102,40 @@ setMethod("getGraphClassMetrics", signature="matrix",
   stopifnot(length(labels)==gorder(x))
   labels <- as.factor(labels)
   x <- set_vertex_attr(x, "class", value=labels)
-  tt <- as.integer(table(labels))
+  # convert to neighbour lists once, rather than once per metric
+  nn <- .igraph2nn(x, labels, directed=!isFALSE(directed))
+  .classMetricsFromNN(nn, x, labels, metrics, directed=directed,
+                      nodeDirected=TRUE)
+}
+
+# Per-class averages of the requested metrics. `nn` goes to the node-level
+# helpers (SI, NP, NCE, PWC), `g` to the per-class igraph metrics. SI and NP
+# are computed once and reused by ISI and PWC.
+#' @importFrom igraph adhesion cohesion
+.classMetricsFromNN <- function(nn, g, labels, metrics, directed=NULL,
+                                nodeDirected=directed){
+  avg <- function(v){
+    num <- rowsum(v, labels, na.rm=TRUE)[,1]
+    den <- rowsum(as.integer(!is.na(v)), labels)[,1]
+    num/ifelse(den==0, NA_real_, den)
+  }
+  if(any(c("SI","ISI") %in% metrics))
+    si <- .simpsonIndex(nn, labels, directed=nodeDirected)
+  if(any(c("NP","PWC") %in% metrics))
+    np <- .nPurity(nn, labels, directed=nodeDirected)
   res <- as.data.frame(lapply(setNames(metrics,metrics), FUN=function(m){
     switch(m,
-          SI={
-             v <- .simpsonIndex(x, labels, directed=directed)
-             num <- rowsum(v, labels, na.rm=TRUE)[,1]
-             den <- rowsum(as.integer(!is.na(v)), labels)[,1]
-             num/ifelse(den==0, NA_real_, den)
-           },
-           ISI={
-             v <- 1/.simpsonIndex(x, labels, directed=directed)
-             num <- rowsum(v, labels, na.rm=TRUE)[,1]
-             den <- rowsum(as.integer(!is.na(v)), labels)[,1]
-             num/ifelse(den==0, NA_real_, den)
-           },
-           NP={
-             v <- .nPurity(x, labels, directed=directed)
-             num <- rowsum(v, labels, na.rm=TRUE)[,1]
-             den <- rowsum(as.integer(!is.na(v)), labels)[,1]
-             num/ifelse(den==0, NA_real_, den)
-           },
-           NCE={
-             v <- .nlog2Enrichment(x, labels, directed=directed)
-             num <- rowsum(v, labels, na.rm=TRUE)[,1]
-             den <- rowsum(as.integer(!is.na(v)), labels)[,1]
-             num/ifelse(den==0, NA_real_, den)
-           },
-           adhesion=.igraphFunPerClass(x, FUN=igraph::adhesion, 
+           SI=avg(si),
+           ISI=avg(1/si),
+           NP=avg(np),
+           NCE=avg(.nlog2Enrichment(nn, labels, directed=nodeDirected)),
+           adhesion=.igraphFunPerClass(g, FUN=igraph::adhesion, 
                                        directed=directed),
-           cohesion=.igraphFunPerClass(x, FUN=igraph::cohesion, 
+           cohesion=.igraphFunPerClass(g, FUN=igraph::cohesion, 
                                        directed=directed),
-           AMSP=.igraphFunPerClass(x, FUN=.adjMeanShortestPath, 
+           AMSP=.igraphFunPerClass(g, FUN=.adjMeanShortestPath, 
                                    directed=directed),
-       PWC={
-             pur <- .nPurity(x, labels, directed=directed)
-             v <- as.integer(pur <= 0.5)
-             num <- rowsum(v, labels, na.rm=TRUE)[,1]
-         den <- rowsum(as.integer(!is.na(pur)), labels)[,1]
-             as.numeric(num/ifelse(den==0, NA_real_, den))
-           },
+           PWC=as.numeric(avg(as.integer(np <= 0.5))),
            stop("Unknown metric ", m)
     )
   }))

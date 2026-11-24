@@ -38,11 +38,15 @@
   }
   stopifnot(!is.null(labels))
   if(.isNNlist(knn)){ # list of varying number of neighbor indices
-    knn <- relist(labels[unlist(knn)],knn)
-    return(vapply(knn, FUN.VALUE=numeric(1L), FUN=function(nn){
-        sum((vapply(unique(labels), FUN.VALUE=numeric(1L),
-                    FUN=function(x) sum(nn==x))/length(nn))^2)
-      }))
+    # per-node label counts as a dense C x n matrix
+    # ponytail: dense, O(n*C) memory; go sparse if C*n gets huge
+    f <- as.factor(labels)
+    C <- nlevels(f)
+    len <- lengths(knn)
+    node <- rep(seq_along(knn), len)
+    cnt <- matrix(tabulate((node-1L)*C + as.integer(f)[unlist(knn)],
+                           C*length(knn)), nrow=C)
+    return(setNames(colSums((cnt/rep(len, each=C))^2), names(knn)))
   }
   .checkInputs(knn, labels)
   k <- ncol(knn$index)
@@ -64,10 +68,10 @@
   }
   stopifnot(!is.null(labels))
   if(.isNNlist(knn)){ # list of varying number of neighbor indices
-    return(mapply(nn=relist(labels[unlist(knn)],knn),
-                  label=labels, FUN=function(nn,label){
-      sum(nn==label)/length(nn)
-    }))
+    len <- lengths(knn)
+    node <- rep(seq_along(knn), len)
+    same <- tabulate(node[labels[unlist(knn)]==labels[node]], length(knn))
+    return(setNames(same/len, names(knn)))
   }
   .checkInputs(knn, labels)
   rowSums(knn$nncl==labels)/ncol(knn$index)
@@ -85,13 +89,16 @@
   }
   stopifnot(!is.null(labels))
   if(.isNNlist(knn)){ # list of varying number of neighbor indices
-    expect <- table(labels)/length(labels)
-    return(mapply(nn=relist(labels[unlist(knn)],knn),
-                  label=labels, FUN=function(nn,label){
-                    expected <- length(nn)*expect[label]
-                    log2((pseudoCount+sum(nn==label))/
-                           (pseudoCount+length(nn)*expected))
-                  }))
+    # expected same-class neighbours = degree * class frequency (as the
+    # fixed-k branch, with k replaced by each node's degree)
+    f <- as.factor(labels)
+    freq <- tabulate(as.integer(f), nlevels(f))/length(f)
+    len <- lengths(knn)
+    node <- rep(seq_along(knn), len)
+    same <- tabulate(node[f[unlist(knn)]==f[node]], length(knn))
+    out <- log2((pseudoCount+same)/(pseudoCount+len*freq[as.integer(f)]))
+    names(out) <- names(knn)
+    return(out)
   }
   .checkInputs(knn, labels)
   k <- ncol(knn$index)
