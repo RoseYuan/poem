@@ -4,7 +4,7 @@
 \alias{emb2knn}
 \title{Computes k nearest neighbors from embedding}
 \usage{
-emb2knn(x, k, BNPARAM = NULL)
+emb2knn(x, k, BNPARAM = NULL, num.threads = 1)
 }
 \arguments{
 \item{x}{A numeric matrix (with features as columns and items as
@@ -15,6 +15,9 @@ rows) from which nearest neighbors will be computed.}
 \item{BNPARAM}{A BiocNeighbors parameter object to compute kNNs. Ignored
 unless the input is a matrix or data.frame. If omitted, the Annoy
 approximation will be used if there are more than 500 elements.}
+
+\item{num.threads}{Number of threads for the neighbor search, passed to
+\code{\link[BiocNeighbors:findKNN]{BiocNeighbors::findKNN()}}. Default 1.}
 }
 \value{
 A knn list.

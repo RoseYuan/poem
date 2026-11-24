@@ -18,7 +18,7 @@ Depends:
     R (>= 4.0)
 Imports:
     aricode,
-    BiocNeighbors,
+    BiocNeighbors (>= 2.0.0),
     BiocParallel,
     bluster,
     clevr,

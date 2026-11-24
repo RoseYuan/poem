@@ -4,7 +4,7 @@
 \alias{emb2snn}
 \title{Computes shared nearest neighbors from embedding}
 \usage{
-emb2snn(x, k, type = "rank", BNPARAM = NULL)
+emb2snn(x, k, type = "rank", BNPARAM = NULL, num.threads = 1)
 }
 \arguments{
 \item{x}{A numeric matrix (with features as columns and items as
@@ -20,6 +20,9 @@ Possible choices include "rank", "number", and "jaccard". See \code{type} in
 \item{BNPARAM}{A BiocNeighbors parameter object to compute kNNs. Ignored
 unless the input is a matrix or data.frame. If omitted, the Annoy
 approximation will be used if there are more than 500 elements.}
+
+\item{num.threads}{Number of threads for the neighbor search, passed to
+\code{\link[BiocNeighbors:findKNN]{BiocNeighbors::findKNN()}}. Default 1.}
 }
 \value{
 An igraph object.

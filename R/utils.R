@@ -32,13 +32,15 @@
 #' @param BNPARAM A BiocNeighbors parameter object to compute kNNs. Ignored 
 #'   unless the input is a matrix or data.frame. If omitted, the Annoy 
 #'   approximation will be used if there are more than 500 elements.
+#' @param num.threads Number of threads for the neighbor search, passed to 
+#'   [BiocNeighbors::findKNN()]. Default 1.
 #' @return A knn list.
 #' @importFrom BiocNeighbors AnnoyParam ExhaustiveParam findKNN
 #' @export
 #' @examples
 #' d1 <- mockData()
 #' emb2knn(as.matrix(d1[,seq_len(2)]),k=5)
-emb2knn <- function(x, k, BNPARAM=NULL){
+emb2knn <- function(x, k, BNPARAM=NULL, num.threads=1){
   stopifnot(is.matrix(x) && is.numeric(x))
   stopifnot(is.numeric(k) && length(k)==1 && k>0 && (k %/% 1)==k)
   if(is.null(BNPARAM)){
@@ -48,7 +50,7 @@ emb2knn <- function(x, k, BNPARAM=NULL){
       BNPARAM <- BiocNeighbors::ExhaustiveParam()
     }
   }
-  findKNN(as.matrix(x), k=k, BNPARAM=BNPARAM)
+  findKNN(as.matrix(x), k=k, BNPARAM=BNPARAM, num.threads=num.threads)
 }
 
 #' Computes shared nearest neighbors from embedding
@@ -65,6 +67,8 @@ emb2knn <- function(x, k, BNPARAM=NULL){
 #' @param BNPARAM A BiocNeighbors parameter object to compute kNNs. Ignored 
 #'   unless the input is a matrix or data.frame. If omitted, the Annoy 
 #'   approximation will be used if there are more than 500 elements.
+#' @param num.threads Number of threads for the neighbor search, passed to 
+#'   [BiocNeighbors::findKNN()]. Default 1.
 #' @return An igraph object.
 #' @importFrom BiocNeighbors AnnoyParam ExhaustiveParam findKNN
 #' @export
@@ -72,8 +76,8 @@ emb2knn <- function(x, k, BNPARAM=NULL){
 #' d1 <- mockData()
 #' emb2snn(as.matrix(d1[,seq_len(2)]),k=5)
 #' @importFrom bluster neighborsToSNNGraph
-emb2snn <- function(x, k, type="rank", BNPARAM=NULL){
-  knn <- emb2knn(x, k, BNPARAM=BNPARAM)
+emb2snn <- function(x, k, type="rank", BNPARAM=NULL, num.threads=1){
+  knn <- emb2knn(x, k, BNPARAM=BNPARAM, num.threads=num.threads)
   bluster::neighborsToSNNGraph(knn$index, type = type)
 }
 
