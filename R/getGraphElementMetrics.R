@@ -100,13 +100,15 @@ setMethod("getGraphElementMetrics", signature="matrix",
   stopifnot(is.character(labels) || is.factor(labels))
   stopifnot(length(labels)==gorder(x))
   labels <- as.factor(labels)
-  x <- set_vertex_attr(x, "class", value=labels)
+  # convert to neighbour lists once, rather than once per metric
+  nn <- .igraph2nn(x, labels, directed=!isFALSE(directed))
+  if(any(c("SI","ISI") %in% metrics)) si <- .simpsonIndex(nn, labels)
   res <- as.data.frame(lapply(setNames(metrics,metrics), FUN=function(m){
     switch(m,
-           SI=.simpsonIndex(x, labels, directed=directed),
-           ISI=1/.simpsonIndex(x, labels, directed=directed),
-           NP=.nPurity(x, labels, directed=directed),
-           NCE=.nlog2Enrichment(x, labels, directed=directed),
+           SI=si,
+           ISI=1/si,
+           NP=.nPurity(nn, labels),
+           NCE=.nlog2Enrichment(nn, labels),
            stop("The metric '",m,"' is either unknown or not available at the",
                 " node-level.")
     )
