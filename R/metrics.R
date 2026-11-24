@@ -85,13 +85,16 @@
   }
   stopifnot(!is.null(labels))
   if(.isNNlist(knn)){ # list of varying number of neighbor indices
-    expect <- table(labels)/length(labels)
-    return(mapply(nn=relist(labels[unlist(knn)],knn),
-                  label=labels, FUN=function(nn,label){
-                    expected <- length(nn)*expect[label]
-                    log2((pseudoCount+sum(nn==label))/
-                           (pseudoCount+length(nn)*expected))
-                  }))
+    # expected same-class neighbours = degree * class frequency (as the
+    # fixed-k branch, with k replaced by each node's degree)
+    f <- as.factor(labels)
+    freq <- tabulate(as.integer(f), nlevels(f))/length(f)
+    len <- lengths(knn)
+    node <- rep(seq_along(knn), len)
+    same <- tabulate(node[f[unlist(knn)]==f[node]], length(knn))
+    out <- log2((pseudoCount+same)/(pseudoCount+len*freq[as.integer(f)]))
+    names(out) <- names(knn)
+    return(out)
   }
   .checkInputs(knn, labels)
   k <- ncol(knn$index)
