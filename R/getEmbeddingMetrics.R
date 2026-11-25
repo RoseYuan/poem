@@ -127,7 +127,10 @@ getEmbeddingClassMetrics <-function(x, labels,
   
   if("dbcv" %in% metrics){
     y <- as.integer(factor(labels, levels = sort(unique(labels))))
-    res$dbcv <- dbcv(x, y, distance = distance, ...)$vcs}
+    vcs <- dbcv(x, y, distance = distance, ...)$vcs
+    # singleton classes are treated as noise and get no score
+    res$dbcv <- unname(vcs[as.character(seq_len(nrow(res)))])
+  }
   res
 }
 
