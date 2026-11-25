@@ -36,7 +36,8 @@ implementation. Currently only \code{mst} from \code{igraph} is implemented.}
 }
 \value{
 A list:
-\item{vcs}{Numeric vector of validity index for each cluster.}
+\item{vcs}{Numeric vector of validity index for each cluster, named by
+cluster ID. Noise and singleton clusters are not included.}
 \item{dbcv}{Numeric value representing the overall DBCV metric.}
 }
 \description{

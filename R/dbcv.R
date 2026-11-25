@@ -63,6 +63,11 @@
   is_mst_edges <- (mst > 0)
   internal_node_inds <- which(colSums(is_mst_edges) > 1)
   internal_edge_weights <- .get_submatrix(mst, inds_a = internal_node_inds)
+  # As in the reference implementation: tiny clusters have no (or a single)
+  # internal node, so fall back to all nodes / the whole MST.
+  if (length(internal_node_inds) == 0) 
+    internal_node_inds <- seq_len(nrow(mst))
+  if (length(internal_edge_weights) <= 1) internal_edge_weights <- mst
   return(list(internal_node_inds = internal_node_inds, 
               internal_edge_weights = internal_edge_weights))
 }
@@ -205,6 +210,8 @@
     dists <- as.matrix(dist(rbind(X[inds_a, , drop = FALSE], 
                             X[inds_b, , drop = FALSE]), 
                          method = distance))
+    dists <- dists[seq_along(inds_a), length(inds_a) + seq_along(inds_b), 
+                   drop = FALSE]
   }
   dists[dists < 1e-12] <- 1e-12
   return(dists)
@@ -227,7 +234,8 @@
 #' @importFrom BiocParallel SerialParam bplapply
 #' 
 #' @return A list:
-#' \item{vcs}{Numeric vector of validity index for each cluster.}
+#' \item{vcs}{Numeric vector of validity index for each cluster, named by
+#' cluster ID. Noise and singleton clusters are not included.}
 #' \item{dbcv}{Numeric value representing the overall DBCV metric.}
 #'
 #' @importFrom utils combn
@@ -256,7 +264,7 @@ dbcv <- function(X, labels, distance = "euclidean", noise_id = -1,
   
   labels <- .convert_singleton_clusters_to_noise(labels, noise_id = noise_id)
   non_noise_inds <- labels != noise_id
-  X <- X[non_noise_inds, ]
+  X <- X[non_noise_inds, , drop = FALSE]
   labels <- labels[non_noise_inds]
   
   if (length(labels) == 0) {
@@ -346,6 +354,8 @@ dbcv <- function(X, labels, distance = "euclidean", noise_id = -1,
   # Compute validity scores
   vcs <- (min_dspcs - dscs) / pmax(min_dspcs, dscs)
   vcs[is.nan(vcs)] <- 0.0
-  dbcv <- sum(vcs * table(labels)) / nrow(X)
+  names(vcs) <- cluster_ids
+  # Noise (incl. singleton clusters) counts in the denominator (Moulavi et al.)
+  dbcv <- sum(vcs * table(labels)) / n
   return(list(vcs = vcs, dbcv = dbcv))
 }
