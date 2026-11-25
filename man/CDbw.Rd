@@ -40,8 +40,9 @@ A vector with the following values (see refs for details):
 }
 \description{
 Computes the CDbw-index (Halkidi and Vazirgiannis 2008; Halkidi,
-Vazirgiannis and Hennig, 2015). This function is directly copied from the
-\code{fpc} CRAN package and was written by Christian Hennig. It is included here
+Vazirgiannis and Hennig, 2015). This function is copied from \code{fpc::cdbw}
+(CRAN package \code{fpc}, written by Christian Hennig), with two bug fixes (see
+Details). It is included here
 to reduce the package dependencies (since \code{fpc} has a few not-so-light
 dependencies that aren't required here).
 }
