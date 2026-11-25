@@ -40,10 +40,19 @@ A vector with the following values (see refs for details):
 }
 \description{
 Computes the CDbw-index (Halkidi and Vazirgiannis 2008; Halkidi,
-Vazirgiannis and Hennig, 2015). This function is directly copied from the
-\code{fpc} CRAN package and was written by Christian Hennig. It is included here
+Vazirgiannis and Hennig, 2015). This function is copied from \code{fpc::cdbw}
+(CRAN package \code{fpc}, written by Christian Hennig), with two bug fixes (see
+Details). It is included here
 to reduce the package dependencies (since \code{fpc} has a few not-so-light
 dependencies that aren't required here).
+}
+\details{
+Two deviations from the \code{fpc} code, both to follow Halkidi and
+Vazirgiannis (2008): the inter-cluster density uses the average standard
+deviation of both clusters (\code{fpc} used the first cluster's only, so the
+result depended on label order), and the intra-cluster density counts
+points within one standard deviation of the shrunk representatives (\code{fpc}
+compared squared distances to the standard deviation).
 }
 \examples{
 d1 <- mockData()
