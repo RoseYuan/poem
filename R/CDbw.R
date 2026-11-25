@@ -34,6 +34,13 @@
 #' F. Murtagh, R. Rocci (eds.) Handbook of Cluster Analysis, CRC Press/Taylor 
 #' \code{&} Francis, Boca Raton.
 #'
+#' @details Two deviations from the `fpc` code, both to follow Halkidi and 
+#'   Vazirgiannis (2008): the inter-cluster density uses the average standard 
+#'   deviation of both clusters (`fpc` used the first cluster's only, so the 
+#'   result depended on label order), and the intra-cluster density counts 
+#'   points within one standard deviation of the shrunk representatives (`fpc`
+#'   compared squared distances to the standard deviation).
+#'
 #' @author Christian Hennig
 #' @examples
 #' d1 <- mockData()
@@ -115,7 +122,8 @@ CDbw <- function(x, labels, r=10, s=seq(0.1,0.8,by=0.1),
   for (i in seq_len(cn-1)){
     for (j in seq(from=i+1L,to=cn)){      
       nrcr <- nrow(rcr[[i]][[j]])
-      wsdij <- mean(sqrt(wvar[i]),sqrt(wvar[j])) 
+      # average stdev of the two clusters (fpc's mean(a, b) passed b as `trim`)
+      wsdij <- mean(c(sqrt(wvar[i]), sqrt(wvar[j])))
       for (k in seq_len(nrcr)){
         u <- (x[rcr[[i]][[j]][k,1],]+x[rcr[[i]][[j]][k,2],])/2
 #        browser()
@@ -158,7 +166,8 @@ CDbw <- function(x, labels, r=10, s=seq(0.1,0.8,by=0.1),
 #      dxj <- as.matrix(dist(x))[labels==j,labels==j]
       for (k in seq_len(repr[j])){
         srep <- (1-s[i])*xcj[repx[[j]][k],]+s[i]*xcc[j,]
-        dsjk <- mahalanobis(xcj,srep,diag(p))
+        # distance, not squared distance, compared to the stdev (as in Dens)
+        dsjk <- sqrt(mahalanobis(xcj,srep,diag(p)))
         denscl[j,i] <- denscl[j,i]+sum(dsjk<stdevj)/nc[j]
       }
       denscl[j,i] <- denscl[j,i]/repr[j]

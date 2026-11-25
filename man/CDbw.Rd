@@ -45,6 +45,14 @@ Vazirgiannis and Hennig, 2015). This function is directly copied from the
 to reduce the package dependencies (since \code{fpc} has a few not-so-light
 dependencies that aren't required here).
 }
+\details{
+Two deviations from the \code{fpc} code, both to follow Halkidi and
+Vazirgiannis (2008): the inter-cluster density uses the average standard
+deviation of both clusters (\code{fpc} used the first cluster's only, so the
+result depended on label order), and the intra-cluster density counts
+points within one standard deviation of the shrunk representatives (\code{fpc}
+compared squared distances to the standard deviation).
+}
 \examples{
 d1 <- mockData()
 CDbw(d1[,seq_len(2)], d1[,3])
